@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity(name = "alert")
+@Entity(name = "alert_log")
 @Builder
 @Getter
 @NoArgsConstructor
@@ -33,5 +33,5 @@ public class AlertLog extends BaseTimeEntity {
 
     @Builder.Default
     @Column
-    private Boolean check = Boolean.FALSE;
+    private Boolean alertCheck = Boolean.FALSE;
 }
