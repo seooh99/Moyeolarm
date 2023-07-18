@@ -1,6 +1,6 @@
 package com.ssafy.moyeolam.domain.meta.domain;
 
-public enum Day implements MetaDateProvider {
+public enum DayOfWeek implements MetaDateProvider {
     MONDAY(1, "월요일"),
     TUESDAY(2, "화요일"),
     WEDNESDAY(3, "수요일"),
@@ -12,7 +12,7 @@ public enum Day implements MetaDateProvider {
     private final int id;
     private final String name;
 
-    Day(int id, String name) {
+    DayOfWeek(int id, String name) {
         this.id = id;
         this.name = name;
     }

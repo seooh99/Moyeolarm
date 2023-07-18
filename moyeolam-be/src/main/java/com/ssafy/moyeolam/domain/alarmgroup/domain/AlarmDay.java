@@ -1,7 +1,7 @@
 package com.ssafy.moyeolam.domain.alarmgroup.domain;
 
 import com.ssafy.moyeolam.domain.BaseTimeEntity;
-import com.ssafy.moyeolam.domain.meta.domain.Day;
+import com.ssafy.moyeolam.domain.meta.domain.DayOfWeek;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,5 +25,5 @@ public class AlarmDay extends BaseTimeEntity {
     private AlarmGroup alarmGroup;
 
     @Enumerated(EnumType.STRING)
-    private Day day;
+    private DayOfWeek dayOfWeek;
 }
