@@ -1,7 +1,7 @@
 package com.ssafy.moyeolam.domain.meta.domain;
 
 public enum AlarmMission implements MetaDateProvider {
-    FACE_RECOGNITION(1, "AI 얼굴 인식"),
+    FACE_RECOGNITION(1, "얼굴 인식"),
     PRESS_BUTTON(2, "버튼 유지");
 
     private final int id;

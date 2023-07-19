@@ -7,7 +7,8 @@ public enum DayOfWeek implements MetaDateProvider {
     THURSDAY(4, "목요일"),
     FRIDAY(5, "금요일"),
     SATURDAY(6, "토요일"),
-    SUNDAY(7, "일요일");
+    SUNDAY(7, "일요일"),
+    NO_SELECT(8, "없음");
 
     private final int id;
     private final String name;
