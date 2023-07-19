@@ -8,6 +8,6 @@ import javax.persistence.Convert;
 @Convert
 public class OauthTypeConverter extends BaseConverter {
     public OauthTypeConverter(MetaDataService metaDataService) {
-        super(metaDataService, MetaDataType.OauthType.name());
+        super(metaDataService, MetaDataType.OAUTH_TYPE.name());
     }
 }

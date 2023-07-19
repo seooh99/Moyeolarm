@@ -8,6 +8,6 @@ import javax.persistence.Convert;
 @Convert
 public class AlertTypeConverter extends BaseConverter {
     public AlertTypeConverter(MetaDataService metaDataService) {
-        super(metaDataService, MetaDataType.AlertType.name());
+        super(metaDataService, MetaDataType.ALERT_TYPE.name());
     }
 }

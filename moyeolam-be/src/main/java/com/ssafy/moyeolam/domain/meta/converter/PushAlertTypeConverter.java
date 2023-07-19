@@ -7,7 +7,7 @@ import javax.persistence.Convert;
 
 @Convert
 public class PushAlertTypeConverter extends BaseConverter {
-    public PushAlertTypeConverter(MetaDataService metaDataService, String metaDataType) {
-        super(metaDataService, MetaDataType.PushAlertType.name());
+    public PushAlertTypeConverter(MetaDataService metaDataService) {
+        super(metaDataService, MetaDataType.PUSH_ALERT_TYPE.name());
     }
 }

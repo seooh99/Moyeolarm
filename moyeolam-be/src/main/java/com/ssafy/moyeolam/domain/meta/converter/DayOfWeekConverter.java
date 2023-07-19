@@ -9,6 +9,6 @@ import javax.persistence.Convert;
 public class DayOfWeekConverter extends BaseConverter{
 
     public DayOfWeekConverter(MetaDataService metaDataService) {
-        super(metaDataService, MetaDataType.DayOfWeek.name());
+        super(metaDataService, MetaDataType.DAY_OF_WEEK.name());
     }
 }

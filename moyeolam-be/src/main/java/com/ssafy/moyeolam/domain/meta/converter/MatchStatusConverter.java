@@ -8,6 +8,6 @@ import javax.persistence.Convert;
 @Convert
 public class MatchStatusConverter extends BaseConverter {
     public MatchStatusConverter(MetaDataService metaDataService) {
-        super(metaDataService, MetaDataType.MatchStatus.name());
+        super(metaDataService, MetaDataType.MATCH_STATUS.name());
     }
 }

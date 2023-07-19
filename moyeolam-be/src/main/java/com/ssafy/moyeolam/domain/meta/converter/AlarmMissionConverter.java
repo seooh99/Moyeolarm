@@ -8,6 +8,6 @@ import javax.persistence.Convert;
 @Convert
 public class AlarmMissionConverter extends BaseConverter {
     public AlarmMissionConverter(MetaDataService metaDataService) {
-        super(metaDataService, MetaDataType.AlarmMission.name());
+        super(metaDataService, MetaDataType.ALARM_MISSION.name());
     }
 }

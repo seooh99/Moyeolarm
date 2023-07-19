@@ -8,6 +8,6 @@ import javax.persistence.Convert;
 @Convert
 public class AlarmSoundConverter extends BaseConverter {
     public AlarmSoundConverter(MetaDataService metaDataService) {
-        super(metaDataService, MetaDataType.AlarmSound.name());
+        super(metaDataService, MetaDataType.ALARM_SOUND.name());
     }
 }

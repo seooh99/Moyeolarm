@@ -8,6 +8,6 @@ import javax.persistence.Convert;
 @Convert
 public class AlarmGroupMemberRoleConverter extends BaseConverter {
     public AlarmGroupMemberRoleConverter(MetaDataService metaDataService) {
-        super(metaDataService, MetaDataType.AlarmGroupMemberRole.name());
+        super(metaDataService, MetaDataType.ALARM_GROUP_MEMBER_ROLE.name());
     }
 }
