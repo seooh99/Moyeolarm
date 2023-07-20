@@ -3,7 +3,7 @@ package com.ssafy.moyeolam.domain.friend.domain;
 import com.ssafy.moyeolam.domain.BaseTimeEntity;
 import com.ssafy.moyeolam.domain.member.domain.Member;
 import com.ssafy.moyeolam.domain.meta.converter.MatchStatusConverter;
-import com.ssafy.moyeolam.domain.meta.domain.MatchStatus;
+import com.ssafy.moyeolam.domain.meta.domain.MetaData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,5 +31,5 @@ public class FriendRequest extends BaseTimeEntity {
     private Member toMember;
 
     @Convert(converter = MatchStatusConverter.class)
-    private MatchStatus matchStatus;
+    private MetaData matchStatus;
 }
