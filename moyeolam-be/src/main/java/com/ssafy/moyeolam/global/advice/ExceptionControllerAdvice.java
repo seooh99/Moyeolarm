@@ -1,5 +1,6 @@
 package com.ssafy.moyeolam.global.advice;
 
+import com.ssafy.moyeolam.domain.alarmgroup.exception.AlarmGroupException;
 import com.ssafy.moyeolam.global.common.response.EnvelopeResponse;
 import com.ssafy.moyeolam.global.common.exception.GlobalErrorInfo;
 import com.ssafy.moyeolam.global.common.exception.GlobalException;
@@ -26,8 +27,17 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(GlobalException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public EnvelopeResponse GlobalExceptionHandler(GlobalException e) {
-        log.error(e.getMessage());
+        e.printStackTrace();
+        return EnvelopeResponse.builder()
+                .code(e.getInfo().getCode())
+                .message(e.getInfo().getMessage())
+                .build();
+    }
 
+    @ExceptionHandler(AlarmGroupException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public EnvelopeResponse AlarmGroupExceptionHandler(AlarmGroupException e) {
+        e.printStackTrace();
         return EnvelopeResponse.builder()
                 .code(e.getInfo().getCode())
                 .message(e.getInfo().getMessage())
