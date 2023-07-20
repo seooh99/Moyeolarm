@@ -2,6 +2,7 @@ package com.ssafy.moyeolam.domain.alarmgroup.domain;
 
 import com.ssafy.moyeolam.domain.BaseTimeEntity;
 import com.ssafy.moyeolam.domain.member.domain.Member;
+import com.ssafy.moyeolam.domain.meta.converter.AlarmGroupMemberRoleConverter;
 import com.ssafy.moyeolam.domain.meta.domain.AlarmGroupMemberRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,7 +30,7 @@ public class AlarmGroupMember extends BaseTimeEntity {
     @JoinColumn(name = "alarm_group_id")
     private AlarmGroup alarmGroup;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = AlarmGroupMemberRoleConverter.class)
     private AlarmGroupMemberRole alarmGroupMemberRole;
 
     @Builder.Default

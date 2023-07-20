@@ -1,6 +1,7 @@
 package com.ssafy.moyeolam.domain.member.domain;
 
 import com.ssafy.moyeolam.domain.BaseTimeEntity;
+import com.ssafy.moyeolam.domain.meta.converter.AlertTypeConverter;
 import com.ssafy.moyeolam.domain.meta.domain.AlertType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,7 +29,7 @@ public class AlertLog extends BaseTimeEntity {
     @JoinColumn(name = "to_member_id", referencedColumnName = "member_id")
     private Member toMember;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = AlertTypeConverter.class)
     private AlertType alertType;
 
     @Builder.Default
