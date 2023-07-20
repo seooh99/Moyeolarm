@@ -17,6 +17,10 @@ public class AlarmGroupService {
     private final AlarmGroupRepository alarmGroupRepository;
 
     public Long generateAlarmGroup(AlarmGroupGenerateRequest request) {
+        /**
+         * TODO: 사용자 및 권한 검증 로직 추가
+         */
+
         AlarmGroup alarmGroup = AlarmGroup.builder()
                 .time(request.getTime())
                 .repeat(request.getDayOfWeek().size() > 0)
