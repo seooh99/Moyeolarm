@@ -1,6 +1,6 @@
 package com.ssafy.moyeolam.domain.meta.domain;
 
-public interface MetaDateProvider {
+public interface MetaDataProvider {
     int getId();
     String getName();
 }

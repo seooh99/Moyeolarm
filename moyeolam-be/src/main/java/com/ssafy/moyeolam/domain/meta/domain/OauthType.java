@@ -1,6 +1,6 @@
 package com.ssafy.moyeolam.domain.meta.domain;
 
-public enum OauthType implements MetaDateProvider {
+public enum OauthType implements MetaDataProvider {
     KAKAO(1, "카카오");
 
     private final int id;
