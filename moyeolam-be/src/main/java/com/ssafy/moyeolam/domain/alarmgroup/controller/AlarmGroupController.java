@@ -1,14 +1,11 @@
 package com.ssafy.moyeolam.domain.alarmgroup.controller;
 
-import com.ssafy.moyeolam.domain.alarmgroup.dto.AlarmGroupGenerateRequest;
+import com.ssafy.moyeolam.domain.alarmgroup.dto.SaveAlarmGroupRequestDto;
 import com.ssafy.moyeolam.domain.alarmgroup.service.AlarmGroupService;
 import com.ssafy.moyeolam.global.common.response.EnvelopeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/alarmgroup")
@@ -18,9 +15,17 @@ public class AlarmGroupController {
     private final AlarmGroupService alarmGroupService;
 
     @PostMapping
-    public EnvelopeResponse<Long> generateAlarmGroup(@RequestBody AlarmGroupGenerateRequest request) {
+    public EnvelopeResponse<Long> generateAlarmGroup(@RequestBody SaveAlarmGroupRequestDto requestDto) {
         return EnvelopeResponse.<Long>builder()
-                .data(alarmGroupService.generateAlarmGroup(request))
+                .data(alarmGroupService.generateAlarmGroup(requestDto))
+                .build();
+    }
+
+    @GetMapping
+    public EnvelopeResponse findAlarmGroups(){
+
+        return EnvelopeResponse.builder()
+                .data(null)
                 .build();
     }
 }

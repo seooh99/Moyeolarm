@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class AlarmGroupGenerateRequest {
+public class SaveAlarmGroupRequestDto {
     @Size(min = 1, max = 50)
     private String title;
 
