@@ -2,7 +2,8 @@ package com.ssafy.moyeolam.domain.friend.domain;
 
 import com.ssafy.moyeolam.domain.BaseTimeEntity;
 import com.ssafy.moyeolam.domain.member.domain.Member;
-import com.ssafy.moyeolam.domain.meta.domain.MatchStatus;
+import com.ssafy.moyeolam.domain.meta.converter.MatchStatusConverter;
+import com.ssafy.moyeolam.domain.meta.domain.MetaData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,6 +30,6 @@ public class FriendRequest extends BaseTimeEntity {
     @JoinColumn(name = "to_member_id", referencedColumnName = "member_id")
     private Member toMember;
 
-    @Enumerated(EnumType.STRING)
-    private MatchStatus matchStatus;
+    @Convert(converter = MatchStatusConverter.class)
+    private MetaData matchStatus;
 }

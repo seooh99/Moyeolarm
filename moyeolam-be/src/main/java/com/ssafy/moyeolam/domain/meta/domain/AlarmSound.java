@@ -1,6 +1,6 @@
 package com.ssafy.moyeolam.domain.meta.domain;
 
-public enum AlarmSound implements MetaDateProvider {
+public enum AlarmSound implements MetaDataProvider {
     BASE_SOUND(1, "기본 알림음");
 
     private final int id;

@@ -1,7 +1,8 @@
 package com.ssafy.moyeolam.domain.member.domain;
 
 import com.ssafy.moyeolam.domain.BaseTimeEntity;
-import com.ssafy.moyeolam.domain.meta.domain.PushAlertType;
+import com.ssafy.moyeolam.domain.meta.converter.PushAlertTypeConverter;
+import com.ssafy.moyeolam.domain.meta.domain.MetaData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,8 +25,8 @@ public class MemberPushAlertSetting extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Enumerated(EnumType.STRING)
-    private PushAlertType pushAlertType;
+    @Convert(converter = PushAlertTypeConverter.class)
+    private MetaData pushAlertType;
 
     @Builder.Default
     @Column
