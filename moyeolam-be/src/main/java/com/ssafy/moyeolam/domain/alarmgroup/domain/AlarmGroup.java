@@ -1,6 +1,7 @@
 package com.ssafy.moyeolam.domain.alarmgroup.domain;
 
 import com.ssafy.moyeolam.domain.BaseTimeEntity;
+import com.ssafy.moyeolam.domain.meta.converter.AlarmMissionConverter;
 import com.ssafy.moyeolam.domain.meta.converter.AlarmSoundConverter;
 import com.ssafy.moyeolam.domain.meta.domain.AlarmMission;
 import com.ssafy.moyeolam.domain.meta.domain.AlarmSound;
@@ -37,15 +38,15 @@ public class AlarmGroup extends BaseTimeEntity {
     @Column
     private Boolean lock = Boolean.FALSE;
 
-    @Convert(converter = AlarmMission.class)
+    @Convert(converter = AlarmMissionConverter.class)
     private MetaData alarmMission;
 
     @Convert(converter = AlarmSoundConverter.class)
     private MetaData alarmSound;
 
-    @OneToMany(mappedBy = "alarm_group")
+    @OneToMany(mappedBy = "alarmGroup")
     private List<AlarmDay> alarmDays = new ArrayList<>();
 
-    @OneToMany(mappedBy = "alarm_group")
+    @OneToMany(mappedBy = "alarmGroup")
     private List<AlarmGroupMember> alarmGroupMembers = new ArrayList<>();
 }
