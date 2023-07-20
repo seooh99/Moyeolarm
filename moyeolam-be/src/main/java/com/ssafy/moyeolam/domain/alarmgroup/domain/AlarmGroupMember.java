@@ -3,7 +3,7 @@ package com.ssafy.moyeolam.domain.alarmgroup.domain;
 import com.ssafy.moyeolam.domain.BaseTimeEntity;
 import com.ssafy.moyeolam.domain.member.domain.Member;
 import com.ssafy.moyeolam.domain.meta.converter.AlarmGroupMemberRoleConverter;
-import com.ssafy.moyeolam.domain.meta.domain.AlarmGroupMemberRole;
+import com.ssafy.moyeolam.domain.meta.domain.MetaData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +31,7 @@ public class AlarmGroupMember extends BaseTimeEntity {
     private AlarmGroup alarmGroup;
 
     @Convert(converter = AlarmGroupMemberRoleConverter.class)
-    private AlarmGroupMemberRole alarmGroupMemberRole;
+    private MetaData alarmGroupMemberRole;
 
     @Builder.Default
     @Column

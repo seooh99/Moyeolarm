@@ -3,8 +3,6 @@ package com.ssafy.moyeolam.domain.alarmgroup.domain;
 import com.ssafy.moyeolam.domain.BaseTimeEntity;
 import com.ssafy.moyeolam.domain.meta.converter.AlarmMissionConverter;
 import com.ssafy.moyeolam.domain.meta.converter.AlarmSoundConverter;
-import com.ssafy.moyeolam.domain.meta.domain.AlarmMission;
-import com.ssafy.moyeolam.domain.meta.domain.AlarmSound;
 import com.ssafy.moyeolam.domain.meta.domain.MetaData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
