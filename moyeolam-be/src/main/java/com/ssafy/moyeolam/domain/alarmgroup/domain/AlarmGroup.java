@@ -28,6 +28,9 @@ public class AlarmGroup extends BaseTimeEntity {
     private Long id;
 
     @Column
+    private String title;
+
+    @Column
     private LocalTime time;
 
     @Builder.Default
