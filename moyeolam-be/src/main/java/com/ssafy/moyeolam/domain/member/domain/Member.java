@@ -2,6 +2,7 @@ package com.ssafy.moyeolam.domain.member.domain;
 
 import com.ssafy.moyeolam.domain.BaseTimeEntity;
 import com.ssafy.moyeolam.domain.friend.domain.Friend;
+import com.ssafy.moyeolam.domain.meta.converter.OauthTypeConverter;
 import com.ssafy.moyeolam.domain.meta.domain.OauthType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +24,7 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_id")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = OauthTypeConverter.class)
     private OauthType oauthType;
 
     @Column

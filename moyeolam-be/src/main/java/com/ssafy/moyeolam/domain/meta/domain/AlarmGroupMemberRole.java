@@ -1,6 +1,6 @@
 package com.ssafy.moyeolam.domain.meta.domain;
 
-public enum AlarmGroupMemberRole implements MetaDateProvider {
+public enum AlarmGroupMemberRole implements MetaDataProvider {
     HOST(1, "방장"),
     NORMAL(2, "일반 사용자");
 
