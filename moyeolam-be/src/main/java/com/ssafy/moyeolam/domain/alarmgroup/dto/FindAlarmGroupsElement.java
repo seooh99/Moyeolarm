@@ -2,7 +2,6 @@ package com.ssafy.moyeolam.domain.alarmgroup.dto;
 
 import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroup;
 import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroupMember;
-import com.ssafy.moyeolam.domain.member.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,7 +18,9 @@ public class FindAlarmGroupsElement {
     private List<String> dayOfWeek;
     private Boolean toggle;
 
-    public static FindAlarmGroupsElement of(AlarmGroup alarmGroup, Member loginMember) {
+    public static FindAlarmGroupsElement of(AlarmGroupMember alarmGroupMember) {
+        AlarmGroup alarmGroup = alarmGroupMember.getAlarmGroup();
+
         return FindAlarmGroupsElement.builder()
                 .alarmGroupId(alarmGroup.getId())
                 .title(alarmGroup.getTitle())
@@ -28,19 +29,7 @@ public class FindAlarmGroupsElement {
                         .stream()
                         .map(day -> day.getDayOfWeek().getName())
                         .collect(Collectors.toList()))
-                .toggle(getToggle(alarmGroup, loginMember))
+                .toggle(alarmGroupMember.getAlarmToggle())
                 .build();
-    }
-
-    private static Boolean getToggle(AlarmGroup alarmGroup, Member loginMember) {
-        List<AlarmGroupMember> alarmGroupMembers = alarmGroup.getAlarmGroupMembers();
-        Long loginMemberId = loginMember.getId();
-
-        for (AlarmGroupMember alarmGroupMember : alarmGroupMembers) {
-            if (alarmGroupMember.getId().equals(loginMemberId)) {
-                return alarmGroupMember.getAlarmToggle();
-            }
-        }
-        return false;
     }
 }

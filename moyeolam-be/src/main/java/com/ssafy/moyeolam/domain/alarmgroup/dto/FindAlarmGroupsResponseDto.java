@@ -1,6 +1,6 @@
 package com.ssafy.moyeolam.domain.alarmgroup.dto;
 
-import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroup;
+import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroupMember;
 import com.ssafy.moyeolam.domain.member.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,10 +13,10 @@ import java.util.stream.Collectors;
 public class FindAlarmGroupsResponseDto {
     private List<FindAlarmGroupsElement> alarmGroups;
 
-    public static FindAlarmGroupsResponseDto of(List<AlarmGroup> alarmGroups, Member loginMember) {
+    public static FindAlarmGroupsResponseDto of(List<AlarmGroupMember> alarmGroupMembers) {
         return FindAlarmGroupsResponseDto.builder()
-                .alarmGroups(alarmGroups.stream()
-                        .map(alarmGroup -> FindAlarmGroupsElement.of(alarmGroup, loginMember))
+                .alarmGroups(alarmGroupMembers.stream()
+                        .map(FindAlarmGroupsElement::of)
                         .collect(Collectors.toList()))
                 .build();
     }

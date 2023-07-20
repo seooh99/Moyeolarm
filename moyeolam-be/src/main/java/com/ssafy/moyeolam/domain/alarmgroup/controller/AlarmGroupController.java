@@ -16,18 +16,18 @@ public class AlarmGroupController {
     private final AlarmGroupService alarmGroupService;
 
     @PostMapping
-    public EnvelopeResponse<Long> generateAlarmGroup(@RequestBody SaveAlarmGroupRequestDto requestDto) {
+    public EnvelopeResponse<Long> saveAlarmGroup(@RequestBody SaveAlarmGroupRequestDto requestDto) {
         AuthenticatedMember loginMember = AuthenticatedMember.builder()
                 .memberId(1L)
                 .build();
 
         return EnvelopeResponse.<Long>builder()
-                .data(alarmGroupService.generateAlarmGroup(requestDto, loginMember.getMemberId()))
+                .data(alarmGroupService.saveAlarmGroup(requestDto, loginMember.getMemberId()))
                 .build();
     }
 
     @GetMapping
-    public EnvelopeResponse findAlarmGroups(){
+    public EnvelopeResponse findAlarmGroups() {
         AuthenticatedMember loginMember = AuthenticatedMember.builder()
                 .memberId(1L)
                 .build();

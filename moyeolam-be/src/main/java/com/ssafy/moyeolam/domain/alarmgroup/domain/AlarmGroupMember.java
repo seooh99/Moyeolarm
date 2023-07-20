@@ -35,5 +35,5 @@ public class AlarmGroupMember extends BaseTimeEntity {
 
     @Builder.Default
     @Column
-    private Boolean AlarmToggle = Boolean.FALSE;
+    private Boolean alarmToggle = Boolean.FALSE;
 }
