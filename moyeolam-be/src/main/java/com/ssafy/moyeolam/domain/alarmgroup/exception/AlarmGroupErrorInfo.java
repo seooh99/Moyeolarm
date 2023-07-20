@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum AlarmGroupErrorInfo {
-    ERROR_MESSAGE("601","에러 메시지");
+    ERROR_MESSAGE("801","에러 메시지");
 
 
     private String code;
