@@ -31,6 +31,9 @@ public class Member extends BaseTimeEntity {
     private String oauthIdentifier;
 
     @Column
+    private String fcmToken;
+
+    @Column
     private String nickname;
 
     @OneToMany(mappedBy = "member")
