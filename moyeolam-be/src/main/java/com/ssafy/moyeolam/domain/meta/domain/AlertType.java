@@ -1,6 +1,6 @@
 package com.ssafy.moyeolam.domain.meta.domain;
 
-public enum AlertType implements MetaDateProvider {
+public enum AlertType implements MetaDataProvider {
     FRIEND_APPROVE(1, "친구수락"),
     FRIEND_REJECT(2, "친구거절"),
     ALARM_GROUP_APPROVE(3, "알람그룹 수락"),

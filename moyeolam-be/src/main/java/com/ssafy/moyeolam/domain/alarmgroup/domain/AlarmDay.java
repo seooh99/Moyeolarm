@@ -1,6 +1,7 @@
 package com.ssafy.moyeolam.domain.alarmgroup.domain;
 
 import com.ssafy.moyeolam.domain.BaseTimeEntity;
+import com.ssafy.moyeolam.domain.meta.converter.DayOfWeekConverter;
 import com.ssafy.moyeolam.domain.meta.domain.DayOfWeek;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,6 @@ public class AlarmDay extends BaseTimeEntity {
     @JoinColumn(name = "alarm_group_id")
     private AlarmGroup alarmGroup;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = DayOfWeekConverter.class)
     private DayOfWeek dayOfWeek;
 }

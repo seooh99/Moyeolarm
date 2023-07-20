@@ -1,6 +1,6 @@
 package com.ssafy.moyeolam.domain.meta.domain;
 
-public enum MatchStatus implements MetaDateProvider{
+public enum MatchStatus implements MetaDataProvider {
     REQUEST_STATUS(1, "요청상태"),
     APPROVE_STATUS(2, "수락상태"),
     REJECT_STATUS(3, "거절상태"),
