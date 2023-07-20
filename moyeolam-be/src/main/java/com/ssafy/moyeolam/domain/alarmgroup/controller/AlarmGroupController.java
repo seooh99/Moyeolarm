@@ -2,6 +2,7 @@ package com.ssafy.moyeolam.domain.alarmgroup.controller;
 
 import com.ssafy.moyeolam.domain.alarmgroup.dto.SaveAlarmGroupRequestDto;
 import com.ssafy.moyeolam.domain.alarmgroup.service.AlarmGroupService;
+import com.ssafy.moyeolam.domain.member.dto.AuthenticatedMember;
 import com.ssafy.moyeolam.global.common.response.EnvelopeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,16 +17,23 @@ public class AlarmGroupController {
 
     @PostMapping
     public EnvelopeResponse<Long> generateAlarmGroup(@RequestBody SaveAlarmGroupRequestDto requestDto) {
+        AuthenticatedMember loginMember = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
+
         return EnvelopeResponse.<Long>builder()
-                .data(alarmGroupService.generateAlarmGroup(requestDto))
+                .data(alarmGroupService.generateAlarmGroup(requestDto, loginMember.getMemberId()))
                 .build();
     }
 
     @GetMapping
     public EnvelopeResponse findAlarmGroups(){
+        AuthenticatedMember loginMember = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
 
         return EnvelopeResponse.builder()
-                .data(null)
+                .data(alarmGroupService.findAlarmGroups(loginMember.getMemberId()))
                 .build();
     }
 }
