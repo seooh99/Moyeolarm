@@ -15,13 +15,13 @@ public class FriendController {
     private final FriendService friendService;
 
     @PostMapping("/{memberId}/request")
-    public EnvelopeResponse<Long> requestFriendRequest(@PathVariable Long memberId) {
+    public EnvelopeResponse<Long> sendFriendRequest(@PathVariable Long memberId) {
         AuthenticatedMember loginMember = AuthenticatedMember.builder()
                 .memberId(1L)
                 .build();
 
         return EnvelopeResponse.<Long>builder()
-                .data(friendService.requestFriendRequest(loginMember.getMemberId(), memberId))
+                .data(friendService.sendFriendRequest(loginMember.getMemberId(), memberId))
                 .build();
     }
 }

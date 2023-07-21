@@ -28,7 +28,7 @@ public class FriendService {
     private final FriendRequestRepository friendRequestRepository;
 
     @Transactional
-    public Long requestFriendRequest(Long loginMemberId, Long toMemberId) {
+    public Long sendFriendRequest(Long loginMemberId, Long toMemberId) {
 
         /**
          * TODO: memberException으로 변경
