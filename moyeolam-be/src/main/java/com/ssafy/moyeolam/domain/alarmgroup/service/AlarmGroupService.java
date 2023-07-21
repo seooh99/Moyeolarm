@@ -6,6 +6,7 @@ import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroupMember;
 import com.ssafy.moyeolam.domain.alarmgroup.dto.FindAlarmGroupResponseDto;
 import com.ssafy.moyeolam.domain.alarmgroup.dto.FindAlarmGroupsResponseDto;
 import com.ssafy.moyeolam.domain.alarmgroup.dto.SaveAlarmGroupRequestDto;
+import com.ssafy.moyeolam.domain.alarmgroup.dto.UpdateAlarmGroupRequestDto;
 import com.ssafy.moyeolam.domain.alarmgroup.exception.AlarmGroupErrorInfo;
 import com.ssafy.moyeolam.domain.alarmgroup.exception.AlarmGroupException;
 import com.ssafy.moyeolam.domain.alarmgroup.repository.AlarmDayRepository;
@@ -16,6 +17,7 @@ import com.ssafy.moyeolam.domain.member.exception.MemberErrorInfo;
 import com.ssafy.moyeolam.domain.member.exception.MemberException;
 import com.ssafy.moyeolam.domain.member.repository.MemberRepository;
 import com.ssafy.moyeolam.domain.meta.domain.AlarmGroupMemberRole;
+import com.ssafy.moyeolam.domain.meta.domain.DayOfWeek;
 import com.ssafy.moyeolam.domain.meta.domain.MetaDataType;
 import com.ssafy.moyeolam.domain.meta.service.MetaDataService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -123,5 +126,38 @@ public class AlarmGroupService {
 
         alarmGroupMemberRepository.deleteByMemberIdAndAlarmGroupId(loginMember.getId(), alarmGroupId);
         return alarmGroup.getId();
+    }
+
+    @Transactional
+    public Long updateAlarmGroup(Long alarmGroupId, Long loginMemberId, UpdateAlarmGroupRequestDto requestDto) {
+        Member loginMember = memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        AlarmGroup alarmGroup = alarmGroupRepository.findByIdWithHostMember(alarmGroupId)
+                .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP));
+
+        if (!alarmGroup.getHostMember().getId().equals(loginMember.getId())) {
+            throw new AlarmGroupException(AlarmGroupErrorInfo.UNAUTHORIZED_UPDATE);
+        }
+
+        alarmGroup.updateAlarmGroup(requestDto.getTitle(), requestDto.getTime());
+        alarmGroup.setAlarmSound(metaDataService.getMetaData(MetaDataType.ALARM_SOUND.name(), requestDto.getAlarmSound()));
+        alarmGroup.setAlarmMission(metaDataService.getMetaData(MetaDataType.ALARM_MISSION.name(), requestDto.getAlarmMission()));
+
+        updateAlarmDays(requestDto.getDayOfWeek(), alarmGroup);
+
+        return alarmGroup.getId();
+    }
+
+    private void updateAlarmDays(List<String> days, AlarmGroup alarmGroup) {
+        alarmDayRepository.deleteAllInBatch(alarmGroup.getAlarmDays());
+
+        List<AlarmDay> alarmDays = days.stream()
+                .map(day -> (AlarmDay.builder()
+                        .alarmGroup(alarmGroup)
+                        .dayOfWeek(metaDataService.getMetaData(MetaDataType.DAY_OF_WEEK.name(), day))
+                        .build()))
+                .collect(Collectors.toList());
+        alarmDayRepository.saveAll(alarmDays);
     }
 }

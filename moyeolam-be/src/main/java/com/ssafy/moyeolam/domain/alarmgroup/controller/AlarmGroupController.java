@@ -3,6 +3,7 @@ package com.ssafy.moyeolam.domain.alarmgroup.controller;
 import com.ssafy.moyeolam.domain.alarmgroup.dto.FindAlarmGroupResponseDto;
 import com.ssafy.moyeolam.domain.alarmgroup.dto.FindAlarmGroupsResponseDto;
 import com.ssafy.moyeolam.domain.alarmgroup.dto.SaveAlarmGroupRequestDto;
+import com.ssafy.moyeolam.domain.alarmgroup.dto.UpdateAlarmGroupRequestDto;
 import com.ssafy.moyeolam.domain.alarmgroup.service.AlarmGroupService;
 import com.ssafy.moyeolam.domain.member.dto.AuthenticatedMember;
 import com.ssafy.moyeolam.global.common.response.EnvelopeResponse;
@@ -60,4 +61,17 @@ public class AlarmGroupController {
                 .data(alarmGroupService.quitAlarmGroup(alarmGroupId, loginMember.getMemberId()))
                 .build();
     }
+
+    @PatchMapping("/{alarmGroupId}")
+    public EnvelopeResponse<Long> updateAlarmGroup(@PathVariable Long alarmGroupId, @RequestBody UpdateAlarmGroupRequestDto requestDto) {
+        AuthenticatedMember loginMember = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
+
+        return EnvelopeResponse.<Long>builder()
+                .data(alarmGroupService.updateAlarmGroup(alarmGroupId, loginMember.getMemberId(), requestDto))
+                .build();
+    }
+
+
 }
