@@ -1,14 +1,14 @@
 package com.ssafy.moyeolam.domain.alarmgroup.controller;
 
-import com.ssafy.moyeolam.domain.alarmgroup.dto.AlarmGroupGenerateRequest;
+import com.ssafy.moyeolam.domain.alarmgroup.dto.FindAlarmGroupResponseDto;
+import com.ssafy.moyeolam.domain.alarmgroup.dto.FindAlarmGroupsResponseDto;
+import com.ssafy.moyeolam.domain.alarmgroup.dto.SaveAlarmGroupRequestDto;
 import com.ssafy.moyeolam.domain.alarmgroup.service.AlarmGroupService;
+import com.ssafy.moyeolam.domain.member.dto.AuthenticatedMember;
 import com.ssafy.moyeolam.global.common.response.EnvelopeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/alarmgroup")
@@ -18,9 +18,46 @@ public class AlarmGroupController {
     private final AlarmGroupService alarmGroupService;
 
     @PostMapping
-    public EnvelopeResponse<Long> generateAlarmGroup(@RequestBody AlarmGroupGenerateRequest request) {
+    public EnvelopeResponse<Long> saveAlarmGroup(@RequestBody SaveAlarmGroupRequestDto requestDto) {
+        AuthenticatedMember loginMember = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
+
         return EnvelopeResponse.<Long>builder()
-                .data(alarmGroupService.generateAlarmGroup(request))
+                .data(alarmGroupService.saveAlarmGroup(requestDto, loginMember.getMemberId()))
+                .build();
+    }
+
+    @GetMapping
+    public EnvelopeResponse<FindAlarmGroupsResponseDto> findAlarmGroups() {
+        AuthenticatedMember loginMember = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
+
+        return EnvelopeResponse.<FindAlarmGroupsResponseDto>builder()
+                .data(alarmGroupService.findAlarmGroups(loginMember.getMemberId()))
+                .build();
+    }
+
+    @GetMapping("/{alarmGroupId}")
+    public EnvelopeResponse<FindAlarmGroupResponseDto> findAlarmGroup(@PathVariable Long alarmGroupId) {
+        AuthenticatedMember loginMember = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
+
+        return EnvelopeResponse.<FindAlarmGroupResponseDto>builder()
+                .data(alarmGroupService.findAlarmGroup(alarmGroupId, loginMember.getMemberId()))
+                .build();
+    }
+
+    @DeleteMapping("/{alarmGroupId}")
+    public EnvelopeResponse<Long> quitAlarmGroup(@PathVariable Long alarmGroupId) {
+        AuthenticatedMember loginMember = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
+
+        return EnvelopeResponse.<Long>builder()
+                .data(alarmGroupService.quitAlarmGroup(alarmGroupId, loginMember.getMemberId()))
                 .build();
     }
 }

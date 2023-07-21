@@ -1,10 +1,9 @@
 package com.ssafy.moyeolam.domain.alarmgroup.domain;
 
 import com.ssafy.moyeolam.domain.BaseTimeEntity;
+import com.ssafy.moyeolam.domain.member.domain.Member;
 import com.ssafy.moyeolam.domain.meta.converter.AlarmMissionConverter;
 import com.ssafy.moyeolam.domain.meta.converter.AlarmSoundConverter;
-import com.ssafy.moyeolam.domain.meta.domain.AlarmMission;
-import com.ssafy.moyeolam.domain.meta.domain.AlarmSound;
 import com.ssafy.moyeolam.domain.meta.domain.MetaData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +27,9 @@ public class AlarmGroup extends BaseTimeEntity {
     private Long id;
 
     @Column
+    private String title;
+
+    @Column
     private LocalTime time;
 
     @Builder.Default
@@ -43,6 +45,10 @@ public class AlarmGroup extends BaseTimeEntity {
 
     @Convert(converter = AlarmSoundConverter.class)
     private MetaData alarmSound;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member hostMember;
 
     @OneToMany(mappedBy = "alarmGroup")
     private List<AlarmDay> alarmDays = new ArrayList<>();
