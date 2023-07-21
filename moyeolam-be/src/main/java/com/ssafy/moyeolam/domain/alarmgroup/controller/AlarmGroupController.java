@@ -59,6 +59,5 @@ public class AlarmGroupController {
         return EnvelopeResponse.<Long>builder()
                 .data(alarmGroupService.quitAlarmGroup(alarmGroupId, loginMember.getMemberId()))
                 .build();
-        
     }
 }
