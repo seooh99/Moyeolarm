@@ -49,4 +49,15 @@ public class AlarmGroupController {
                 .data(alarmGroupService.findAlarmGroup(alarmGroupId, loginMember.getMemberId()))
                 .build();
     }
+
+    @DeleteMapping("/{alarmGroupId}")
+    public EnvelopeResponse<Long> quitAlarmGroup(@PathVariable Long alarmGroupId) {
+        AuthenticatedMember loginMember = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
+
+        return EnvelopeResponse.<Long>builder()
+                .data(alarmGroupService.quitAlarmGroup(alarmGroupId, loginMember.getMemberId()))
+                .build();
+    }
 }

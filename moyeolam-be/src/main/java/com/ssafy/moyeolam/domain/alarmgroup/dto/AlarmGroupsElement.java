@@ -16,6 +16,7 @@ public class AlarmGroupsElement {
     private String title;
     private LocalTime time;
     private List<String> dayOfWeek;
+    private Boolean isLock;
     private Boolean toggle;
 
     public static AlarmGroupsElement of(AlarmGroupMember alarmGroupMember) {
@@ -29,6 +30,7 @@ public class AlarmGroupsElement {
                         .stream()
                         .map(day -> day.getDayOfWeek().getName())
                         .collect(Collectors.toList()))
+                .isLock(alarmGroup.getLock())
                 .toggle(alarmGroupMember.getAlarmToggle())
                 .build();
     }
