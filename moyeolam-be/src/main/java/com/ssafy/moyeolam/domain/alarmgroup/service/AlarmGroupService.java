@@ -3,8 +3,11 @@ package com.ssafy.moyeolam.domain.alarmgroup.service;
 import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmDay;
 import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroup;
 import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroupMember;
+import com.ssafy.moyeolam.domain.alarmgroup.dto.FindAlarmGroupResponseDto;
 import com.ssafy.moyeolam.domain.alarmgroup.dto.FindAlarmGroupsResponseDto;
 import com.ssafy.moyeolam.domain.alarmgroup.dto.SaveAlarmGroupRequestDto;
+import com.ssafy.moyeolam.domain.alarmgroup.exception.AlarmGroupErrorInfo;
+import com.ssafy.moyeolam.domain.alarmgroup.exception.AlarmGroupException;
 import com.ssafy.moyeolam.domain.alarmgroup.repository.AlarmDayRepository;
 import com.ssafy.moyeolam.domain.alarmgroup.repository.AlarmGroupMemberRepository;
 import com.ssafy.moyeolam.domain.alarmgroup.repository.AlarmGroupRepository;
@@ -85,4 +88,20 @@ public class AlarmGroupService {
         return FindAlarmGroupsResponseDto.of(alarmGroupMembers);
     }
 
+    @Transactional(readOnly = true)
+    public FindAlarmGroupResponseDto findAlarmGroup(Long alarmGroupId, Long loginMemberId) {
+        /**
+         * TODO: memberException으로 변경
+         */
+        Member loginMember = memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new GlobalException(GlobalErrorInfo.INTERNAL_SERVER_ERROR));
+
+        AlarmGroup alarmGroup = alarmGroupRepository.findByIdWithAlarmGroupMembers(alarmGroupId)
+                .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP));
+
+        AlarmGroupMember alarmGroupLoginMember = alarmGroupMemberRepository.findByMemberIdAndAlarmGroupId(loginMember.getId(), alarmGroupId)
+                .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.UNAUTHORIZED_ACCESS));
+
+        return FindAlarmGroupResponseDto.of(alarmGroup, alarmGroupLoginMember.getAlarmGroupMemberRole().getName());
+    }
 }
