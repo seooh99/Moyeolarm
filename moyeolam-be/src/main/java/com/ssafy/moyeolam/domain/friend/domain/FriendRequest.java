@@ -32,4 +32,8 @@ public class FriendRequest extends BaseTimeEntity {
 
     @Convert(converter = MatchStatusConverter.class)
     private MetaData matchStatus;
+
+    public void updateMatchStatus(MetaData matchStatus) {
+        this.matchStatus = matchStatus;
+    }
 }
