@@ -11,17 +11,18 @@ import java.util.stream.Collectors;
 
 @Getter
 @Builder
-public class FindAlarmGroupsElement {
+public class AlarmGroupsElement {
     private Long alarmGroupId;
     private String title;
     private LocalTime time;
     private List<String> dayOfWeek;
+    private Boolean isLock;
     private Boolean toggle;
 
-    public static FindAlarmGroupsElement of(AlarmGroupMember alarmGroupMember) {
+    public static AlarmGroupsElement of(AlarmGroupMember alarmGroupMember) {
         AlarmGroup alarmGroup = alarmGroupMember.getAlarmGroup();
 
-        return FindAlarmGroupsElement.builder()
+        return AlarmGroupsElement.builder()
                 .alarmGroupId(alarmGroup.getId())
                 .title(alarmGroup.getTitle())
                 .time(alarmGroup.getTime())
@@ -29,6 +30,7 @@ public class FindAlarmGroupsElement {
                         .stream()
                         .map(day -> day.getDayOfWeek().getName())
                         .collect(Collectors.toList()))
+                .isLock(alarmGroup.getLock())
                 .toggle(alarmGroupMember.getAlarmToggle())
                 .build();
     }

@@ -1,5 +1,7 @@
 package com.ssafy.moyeolam.domain.alarmgroup.controller;
 
+import com.ssafy.moyeolam.domain.alarmgroup.dto.FindAlarmGroupResponseDto;
+import com.ssafy.moyeolam.domain.alarmgroup.dto.FindAlarmGroupsResponseDto;
 import com.ssafy.moyeolam.domain.alarmgroup.dto.SaveAlarmGroupRequestDto;
 import com.ssafy.moyeolam.domain.alarmgroup.service.AlarmGroupService;
 import com.ssafy.moyeolam.domain.member.dto.AuthenticatedMember;
@@ -27,13 +29,35 @@ public class AlarmGroupController {
     }
 
     @GetMapping
-    public EnvelopeResponse findAlarmGroups() {
+    public EnvelopeResponse<FindAlarmGroupsResponseDto> findAlarmGroups() {
         AuthenticatedMember loginMember = AuthenticatedMember.builder()
                 .memberId(1L)
                 .build();
 
-        return EnvelopeResponse.builder()
+        return EnvelopeResponse.<FindAlarmGroupsResponseDto>builder()
                 .data(alarmGroupService.findAlarmGroups(loginMember.getMemberId()))
+                .build();
+    }
+
+    @GetMapping("/{alarmGroupId}")
+    public EnvelopeResponse<FindAlarmGroupResponseDto> findAlarmGroup(@PathVariable Long alarmGroupId) {
+        AuthenticatedMember loginMember = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
+
+        return EnvelopeResponse.<FindAlarmGroupResponseDto>builder()
+                .data(alarmGroupService.findAlarmGroup(alarmGroupId, loginMember.getMemberId()))
+                .build();
+    }
+
+    @DeleteMapping("/{alarmGroupId}")
+    public EnvelopeResponse<Long> quitAlarmGroup(@PathVariable Long alarmGroupId) {
+        AuthenticatedMember loginMember = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
+
+        return EnvelopeResponse.<Long>builder()
+                .data(alarmGroupService.quitAlarmGroup(alarmGroupId, loginMember.getMemberId()))
                 .build();
     }
 }

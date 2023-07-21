@@ -3,18 +3,21 @@ package com.ssafy.moyeolam.domain.alarmgroup.service;
 import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmDay;
 import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroup;
 import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroupMember;
+import com.ssafy.moyeolam.domain.alarmgroup.dto.FindAlarmGroupResponseDto;
 import com.ssafy.moyeolam.domain.alarmgroup.dto.FindAlarmGroupsResponseDto;
 import com.ssafy.moyeolam.domain.alarmgroup.dto.SaveAlarmGroupRequestDto;
+import com.ssafy.moyeolam.domain.alarmgroup.exception.AlarmGroupErrorInfo;
+import com.ssafy.moyeolam.domain.alarmgroup.exception.AlarmGroupException;
 import com.ssafy.moyeolam.domain.alarmgroup.repository.AlarmDayRepository;
 import com.ssafy.moyeolam.domain.alarmgroup.repository.AlarmGroupMemberRepository;
 import com.ssafy.moyeolam.domain.alarmgroup.repository.AlarmGroupRepository;
 import com.ssafy.moyeolam.domain.member.domain.Member;
+import com.ssafy.moyeolam.domain.member.exception.MemberErrorInfo;
+import com.ssafy.moyeolam.domain.member.exception.MemberException;
 import com.ssafy.moyeolam.domain.member.repository.MemberRepository;
 import com.ssafy.moyeolam.domain.meta.domain.AlarmGroupMemberRole;
 import com.ssafy.moyeolam.domain.meta.domain.MetaDataType;
 import com.ssafy.moyeolam.domain.meta.service.MetaDataService;
-import com.ssafy.moyeolam.global.common.exception.GlobalErrorInfo;
-import com.ssafy.moyeolam.global.common.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,11 +42,12 @@ public class AlarmGroupService {
          * TODO: memberException으로 변경
          */
         Member loginMember = memberRepository.findById(loginMemberId)
-                .orElseThrow(() -> new GlobalException(GlobalErrorInfo.INTERNAL_SERVER_ERROR));
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
 
         // 1. 알람그룹 방 생성
         AlarmGroup alarmGroup = AlarmGroup.builder()
+                .hostMember(loginMember)
                 .title(requestDto.getTitle())
                 .time(requestDto.getTime())
                 .repeat(requestDto.getDayOfWeek().size() > 0)
@@ -75,14 +79,49 @@ public class AlarmGroupService {
 
     @Transactional(readOnly = true)
     public FindAlarmGroupsResponseDto findAlarmGroups(Long loginMemberId) {
-        /**
-         * TODO: memberException으로 변경
-         */
         Member loginMember = memberRepository.findById(loginMemberId)
-                .orElseThrow(() -> new GlobalException(GlobalErrorInfo.INTERNAL_SERVER_ERROR));
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
-        List<AlarmGroupMember> alarmGroupMembers = alarmGroupMemberRepository.findAllWithAlarmGroupAndMemberById(loginMember.getId());
+        List<AlarmGroupMember> alarmGroupMembers = alarmGroupMemberRepository.findAllWithAlarmGroupAndMemberByMemberId(loginMember.getId());
         return FindAlarmGroupsResponseDto.of(alarmGroupMembers);
     }
 
+    @Transactional(readOnly = true)
+    public FindAlarmGroupResponseDto findAlarmGroup(Long alarmGroupId, Long loginMemberId) {
+        Member loginMember = memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        AlarmGroup alarmGroup = alarmGroupRepository.findByIdWithAlarmGroupMembers(alarmGroupId)
+                .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP));
+
+        if (!alarmGroupMemberRepository.existsByMemberIdAndAlarmGroupId(loginMember.getId(), alarmGroupId)) {
+            throw new AlarmGroupException(AlarmGroupErrorInfo.UNAUTHORIZED_ACCESS);
+        }
+
+        return FindAlarmGroupResponseDto.of(alarmGroup, loginMember);
+    }
+
+    @Transactional
+    public Long quitAlarmGroup(Long alarmGroupId, Long loginMemberId) {
+        Member loginMember = memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        AlarmGroup alarmGroup = alarmGroupRepository.findByIdWithHostMember(alarmGroupId)
+                .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP));
+
+        if (!alarmGroupMemberRepository.existsByMemberIdAndAlarmGroupId(loginMember.getId(), alarmGroupId)) {
+            throw new AlarmGroupException(AlarmGroupErrorInfo.UNAUTHORIZED_ACCESS);
+        }
+
+        boolean isHost = alarmGroup.getHostMember().getId().equals(loginMember.getId());
+        if (isHost) {
+            alarmGroupMemberRepository.deleteAllInBatch(alarmGroup.getAlarmGroupMembers());
+            alarmDayRepository.deleteAllInBatch(alarmGroup.getAlarmDays());
+            alarmGroupRepository.delete(alarmGroup);
+            return alarmGroup.getId();
+        }
+
+        alarmGroupMemberRepository.deleteByMemberIdAndAlarmGroupId(loginMember.getId(), alarmGroupId);
+        return alarmGroup.getId();
+    }
 }
