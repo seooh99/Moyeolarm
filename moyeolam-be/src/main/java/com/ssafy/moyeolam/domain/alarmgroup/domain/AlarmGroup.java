@@ -55,4 +55,17 @@ public class AlarmGroup extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "alarmGroup")
     private List<AlarmGroupMember> alarmGroupMembers = new ArrayList<>();
+
+    public void updateAlarmGroup(String title, LocalTime time) {
+        this.title = title;
+        this.time = time;
+    }
+
+    public void setAlarmMission(MetaData alarmMission) {
+        this.alarmMission = alarmMission;
+    }
+
+    public void setAlarmSound(MetaData alarmSound) {
+        this.alarmSound = alarmSound;
+    }
 }
