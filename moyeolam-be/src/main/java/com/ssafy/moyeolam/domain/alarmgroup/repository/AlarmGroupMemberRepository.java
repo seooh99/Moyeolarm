@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AlarmGroupMemberRepository extends JpaRepository<AlarmGroupMember, Long> {
@@ -20,4 +21,6 @@ public interface AlarmGroupMemberRepository extends JpaRepository<AlarmGroupMemb
             "where m.id = :memberId " +
             "order by a.alarmToggle desc, g.time asc")
     List<AlarmGroupMember> findAllWithAlarmGroupAndMemberById(@Param("memberId") Long memberId);
+
+    Optional<AlarmGroupMember> findByMemberIdAndAlarmGroupId(Long memberId, Long alarmGroupId);
 }
