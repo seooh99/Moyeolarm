@@ -38,4 +38,7 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "member")
     private List<Friend> friends = new ArrayList<>();
+
+    @OneToOne(mappedBy = "member")
+    private ProfileImage profileImage;
 }
