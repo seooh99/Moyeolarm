@@ -20,10 +20,7 @@ import com.ssafy.moyeolam.domain.member.domain.Member;
 import com.ssafy.moyeolam.domain.member.exception.MemberErrorInfo;
 import com.ssafy.moyeolam.domain.member.exception.MemberException;
 import com.ssafy.moyeolam.domain.member.repository.MemberRepository;
-import com.ssafy.moyeolam.domain.meta.domain.AlarmGroupMemberRole;
-import com.ssafy.moyeolam.domain.meta.domain.AlertType;
-import com.ssafy.moyeolam.domain.meta.domain.MatchStatus;
-import com.ssafy.moyeolam.domain.meta.domain.MetaDataType;
+import com.ssafy.moyeolam.domain.meta.domain.*;
 import com.ssafy.moyeolam.domain.meta.service.MetaDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -179,18 +176,29 @@ public class AlarmGroupService {
 
         List<Long> requestFailMember = new ArrayList<>();
         for (Long memberId : memberIds) {
-            // 요청을 보내는 memberId의 요청상태가 요청, 수락 상태이거나, 호스트이면 실패
-            if (alarmGroupRequestRepository.existsByAlarmGroupIdAndFromMemberIdAndToMemberId(alarmGroupId, loginMember.getId(), memberId,
-                    metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.REQUEST_STATUS.getName()),
-                    metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.APPROVE_STATUS.getName()))
-                    || loginMember.getId().equals(memberId)) {
+            if (loginMember.getId().equals(memberId)) {
                 requestFailMember.add(memberId);
                 continue;
             }
+
+            AlarmGroupRequest alarmGroupRequest = alarmGroupRequestRepository.findByAlarmGroupIdAndFromMemberIdAndToMemberId(alarmGroupId, loginMember.getId(), memberId)
+                    .orElse(null);
+
+            if (alarmGroupRequest != null) {
+                MetaData matchStatus = alarmGroupRequest.getMatchStatus();
+                if (matchStatus.getName().equals(MatchStatus.REQUEST_STATUS.getName()) || matchStatus.getName().equals(MatchStatus.APPROVE_STATUS.getName())) {
+                    requestFailMember.add(memberId);
+                    continue;
+                }
+
+                alarmGroupRequest.setMatchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.REQUEST_STATUS.getName()));
+                continue;
+            }
+
             Member toMember = memberRepository.findById(memberId)
                     .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
-            AlarmGroupRequest alarmGroupRequest = AlarmGroupRequest.builder()
+            alarmGroupRequest = AlarmGroupRequest.builder()
                     .alarmGroup(alarmGroup)
                     .fromMember(loginMember)
                     .toMember(toMember)
