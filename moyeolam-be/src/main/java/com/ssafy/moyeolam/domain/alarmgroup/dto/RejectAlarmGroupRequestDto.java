@@ -5,8 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ApproveAlarmGroupRequestDto {
+public class RejectAlarmGroupRequestDto {
     private Long fromMemberId;
     private Long toMemberId;
-
 }
