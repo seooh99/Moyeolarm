@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum AlarmGroupErrorInfo {
     UNAUTHORIZED_ACCESS("801", "알람그룹 접근 권한이 없습니다."),
     NOT_FOUND_ALARM_GROUP("802", "존재하지 않는 알람그룹입니다."),
-    UNAUTHORIZED_UPDATE("803", "알람그룹 수정 권한이 없습니다.");
+    UNAUTHORIZED_UPDATE("803", "알람그룹 수정 권한이 없습니다."),
+    UNAUTHORIZED_REQUEST("804", "알람그룹 초대 권한이 없습니다.");
 
 
     private String code;
