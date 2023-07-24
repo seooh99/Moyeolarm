@@ -99,7 +99,7 @@ public class AlarmGroupService {
                 .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP));
 
         if (!alarmGroupMemberRepository.existsByMemberIdAndAlarmGroupId(loginMember.getId(), alarmGroupId)) {
-            throw new AlarmGroupException(AlarmGroupErrorInfo.UNAUTHORIZED_ACCESS);
+            throw new AlarmGroupException(AlarmGroupErrorInfo.ALREADY_NOT_ALARM_GROUP_MEMBER);
         }
 
         return FindAlarmGroupResponseDto.of(alarmGroup, loginMember);
@@ -114,18 +114,21 @@ public class AlarmGroupService {
                 .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP));
 
         if (!alarmGroupMemberRepository.existsByMemberIdAndAlarmGroupId(loginMember.getId(), alarmGroupId)) {
-            throw new AlarmGroupException(AlarmGroupErrorInfo.UNAUTHORIZED_ACCESS);
+            throw new AlarmGroupException(AlarmGroupErrorInfo.ALREADY_NOT_ALARM_GROUP_MEMBER);
         }
 
-        boolean isHost = alarmGroup.getHostMember().getId().equals(loginMember.getId());
-        if (isHost) {
+        Member hostMember = alarmGroup.getHostMember();
+        if (hostMember.getId().equals(loginMember.getId())) {
             alarmGroupMemberRepository.deleteAllInBatch(alarmGroup.getAlarmGroupMembers());
             alarmDayRepository.deleteAllInBatch(alarmGroup.getAlarmDays());
             alarmGroupRepository.delete(alarmGroup);
             return alarmGroup.getId();
         }
-
         alarmGroupMemberRepository.deleteByMemberIdAndAlarmGroupId(loginMember.getId(), alarmGroupId);
+
+        AlarmGroupRequest alarmGroupRequest = alarmGroupRequestRepository.findByAlarmGroupIdAndFromMemberIdAndToMemberId(alarmGroup.getId(), hostMember.getId(), loginMember.getId())
+                .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP_REQUEST));
+        alarmGroupRequest.setMatchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.DELETE_STATUS.getName()));
 
         AlertLog alertLog = AlertLog.builder()
                 .fromMember(loginMember)
@@ -298,5 +301,42 @@ public class AlarmGroupService {
         }
 
         throw new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP_REQUEST);
+    }
+
+    @Transactional
+    public Long banAlarmGroupMember(Long alarmGroupId, Long loginMemberId, Long banMemberId) {
+        Member loginMember = memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        Member banMember = memberRepository.findById(banMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        AlarmGroup alarmGroup = alarmGroupRepository.findByIdWithHostMember(alarmGroupId)
+                .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP));
+
+        if (!alarmGroupMemberRepository.existsByMemberIdAndAlarmGroupId(banMemberId, alarmGroupId)) {
+            throw new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP_MEMBER);
+        }
+
+        if (!alarmGroup.getHostMember().getId().equals(loginMember.getId())) {
+            throw new AlarmGroupException(AlarmGroupErrorInfo.UNAUTHORIZED_BAN);
+        }
+
+        if (alarmGroup.getHostMember().getId().equals(banMemberId)) {
+            throw new AlarmGroupException(AlarmGroupErrorInfo.NOT_SELF_BAN);
+        }
+        alarmGroupMemberRepository.deleteByMemberIdAndAlarmGroupId(banMemberId, alarmGroupId);
+
+        AlarmGroupRequest alarmGroupRequest = alarmGroupRequestRepository.findByAlarmGroupIdAndFromMemberIdAndToMemberId(alarmGroupId, loginMember.getId(), banMember.getId())
+                .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP_REQUEST));
+        alarmGroupRequest.setMatchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.DELETE_STATUS.getName()));
+
+        AlertLog alertLog = AlertLog.builder()
+                .fromMember(loginMember)
+                .toMember(banMember)
+                .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_BAN.getName()))
+                .build();
+        alertLogRepository.save(alertLog);
+        return banMemberId;
     }
 }
