@@ -36,4 +36,8 @@ public class AlarmGroupRequest extends BaseTimeEntity {
 
     @Convert(converter = MatchStatusConverter.class)
     private MetaData matchStatus;
+
+    public void setMatchStatus(MetaData matchStatus) {
+        this.matchStatus = matchStatus;
+    }
 }
