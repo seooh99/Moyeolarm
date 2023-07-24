@@ -126,6 +126,14 @@ public class AlarmGroupService {
         }
 
         alarmGroupMemberRepository.deleteByMemberIdAndAlarmGroupId(loginMember.getId(), alarmGroupId);
+
+        AlertLog alertLog = AlertLog.builder()
+                .fromMember(loginMember)
+                .toMember(alarmGroup.getHostMember())
+                .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_QUIT.getName()))
+                .build();
+        alertLogRepository.save(alertLog);
+
         return alarmGroup.getId();
     }
 
