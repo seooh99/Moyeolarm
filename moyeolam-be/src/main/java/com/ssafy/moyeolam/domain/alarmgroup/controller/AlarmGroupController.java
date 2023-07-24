@@ -87,11 +87,22 @@ public class AlarmGroupController {
     @PostMapping("/{alarmGroupId}/approve")
     public EnvelopeResponse<Long> approveAlarmGroup(@PathVariable Long alarmGroupId, @RequestBody ApproveAlarmGroupRequestDto requestDto) {
         AuthenticatedMember loginMember = AuthenticatedMember.builder()
-                .memberId(1L)
+                .memberId(2L)
                 .build();
 
         return EnvelopeResponse.<Long>builder()
                 .data(alarmGroupService.approveAlarmGroup(alarmGroupId, loginMember.getMemberId(), requestDto.getFromMemberId(), requestDto.getToMemberId()))
+                .build();
+    }
+
+    @PostMapping("/{alarmGroupId}/reject")
+    public EnvelopeResponse<Long> rejectAlarmGroup(@PathVariable Long alarmGroupId, @RequestBody RejectAlarmGroupRequestDto requestDto) {
+        AuthenticatedMember loginMember = AuthenticatedMember.builder()
+                .memberId(2L)
+                .build();
+
+        return EnvelopeResponse.<Long>builder()
+                .data(alarmGroupService.rejectAlarmGroup(alarmGroupId, loginMember.getMemberId(), requestDto.getFromMemberId(), requestDto.getToMemberId()))
                 .build();
     }
 
