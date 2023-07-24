@@ -9,13 +9,13 @@ import com.ssafy.moyeolam.domain.friend.exception.FriendException;
 import com.ssafy.moyeolam.domain.friend.repository.FriendRepository;
 import com.ssafy.moyeolam.domain.friend.repository.FriendRequestRepository;
 import com.ssafy.moyeolam.domain.member.domain.Member;
+import com.ssafy.moyeolam.domain.member.exception.MemberErrorInfo;
+import com.ssafy.moyeolam.domain.member.exception.MemberException;
 import com.ssafy.moyeolam.domain.member.repository.MemberRepository;
 import com.ssafy.moyeolam.domain.meta.domain.AlertType;
 import com.ssafy.moyeolam.domain.meta.domain.MatchStatus;
 import com.ssafy.moyeolam.domain.meta.domain.MetaDataType;
 import com.ssafy.moyeolam.domain.meta.service.MetaDataService;
-import com.ssafy.moyeolam.global.common.exception.GlobalErrorInfo;
-import com.ssafy.moyeolam.global.common.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,15 +36,11 @@ public class FriendService {
 
     @Transactional
     public Long sendFriendRequest(Long loginMemberId, Long toMemberId) {
-
-        /**
-         * TODO: memberException으로 변경
-         */
         Member loginMember = memberRepository.findById(loginMemberId)
-                .orElseThrow(() -> new GlobalException(GlobalErrorInfo.INTERNAL_SERVER_ERROR));
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
         Member toMember = memberRepository.findById(toMemberId)
-                .orElseThrow(() -> new GlobalException(GlobalErrorInfo.INTERNAL_SERVER_ERROR));
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
         Consumer<FriendRequest> friendRequestStatusValidator = friendRequest -> {
             String matchStatusName = friendRequest.getMatchStatus().getName();
@@ -78,21 +74,14 @@ public class FriendService {
 
     @Transactional
     public Void approveFriendRequest(Long loginMemberId, Long friendRequestId) {
-
-        /**
-         * TODO: memberException으로 변경
-         */
         Member loginMember = memberRepository.findById(loginMemberId)
-                .orElseThrow(() -> new GlobalException(GlobalErrorInfo.INTERNAL_SERVER_ERROR));
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
         FriendRequest friendRequest = friendRequestRepository.findById(friendRequestId)
                 .orElseThrow(() -> new FriendException(FriendErrorInfo.NOT_FOUND_FRIEND_REQUEST));
 
-        /**
-         * TODO: memberException으로 변경
-         */
         Member fromMember = memberRepository.findById(friendRequest.getFromMember().getId())
-                .orElseThrow(() -> new GlobalException(GlobalErrorInfo.INTERNAL_SERVER_ERROR));
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
         if (!loginMemberId.equals(friendRequest.getToMember().getId()))
             throw new FriendException(FriendErrorInfo.NOT_REQUESTED_USER);
