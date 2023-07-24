@@ -14,11 +14,14 @@ import com.ssafy.moyeolam.domain.alarmgroup.repository.AlarmDayRepository;
 import com.ssafy.moyeolam.domain.alarmgroup.repository.AlarmGroupMemberRepository;
 import com.ssafy.moyeolam.domain.alarmgroup.repository.AlarmGroupRepository;
 import com.ssafy.moyeolam.domain.alarmgroup.repository.AlarmGroupRequestRepository;
+import com.ssafy.moyeolam.domain.alert.domain.AlertLog;
+import com.ssafy.moyeolam.domain.alert.repository.AlertLogRepository;
 import com.ssafy.moyeolam.domain.member.domain.Member;
 import com.ssafy.moyeolam.domain.member.exception.MemberErrorInfo;
 import com.ssafy.moyeolam.domain.member.exception.MemberException;
 import com.ssafy.moyeolam.domain.member.repository.MemberRepository;
 import com.ssafy.moyeolam.domain.meta.domain.AlarmGroupMemberRole;
+import com.ssafy.moyeolam.domain.meta.domain.AlertType;
 import com.ssafy.moyeolam.domain.meta.domain.MatchStatus;
 import com.ssafy.moyeolam.domain.meta.domain.MetaDataType;
 import com.ssafy.moyeolam.domain.meta.service.MetaDataService;
@@ -41,6 +44,7 @@ public class AlarmGroupService {
     private final AlarmGroupMemberRepository alarmGroupMemberRepository;
     private final AlarmDayRepository alarmDayRepository;
     private final AlarmGroupRequestRepository alarmGroupRequestRepository;
+    private final AlertLogRepository alertLogRepository;
 
 
     @Transactional
@@ -227,7 +231,15 @@ public class AlarmGroupService {
                     .alarmToggle(false)
                     .build();
             alarmGroupMemberRepository.save(alarmGroupMember);
-            
+
+            // 알림로그 저장
+            AlertLog alertLog = AlertLog.builder()
+                    .fromMember(loginMember)
+                    .toMember(fromMember)
+                    .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_APPROVE.getName()))
+                    .build();
+            alertLogRepository.save(alertLog);
+
             return loginMember.getId();
         }
 
