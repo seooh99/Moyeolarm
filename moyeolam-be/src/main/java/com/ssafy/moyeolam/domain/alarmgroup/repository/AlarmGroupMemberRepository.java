@@ -23,5 +23,5 @@ public interface AlarmGroupMemberRepository extends JpaRepository<AlarmGroupMemb
 
     boolean existsByMemberIdAndAlarmGroupId(Long memberId, Long alarmGroupId);
 
-    void deleteByMemberIdAndAlarmGroupId(Long id, Long alarmGroupId);
+    void deleteByMemberIdAndAlarmGroupId(Long memberId, Long alarmGroupId);
 }
