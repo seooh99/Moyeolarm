@@ -1,16 +1,21 @@
 package com.ssafy.moyeolam.domain.friend.service;
 
+import com.ssafy.moyeolam.domain.alert.domain.AlertLog;
+import com.ssafy.moyeolam.domain.alert.repository.AlertLogRepository;
+import com.ssafy.moyeolam.domain.friend.domain.Friend;
 import com.ssafy.moyeolam.domain.friend.domain.FriendRequest;
 import com.ssafy.moyeolam.domain.friend.exception.FriendErrorInfo;
 import com.ssafy.moyeolam.domain.friend.exception.FriendException;
+import com.ssafy.moyeolam.domain.friend.repository.FriendRepository;
 import com.ssafy.moyeolam.domain.friend.repository.FriendRequestRepository;
 import com.ssafy.moyeolam.domain.member.domain.Member;
+import com.ssafy.moyeolam.domain.member.exception.MemberErrorInfo;
+import com.ssafy.moyeolam.domain.member.exception.MemberException;
 import com.ssafy.moyeolam.domain.member.repository.MemberRepository;
+import com.ssafy.moyeolam.domain.meta.domain.AlertType;
 import com.ssafy.moyeolam.domain.meta.domain.MatchStatus;
 import com.ssafy.moyeolam.domain.meta.domain.MetaDataType;
 import com.ssafy.moyeolam.domain.meta.service.MetaDataService;
-import com.ssafy.moyeolam.global.common.exception.GlobalErrorInfo;
-import com.ssafy.moyeolam.global.common.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,19 +30,17 @@ import java.util.function.Consumer;
 public class FriendService {
     private final MetaDataService metaDataService;
     private final MemberRepository memberRepository;
+    private final FriendRepository friendRepository;
     private final FriendRequestRepository friendRequestRepository;
+    private final AlertLogRepository alertLogRepository;
 
     @Transactional
     public Long sendFriendRequest(Long loginMemberId, Long toMemberId) {
-
-        /**
-         * TODO: memberException으로 변경
-         */
         Member loginMember = memberRepository.findById(loginMemberId)
-                .orElseThrow(() -> new GlobalException(GlobalErrorInfo.INTERNAL_SERVER_ERROR));
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
         Member toMember = memberRepository.findById(toMemberId)
-                .orElseThrow(() -> new GlobalException(GlobalErrorInfo.INTERNAL_SERVER_ERROR));
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
         Consumer<FriendRequest> friendRequestStatusValidator = friendRequest -> {
             String matchStatusName = friendRequest.getMatchStatus().getName();
@@ -70,21 +73,57 @@ public class FriendService {
     }
 
     @Transactional
-    public Void rejectFriendRequest(Long loginMemberId, Long friendRequestId) {
-        /**
-         * TODO: memberException으로 변경
-         */
-        memberRepository.findById(loginMemberId)
-                .orElseThrow(() -> new GlobalException(GlobalErrorInfo.INTERNAL_SERVER_ERROR));
+    public Void approveFriendRequest(Long loginMemberId, Long friendRequestId) {
+        Member loginMember = memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
         FriendRequest friendRequest = friendRequestRepository.findById(friendRequestId)
                 .orElseThrow(() -> new FriendException(FriendErrorInfo.NOT_FOUND_FRIEND_REQUEST));
 
-        /**
-         * TODO: memberException으로 변경
-         */
+        Member fromMember = memberRepository.findById(friendRequest.getFromMember().getId())
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        if (!loginMemberId.equals(friendRequest.getToMember().getId()))
+            throw new FriendException(FriendErrorInfo.NOT_REQUESTED_USER);
+
+        if (!friendRequest.getMatchStatus().equals(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.REQUEST_STATUS.getName())))
+            throw new FriendException(FriendErrorInfo.NOT_REQUEST_STATUS);
+
+        friendRequest.updateMatchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.APPROVE_STATUS.getName()));
+
+        Friend fromToFriend = Friend.builder()
+                .member(fromMember)
+                .myFriend(loginMember)
+                .build();
+        friendRepository.save(fromToFriend);
+
+        Friend toFromFriend = Friend.builder()
+                .member(loginMember)
+                .myFriend(fromMember)
+                .build();
+        friendRepository.save(toFromFriend);
+
+        // 알림로그 저장
+        AlertLog alertLog = AlertLog.builder()
+                .fromMember(loginMember)
+                .toMember(fromMember)
+                .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.FRIEND_APPROVE.getName()))
+                .build();
+        alertLogRepository.save(alertLog);
+
+        return null;
+    }
+
+    @Transactional
+    public Void rejectFriendRequest(Long loginMemberId, Long friendRequestId) {
+        memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        FriendRequest friendRequest = friendRequestRepository.findById(friendRequestId)
+                .orElseThrow(() -> new FriendException(FriendErrorInfo.NOT_FOUND_FRIEND_REQUEST));
+
         memberRepository.findById(friendRequest.getFromMember().getId())
-                .orElseThrow(() -> new GlobalException(GlobalErrorInfo.INTERNAL_SERVER_ERROR));
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
         if (!loginMemberId.equals(friendRequest.getToMember().getId()))
             throw new FriendException(FriendErrorInfo.NOT_REQUESTED_USER);

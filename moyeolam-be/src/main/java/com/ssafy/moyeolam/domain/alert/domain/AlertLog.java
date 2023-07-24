@@ -1,6 +1,7 @@
-package com.ssafy.moyeolam.domain.member.domain;
+package com.ssafy.moyeolam.domain.alert.domain;
 
 import com.ssafy.moyeolam.domain.BaseTimeEntity;
+import com.ssafy.moyeolam.domain.member.domain.Member;
 import com.ssafy.moyeolam.domain.meta.converter.AlertTypeConverter;
 import com.ssafy.moyeolam.domain.meta.domain.MetaData;
 import lombok.AllArgsConstructor;
