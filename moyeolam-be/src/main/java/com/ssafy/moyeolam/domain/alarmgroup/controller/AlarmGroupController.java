@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/alarmgroup")
+@RequestMapping("/alarmgroups")
 @RequiredArgsConstructor
 @Slf4j
 public class AlarmGroupController {
@@ -81,6 +81,17 @@ public class AlarmGroupController {
 
         return EnvelopeResponse.<List<Long>>builder()
                 .data(alarmGroupService.requestAlarmGroup(loginMember.getMemberId(), alarmGroupId, requestDto.getMemberIds()))
+                .build();
+    }
+
+    @PostMapping("/{alarmGroupId}/approve")
+    public EnvelopeResponse<Long> approveAlarmGroup(@PathVariable Long alarmGroupId, @RequestBody ApproveAlarmGroupRequestDto requestDto) {
+        AuthenticatedMember loginMember = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
+
+        return EnvelopeResponse.<Long>builder()
+                .data(alarmGroupService.approveAlarmGroup(alarmGroupId, loginMember.getMemberId(), requestDto.getFromMemberId(), requestDto.getToMemberId()))
                 .build();
     }
 
