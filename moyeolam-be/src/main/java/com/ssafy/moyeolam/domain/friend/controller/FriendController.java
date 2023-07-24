@@ -24,4 +24,15 @@ public class FriendController {
                 .data(friendService.sendFriendRequest(loginMember.getMemberId(), memberId))
                 .build();
     }
+
+    @PostMapping("/{friendRequestId}/approve")
+    public EnvelopeResponse<Void> approveFriendRequest(@PathVariable Long friendRequestId) {
+        AuthenticatedMember loginMember = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
+
+        return EnvelopeResponse.<Void>builder()
+                .data(friendService.approveFriendRequest(loginMember.getMemberId(), friendRequestId))
+                .build();
+    }
 }
