@@ -299,4 +299,37 @@ public class AlarmGroupService {
 
         throw new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP_REQUEST);
     }
+
+    @Transactional
+    public Long banAlarmGroupMember(Long alarmGroupId, Long loginMemberId, Long banMemberId) {
+        Member loginMember = memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        Member banMember = memberRepository.findById(banMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        AlarmGroup alarmGroup = alarmGroupRepository.findByIdWithHostMember(alarmGroupId)
+                .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP));
+
+        if (!alarmGroupMemberRepository.existsByMemberIdAndAlarmGroupId(banMemberId, alarmGroupId)) {
+            throw new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP_MEMBER);
+        }
+
+        if (!alarmGroup.getHostMember().getId().equals(loginMember.getId())) {
+            throw new AlarmGroupException(AlarmGroupErrorInfo.UNAUTHORIZED_BAN);
+        }
+
+        if (alarmGroup.getHostMember().getId().equals(banMemberId)) {
+            throw new AlarmGroupException(AlarmGroupErrorInfo.NOT_SELF_BAN);
+        }
+        alarmGroupMemberRepository.deleteByMemberIdAndAlarmGroupId(banMemberId, alarmGroupId);
+
+        AlertLog alertLog = AlertLog.builder()
+                .fromMember(loginMember)
+                .toMember(banMember)
+                .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_BAN.getName()))
+                .build();
+        alertLogRepository.save(alertLog);
+        return banMemberId;
+    }
 }
