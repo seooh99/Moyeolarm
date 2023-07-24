@@ -2,10 +2,13 @@ package com.ssafy.moyeolam.domain.alarmgroup.repository;
 
 import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroupRequest;
 import com.ssafy.moyeolam.domain.meta.domain.MetaData;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public interface AlarmGroupRequestRepository extends JpaRepository<AlarmGroupRequest, Long> {
@@ -18,4 +21,6 @@ public interface AlarmGroupRequestRepository extends JpaRepository<AlarmGroupReq
                                                              @Param("toMemberId") Long toMemberId,
                                                              @Param("requestStatus") MetaData requestStatus,
                                                              @Param("acceptStatus") MetaData acceptStatus);
+    
+    Optional<AlarmGroupRequest> findByAlarmGroupIdAndFromMemberIdAndToMemberId(Long alarmGroupId, Long fromMemberId, Long toMemberId);
 }
