@@ -68,4 +68,32 @@ public class FriendService {
         fromToFriendRequest.updateMatchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.REQUEST_STATUS.getName()));
         return fromToFriendRequest.getId();
     }
+
+    @Transactional
+    public Void rejectFriendRequest(Long loginMemberId, Long friendRequestId) {
+        /**
+         * TODO: memberException으로 변경
+         */
+        memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new GlobalException(GlobalErrorInfo.INTERNAL_SERVER_ERROR));
+
+        FriendRequest friendRequest = friendRequestRepository.findById(friendRequestId)
+                .orElseThrow(() -> new FriendException(FriendErrorInfo.NOT_FOUND_FRIEND_REQUEST));
+
+        /**
+         * TODO: memberException으로 변경
+         */
+        memberRepository.findById(friendRequest.getFromMember().getId())
+                .orElseThrow(() -> new GlobalException(GlobalErrorInfo.INTERNAL_SERVER_ERROR));
+
+        if (!loginMemberId.equals(friendRequest.getToMember().getId()))
+            throw new FriendException(FriendErrorInfo.NOT_REQUESTED_USER);
+
+        if (!friendRequest.getMatchStatus().equals(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.REQUEST_STATUS.getName())))
+            throw new FriendException(FriendErrorInfo.NOT_REQUEST_STATUS);
+
+        friendRequest.updateMatchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.REJECT_STATUS.getName()));
+
+        return null;
+    }
 }
