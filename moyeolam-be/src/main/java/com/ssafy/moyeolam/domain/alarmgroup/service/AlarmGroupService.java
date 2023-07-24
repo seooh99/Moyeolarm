@@ -126,6 +126,14 @@ public class AlarmGroupService {
         }
 
         alarmGroupMemberRepository.deleteByMemberIdAndAlarmGroupId(loginMember.getId(), alarmGroupId);
+
+        AlertLog alertLog = AlertLog.builder()
+                .fromMember(loginMember)
+                .toMember(alarmGroup.getHostMember())
+                .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_QUIT.getName()))
+                .build();
+        alertLogRepository.save(alertLog);
+
         return alarmGroup.getId();
     }
 
@@ -254,4 +262,41 @@ public class AlarmGroupService {
         throw new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP_REQUEST);
     }
 
+
+    @Transactional
+    public Long rejectAlarmGroup(Long alarmGroupId, Long loginMemberId, Long fromMemberId, Long toMemberId) {
+        Member loginMember = memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        Member fromMember = memberRepository.findById(fromMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        Member toMember = memberRepository.findById(toMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        if (!loginMember.getId().equals(toMember.getId())) {
+            throw new AlarmGroupException(AlarmGroupErrorInfo.UNAUTHORIZED_APPROVE);
+        }
+
+        AlarmGroup alarmGroup = alarmGroupRepository.findById(alarmGroupId)
+                .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP));
+
+        AlarmGroupRequest alarmGroupRequest = alarmGroupRequestRepository.findByAlarmGroupIdAndFromMemberIdAndToMemberId(alarmGroup.getId(), fromMember.getId(), toMember.getId())
+                .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP_REQUEST));
+
+        if (alarmGroupRequest.getMatchStatus().getName().equals(MatchStatus.REQUEST_STATUS.getName())) {
+            alarmGroupRequest.setMatchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.REJECT_STATUS.getName()));
+
+            // 알림로그 저장
+            AlertLog alertLog = AlertLog.builder()
+                    .fromMember(loginMember)
+                    .toMember(fromMember)
+                    .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_REJECT.getName()))
+                    .build();
+            alertLogRepository.save(alertLog);
+            return loginMember.getId();
+        }
+
+        throw new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP_REQUEST);
+    }
 }
