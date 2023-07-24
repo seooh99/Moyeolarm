@@ -106,5 +106,15 @@ public class AlarmGroupController {
                 .build();
     }
 
+    @PostMapping("{alarmGroupId}/ban")
+    public EnvelopeResponse<Long> banAlarmGroupMember(@PathVariable Long alarmGroupId, @RequestBody BanAlarmGroupMemberRequestDto banAlarmGroupMemberRequestDto) {
+        AuthenticatedMember loginMember = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
+
+        return EnvelopeResponse.<Long>builder()
+                .data(alarmGroupService.banAlarmGroupMember(alarmGroupId, loginMember.getMemberId(), banAlarmGroupMemberRequestDto.getMemberId()))
+                .build();
+    }
 
 }
