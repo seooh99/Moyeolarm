@@ -1,5 +1,7 @@
 package com.ssafy.moyeolam.domain.friend.service;
 
+import com.ssafy.moyeolam.domain.alert.domain.AlertLog;
+import com.ssafy.moyeolam.domain.alert.repository.AlertLogRepository;
 import com.ssafy.moyeolam.domain.friend.domain.Friend;
 import com.ssafy.moyeolam.domain.friend.domain.FriendRequest;
 import com.ssafy.moyeolam.domain.friend.exception.FriendErrorInfo;
@@ -8,6 +10,7 @@ import com.ssafy.moyeolam.domain.friend.repository.FriendRepository;
 import com.ssafy.moyeolam.domain.friend.repository.FriendRequestRepository;
 import com.ssafy.moyeolam.domain.member.domain.Member;
 import com.ssafy.moyeolam.domain.member.repository.MemberRepository;
+import com.ssafy.moyeolam.domain.meta.domain.AlertType;
 import com.ssafy.moyeolam.domain.meta.domain.MatchStatus;
 import com.ssafy.moyeolam.domain.meta.domain.MetaDataType;
 import com.ssafy.moyeolam.domain.meta.service.MetaDataService;
@@ -29,6 +32,7 @@ public class FriendService {
     private final MemberRepository memberRepository;
     private final FriendRepository friendRepository;
     private final FriendRequestRepository friendRequestRepository;
+    private final AlertLogRepository alertLogRepository;
 
     @Transactional
     public Long sendFriendRequest(Long loginMemberId, Long toMemberId) {
@@ -109,6 +113,14 @@ public class FriendService {
                 .myFriend(fromMember)
                 .build();
         friendRepository.save(toFromFriend);
+
+        // 알림로그 저장
+        AlertLog alertLog = AlertLog.builder()
+                .fromMember(loginMember)
+                .toMember(fromMember)
+                .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.FRIEND_APPROVE.getName()))
+                .build();
+        alertLogRepository.save(alertLog);
 
         return null;
     }
