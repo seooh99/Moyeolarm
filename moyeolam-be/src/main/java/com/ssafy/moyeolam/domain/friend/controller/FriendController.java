@@ -46,4 +46,15 @@ public class FriendController {
                 .data(friendService.rejectFriendRequest(loginMember.getMemberId(), friendRequestId))
                 .build();
     }
+
+    @DeleteMapping("/{myFriendId}")
+    public EnvelopeResponse<Void> deleteFriend(@PathVariable Long myFriendId) {
+        AuthenticatedMember loginMember = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
+
+        return EnvelopeResponse.<Void>builder()
+                .data(friendService.deleteFriend(loginMember.getMemberId(), myFriendId))
+                .build();
+    }
 }
