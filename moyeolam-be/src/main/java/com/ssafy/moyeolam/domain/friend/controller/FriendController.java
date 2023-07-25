@@ -69,4 +69,15 @@ public class FriendController {
                 .data(friendService.deleteFriend(loginMember.getMemberId(), myFriendId))
                 .build();
     }
+
+    @GetMapping("/search")
+    public EnvelopeResponse<FindFriendsResponseDto> searchFriends(@RequestParam String keyword) {
+        AuthenticatedMember loginMember = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
+
+        return EnvelopeResponse.<FindFriendsResponseDto>builder()
+                .data(friendService.searchFriends(loginMember.getMemberId(), keyword))
+                .build();
+    }
 }
