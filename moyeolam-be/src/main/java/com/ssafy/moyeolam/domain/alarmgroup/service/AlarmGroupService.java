@@ -341,7 +341,7 @@ public class AlarmGroupService {
     }
 
     @Transactional
-    public Long lockAlarmGroup(Long alarmGroupId, Long loginMemberId) {
+    public Boolean lockAlarmGroup(Long alarmGroupId, Long loginMemberId) {
         Member loginMember = memberRepository.findById(loginMemberId)
                 .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
@@ -353,6 +353,25 @@ public class AlarmGroupService {
         }
 
         alarmGroup.setLock(!alarmGroup.getLock());
-        return alarmGroup.getId();
+        return alarmGroup.getLock();
+    }
+
+    @Transactional
+    public Boolean toggleAlarm(Long alarmGroupId, Long loginMemberId) {
+        Member loginMember = memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        AlarmGroup alarmGroup = alarmGroupRepository.findById(alarmGroupId)
+                .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP));
+
+        AlarmGroupMember alarmGroupMember = alarmGroupMemberRepository.findByAlarmGroupIdAndMemberId(alarmGroup.getId(), loginMember.getId())
+                .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP_MEMBER));
+
+        if (alarmGroup.getLock()) {
+            throw new AlarmGroupException(AlarmGroupErrorInfo.LOCKED_ALARM_TOGGLE);
+        }
+        alarmGroupMember.setAlarmToggle(!alarmGroupMember.getAlarmToggle());
+
+        return alarmGroupMember.getAlarmToggle();
     }
 }
