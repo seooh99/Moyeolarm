@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AlarmGroupMemberRepository extends JpaRepository<AlarmGroupMember, Long> {
@@ -24,4 +25,6 @@ public interface AlarmGroupMemberRepository extends JpaRepository<AlarmGroupMemb
     boolean existsByMemberIdAndAlarmGroupId(Long memberId, Long alarmGroupId);
 
     void deleteByMemberIdAndAlarmGroupId(Long memberId, Long alarmGroupId);
+
+    Optional<AlarmGroupMember> findByAlarmGroupIdAndMemberId(Long alarmGroupId, Long memberId);
 }

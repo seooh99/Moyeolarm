@@ -4,6 +4,7 @@ import com.ssafy.moyeolam.domain.alert.domain.AlertLog;
 import com.ssafy.moyeolam.domain.alert.repository.AlertLogRepository;
 import com.ssafy.moyeolam.domain.friend.domain.Friend;
 import com.ssafy.moyeolam.domain.friend.domain.FriendRequest;
+import com.ssafy.moyeolam.domain.friend.dto.FindFriendsResponseDto;
 import com.ssafy.moyeolam.domain.friend.exception.FriendErrorInfo;
 import com.ssafy.moyeolam.domain.friend.exception.FriendException;
 import com.ssafy.moyeolam.domain.friend.repository.FriendRepository;
@@ -19,8 +20,9 @@ import com.ssafy.moyeolam.domain.meta.service.MetaDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -142,6 +144,15 @@ public class FriendService {
         alertLogRepository.save(alertLog);
 
         return null;
+    }
+
+    @Transactional(readOnly = true)
+    public FindFriendsResponseDto findFriends(Long loginMemberId) {
+        memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        List<Friend> friends = friendRepository.findAllByMemberId(loginMemberId);
+        return FindFriendsResponseDto.from(friends);
     }
 
     @Transactional
