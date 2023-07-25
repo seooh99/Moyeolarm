@@ -118,13 +118,24 @@ public class AlarmGroupController {
     }
 
     @PostMapping("/{alarmGroupId}/lock")
-    public EnvelopeResponse<Long> lockAlarmGroup(@PathVariable Long alarmGroupId) {
+    public EnvelopeResponse<Boolean> lockAlarmGroup(@PathVariable Long alarmGroupId) {
         AuthenticatedMember loginMember = AuthenticatedMember.builder()
                 .memberId(1L)
                 .build();
 
-        return EnvelopeResponse.<Long>builder()
+        return EnvelopeResponse.<Boolean>builder()
                 .data(alarmGroupService.lockAlarmGroup(alarmGroupId, loginMember.getMemberId()))
+                .build();
+    }
+
+    @PostMapping("/{alarmGroupId}/toggle")
+    public EnvelopeResponse<Boolean> toggleAlarm(@PathVariable Long alarmGroupId) {
+        AuthenticatedMember loginMember = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
+
+        return EnvelopeResponse.<Boolean>builder()
+                .data(alarmGroupService.toggleAlarm(alarmGroupId, loginMember.getMemberId()))
                 .build();
     }
 
