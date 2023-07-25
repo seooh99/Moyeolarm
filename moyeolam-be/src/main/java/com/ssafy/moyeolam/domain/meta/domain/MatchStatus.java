@@ -4,7 +4,7 @@ public enum MatchStatus implements MetaDataProvider {
     REQUEST_STATUS(1, "요청상태"),
     APPROVE_STATUS(2, "수락상태"),
     REJECT_STATUS(3, "거절상태"),
-    DELETE(4, "삭제상태");
+    DELETE_STATUS(4, "삭제상태");
 
     private final int id;
     private final String name;
