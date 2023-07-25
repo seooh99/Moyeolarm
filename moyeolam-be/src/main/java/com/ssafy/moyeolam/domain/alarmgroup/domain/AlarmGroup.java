@@ -68,4 +68,8 @@ public class AlarmGroup extends BaseTimeEntity {
     public void setAlarmSound(MetaData alarmSound) {
         this.alarmSound = alarmSound;
     }
+
+    public void setLock(Boolean lock) {
+        this.lock = lock;
+    }
 }

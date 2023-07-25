@@ -13,16 +13,16 @@ class _BtnCalling extends State<BtnCalling> {
 
     final ButtonStyle style =
     ElevatedButton.styleFrom(
-        textStyle: const TextStyle(fontSize: 20),
-        minimumSize: Size(280, 40),
-        primary: Colors.purple);
+      textStyle: const TextStyle(fontSize: 20),
+    minimumSize: Size(280, 40),
+    primary: Colors.purple);
 
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-          style: style,
-          onPressed: () {},
-          child: Icon(Icons.call),
+            style: style,
+            onPressed: () {},
+            child: Icon(Icons.call),
         ),
       ),
     );

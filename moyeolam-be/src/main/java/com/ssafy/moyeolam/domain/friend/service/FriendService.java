@@ -116,6 +116,36 @@ public class FriendService {
         return null;
     }
 
+    @Transactional
+    public Void rejectFriendRequest(Long loginMemberId, Long friendRequestId) {
+        Member loginMember = memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        FriendRequest friendRequest = friendRequestRepository.findById(friendRequestId)
+                .orElseThrow(() -> new FriendException(FriendErrorInfo.NOT_FOUND_FRIEND_REQUEST));
+
+        Member fromMember = memberRepository.findById(friendRequest.getFromMember().getId())
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        if (!loginMemberId.equals(friendRequest.getToMember().getId()))
+            throw new FriendException(FriendErrorInfo.NOT_REQUESTED_USER);
+
+        if (!friendRequest.getMatchStatus().equals(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.REQUEST_STATUS.getName())))
+            throw new FriendException(FriendErrorInfo.NOT_REQUEST_STATUS);
+
+        friendRequest.updateMatchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.REJECT_STATUS.getName()));
+
+        // 알림로그 저장
+        AlertLog alertLog = AlertLog.builder()
+                .fromMember(loginMember)
+                .toMember(fromMember)
+                .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.FRIEND_REJECT.getName()))
+                .build();
+        alertLogRepository.save(alertLog);
+
+        return null;
+    }
+
     @Transactional(readOnly = true)
     public FindFriendsResponseDto findFriends(Long loginMemberId) {
         memberRepository.findById(loginMemberId)

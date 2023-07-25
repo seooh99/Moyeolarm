@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
-class BtnCalling extends StatefulWidget {
-  const BtnCalling({super.key});
+class ElevatedButtonExample extends StatefulWidget {
+  const ElevatedButtonExample({super.key});
 
   @override
-  State<BtnCalling> createState() => _BtnCalling();
+  State<ElevatedButtonExample> createState() => _ElevatedButtonExampleState();
 }
 
-class _BtnCalling extends State<BtnCalling> {
+class _ElevatedButtonExampleState extends State<ElevatedButtonExample> {
   @override
   Widget build(BuildContext context) {
 
     final ButtonStyle style =
     ElevatedButton.styleFrom(
         textStyle: const TextStyle(fontSize: 20),
-        minimumSize: Size(280, 40),
-        primary: Colors.purple);
+        minimumSize: Size(220, 40),
+        primary: Colors.red);
 
     return Scaffold(
       body: Center(

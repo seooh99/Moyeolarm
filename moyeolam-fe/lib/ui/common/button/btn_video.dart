@@ -13,7 +13,7 @@ class _BtnVideo extends State<BtnVideo> {
 
     final ButtonStyle style =
     ElevatedButton.styleFrom(
-        shape: CircleBorder(),
+      shape: CircleBorder(),
         padding: EdgeInsets.all(10),
         primary: Colors.white);
 
@@ -23,7 +23,7 @@ class _BtnVideo extends State<BtnVideo> {
           style: style,
           onPressed: () {},
           child: Icon(Icons.videocam_off,
-            color: Colors.black,),
+          color: Colors.black,),
         ),
       ),
     );

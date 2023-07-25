@@ -37,6 +37,17 @@ public class FriendController {
                 .build();
     }
 
+    @PostMapping("/{friendRequestId}/reject")
+    public EnvelopeResponse<Void> rejectFriendRequest(@PathVariable Long friendRequestId) {
+        AuthenticatedMember loginMember = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
+
+        return EnvelopeResponse.<Void>builder()
+                .data(friendService.rejectFriendRequest(loginMember.getMemberId(), friendRequestId))
+                .build();
+    }
+
     @GetMapping
     public EnvelopeResponse<FindFriendsResponseDto> findFriends() {
         AuthenticatedMember loginMember = AuthenticatedMember.builder()
