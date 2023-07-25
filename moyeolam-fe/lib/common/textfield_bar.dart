@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:youngjun/common/const/colors.dart';
 
 
-class TextFieldbox extends StatelessWidget {
+class TextFieldbox extends StatefulWidget {
   const TextFieldbox({super.key});
+
+  @override
+  State<TextFieldbox> createState() => _TextFieldboxState();
+}
+
+class _TextFieldboxState extends State<TextFieldbox> {
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +17,7 @@ class TextFieldbox extends StatelessWidget {
       width: 250,
       child: Center(
         child: TextField(
-          obscureText: true,
+          // obscureText: true,
           cursorColor: MAIN_COLOR,
           style: TextStyle( // TextField의 텍스트 스타일 설정
             color: MAIN_COLOR,
