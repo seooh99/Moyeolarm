@@ -24,30 +24,31 @@ class _MainNavState extends State<MainNav> {
         backgroundColor: backgroundColor,
         title: Text("모여람"),
         actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.notifications),
-          onPressed: () => {
-            print("alert clicked!")
-          }
+          IconButton(
+              icon: Icon(Icons.notifications),
+              onPressed: () => {
+                print("alert clicked!")
+              }
           ),
         ],
       ),
       // body: ,
       bottomSheet: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-                icon: Icon(Icons.alarm),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.group),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
+        iconSize: 35.0,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.alarm),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.group),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
               label: ''
-            ),
-          ],
+          ),
+        ],
         currentIndex: _selectedIndex,
         selectedItemColor: mainColor,
         onTap: _onItemTapped,
