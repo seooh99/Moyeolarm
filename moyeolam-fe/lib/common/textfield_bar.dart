@@ -17,6 +17,7 @@ class _TextFieldboxState extends State<TextFieldbox> {
       width: 250,
       child: Center(
         child: TextField(
+          keyboardType: TextInputType.text,
           // obscureText: true,
           cursorColor: MAIN_COLOR,
           style: TextStyle( // TextField의 텍스트 스타일 설정
