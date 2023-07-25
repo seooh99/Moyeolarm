@@ -339,4 +339,20 @@ public class AlarmGroupService {
         alertLogRepository.save(alertLog);
         return banMemberId;
     }
+
+    @Transactional
+    public Long lockAlarmGroup(Long alarmGroupId, Long loginMemberId) {
+        Member loginMember = memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        AlarmGroup alarmGroup = alarmGroupRepository.findByIdWithHostMember(alarmGroupId)
+                .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP));
+
+        if (!alarmGroup.getHostMember().getId().equals(loginMember.getId())) {
+            throw new AlarmGroupException(AlarmGroupErrorInfo.UNAUTHORIZED_LOCK);
+        }
+
+        alarmGroup.setLock(!alarmGroup.getLock());
+        return alarmGroup.getId();
+    }
 }
