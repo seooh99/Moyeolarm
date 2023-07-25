@@ -143,4 +143,29 @@ public class FriendService {
 
         return null;
     }
+
+    @Transactional
+    public Void deleteFriend(Long loginMemberId, Long myFriendId) {
+        memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        memberRepository.findById(myFriendId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        Friend fromToFriend = friendRepository.findByMemberIdAndMyFriendId(loginMemberId, myFriendId)
+                .orElseThrow(() -> new FriendException(FriendErrorInfo.NOT_FRIEND_STATUS));
+
+        Friend toFromFriend = friendRepository.findByMemberIdAndMyFriendId(myFriendId, loginMemberId)
+                .orElseThrow(() -> new FriendException(FriendErrorInfo.NOT_FRIEND_STATUS));
+
+        friendRepository.delete(fromToFriend);
+        friendRepository.delete(toFromFriend);
+
+        friendRequestRepository.findByFromMemberIdAndToMemberId(loginMemberId, myFriendId)
+                .ifPresent(friendRequest -> friendRequest.updateMatchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.DELETE_STATUS.getName())));
+        friendRequestRepository.findByFromMemberIdAndToMemberId(myFriendId, loginMemberId)
+                .ifPresent(friendRequest -> friendRequest.updateMatchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.DELETE_STATUS.getName())));
+
+        return null;
+    }
 }
