@@ -10,7 +10,7 @@ class AlarmList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        backgroundColor: mainColor,
+        backgroundColor: MAIN_COLOR,
           onPressed: (){},
       child: Icon(Icons.add,
       color: Colors.white,),),
