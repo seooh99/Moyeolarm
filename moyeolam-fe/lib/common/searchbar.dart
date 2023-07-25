@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:youngjun/ui/common/const/colors.dart';
+import 'package:youngjun/common/const/colors.dart';
 
 
 class PinnedSearchBarApp extends StatefulWidget {

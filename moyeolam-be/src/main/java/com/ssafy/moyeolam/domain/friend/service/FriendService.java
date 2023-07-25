@@ -4,6 +4,7 @@ import com.ssafy.moyeolam.domain.alert.domain.AlertLog;
 import com.ssafy.moyeolam.domain.alert.repository.AlertLogRepository;
 import com.ssafy.moyeolam.domain.friend.domain.Friend;
 import com.ssafy.moyeolam.domain.friend.domain.FriendRequest;
+import com.ssafy.moyeolam.domain.friend.dto.FindFriendsResponseDto;
 import com.ssafy.moyeolam.domain.friend.exception.FriendErrorInfo;
 import com.ssafy.moyeolam.domain.friend.exception.FriendException;
 import com.ssafy.moyeolam.domain.friend.repository.FriendRepository;
@@ -19,10 +20,12 @@ import com.ssafy.moyeolam.domain.meta.service.MetaDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -142,5 +145,48 @@ public class FriendService {
         alertLogRepository.save(alertLog);
 
         return null;
+    }
+
+    @Transactional(readOnly = true)
+    public FindFriendsResponseDto findFriends(Long loginMemberId) {
+        memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        List<Friend> friends = friendRepository.findAllByMemberId(loginMemberId);
+        return FindFriendsResponseDto.from(friends);
+    }
+
+    @Transactional
+    public Void deleteFriend(Long loginMemberId, Long myFriendId) {
+        memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        memberRepository.findById(myFriendId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        Friend fromToFriend = friendRepository.findByMemberIdAndMyFriendId(loginMemberId, myFriendId)
+                .orElseThrow(() -> new FriendException(FriendErrorInfo.NOT_FRIEND_STATUS));
+
+        Friend toFromFriend = friendRepository.findByMemberIdAndMyFriendId(myFriendId, loginMemberId)
+                .orElseThrow(() -> new FriendException(FriendErrorInfo.NOT_FRIEND_STATUS));
+
+        friendRepository.delete(fromToFriend);
+        friendRepository.delete(toFromFriend);
+
+        friendRequestRepository.findByFromMemberIdAndToMemberId(loginMemberId, myFriendId)
+                .ifPresent(friendRequest -> friendRequest.updateMatchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.DELETE_STATUS.getName())));
+        friendRequestRepository.findByFromMemberIdAndToMemberId(myFriendId, loginMemberId)
+                .ifPresent(friendRequest -> friendRequest.updateMatchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.DELETE_STATUS.getName())));
+
+        return null;
+    }
+
+    @Transactional(readOnly = true)
+    public FindFriendsResponseDto searchFriends(Long loginMemberId, String keyword) {
+        memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        List<Friend> friends = friendRepository.findAllByMemberIdAndKeyword(loginMemberId, keyword);
+        return FindFriendsResponseDto.from(friends);
     }
 }
