@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -178,5 +179,14 @@ public class FriendService {
                 .ifPresent(friendRequest -> friendRequest.updateMatchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.DELETE_STATUS.getName())));
 
         return null;
+    }
+
+    @Transactional(readOnly = true)
+    public FindFriendsResponseDto searchFriends(Long loginMemberId, String keyword) {
+        memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        List<Friend> friends = friendRepository.findAllByMemberIdAndKeyword(loginMemberId, keyword);
+        return FindFriendsResponseDto.from(friends);
     }
 }
