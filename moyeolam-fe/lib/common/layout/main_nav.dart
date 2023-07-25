@@ -21,7 +21,7 @@ class _MainNavState extends State<MainNav> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: backgroundColor,
+        backgroundColor: BACKGROUND_COLOR,
         title: Text("모여람"),
         actions: <Widget>[
           IconButton(
@@ -50,11 +50,11 @@ class _MainNavState extends State<MainNav> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: mainColor,
+        selectedItemColor: MAIN_COLOR,
         onTap: _onItemTapped,
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        backgroundColor: backgroundColor,
+        backgroundColor: BACKGROUND_COLOR,
       ),
     );
   }
