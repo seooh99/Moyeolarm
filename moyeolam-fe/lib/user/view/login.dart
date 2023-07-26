@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/user/view/sign_in.dart';
+import 'package:youngjun/user/viewmodel/logic_login.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
-
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(
@@ -31,12 +31,15 @@ class Login extends StatelessWidget {
                       'assets/images/kakao_login_medium_wide.png',
                     ),
                 onTap: ()
-                {
+                 {
                  print("카카오 로그인");
-                 Navigator.push(
-                     context,
-                     MaterialPageRoute(builder: (context) => SignIn(),),
-                 );
+                 // Navigator.push(
+                 //     context,
+                 //     MaterialPageRoute(builder: (context) => SignIn(),),
+                 // );
+                 //  LogicLogin ll = new LogicLogin();
+                  var _result =  getInfo();
+                  // print(_result);
                 },
               ),
             ),
