@@ -4,25 +4,13 @@ import 'package:flutter/material.dart';
 
 
 class BtnBack extends StatelessWidget {
-  const BtnBack({super.key});
+  const BtnBack({super.key, required this.onPressed,});
+
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.all(4.0),
-      child: ButtonTypesGroup(enabled: true),
-    );
-  }
-}
-
-class ButtonTypesGroup extends StatelessWidget {
-  const ButtonTypesGroup({super.key, required this.enabled});
-
-  final bool enabled;
-
-  @override
-  Widget build(BuildContext context) {
-    final VoidCallback? onPressed = enabled ? () {} : null;
+    // onPressed = enabled ? () {} : null;
 
     return IconButton(
               icon: const Icon(Icons.arrow_back_ios_new), onPressed: onPressed,
