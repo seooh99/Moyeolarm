@@ -12,7 +12,10 @@ class SignIn extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // const BtnBack(),
+            BtnBack(
+              onPressed: () =>
+                Navigator.pop(context),
+            ),
             const SizedBox(
               width: 200,
               height: 120,
