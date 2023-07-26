@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [IconButton].
-
-
 class BtnBack extends StatelessWidget {
   const BtnBack({super.key, required this.onPressed,});
 
