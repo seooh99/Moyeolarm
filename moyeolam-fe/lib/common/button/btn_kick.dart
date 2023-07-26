@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 
 class BtnKick extends StatefulWidget {
-  const BtnKick({super.key});
+  const BtnKick({super.key, required this.onPressed,});
+
+  final VoidCallback onPressed;
 
   @override
   State<BtnKick> createState() => _IconButtonExampleState();
@@ -14,7 +16,7 @@ class _IconButtonExampleState extends State<BtnKick> {
     return
         IconButton(
           icon: const Icon(Icons.close),
-          onPressed: () {},
+          onPressed: widget.onPressed, // 'widget.' 추가
         );
 
   }
