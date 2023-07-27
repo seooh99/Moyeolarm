@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/user/view/set_nickname.dart';
 import 'package:youngjun/user/viewmodel/login_view_model.dart';
-import 'package:youngjun/data/model/user._modeldart';
+import 'package:youngjun/data/model/user_model.dart';
 import 'package:youngjun/user/view/set_nickname.dart';
 
 class Login extends StatefulWidget {
