@@ -40,7 +40,7 @@ pipeline {
                 sshagent(['ec2-server']){
                     sh """
                         scp ./moyeolam-be/build/libs/moyeolam-0.0.1-SNAPSHOT.jar ubuntu@i9a502.p.ssafy.io:/home/ubuntu
-                        ssh -o StrictHostKeyChecking=no -f ubuntu@i9a502.p.ssafy.io 'fuser -k -n tcp 80'
+                        ssh -o StrictHostKeyChecking=no -f ubuntu@i9a502.p.ssafy.io 'fuser -k -n tcp 8080'
                         ssh -o StrictHostKeyChecking=no -f ubuntu@i9a502.p.ssafy.io 'java -jar moyeolam-0.0.1-SNAPSHOT.jar'
                     """
                 }
