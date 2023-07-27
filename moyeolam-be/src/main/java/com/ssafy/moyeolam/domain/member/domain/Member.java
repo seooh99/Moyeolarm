@@ -27,6 +27,9 @@ public class Member extends BaseTimeEntity {
     @Convert(converter = OauthTypeConverter.class)
     private MetaData oauthType;
 
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "member")
+    private MemberToken memberToken;
+
     @Column
     private String oauthIdentifier;
 
@@ -41,4 +44,12 @@ public class Member extends BaseTimeEntity {
 
     @OneToOne(mappedBy = "member")
     private ProfileImage profileImage;
+
+    public void updateRefreshToken(String updateRefreshToken) {
+        if (this.memberToken == null) {
+            this.memberToken = new MemberToken();
+            this.memberToken.setMember(this);
+        }
+        this.memberToken.setRefreshToken(updateRefreshToken);
+    }
 }
