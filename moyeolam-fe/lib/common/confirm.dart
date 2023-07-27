@@ -13,11 +13,11 @@ class DialogExample extends StatelessWidget {
       content: const Text('AlertDialog description'),
       actions: <Widget>[
         TextButton(
-          onPressed: () => cancelOnPressed(),
+          onPressed: () => cancelOnPressed,
           child: const Text('Cancel'),
         ),
         TextButton(
-          onPressed: () => okOnPressed(),
+          onPressed: () => okOnPressed,
           child: const Text('OK'),
         ),
       ],

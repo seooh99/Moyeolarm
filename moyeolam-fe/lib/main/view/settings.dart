@@ -82,7 +82,6 @@ class Settings extends StatelessWidget {
   }
 
 
-
   Widget buildDivider() {
     return Column(
       children: [
