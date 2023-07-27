@@ -19,8 +19,8 @@ pipeline {
             steps{
                 sshagent(['ec2-server']){
                     sh """
-                        ssh -o StrictHostKeyChecking=no ubuntu@i9a502.p.ssafy.io 'cp /home/ubuntu/application-setting-files/application.yml /jenkins/workspace/moyeolam/moyeolam-be/src/main/resources/'
-                        ssh -o StrictHostKeyChecking=no ubuntu@i9a502.p.ssafy.io 'cp /home/ubuntu/application-setting-files/application-local.yml /jenkins/workspace/moyeolam/moyeolam-be/src/main/resources/'
+                        ssh -o StrictHostKeyChecking=no ubuntu@i9a502.p.ssafy.io 'sudo cp /home/ubuntu/application-setting-files/application.yml /jenkins/workspace/moyeolam/moyeolam-be/src/main/resources/'
+                        ssh -o StrictHostKeyChecking=no ubuntu@i9a502.p.ssafy.io 'sudo cp /home/ubuntu/application-setting-files/application-local.yml /jenkins/workspace/moyeolam/moyeolam-be/src/main/resources/'
                     """
                 }
             }
