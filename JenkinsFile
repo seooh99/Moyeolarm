@@ -14,16 +14,24 @@ pipeline {
                 }
             }
         }
+        
+        stage('.yml Setting'){
+            steps{
+                sshagent(['ec2-server']){
+                    sh """
+                        ssh -o StrictHostKeyChecking=no -f ubuntu@i9a502.p.ssafy.io 'cp /home/ubuntu/application-setting-files/application.yml ./moyeolam-be/src/main/resources/'
+                        ssh -o StrictHostKeyChecking=no -f ubuntu@i9a502.p.ssafy.io 'cp /home/ubuntu/application-setting-files/application-local.yml ./moyeolam-be/src/main/resources/'
+                    """
+            }
+        }
+        
         stage('Build'){
             steps{
-                sh '''
-                    cd moyeolam-be
-                    cp /home/ubuntu/application-setting-files/application.yml ./src/main/resources/
-                    cp /home/ubuntu/application-setting-files/application-local.yml ./src/main/resources/
-                    
+                sh """
+                    cd moyeolam-be                    
                     chmod +x gradlew
                     ./gradlew clean build
-                '''
+                """
             }
         }
         stage('Deploy'){
