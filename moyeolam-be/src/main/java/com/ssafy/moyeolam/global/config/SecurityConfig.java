@@ -48,6 +48,8 @@ public class SecurityConfig {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .headers().frameOptions().disable()
+                .and()
                 .formLogin().disable()
                 .httpBasic().disable()
                 .apply(new MyCustomDsl())
