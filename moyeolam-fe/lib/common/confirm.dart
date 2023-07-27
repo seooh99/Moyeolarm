@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
 class DialogExample extends StatelessWidget {
-  const DialogExample({super.key});
+  const DialogExample({
+    super.key,
+    required this.cancelOnPressed,
+    required this.okOnPressed
+  });
+  final VoidCallback cancelOnPressed;
+  final VoidCallback okOnPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -10,11 +16,11 @@ class DialogExample extends StatelessWidget {
       content: const Text('AlertDialog description'),
       actions: <Widget>[
         TextButton(
-          onPressed: () => Navigator.pop(context, 'Cancel'),
+          onPressed: () => cancelOnPressed,
           child: const Text('Cancel'),
         ),
         TextButton(
-          onPressed: () => Navigator.pop(context, 'OK'),
+          onPressed: () => okOnPressed,
           child: const Text('OK'),
         ),
       ],
