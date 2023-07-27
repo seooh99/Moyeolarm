@@ -53,16 +53,11 @@ public class SecurityConfig {
                 .apply(new MyCustomDsl())
                 .and()
                 .authorizeRequests()
-                .antMatchers("/user/**").authenticated()
-                // .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN') or
-                // hasRole('ROLE_USER')")
-                // .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN') and
-                // hasRole('ROLE_USER')")
-//                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+//              .antMatchers("/user/**").authenticated()
+//              .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 .anyRequest().permitAll()
                 .and()
                 .oauth2Login()
-//                .loginPage("/login")
                 .successHandler(oAuth2LoginSuccessHandler)
                 .userInfoEndpoint()
                 .userService(principalOauth2UserService);
@@ -77,13 +72,6 @@ public class SecurityConfig {
             http
                     .addFilter(corsConfig.corsFilter())
                     .addFilter(new JwtAuthenticationProcessingFilter(authenticationManager, jwtProvider, memberRepository));
-//                    .addFilter(new JW(authenticationManager, userRepository));
         }
     }
-//    @Bean
-//    public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
-//        JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService, memberRepository);
-//        return jwtAuthenticationFilter;
-//    }
-
 }
