@@ -1,8 +1,5 @@
-import 'dart:js_util';
-
 import 'package:flutter/material.dart';
 import 'package:youngjun/common/const/colors.dart';
-import './title_bar.dart';
 
 class MainNav extends StatefulWidget {
   const MainNav({
