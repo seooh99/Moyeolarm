@@ -18,6 +18,9 @@ pipeline {
             steps{
                 sh '''
                     cd moyeolam-be
+                    cp /home/ubuntu/application-setting-files/application.yml ./src/main/resources/
+                    cp /home/ubuntu/application-setting-files/application-local.yml ./src/main/resources/
+                    
                     chmod +x gradlew
                     ./gradlew clean build
                 '''
