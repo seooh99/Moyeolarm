@@ -22,6 +22,7 @@ pipeline {
                         ssh -o StrictHostKeyChecking=no -f ubuntu@i9a502.p.ssafy.io 'cp /home/ubuntu/application-setting-files/application.yml ./moyeolam-be/src/main/resources/'
                         ssh -o StrictHostKeyChecking=no -f ubuntu@i9a502.p.ssafy.io 'cp /home/ubuntu/application-setting-files/application-local.yml ./moyeolam-be/src/main/resources/'
                     """
+                }
             }
         }
         
