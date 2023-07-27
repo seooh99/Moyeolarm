@@ -43,7 +43,12 @@ class ClockSetting extends StatelessWidget {
             color: MAIN_COLOR,
           ),
           SizedBox(
-            height: 300,
+            height: 50,
+          ),
+          Clock(
+          ),
+          SizedBox(
+            height: 50,
           ),
           Column(
             children: [
