@@ -1,4 +1,4 @@
-package com.ssafy.moyeolam.domain.auth.oauth2.handler;
+package com.ssafy.moyeolam.domain.auth.service.oauth2.handler;
 
 import com.ssafy.moyeolam.domain.auth.dto.PrincipalDetails;
 import com.ssafy.moyeolam.domain.auth.service.jwt.JwtProvider.JwtProvider;

@@ -1,4 +1,4 @@
-package com.ssafy.moyeolam.domain.auth.oauth2;
+package com.ssafy.moyeolam.domain.auth.service.oauth2;
 
 
 import com.ssafy.moyeolam.domain.auth.dto.PrincipalDetails;

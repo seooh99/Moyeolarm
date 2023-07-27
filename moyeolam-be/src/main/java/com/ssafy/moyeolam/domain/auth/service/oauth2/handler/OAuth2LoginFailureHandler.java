@@ -1,4 +1,4 @@
-package com.ssafy.moyeolam.domain.auth.oauth2.handler;
+package com.ssafy.moyeolam.domain.auth.service.oauth2.handler;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;

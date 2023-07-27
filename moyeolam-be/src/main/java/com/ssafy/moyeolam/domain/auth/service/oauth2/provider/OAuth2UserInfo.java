@@ -1,4 +1,4 @@
-package com.ssafy.moyeolam.domain.auth.oauth2.provider;
+package com.ssafy.moyeolam.domain.auth.service.oauth2.provider;
 
 public interface OAuth2UserInfo {
     String getProviderId();
