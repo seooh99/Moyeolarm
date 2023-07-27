@@ -291,12 +291,12 @@ public class AlarmGroupService {
             alarmGroupRequest.setMatchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.REJECT_STATUS.getName()));
 
             // 알림로그 저장
-            AlertLog alertLog = AlertLog.builder()
-                    .fromMember(loginMember)
-                    .toMember(fromMember)
-                    .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_REJECT.getName()))
-                    .build();
-            alertLogRepository.save(alertLog);
+//            AlertLog alertLog = AlertLog.builder()
+//                    .fromMember(loginMember)
+//                    .toMember(fromMember)
+//                    .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_REJECT.getName()))
+//                    .build();
+//            alertLogRepository.save(alertLog);
             return loginMember.getId();
         }
 
