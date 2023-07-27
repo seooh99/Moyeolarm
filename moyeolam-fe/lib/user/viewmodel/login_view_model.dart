@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:youngjun/data/model/user._modeldart';
+import 'package:youngjun/data/model/user_model.dart';
 import 'package:youngjun/data/repository/user_repository.dart';
 
 class UserViewModel with ChangeNotifier {
