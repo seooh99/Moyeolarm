@@ -1,6 +1,6 @@
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:youngjun/data/model/user._modeldart';
+import 'package:youngjun/data/model/user_model.dart';
 import 'package:http/http.dart' as http;
 
 class UserDataSource {
