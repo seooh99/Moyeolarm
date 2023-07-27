@@ -56,9 +56,16 @@ class Settings extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (text == '로그아웃') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => DialogExample()),
+          showDialog(
+            context: context,
+            barrierDismissible: true, // 바깥 영역 터치시
+            builder: (BuildContext context) => DialogExample(
+              cancelOnPressed: () => Navigator.pop(context),
+              okOnPressed: () {
+                Navigator.pop(context); // 먼저 모달을 닫음
+                Navigator.pushNamed(context, '/'); // 그 다음 '/'로 라우트
+              },
+            ),
           );
         }
       },
@@ -73,6 +80,7 @@ class Settings extends StatelessWidget {
       ),
     );
   }
+
 
 
   Widget buildDivider() {
