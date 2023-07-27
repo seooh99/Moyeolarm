@@ -1,52 +1,65 @@
 import 'package:flutter/material.dart';
-import 'package:youngjun/common/const/colors.dart';
-import 'package:youngjun/user/view/sign_in.dart';
-import 'package:youngjun/user/viewmodel/logic_login.dart';
+import 'package:provider/provider.dart';
 
-class Login extends StatelessWidget {
+import 'package:youngjun/common/const/colors.dart';
+import 'package:youngjun/user/view/set_nickname.dart';
+import 'package:youngjun/user/viewmodel/login_view_model.dart';
+import 'package:youngjun/data/model/user_model.dart';
+import 'package:youngjun/user/view/set_nickname.dart';
+
+class Login extends StatefulWidget {
   const Login({super.key});
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  late List<User> userList;
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(
-              width: 200,
-              height: 120,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(
+            width: 200,
+            height: 120,
+          ),
+          Center(
+            child: Container(
+              color: Colors.red,
+              width: 280,
+              height: 280,
             ),
-            Center(
-              child: Container(
-                color: Colors.red,
-                width: 280,
-                height: 280,
+          ),
+          const SizedBox(
+            width: 200,
+            height: 120,
+          ),
+          Center(child:
+              Consumer<UserViewModel>(builder: (context, provider, child) {
+            userList = provider.userList;
+            return InkWell(
+              child: Image.asset(
+                'assets/images/kakao_login_medium_wide.png',
               ),
-            ),
-            const SizedBox(
-              width: 200,
-              height: 120,
-            ),
-            Center(
-              child:  InkWell(
-                child: Image.asset(
-                      'assets/images/kakao_login_medium_wide.png',
-                    ),
-                onTap: ()
-                 {
-                 print("카카오 로그인");
-                 // Navigator.push(
-                 //     context,
-                 //     MaterialPageRoute(builder: (context) => SignIn(),),
-                 // );
-                 //  LogicLogin ll = new LogicLogin();
-                  var _result =  getInfo();
-                  // print(_result);
-                },
-              ),
-            ),
-          ],
-
-        ),
-        backgroundColor: BACKGROUND_COLOR,
-      );
+              onTap: () {
+                print("카카오 로그인");
+                print("${userList}");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SetNickname(),
+                  ),
+                );
+              },
+            );
+          })),
+        ],
+      ),
+      backgroundColor: BACKGROUND_COLOR,
+    );
   }
 }
