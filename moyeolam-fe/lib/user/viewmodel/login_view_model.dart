@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 
 import 'package:youngjun/data/model/user_model.dart';
 import 'package:youngjun/data/repository/user_repository.dart';
@@ -16,6 +16,7 @@ class UserViewModel with ChangeNotifier {
 
   Future<void> _getUserList() async {
     _userList = await _userRepository.getUserList();
+    print(_userList);
     notifyListeners();
   }
 
