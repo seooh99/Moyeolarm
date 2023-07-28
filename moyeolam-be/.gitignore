@@ -38,3 +38,5 @@ out/
 
 # Application Setting Files
 /src/main/resources/application-local.yml
+/src/main/resources/application-jwt.yml
+/src/main/resources/application-oauth.yml
