@@ -130,9 +130,11 @@ public class AlarmGroupService {
                 .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP_REQUEST));
         alarmGroupRequest.setMatchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.DELETE_STATUS.getName()));
 
+        // 알람그룹 로그
         AlertLog alertLog = AlertLog.builder()
                 .fromMember(loginMember)
                 .toMember(alarmGroup.getHostMember())
+                .alarmGroup(alarmGroup)
                 .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_QUIT.getName()))
                 .build();
         alertLogRepository.save(alertLog);
@@ -255,6 +257,7 @@ public class AlarmGroupService {
             AlertLog alertLog = AlertLog.builder()
                     .fromMember(loginMember)
                     .toMember(fromMember)
+                    .alarmGroup(alarmGroup)
                     .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_APPROVE.getName()))
                     .build();
             alertLogRepository.save(alertLog);
@@ -291,12 +294,12 @@ public class AlarmGroupService {
             alarmGroupRequest.setMatchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.REJECT_STATUS.getName()));
 
             // 알림로그 저장
-            AlertLog alertLog = AlertLog.builder()
-                    .fromMember(loginMember)
-                    .toMember(fromMember)
-                    .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_REJECT.getName()))
-                    .build();
-            alertLogRepository.save(alertLog);
+//            AlertLog alertLog = AlertLog.builder()
+//                    .fromMember(loginMember)
+//                    .toMember(fromMember)
+//                    .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_REJECT.getName()))
+//                    .build();
+//            alertLogRepository.save(alertLog);
             return loginMember.getId();
         }
 
@@ -334,6 +337,7 @@ public class AlarmGroupService {
         AlertLog alertLog = AlertLog.builder()
                 .fromMember(loginMember)
                 .toMember(banMember)
+                .alarmGroup(alarmGroup)
                 .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_BAN.getName()))
                 .build();
         alertLogRepository.save(alertLog);
