@@ -1,6 +1,7 @@
 package com.ssafy.moyeolam.domain.alert.domain;
 
 import com.ssafy.moyeolam.domain.BaseTimeEntity;
+import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroup;
 import com.ssafy.moyeolam.domain.member.domain.Member;
 import com.ssafy.moyeolam.domain.meta.converter.AlertTypeConverter;
 import com.ssafy.moyeolam.domain.meta.domain.MetaData;
@@ -29,6 +30,10 @@ public class AlertLog extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_member_id", referencedColumnName = "member_id")
     private Member toMember;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "alarm_group_id")
+    private AlarmGroup alarmGroup;
 
     @Convert(converter = AlertTypeConverter.class)
     private MetaData alertType;
