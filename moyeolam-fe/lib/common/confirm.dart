@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DialogExample extends StatelessWidget {
-  const DialogExample({
-    super.key,
-    required this.cancelOnPressed,
-    required this.okOnPressed
-  });
+  const DialogExample(
+      {super.key, required this.cancelOnPressed, required this.okOnPressed});
   final VoidCallback cancelOnPressed;
   final VoidCallback okOnPressed;
 
