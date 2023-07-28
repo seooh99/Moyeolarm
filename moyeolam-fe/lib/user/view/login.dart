@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:youngjun/common/const/colors.dart';
-import 'package:youngjun/user/view/set_nickname.dart';
 import 'package:youngjun/user/viewmodel/login_view_model.dart';
 import 'package:youngjun/data/model/user_model.dart';
-import 'package:youngjun/user/view/set_nickname.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -47,13 +45,14 @@ class _LoginState extends State<Login> {
               ),
               onTap: () {
                 print("카카오 로그인");
-                print("${userList}");
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SetNickname(),
-                  ),
-                );
+                UserViewModel();
+                print("$userList");
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => SetNickname(),
+                //   ),
+                // );
               },
             );
           })),
