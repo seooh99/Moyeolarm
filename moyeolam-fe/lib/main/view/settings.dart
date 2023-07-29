@@ -82,6 +82,7 @@ class Settings extends StatelessWidget {
     var dio = Dio();
     await dio.post('YOUR_API_ENDPOINT', data: {'status': status});
     // API 엔드포인트와 전송하는 데이터는 실제 API에 맞게 조정해야 합니다.
+    print('Notification status updated to $status');  // 로그 출력
   }
 
 
@@ -99,6 +100,10 @@ class Settings extends StatelessWidget {
                 Navigator.pop(context); // 먼저 모달을 닫음
                 Navigator.pushNamed(context, '/'); // 그 다음 '/'로 라우트
               },
+              // title: '로그아웃 확인',
+              // description: '로그아웃 하시겠습니까?',
+              // cancelButtonText: '아니오',
+              // okButtonText: '예',
             ),
           );
         }
