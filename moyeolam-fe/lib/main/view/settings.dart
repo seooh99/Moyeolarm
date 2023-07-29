@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'package:dio/dio.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/button/btn_toggle.dart';
 
@@ -7,9 +9,9 @@ import '../../common/confirm.dart';
 
 
 class Settings extends StatelessWidget {
-  const Settings({super.key});
+  const Settings({Key? key}) : super(key: key);
 
-  @override
+  @override 
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -22,12 +24,28 @@ class Settings extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   buildText('알림 설정', context),
-                  BtnToggle(),
+                  FutureBuilder<bool>(
+                    future: fetchNotificationStatus(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else {
+                        return BtnToggle(
+                          value: snapshot.data ?? false,
+                          onChanged: (bool newValue) {
+                            print('바뀌었다!');
+                            updateNotificationStatus(newValue);
+                          },
+                        );
+                      }
+                    },
+                  ),
+
+
                 ],
               ),
               buildDivider(),
@@ -51,6 +69,22 @@ class Settings extends StatelessWidget {
       ),
     );
   }
+
+  // 서버에서 현재 알림 상태를 가져오는 함수
+  Future<bool> fetchNotificationStatus() async {
+    var dio = Dio();
+    var response = await dio.get('YOUR_API_ENDPOINT');
+    return response.data['status']; // API 응답에 따라 적절히 수정해야 합니다.
+  }
+
+// 서버에 새로운 알림 상태를 업데이트하는 함수
+  void updateNotificationStatus(bool status) async {
+    var dio = Dio();
+    await dio.post('YOUR_API_ENDPOINT', data: {'status': status});
+    // API 엔드포인트와 전송하는 데이터는 실제 API에 맞게 조정해야 합니다.
+  }
+
+
 
   Widget buildText(String text, BuildContext context) {
     return InkWell(
