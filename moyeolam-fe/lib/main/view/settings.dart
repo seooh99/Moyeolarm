@@ -99,6 +99,10 @@ class Settings extends StatelessWidget {
                 Navigator.pop(context); // 먼저 모달을 닫음
                 Navigator.pushNamed(context, '/'); // 그 다음 '/'로 라우트
               },
+              // title: '로그아웃 확인',
+              // description: '로그아웃 하시겠습니까?',
+              // cancelButtonText: '아니오',
+              // okButtonText: '예',
             ),
           );
         }
