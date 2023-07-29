@@ -11,7 +11,7 @@ import '../../common/confirm.dart';
 class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key: key);
 
-  @override
+  @override 
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
