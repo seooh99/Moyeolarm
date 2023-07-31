@@ -4,17 +4,31 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../model/user_model.dart';
 import '../repository/user_repository.dart';
 
-final userProvider = StateNotifierProvider((ref) => UserViewModel());
+final userProvider = StateProvider((ref) => UserViewModel());
 UserRepository _userRepository = UserRepository();
 
 class UserViewModel extends StateNotifier<User> {
-  UserViewModel() : super(User(''));
-  var nickname = '';
+  UserViewModel() : super(User(null));
+  var nickname;
 
   void login() async {
-    var usr = await _userRepository.getUserList();
-    nickname = usr!.nickname.toString();
-    print(nickname);
+    try {
+      var usr = await _userRepository.getUserList();
+      print("${usr.toString()} API user data");
+      // usr = null;  // nickname == null test
+      if (usr != null) {
+        nickname = usr.nickname.toString();
+        print("$nickname nickname is not null");
+        // context.go(name);
+        print("going main page");
+        // Navigator.push(context, MaterialPageRoute(builder: builder))
+      } else {
+        print("going setting nickname page");
+      }
+    } catch (error) {
+      print(error);
+    }
+
     // return usr!;
   }
 
