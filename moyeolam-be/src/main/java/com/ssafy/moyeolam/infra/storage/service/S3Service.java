@@ -1,4 +1,4 @@
-package com.ssafy.moyeolam.service;
+package com.ssafy.moyeolam.infra.storage.service;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
