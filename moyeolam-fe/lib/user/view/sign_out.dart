@@ -1,8 +1,12 @@
-class  extends StatelessWidget {
-  const ({super.key});
+import 'package:flutter/material.dart';
+
+class SignOut extends StatelessWidget {
+  const SignOut({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+
+    );
   }
 }
