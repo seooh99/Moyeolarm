@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:youngjun/common/const/colors.dart';
+import 'package:youngjun/user/model/user_model.dart';
 import 'package:youngjun/user/viewmodel/login_view_model.dart';
-import 'package:youngjun/data/model/user_model.dart';
 
-class Login extends StatefulWidget {
+class Login extends ConsumerStatefulWidget {
   const Login({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  ConsumerState<Login> createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginState extends ConsumerState<Login> {
   late List<User> userList;
 
   @override
@@ -36,17 +36,22 @@ class _LoginState extends State<Login> {
             width: 200,
             height: 120,
           ),
-          Center(child:
-              Consumer<UserViewModel>(builder: (context, provider, child) {
-            userList = provider.userList;
-            return InkWell(
+          Center(
+            child: InkWell(
               child: Image.asset(
                 'assets/images/kakao_login_medium_wide.png',
               ),
               onTap: () {
+                UserViewModel().login();
                 print("카카오 로그인");
-                UserViewModel();
-                print("$userList");
+
+                var usrNickname = Provider((ref) {
+                  var usr = ref.watch(userProvider);
+                  return usr;
+                });
+                print((usrNickname));
+                // UserViewModel();
+                // print("$userList");
                 // Navigator.push(
                 //   context,
                 //   MaterialPageRoute(
@@ -54,8 +59,8 @@ class _LoginState extends State<Login> {
                 //   ),
                 // );
               },
-            );
-          })),
+            ),
+          ),
         ],
       ),
       backgroundColor: BACKGROUND_COLOR,
