@@ -1,24 +1,56 @@
-import 'package:flutter/material.dart';
 // import 'package:provider/provider.dart';
 
-import 'package:youngjun/data/model/user_model.dart';
-import 'package:youngjun/data/repository/user_repository.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../model/user_model.dart';
+import '../repository/user_repository.dart';
 
-class UserViewModel with ChangeNotifier {
-  late final UserRepository _userRepository;
-  List<User> _userList = List.empty(growable: true);
-  List<User> get userList => _userList;
+final userProvider = StateProvider((ref) => UserViewModel());
+UserRepository _userRepository = UserRepository();
 
-  UserViewModel() {
-    _userRepository = UserRepository();
-    _getUserList();
+class UserViewModel extends StateNotifier<User> {
+  UserViewModel() : super(User(null));
+  var nickname;
+
+  void login() async {
+    try {
+      var usr = await _userRepository.getUserList();
+      print("${usr.toString()} API user data");
+      // usr = null;  // nickname == null test
+      if (usr != null) {
+        nickname = usr.nickname.toString();
+        print("$nickname nickname is not null");
+        // context.go(name);
+        print("going main page");
+        // Navigator.push(context, MaterialPageRoute(builder: builder))
+      } else {
+        print("going setting nickname page");
+      }
+    } catch (error) {
+      print(error);
+    }
+
+    // return usr!;
   }
 
-  Future<void> _getUserList() async {
-    _userList = await _userRepository.getUserList();
-    print(_userList);
-    notifyListeners();
+  String setNickname(newNickname) {
+    nickname = newNickname;
+    return nickname;
   }
+
+  // late final UserRepository _userRepository;
+  // List<User> _userList = List.empty(growable: true);
+  // List<User> get userList => _userList;
+
+  // UserViewModel() {
+  //   _userRepository = UserRepository();
+  //   _getUserList();
+  // }
+
+  // Future<void> _getUserList() async {
+  //   _userList = await _userRepository.getUserList();
+  //   print(_userList);
+  //   notifyListeners();
+  // }
 
   // void addData(int newUserId, int newOauthType, String newOauthIndex,
   //     String newFcmToken, String newNickname, DateTime newSignDate) {
