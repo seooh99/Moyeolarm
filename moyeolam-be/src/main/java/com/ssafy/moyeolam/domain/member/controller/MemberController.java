@@ -1,12 +1,47 @@
 package com.ssafy.moyeolam.domain.member.controller;
 
+import com.ssafy.moyeolam.domain.auth.dto.PrincipalDetails;
+import com.ssafy.moyeolam.domain.member.dto.ProfileImageDto;
+import com.ssafy.moyeolam.domain.member.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
+@RequiredArgsConstructor
 public class MemberController {
+
+    private final MemberService memberService;
+
+    @PostMapping("/member/profileImage")
+    public String uploadProfileImage(@AuthenticationPrincipal PrincipalDetails principal, ProfileImageDto profileImageDto) throws IOException {
+
+        System.out.println(principal);
+        try {
+            String username = principal.getUsername();
+            System.out.println("유저 이름: " + username);
+            memberService.findByOauthIdentifier(username)
+                    .ifPresent(member ->{
+                        try {
+                            memberService.saveProfileImage(member, profileImageDto);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+        } catch (NullPointerException e) {
+            System.out.println("에러 발생: " + e.getMessage());
+        }
+        return "redirect:/";
+    }
+
+
 
     static class ResponseData {
         private int code;
