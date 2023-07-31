@@ -14,8 +14,8 @@ class AlarmList extends StatelessWidget {
           padding: const EdgeInsets.only(top: 30),
           child: Card(
             margin: const EdgeInsets.only(right: 10, left: 10),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -30,7 +30,10 @@ class AlarmList extends StatelessWidget {
                           ),
                         ),
                       ),
-                      BtnToggle(),
+                      BtnToggle(
+                        value: true,
+                        onChanged: (bool value) {},
+                      ),
                     ],
                   ),
                   Row(
@@ -54,7 +57,8 @@ class AlarmList extends StatelessWidget {
             ),
           ),
         ),
-        Padding(padding: EdgeInsets.symmetric(vertical: 10),
+        Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
             child: Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -65,12 +69,12 @@ class AlarmList extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 40),
                   child: Center(
-                    child: Icon(Icons.add,
-                      color: MAIN_COLOR,),
+                    child: Icon(
+                      Icons.add,
+                      color: MAIN_COLOR,
+                    ),
                   ),
-                )
-            )
-        ),
+                ))),
       ],
     );
   }
