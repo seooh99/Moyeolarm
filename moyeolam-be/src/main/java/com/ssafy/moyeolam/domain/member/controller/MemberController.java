@@ -7,10 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -41,6 +38,19 @@ public class MemberController {
         return "redirect:/";
     }
 
+    @DeleteMapping("/member/profileImage")
+    public @ResponseBody String deleteProfileImage(@AuthenticationPrincipal PrincipalDetails principal){
+        String username = principal.getUsername();
+        memberService.findByOauthIdentifier(username)
+                .ifPresent(member -> {
+                    try {
+                        memberService.deleteProfileImage(member);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+        return "삭제됨";
+    }
 
 
     static class ResponseData {
