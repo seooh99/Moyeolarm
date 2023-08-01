@@ -18,8 +18,10 @@ class User {
     this.nickname,
     // required this.friendsList,
     // required this.roomList,
-    // required this.accessToken,
-    // required this.refreshToken,
+    //   {
+    //   required this.accessToken,
+    //   required this.refreshToken,
+    // }
   );
 
   // factory User.fromJson(Map<String, dynamic> json) => User(
