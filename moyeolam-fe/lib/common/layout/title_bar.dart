@@ -5,24 +5,25 @@ class TitleBar extends StatelessWidget implements PreferredSizeWidget {
   const TitleBar({
     super.key,
     required this.onPressed,
-    this.titleIcon,
+    required this.titleIcon,
     required this.appBar,
     required this.title,
   });
   final VoidCallback onPressed;
   final IconData? titleIcon;
   final AppBar appBar;
-  final Widget title;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: true,
       backgroundColor: BACKGROUND_COLOR,
-      title: title,
+      title: Text(title),
       actions: [
         IconButton(
             icon: Icon(titleIcon),
+            color: MAIN_COLOR,
             onPressed: () {
               print("Pressed!");
               onPressed();

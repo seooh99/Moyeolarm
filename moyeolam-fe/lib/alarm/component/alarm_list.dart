@@ -4,8 +4,24 @@ import '../../common/button/btn_toggle.dart';
 import '../../common/const/colors.dart';
 
 class AlarmList extends StatelessWidget {
-  const AlarmList({super.key});
 
+  const AlarmList({super.key,
+
+    required this.alarmGroupId,
+    this.weekday = const [true, true, true, true, true, true, true],
+    required this.hour,
+    required this.minute,
+    required this.toggle,
+    required this.title,
+
+  });
+
+  final int alarmGroupId;
+  final List<bool> weekday;
+  final int hour;
+  final int minute;
+  final bool toggle;
+  final String title;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -24,14 +40,14 @@ class AlarmList extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          '빨리 주말와라~~~',
+                          title,
                           style: TextStyle(
                             fontSize: 16.0,
                           ),
                         ),
                       ),
                       BtnToggle(
-                        value: true,
+                        value: toggle,
                         onChanged: (bool value) {},
                       ),
                     ],
@@ -39,7 +55,7 @@ class AlarmList extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        '12:00',
+                        '$hour : $minute',
                         style: TextStyle(
                           fontSize: 34.0,
                         ),
