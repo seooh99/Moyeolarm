@@ -34,7 +34,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         OAuth2UserInfo oAuth2UserInfo = null;
         if(registrationId.equals("kakao")){
-            System.out.println("카카오 로그인 요청");
+//            System.out.println("카카오 로그인 요청");
             oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
         }else if (registrationId.equals("google")){
             // ...
