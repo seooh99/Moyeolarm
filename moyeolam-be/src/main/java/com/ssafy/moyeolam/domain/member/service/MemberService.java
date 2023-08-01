@@ -2,7 +2,10 @@ package com.ssafy.moyeolam.domain.member.service;
 
 import com.ssafy.moyeolam.domain.member.domain.Member;
 import com.ssafy.moyeolam.domain.member.domain.ProfileImage;
-import com.ssafy.moyeolam.domain.member.dto.ProfileImageDto;
+import com.ssafy.moyeolam.domain.member.dto.UploadProfileImageRequestDto;
+import com.ssafy.moyeolam.domain.member.dto.UploadProfileImageResponseDto;
+import com.ssafy.moyeolam.domain.member.exception.MemberErrorInfo;
+import com.ssafy.moyeolam.domain.member.exception.MemberException;
 import com.ssafy.moyeolam.domain.member.repository.MemberRepository;
 import com.ssafy.moyeolam.domain.member.repository.ProfileImageRepository;
 import com.ssafy.moyeolam.infra.storage.service.S3Service;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -24,23 +28,41 @@ public class MemberService {
         return memberRepository.findByOauthIdentifier(username);
     }
 
-    public void saveProfileImage(Member member, ProfileImageDto profileImageDto) throws IOException {
+    public UploadProfileImageResponseDto uploadProfileImage(Member member, UploadProfileImageRequestDto uploadProfileImageRequestDto) throws IOException {
 
         String dirName = "profile_image";
-        String url = s3Service.uploadFile(profileImageDto.getFile(), dirName);
+        Map<String, String> result = s3Service.uploadFile(uploadProfileImageRequestDto.getFile(), dirName);
 
-        profileImageDto.setUrl(url);
-        ProfileImage profileImagefile = ProfileImage.builder()
+        String url = result.get("url");
+        String fileName = result.get("fileName");
+
+        uploadProfileImageRequestDto.setImageUrl(url);
+        uploadProfileImageRequestDto.setImagePath(fileName);
+
+        ProfileImage profileImage = ProfileImage.builder()
                 .member(member)
-                .imagePath(profileImageDto.getPath())
-                .imageUrl(profileImageDto.getUrl())
+                .imagePath(uploadProfileImageRequestDto.getImagePath())
+                .imageUrl(uploadProfileImageRequestDto.getImageUrl())
                 .build();
-        profileImageRepository.save(profileImagefile);
+        profileImageRepository.save(profileImage);
+
+        return UploadProfileImageResponseDto.of(profileImage);
+    }
+
+    public Long deleteProfileImage(Member member){
+
+        ProfileImage profileImage = profileImageRepository.findByMember(member)
+                .orElseThrow(()-> new MemberException(MemberErrorInfo.NOT_FOUND_PROFILEIMAGE));
+
+        String imagePath = profileImage.getImagePath();
+        s3Service.deleteFile(imagePath);
+        profileImageRepository.delete(profileImage);
+
+        return profileImage.getId();
     }
 
     public List<ProfileImage> getFiles() {
         List<ProfileImage> all = profileImageRepository.findAll();
         return all;
     }
-
 }
