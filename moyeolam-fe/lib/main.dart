@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import 'package:youngjun/main/view/settings.dart';
@@ -7,15 +8,32 @@ import 'package:youngjun/user/view/set_nickname.dart';
 
 // import 'package:youngjun/user/view/sign_in.dart';
 
-import 'common/const/alarm_list.dart';
+// import 'common/const/alarm_list.dart';
 import 'common/layout/main_nav.dart';
-import 'main/view/alarm_list.dart';
+// import 'main/view/alarm_list.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(
     _Moyuram(),
   );
+}
+
+Future<void> _configureFirebaseMessaging() async {
+  var fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: "BCbCyGkfT1KJoi7vI-4oS96nXrzxejo1Hb9Boa0b4a17OIAoBNVsYzZdkx");
+
+  FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
+    // save token to server
+  });
+
+  FirebaseMessaging.instance.deleteToken();
 }
 
 class _Moyuram extends StatelessWidget {
@@ -38,12 +56,12 @@ class _Moyuram extends StatelessWidget {
         // ),
 
 
-      initialRoute: '/main_alarm_list',
+      initialRoute: '/settings',
       routes: {
           '/': (context) => Login(), // 초기 라우트로 카카오로그인페이지 설정
           // '/set_nickname' : (context) => SignIn(),
-          '/main_alarm_list' : (context) => MainAlarmList(),
-          '/arlat_list' : (context) => AlarmList(), // 알림보기
+          // '/main_alarm_list' : (context) => MainAlarmList(),
+          // '/arlat_list' : (context) => AlarmList(), // 알림보기
           // 알람 초대 confirm (모달창 주소필요없음)
           // 친구 초대 confirm (모달창 주소필요없음)
           // 친구목록리스트(nav)
