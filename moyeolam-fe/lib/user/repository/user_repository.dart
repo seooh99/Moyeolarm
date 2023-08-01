@@ -11,6 +11,7 @@ class UserRepository {
   );
 
   Future<User>? getUserList() {
+    print("repository");
     return _userDataSource.getUser();
   }
 }
