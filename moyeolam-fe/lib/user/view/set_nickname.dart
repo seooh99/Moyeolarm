@@ -6,6 +6,7 @@ import 'package:youngjun/common/button/btn_back.dart';
 class SetNickname extends StatelessWidget {
   const SetNickname({super.key});
 
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
@@ -20,7 +21,7 @@ class SetNickname extends StatelessWidget {
               height: 120,
             ),
             Container(
-              child: TextFieldbox(),
+              child: const TextFieldbox(),
             ),
             const SizedBox(
               width: 200,
@@ -29,7 +30,7 @@ class SetNickname extends StatelessWidget {
             Center(
                 child: ElevatedButton(
               onPressed: () => Navigator.pop(context),
-              child: Text("시작하기"),
+              child: const Text("시작하기"),
             )),
           ],
         ),
