@@ -4,11 +4,10 @@ import 'package:youngjun/common/const/colors.dart';
 class MainNav extends StatefulWidget {
   const MainNav({
     super.key,
-    required this.bodyWidgets,
-    required this.appBar,
+    this.bodyWidgets,
+
   });
-  final List<Widget> bodyWidgets;
-  final PreferredSizeWidget appBar;
+  final List<Widget>? bodyWidgets;
   @override
   State<MainNav> createState() => _MainNavState();
 }
@@ -24,12 +23,7 @@ class _MainNavState extends State<MainNav> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: widget.appBar,
-      body: Center(
-        child: widget.bodyWidgets.elementAt(_selectedIndex),
-      ),
-      bottomSheet: BottomNavigationBar(
+    return BottomNavigationBar(
         iconSize: 35.0,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -48,7 +42,6 @@ class _MainNavState extends State<MainNav> {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         backgroundColor: BACKGROUND_COLOR,
-      ),
     );
   }
 }
