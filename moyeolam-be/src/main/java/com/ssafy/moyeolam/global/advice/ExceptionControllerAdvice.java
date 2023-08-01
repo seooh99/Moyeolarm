@@ -3,6 +3,7 @@ package com.ssafy.moyeolam.global.advice;
 import com.ssafy.moyeolam.domain.alarmgroup.exception.AlarmGroupException;
 import com.ssafy.moyeolam.domain.friend.exception.FriendException;
 import com.ssafy.moyeolam.domain.member.exception.MemberException;
+import com.ssafy.moyeolam.domain.webrtc.exception.WebRtcException;
 import com.ssafy.moyeolam.global.common.response.EnvelopeResponse;
 import com.ssafy.moyeolam.global.common.exception.GlobalErrorInfo;
 import com.ssafy.moyeolam.global.common.exception.GlobalException;
@@ -59,6 +60,16 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(MemberException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public EnvelopeResponse MemberExceptionHandler(MemberException e) {
+        e.printStackTrace();
+        return EnvelopeResponse.builder()
+                .code(e.getInfo().getCode())
+                .message(e.getInfo().getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(WebRtcException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public EnvelopeResponse WebRtcExceptionHandler(WebRtcException e) {
         e.printStackTrace();
         return EnvelopeResponse.builder()
                 .code(e.getInfo().getCode())
