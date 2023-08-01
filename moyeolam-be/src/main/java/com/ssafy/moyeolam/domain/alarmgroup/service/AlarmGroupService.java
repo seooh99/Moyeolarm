@@ -22,6 +22,7 @@ import com.ssafy.moyeolam.domain.member.exception.MemberException;
 import com.ssafy.moyeolam.domain.member.repository.MemberRepository;
 import com.ssafy.moyeolam.domain.meta.domain.*;
 import com.ssafy.moyeolam.domain.meta.service.MetaDataService;
+import com.ssafy.moyeolam.domain.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,7 @@ public class AlarmGroupService {
     private final AlarmDayRepository alarmDayRepository;
     private final AlarmGroupRequestRepository alarmGroupRequestRepository;
     private final AlertLogRepository alertLogRepository;
+    private final NotificationService notificationService;
 
 
     @Transactional
@@ -139,6 +141,10 @@ public class AlarmGroupService {
                 .build();
         alertLogRepository.save(alertLog);
 
+        // 푸시알림 전송
+        String body = hostMember.getNickname() + " 님의 알람그룹 " + alarmGroup.getTitle() + "에서 나갔습니다.";
+        notificationService.sendNotification(loginMember, body, AlertType.ALARM_GROUP_QUIT.getName());
+
         return alarmGroup.getId();
     }
 
@@ -218,6 +224,10 @@ public class AlarmGroupService {
                     .matchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.REQUEST_STATUS.getName()))
                     .build();
             alarmGroupRequestRepository.save(alarmGroupRequest);
+
+            // 푸시알림 전송
+            String body = loginMember.getNickname() + " 님의 " + alarmGroup.getTime() + " 알람그룹 " + alarmGroup.getTitle() + "방에 초대되었습니다.";
+            notificationService.sendNotification(toMember, body, AlertType.ALARM_GROUP_REQUEST.getName());
         }
         return requestFailMember;
     }
@@ -261,6 +271,10 @@ public class AlarmGroupService {
                     .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_APPROVE.getName()))
                     .build();
             alertLogRepository.save(alertLog);
+
+            // 푸시알림 전송
+            String body = loginMember.getNickname() + " 님이 알람그룹 " + alarmGroup.getTitle() + "방에 참여하였습니다.";
+            notificationService.sendNotification(fromMember, body, AlertType.ALARM_GROUP_APPROVE.getName());
 
             return loginMember.getId();
         }
@@ -341,6 +355,11 @@ public class AlarmGroupService {
                 .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_BAN.getName()))
                 .build();
         alertLogRepository.save(alertLog);
+
+        // 푸시알림 전송
+        String body = loginMember.getNickname() + " 님의 알람그룹 " + alarmGroup.getTitle() + "에서 강퇴당했습니다.";
+        notificationService.sendNotification(banMember, body, AlertType.ALARM_GROUP_BAN.getName());
+
         return banMemberId;
     }
 
