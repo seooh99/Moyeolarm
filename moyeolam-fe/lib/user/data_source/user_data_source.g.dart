@@ -41,9 +41,7 @@ class _UserDataSource implements UserDataSource {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    // print("${_result.data!["data"]['nickname']}");
     final value = User.fromJson(_result.data!["data"]);
-    print("${value.nickname}ㅇㅇ");
     return value;
   }
 
