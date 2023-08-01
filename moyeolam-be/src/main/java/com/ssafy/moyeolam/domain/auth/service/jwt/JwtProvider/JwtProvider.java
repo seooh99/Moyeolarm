@@ -64,14 +64,14 @@ public class JwtProvider {
     public void sendAccessToken(HttpServletResponse response, String accessToken){
         response.setStatus(HttpServletResponse.SC_OK);
         response.setHeader(accessHeader, accessToken);
-        System.out.printf("재발급된 AccessToken : {}", accessToken);
+//        System.out.printf("재발급된 AccessToken : {}", accessToken);
     }
 
     public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken){
         response.setStatus(HttpServletResponse.SC_OK);
         setAccessTokenHeader(response, accessToken);
         setRefreshTokenHeader(response, refreshToken);
-        System.out.println("Access Token, Refresh Token 헤더 설정 완료");
+//        System.out.println("Access Token, Refresh Token 헤더 설정 완료");
     }
 
     public Optional<String> extractRefreshToken(HttpServletRequest request) {
@@ -121,7 +121,6 @@ public class JwtProvider {
 
         try{
             JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token);
-            System.out.println("유효한 토큰");
             return true;
         } catch(Error e){
             System.out.println("유효하지않은 토큰입니다. {}"+ e.getMessage());
