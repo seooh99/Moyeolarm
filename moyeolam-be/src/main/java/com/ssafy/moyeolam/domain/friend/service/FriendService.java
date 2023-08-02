@@ -46,7 +46,7 @@ public class FriendService {
         Member loginMember = memberRepository.findById(loginMemberId)
                 .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
-        Member toMember = memberRepository.findById(toMemberId)
+        Member toMember = memberRepository.findByIdWithFcmTokens(toMemberId)
                 .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
         Consumer<FriendRequest> friendRequestStatusValidator = friendRequest -> {
@@ -79,7 +79,7 @@ public class FriendService {
 
         // 푸시알림 전송
         String body = loginMember.getNickname() + " 님이 친구를 요청하였습니다.";
-        notificationService.sendNotification(toMember, body, AlertType.FRIEND_REQUEST.getName());
+        notificationService.sendAllNotification(toMember, body, AlertType.FRIEND_REQUEST);
 
         return fromToFriendRequest.getId();
     }
@@ -92,7 +92,7 @@ public class FriendService {
         FriendRequest friendRequest = friendRequestRepository.findById(friendRequestId)
                 .orElseThrow(() -> new FriendException(FriendErrorInfo.NOT_FOUND_FRIEND_REQUEST));
 
-        Member fromMember = memberRepository.findById(friendRequest.getFromMember().getId())
+        Member fromMember = memberRepository.findByIdWithFcmTokens(friendRequest.getFromMember().getId())
                 .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
         if (!loginMemberId.equals(friendRequest.getToMember().getId()))
@@ -125,7 +125,7 @@ public class FriendService {
 
         // 푸시알림 전송
         String body = loginMember.getNickname() + " 님이 친구를 수락하였습니다.";
-        notificationService.sendNotification(fromMember, body, AlertType.FRIEND_APPROVE.getName());
+        notificationService.sendAllNotification(fromMember, body, AlertType.FRIEND_APPROVE);
 
         return null;
     }
