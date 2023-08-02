@@ -41,7 +41,7 @@ class _UserDataSource implements UserDataSource {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = User.fromJson(_result.data!["data"]);
+    final value = User.fromJson(_result.data!);
     return value;
   }
 

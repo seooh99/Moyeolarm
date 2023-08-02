@@ -21,7 +21,7 @@ class _AlarmListRepository implements AlarmListRepository {
   String? baseUrl;
 
   @override
-  Future<Alarm> getAlarmList({required id}) async {
+  Future<Alarm> getAlarmList({required String id}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -38,7 +38,11 @@ class _AlarmListRepository implements AlarmListRepository {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = Alarm.fromJson(_result.data!);
     return value;
   }
@@ -54,5 +58,22 @@ class _AlarmListRepository implements AlarmListRepository {
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }
