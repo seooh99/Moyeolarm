@@ -1,9 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:youngjun/common/const/colors.dart';
+import 'package:youngjun/user/view/set_nickname.dart';
 import 'package:youngjun/user/viewmodel/auth_view_model.dart';
 
 class AuthView extends StatelessWidget {
   const AuthView({super.key});
+  static var storage = const FlutterSecureStorage();
+
+  Future isLogin() async {
+    var resposne = await storage.read(key: "userInfo");
+    var info = jsonDecode(resposne!);
+    return info.nickname ? true : false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +44,16 @@ class AuthView extends StatelessWidget {
               ),
               onTap: () {
                 AuthViewModel();
+                dynamic info = isLogin();
+                if (info == true) {
+                  // Navigator.push(context, (context)=> MainPage());
+                } else {
+                  print("$info 12355");
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SetNickname()));
+                }
                 // var storage = const FlutterSecureStorage();
               },
             ),
