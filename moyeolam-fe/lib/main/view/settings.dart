@@ -5,6 +5,7 @@ import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/button/btn_toggle.dart';
 
 import '../../common/confirm.dart';
+import '../../common/layout/main_nav.dart';
 
 
 
@@ -58,11 +59,57 @@ class Settings extends StatelessWidget {
               ),
               buildDivider(),
               buildText('개발자 정보', context),
+
+              InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: Text('로그아웃'),
+                      content: Text('로그아웃 하시겠습니까?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text('취소'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pushNamed(context, '/');
+                          },
+                          child: Text('확인'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildDivider(),
+                    buildText('로그아웃', context),
+
+                  ],
+                ),
+              ),
+
+
+              InkWell(
+                onTap: () {
+                        Navigator.pushNamed(context, '/sign_out');
+                      },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildDivider(),
+                    buildText('회원탈퇴', context),
+
+                  ],
+                ),
+              ),
               buildDivider(),
-              buildText('로그아웃', context),
-              buildDivider(),
-              buildText('회원탈퇴', context),
-              buildDivider(),
+
             ],
           ),
         ),
@@ -87,27 +134,7 @@ class Settings extends StatelessWidget {
 
 
   Widget buildText(String text, BuildContext context) {
-    return InkWell(
-      onTap: () {
-        if (text == '로그아웃') {
-          showDialog(
-            context: context,
-            barrierDismissible: true, // 바깥 영역 터치시
-            builder: (BuildContext context) => DialogExample(
-              cancelOnPressed: () => Navigator.pop(context),
-              okOnPressed: () {
-                Navigator.pop(context); // 먼저 모달을 닫음
-                Navigator.pushNamed(context, '/'); // 그 다음 '/'로 라우트
-              },
-              // title: '로그아웃 확인',
-              // description: '로그아웃 하시겠습니까?',
-              // cancelButtonText: '아니오',
-              // okButtonText: '예',
-            ),
-          );
-        }
-      },
-      child: Text(
+    return Text(
         text,
         style: TextStyle(
           color: Colors.white,
@@ -115,8 +142,7 @@ class Settings extends StatelessWidget {
           fontSize: 24.0,
           fontWeight: FontWeight.normal,
         ),
-      ),
-    );
+      );
   }
 
 
