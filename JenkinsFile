@@ -1,20 +1,21 @@
 pipeline {
     agent any
     stages {
-        stage('Prepare') {
+        stage('Project Prepare') {
             steps {
                 git url: "https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A502.git",
                     branch: 'dev',
                     credentialsId: 'gitlab'
             }
-
-            post {
-                success {
-                    echo 'Successfully Cloned Repository'
-                }
+        }
+        stage('Private key Setting'){
+            steps {
+                git url: "https://github.com/jjuny0310/moyeolam-private-key.git",
+                    branch: 'main',
+                    credentialsId: 'github'
             }
         }
-        
+
         stage('yml Copy'){
             steps{
                 sshagent(['ec2-server']){
