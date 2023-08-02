@@ -2,6 +2,7 @@ package com.ssafy.moyeolam.domain.member.service;
 
 import com.ssafy.moyeolam.domain.member.domain.Member;
 import com.ssafy.moyeolam.domain.member.domain.ProfileImage;
+import com.ssafy.moyeolam.domain.member.dto.SaveNicknameRequestDto;
 import com.ssafy.moyeolam.domain.member.dto.UploadProfileImageRequestDto;
 import com.ssafy.moyeolam.domain.member.dto.UploadProfileImageResponseDto;
 import com.ssafy.moyeolam.domain.member.exception.MemberErrorInfo;
@@ -64,5 +65,18 @@ public class MemberService {
     public List<ProfileImage> getFiles() {
         List<ProfileImage> all = profileImageRepository.findAll();
         return all;
+    }
+
+    public Long saveNickname(Member member, SaveNicknameRequestDto saveNicknameRequestDto) {
+
+        if(member ==null){
+            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+        }
+        System.out.println("saveNicknameRequestDto.getNickname()"+saveNicknameRequestDto.getNickname());
+
+        member.setNickname(saveNicknameRequestDto.getNickname());
+        memberRepository.save(member);
+
+        return member.getId();
     }
 }

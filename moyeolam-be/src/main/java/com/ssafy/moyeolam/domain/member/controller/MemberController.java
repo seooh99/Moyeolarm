@@ -2,8 +2,11 @@ package com.ssafy.moyeolam.domain.member.controller;
 
 import com.ssafy.moyeolam.domain.auth.dto.PrincipalDetails;
 import com.ssafy.moyeolam.domain.member.domain.Member;
+import com.ssafy.moyeolam.domain.member.dto.SaveNicknameRequestDto;
 import com.ssafy.moyeolam.domain.member.dto.UploadProfileImageRequestDto;
 import com.ssafy.moyeolam.domain.member.dto.UploadProfileImageResponseDto;
+import com.ssafy.moyeolam.domain.member.exception.MemberErrorInfo;
+import com.ssafy.moyeolam.domain.member.exception.MemberException;
 import com.ssafy.moyeolam.domain.member.service.MemberService;
 import com.ssafy.moyeolam.global.common.response.EnvelopeResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,6 +43,21 @@ public class MemberController {
                 .data(memberService.deleteProfileImage(member))
                 .build();
     }
+
+    @PostMapping("/member/nickname")
+    public EnvelopeResponse<Long> saveNickname(@AuthenticationPrincipal PrincipalDetails principal, SaveNicknameRequestDto saveNicknameRequestDto){
+
+        if (principal==null){
+            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+        }
+
+        Member member = principal.getMember();
+
+        return EnvelopeResponse.<Long>builder()
+                .data(memberService.saveNickname(member, saveNicknameRequestDto))
+                .build();
+    }
+
 
 
     static class ResponseData {
