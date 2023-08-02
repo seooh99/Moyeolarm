@@ -69,10 +69,12 @@ public class MemberService {
 
     public Long saveNickname(Member member, SaveNicknameRequestDto saveNicknameRequestDto) {
 
-        if(member ==null){
-            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
-        }
-        System.out.println("saveNicknameRequestDto.getNickname()"+saveNicknameRequestDto.getNickname());
+        String newNickname = saveNicknameRequestDto.getNickname();
+
+        memberRepository.findByNickname(newNickname)
+                .ifPresent((foundedMember)->{
+                    throw new MemberException(MemberErrorInfo.NICKNAME_ALREADY_IN_USE);
+                });
 
         member.setNickname(saveNicknameRequestDto.getNickname());
         memberRepository.save(member);
