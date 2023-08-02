@@ -2,7 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import 'package:youngjun/main/view/settings.dart';
-import 'package:youngjun/user/view/login.dart';
+// import 'package:youngjun/user/view/login.dart';
 
 import 'package:youngjun/user/view/set_nickname.dart';
 
@@ -12,28 +12,44 @@ import 'package:youngjun/user/view/set_nickname.dart';
 import 'common/layout/main_nav.dart';
 // import 'main/view/alarm_list.dart';
 
+import 'dart:io';
+
+
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:provider/provider.dart';
+import 'package:youngjun/fcm/provider/fcm_provider.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  if (Platform.isAndroid) {
+    const channel = const AndroidNotificationChannel(
+      'default_channel', // id
+      'Default Channel', // name
+      importance: Importance.high,
+    );
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+  }
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  await FcmProvider().initNotifications();
+
   runApp(
-    _Moyuram(),
+    ChangeNotifierProvider(
+      create: (context) => FcmProvider(),
+      child: _Moyuram(),
+    ),
   );
-}
-
-Future<void> _configureFirebaseMessaging() async {
-  var fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: "BCbCyGkfT1KJoi7vI-4oS96nXrzxejo1Hb9Boa0b4a17OIAoBNVsYzZdkx");
-
-  FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
-    // save token to server
-  });
-
-  FirebaseMessaging.instance.deleteToken();
 }
 
 class _Moyuram extends StatelessWidget {
@@ -41,6 +57,8 @@ class _Moyuram extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    // context.read<FcmProvider>().configureFirebaseMessaging();
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         // home: Scaffold(
@@ -58,7 +76,7 @@ class _Moyuram extends StatelessWidget {
 
       initialRoute: '/settings',
       routes: {
-          '/': (context) => Login(), // 초기 라우트로 카카오로그인페이지 설정
+          // '/': (context) => Login(), // 초기 라우트로 카카오로그인페이지 설정
           // '/set_nickname' : (context) => SignIn(),
           // '/main_alarm_list' : (context) => MainAlarmList(),
           // '/arlat_list' : (context) => AlarmList(), // 알림보기
@@ -73,7 +91,8 @@ class _Moyuram extends StatelessWidget {
           // '/alarm_room_sub' : (context) =>, // 이건 방장칭구칭구(닉네임 or 아이디으로도 차별 줘야함)
           // 반복요일 설정
           // 알람음 설정
-          // 인증방식 설정
+          // 인증방식 설정1
+
           // 개발자정보 필요해?? -> 회의 필요~~~
           // 로그아웃 confirm (모달창 주소필요없음)
           // 회원탈퇴 페이지
