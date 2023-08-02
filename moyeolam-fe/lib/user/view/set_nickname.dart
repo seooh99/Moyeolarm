@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/textfield_bar.dart';
-import 'package:youngjun/common/button/btn_back.dart';
+import 'package:youngjun/user/viewmodel/set_nickname_view_model.dart';
 
-class SetNickname extends StatelessWidget {
+class SetNickname extends StatefulWidget {
   const SetNickname({super.key});
 
+  @override
+  State<SetNickname> createState() => _SetNicknameState();
+}
+
+class _SetNicknameState extends State<SetNickname> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,15 +18,13 @@ class SetNickname extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            BtnBack(
-              onPressed: () => Navigator.pop(context),
-            ),
-            const SizedBox(
+            SizedBox(
               width: 200,
               height: 120,
+              child: Text(NicknameViewModel().nName),
             ),
-            Container(
-              child: const TextFieldbox(),
+            TextFieldbox(
+              setContents: NicknameViewModel().setNickname,
             ),
             const SizedBox(
               width: 200,
@@ -29,7 +32,9 @@ class SetNickname extends StatelessWidget {
             ),
             Center(
                 child: ElevatedButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                // print("${_content.text} 1235");
+              },
               child: const Text("시작하기"),
             )),
           ],
