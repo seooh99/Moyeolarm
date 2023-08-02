@@ -27,5 +27,5 @@ public class FcmToken extends BaseTimeEntity {
     private String fcmToken;
 
     @Column
-    private String device_identifier;
+    private String deviceIdentifier;
 }

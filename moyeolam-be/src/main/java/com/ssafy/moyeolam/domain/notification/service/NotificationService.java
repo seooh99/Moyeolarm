@@ -23,18 +23,18 @@ public class NotificationService {
 
     public void sendAllNotification(Member member, String body, AlertType alertType) {
         for (FcmToken fcmToken : member.getFcmTokens()) {
-            sendNotification(fcmToken.getFcmToken(), body, alertType);
+            sendNotification(fcmToken, body, alertType);
         }
     }
 
-    private void sendNotification(String fcmToken, String body, AlertType alertType) {
+    private void sendNotification(FcmToken fcmToken, String body, AlertType alertType) {
         Notification notification = Notification.builder()
                 .setTitle(TITLE)
                 .setBody(body)
                 .build();
 
         Message message = Message.builder()
-                .setToken(fcmToken)
+                .setToken(fcmToken.getFcmToken())
                 .setNotification(notification)
                 .putData("notificationType", alertType.getName())
                 .build();
