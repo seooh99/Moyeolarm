@@ -22,6 +22,7 @@ import com.ssafy.moyeolam.domain.member.exception.MemberException;
 import com.ssafy.moyeolam.domain.member.repository.MemberRepository;
 import com.ssafy.moyeolam.domain.meta.domain.*;
 import com.ssafy.moyeolam.domain.meta.service.MetaDataService;
+import com.ssafy.moyeolam.domain.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,7 @@ public class AlarmGroupService {
     private final AlarmDayRepository alarmDayRepository;
     private final AlarmGroupRequestRepository alarmGroupRequestRepository;
     private final AlertLogRepository alertLogRepository;
+    private final NotificationService notificationService;
 
 
     @Transactional
@@ -107,7 +109,7 @@ public class AlarmGroupService {
 
     @Transactional
     public Long quitAlarmGroup(Long alarmGroupId, Long loginMemberId) {
-        Member loginMember = memberRepository.findById(loginMemberId)
+        Member loginMember = memberRepository.findByIdWithFcmTokens(loginMemberId)
                 .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
         AlarmGroup alarmGroup = alarmGroupRepository.findByIdWithHostMember(alarmGroupId)
@@ -138,6 +140,10 @@ public class AlarmGroupService {
                 .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_QUIT.getName()))
                 .build();
         alertLogRepository.save(alertLog);
+
+        // 푸시알림 전송
+        String body = hostMember.getNickname() + " 님의 알람그룹 " + alarmGroup.getTitle() + "에서 나갔습니다.";
+        notificationService.sendAllNotification(loginMember, body, AlertType.ALARM_GROUP_QUIT);
 
         return alarmGroup.getId();
     }
@@ -208,7 +214,7 @@ public class AlarmGroupService {
                 continue;
             }
 
-            Member toMember = memberRepository.findById(memberId)
+            Member toMember = memberRepository.findByIdWithFcmTokens(memberId)
                     .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
             alarmGroupRequest = AlarmGroupRequest.builder()
@@ -218,6 +224,10 @@ public class AlarmGroupService {
                     .matchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.REQUEST_STATUS.getName()))
                     .build();
             alarmGroupRequestRepository.save(alarmGroupRequest);
+
+            // 푸시알림 전송
+            String body = loginMember.getNickname() + " 님의 " + alarmGroup.getTime() + " 알람그룹 " + alarmGroup.getTitle() + "방에 초대되었습니다.";
+            notificationService.sendAllNotification(toMember, body, AlertType.ALARM_GROUP_REQUEST);
         }
         return requestFailMember;
     }
@@ -227,7 +237,7 @@ public class AlarmGroupService {
         Member loginMember = memberRepository.findById(loginMemberId)
                 .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
-        Member fromMember = memberRepository.findById(fromMemberId)
+        Member fromMember = memberRepository.findByIdWithFcmTokens(fromMemberId)
                 .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
         Member toMember = memberRepository.findById(toMemberId)
@@ -262,6 +272,10 @@ public class AlarmGroupService {
                     .build();
             alertLogRepository.save(alertLog);
 
+            // 푸시알림 전송
+            String body = loginMember.getNickname() + " 님이 알람그룹 " + alarmGroup.getTitle() + "방에 참여하였습니다.";
+            notificationService.sendAllNotification(fromMember, body, AlertType.ALARM_GROUP_APPROVE);
+
             return loginMember.getId();
         }
 
@@ -293,13 +307,6 @@ public class AlarmGroupService {
         if (alarmGroupRequest.getMatchStatus().getName().equals(MatchStatus.REQUEST_STATUS.getName())) {
             alarmGroupRequest.setMatchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.REJECT_STATUS.getName()));
 
-            // 알림로그 저장
-//            AlertLog alertLog = AlertLog.builder()
-//                    .fromMember(loginMember)
-//                    .toMember(fromMember)
-//                    .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_REJECT.getName()))
-//                    .build();
-//            alertLogRepository.save(alertLog);
             return loginMember.getId();
         }
 
@@ -311,7 +318,7 @@ public class AlarmGroupService {
         Member loginMember = memberRepository.findById(loginMemberId)
                 .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
-        Member banMember = memberRepository.findById(banMemberId)
+        Member banMember = memberRepository.findByIdWithFcmTokens(banMemberId)
                 .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
         AlarmGroup alarmGroup = alarmGroupRepository.findByIdWithHostMember(alarmGroupId)
@@ -341,6 +348,11 @@ public class AlarmGroupService {
                 .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_BAN.getName()))
                 .build();
         alertLogRepository.save(alertLog);
+
+        // 푸시알림 전송
+        String body = loginMember.getNickname() + " 님의 알람그룹 " + alarmGroup.getTitle() + "에서 강퇴당했습니다.";
+        notificationService.sendAllNotification(banMember, body, AlertType.ALARM_GROUP_BAN);
+
         return banMemberId;
     }
 

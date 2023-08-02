@@ -4,8 +4,24 @@ import '../../common/button/btn_toggle.dart';
 import '../../common/const/colors.dart';
 
 class AlarmList extends StatelessWidget {
-  const AlarmList({super.key});
 
+  const AlarmList({super.key,
+
+    required this.alarmGroupId,
+    this.weekday = const [true, true, true, true, true, true, true],
+    required this.hour,
+    required this.minute,
+    required this.toggle,
+    required this.title,
+
+  });
+
+  final int alarmGroupId;
+  final List<bool> weekday;
+  final int hour;
+  final int minute;
+  final bool toggle;
+  final String title;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -14,8 +30,8 @@ class AlarmList extends StatelessWidget {
           padding: const EdgeInsets.only(top: 30),
           child: Card(
             margin: const EdgeInsets.only(right: 10, left: 10),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -24,19 +40,22 @@ class AlarmList extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          '빨리 주말와라~~~',
+                          title,
                           style: TextStyle(
                             fontSize: 16.0,
                           ),
                         ),
                       ),
-                      BtnToggle(),
+                      BtnToggle(
+                        value: toggle,
+                        onChanged: (bool value) {},
+                      ),
                     ],
                   ),
                   Row(
                     children: [
                       Text(
-                        '12:00',
+                        '$hour : $minute',
                         style: TextStyle(
                           fontSize: 34.0,
                         ),
@@ -54,7 +73,8 @@ class AlarmList extends StatelessWidget {
             ),
           ),
         ),
-        Padding(padding: EdgeInsets.symmetric(vertical: 10),
+        Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
             child: Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -65,12 +85,12 @@ class AlarmList extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 40),
                   child: Center(
-                    child: Icon(Icons.add,
-                      color: MAIN_COLOR,),
+                    child: Icon(
+                      Icons.add,
+                      color: MAIN_COLOR,
+                    ),
                   ),
-                )
-            )
-        ),
+                ))),
       ],
     );
   }

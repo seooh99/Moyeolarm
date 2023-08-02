@@ -17,12 +17,15 @@ import com.ssafy.moyeolam.domain.meta.domain.AlertType;
 import com.ssafy.moyeolam.domain.meta.domain.MatchStatus;
 import com.ssafy.moyeolam.domain.meta.domain.MetaDataType;
 import com.ssafy.moyeolam.domain.meta.service.MetaDataService;
+import com.ssafy.moyeolam.domain.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -36,13 +39,14 @@ public class FriendService {
     private final FriendRepository friendRepository;
     private final FriendRequestRepository friendRequestRepository;
     private final AlertLogRepository alertLogRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     public Long sendFriendRequest(Long loginMemberId, Long toMemberId) {
         Member loginMember = memberRepository.findById(loginMemberId)
                 .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
-        Member toMember = memberRepository.findById(toMemberId)
+        Member toMember = memberRepository.findByIdWithFcmTokens(toMemberId)
                 .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
         Consumer<FriendRequest> friendRequestStatusValidator = friendRequest -> {
@@ -72,6 +76,11 @@ public class FriendService {
 
         FriendRequest fromToFriendRequest = fromToFriendRequestOptional.get();
         fromToFriendRequest.updateMatchStatus(metaDataService.getMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.REQUEST_STATUS.getName()));
+
+        // 푸시알림 전송
+        String body = loginMember.getNickname() + " 님이 친구를 요청하였습니다.";
+        notificationService.sendAllNotification(toMember, body, AlertType.FRIEND_REQUEST);
+
         return fromToFriendRequest.getId();
     }
 
@@ -83,7 +92,7 @@ public class FriendService {
         FriendRequest friendRequest = friendRequestRepository.findById(friendRequestId)
                 .orElseThrow(() -> new FriendException(FriendErrorInfo.NOT_FOUND_FRIEND_REQUEST));
 
-        Member fromMember = memberRepository.findById(friendRequest.getFromMember().getId())
+        Member fromMember = memberRepository.findByIdWithFcmTokens(friendRequest.getFromMember().getId())
                 .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
         if (!loginMemberId.equals(friendRequest.getToMember().getId()))
@@ -113,6 +122,10 @@ public class FriendService {
                 .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.FRIEND_APPROVE.getName()))
                 .build();
         alertLogRepository.save(alertLog);
+
+        // 푸시알림 전송
+        String body = loginMember.getNickname() + " 님이 친구를 수락하였습니다.";
+        notificationService.sendAllNotification(fromMember, body, AlertType.FRIEND_APPROVE);
 
         return null;
     }

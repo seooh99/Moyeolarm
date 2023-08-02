@@ -1,12 +1,64 @@
 package com.ssafy.moyeolam.domain.member.controller;
 
+import com.ssafy.moyeolam.domain.auth.dto.PrincipalDetails;
+import com.ssafy.moyeolam.domain.member.domain.Member;
+import com.ssafy.moyeolam.domain.member.dto.SaveNicknameRequestDto;
+import com.ssafy.moyeolam.domain.member.dto.UploadProfileImageRequestDto;
+import com.ssafy.moyeolam.domain.member.dto.UploadProfileImageResponseDto;
+import com.ssafy.moyeolam.domain.member.exception.MemberErrorInfo;
+import com.ssafy.moyeolam.domain.member.exception.MemberException;
+import com.ssafy.moyeolam.domain.member.service.MemberService;
+import com.ssafy.moyeolam.global.common.response.EnvelopeResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 public class MemberController {
+
+    private final MemberService memberService;
+
+    @PostMapping("/member/profileImage")
+    public EnvelopeResponse<UploadProfileImageResponseDto> uploadProfileImage(@AuthenticationPrincipal PrincipalDetails principal, UploadProfileImageRequestDto uploadProfileImageRequestDto) throws IOException {
+
+        Member member = principal.getMember();
+
+        return EnvelopeResponse.<UploadProfileImageResponseDto>builder()
+                .data(memberService.uploadProfileImage(member, uploadProfileImageRequestDto))
+                .build();
+    }
+
+    @DeleteMapping("/member/profileImage")
+    public EnvelopeResponse<Long> deleteProfileImage(@AuthenticationPrincipal PrincipalDetails principal){
+
+        Member member = principal.getMember();
+
+        return EnvelopeResponse.<Long>builder()
+                .data(memberService.deleteProfileImage(member))
+                .build();
+    }
+
+    @PostMapping("/member/nickname")
+    public EnvelopeResponse<Long> saveNickname(@AuthenticationPrincipal PrincipalDetails principal, SaveNicknameRequestDto saveNicknameRequestDto){
+
+        if (principal==null){
+            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+        }
+
+        Member member = principal.getMember();
+
+        return EnvelopeResponse.<Long>builder()
+                .data(memberService.saveNickname(member, saveNicknameRequestDto))
+                .build();
+    }
+
+
 
     static class ResponseData {
         private int code;
