@@ -24,6 +24,7 @@ pipeline {
                         ssh -o StrictHostKeyChecking=no ubuntu@i9a502.p.ssafy.io 'sudo cp /home/ubuntu/application-setting-files/application-jwt.yml /jenkins/workspace/moyeolam/moyeolam-be/src/main/resources/'
                         ssh -o StrictHostKeyChecking=no ubuntu@i9a502.p.ssafy.io 'sudo cp /home/ubuntu/application-setting-files/application-oauth.yml /jenkins/workspace/moyeolam/moyeolam-be/src/main/resources/'
                         ssh -o StrictHostKeyChecking=no ubuntu@i9a502.p.ssafy.io 'sudo cp /home/ubuntu/application-setting-files/application-s3.yml /jenkins/workspace/moyeolam/moyeolam-be/src/main/resources/'
+                        ssh -o StrictHostKeyChecking=no ubuntu@i9a502.p.ssafy.io 'sudo cp /home/ubuntu/application-setting-files/firebase-service-account.json /jenkins/workspace/moyeolam/moyeolam-be/src/main/resources/'
                     """
                 }
             }
