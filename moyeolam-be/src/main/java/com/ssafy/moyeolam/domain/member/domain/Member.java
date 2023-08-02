@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "member")
 @Builder
@@ -34,9 +36,6 @@ public class Member extends BaseTimeEntity {
     private String oauthIdentifier;
 
     @Column
-    private String fcmToken;
-
-    @Column
     private String nickname;
 
     @OneToMany(mappedBy = "member")
@@ -44,6 +43,9 @@ public class Member extends BaseTimeEntity {
 
     @OneToOne(mappedBy = "member")
     private ProfileImage profileImage;
+
+    @OneToMany(mappedBy = "member")
+    private Set<FcmToken> fcmTokens = new HashSet<>();
 
     public void updateRefreshToken(String updateRefreshToken) {
         if (this.memberToken == null) {
