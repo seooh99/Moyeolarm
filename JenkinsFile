@@ -3,14 +3,16 @@ pipeline {
     stages {
         stage('Project Prepare') {
             steps {
-                git url: "https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A502.git",
-                    branch: 'test',
-                    credentialsId: 'gitlab'
+                dir('/var/jenkins_home/workspace/moyeolam-project'){
+                    git url: "https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A502.git",
+                        branch: 'test',
+                        credentialsId: 'gitlab'
+                }
             }
         }
         stage('Private key Setting'){
             steps {
-                dir('/home/ubuntu/moyeolam-private-key'){
+                dir('/var/jenkins_home/workspace/moyeolam-private-key'){
                     git url: "https://github.com/jjuny0310/moyeolam-private-key.git",
                         branch: 'main',
                         credentialsId: 'github'
