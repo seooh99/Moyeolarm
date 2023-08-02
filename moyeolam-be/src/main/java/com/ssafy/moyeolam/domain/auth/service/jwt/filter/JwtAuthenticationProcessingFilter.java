@@ -49,8 +49,6 @@ public class JwtAuthenticationProcessingFilter extends BasicAuthenticationFilter
                 .filter(jwtProvider::isTokenValid)
                 .orElse(null);
 
-        System.out.println("JWT필터, refreshToken : "+refreshToken);
-
         if(refreshToken != null){
             checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
             return;
@@ -77,9 +75,6 @@ public class JwtAuthenticationProcessingFilter extends BasicAuthenticationFilter
 
 
     private void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-        System.out.println("checkAccessTokenAndAuthentication() 호출");
-        System.out.println("jwtService.extractAccessToken(request)"+ jwtProvider.extractAccessToken(request));
 
         Optional<String> token  = jwtProvider.extractAccessToken(request);
         if(token.isEmpty()){

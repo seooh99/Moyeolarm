@@ -6,8 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
-public class ProfileImageDto {
-    private String path;
-    private String url;
+public class UploadProfileImageRequestDto {
+    private String imagePath;
+    private String imageUrl;
     private MultipartFile file;
 }

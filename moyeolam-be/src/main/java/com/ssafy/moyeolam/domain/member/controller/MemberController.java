@@ -1,8 +1,14 @@
 package com.ssafy.moyeolam.domain.member.controller;
 
 import com.ssafy.moyeolam.domain.auth.dto.PrincipalDetails;
-import com.ssafy.moyeolam.domain.member.dto.ProfileImageDto;
+import com.ssafy.moyeolam.domain.member.domain.Member;
+import com.ssafy.moyeolam.domain.member.dto.SaveNicknameRequestDto;
+import com.ssafy.moyeolam.domain.member.dto.UploadProfileImageRequestDto;
+import com.ssafy.moyeolam.domain.member.dto.UploadProfileImageResponseDto;
+import com.ssafy.moyeolam.domain.member.exception.MemberErrorInfo;
+import com.ssafy.moyeolam.domain.member.exception.MemberException;
 import com.ssafy.moyeolam.domain.member.service.MemberService;
+import com.ssafy.moyeolam.global.common.response.EnvelopeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,39 +25,39 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/member/profileImage")
-    public String uploadProfileImage(@AuthenticationPrincipal PrincipalDetails principal, ProfileImageDto profileImageDto) throws IOException {
+    public EnvelopeResponse<UploadProfileImageResponseDto> uploadProfileImage(@AuthenticationPrincipal PrincipalDetails principal, UploadProfileImageRequestDto uploadProfileImageRequestDto) throws IOException {
 
-        System.out.println(principal);
-        try {
-            String username = principal.getUsername();
-            System.out.println("유저 이름: " + username);
-            memberService.findByOauthIdentifier(username)
-                    .ifPresent(member ->{
-                        try {
-                            memberService.saveProfileImage(member, profileImageDto);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-        } catch (NullPointerException e) {
-            System.out.println("에러 발생: " + e.getMessage());
-        }
-        return "redirect:/";
+        Member member = principal.getMember();
+
+        return EnvelopeResponse.<UploadProfileImageResponseDto>builder()
+                .data(memberService.uploadProfileImage(member, uploadProfileImageRequestDto))
+                .build();
     }
 
     @DeleteMapping("/member/profileImage")
-    public @ResponseBody String deleteProfileImage(@AuthenticationPrincipal PrincipalDetails principal){
-        String username = principal.getUsername();
-        memberService.findByOauthIdentifier(username)
-                .ifPresent(member -> {
-                    try {
-                        memberService.deleteProfileImage(member);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-        return "삭제됨";
+    public EnvelopeResponse<Long> deleteProfileImage(@AuthenticationPrincipal PrincipalDetails principal){
+
+        Member member = principal.getMember();
+
+        return EnvelopeResponse.<Long>builder()
+                .data(memberService.deleteProfileImage(member))
+                .build();
     }
+
+    @PostMapping("/member/nickname")
+    public EnvelopeResponse<Long> saveNickname(@AuthenticationPrincipal PrincipalDetails principal, SaveNicknameRequestDto saveNicknameRequestDto){
+
+        if (principal==null){
+            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+        }
+
+        Member member = principal.getMember();
+
+        return EnvelopeResponse.<Long>builder()
+                .data(memberService.saveNickname(member, saveNicknameRequestDto))
+                .build();
+    }
+
 
 
     static class ResponseData {

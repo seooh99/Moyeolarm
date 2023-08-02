@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "268829750741",
+    "project_id": "moyeolam-d4a1d",
+    "storage_bucket": "moyeolam-d4a1d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268829750741:android:0142b27ce0c0be6019b95c",
+        "android_client_info": {
+          "package_name": "com.example.youngjun"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "268829750741-3109pv3qjtql23ncmbqqogvf5snrftdj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpjtw29fcYk55UhfUuCa8A58kc-ICZw-Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "268829750741-3109pv3qjtql23ncmbqqogvf5snrftdj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "268829750741-fhh08ba7557f4qfe44hddf796u1bqh6m.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.youngjun"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
