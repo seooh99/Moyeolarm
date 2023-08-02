@@ -1,12 +1,15 @@
 package com.ssafy.moyeolam.domain.alarmgroup.dto;
 
+import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmDay;
 import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroup;
 import com.ssafy.moyeolam.domain.member.domain.Member;
 import com.ssafy.moyeolam.domain.meta.domain.AlarmGroupMemberRole;
+import com.ssafy.moyeolam.domain.meta.domain.DayOfWeek;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,8 +18,11 @@ import java.util.stream.Collectors;
 public class AlarmGroupElement {
     private Long alarmGroupId;
     private String title;
-    private LocalTime time;
-    private List<String> dayOfWeek;
+//    private LocalTime time;
+    private Integer hour;
+    private Integer minute;
+//    private List<String> dayOfWeek;
+    private List<Boolean> dayOfWeek;
     private String alarmSound;
     private String alarmMission;
     private Boolean isLock;
@@ -27,11 +33,9 @@ public class AlarmGroupElement {
         return AlarmGroupElement.builder()
                 .alarmGroupId(alarmGroup.getId())
                 .title(alarmGroup.getTitle())
-                .time(alarmGroup.getTime())
-                .dayOfWeek(alarmGroup.getAlarmDays()
-                        .stream()
-                        .map(day -> day.getDayOfWeek().getName())
-                        .collect(Collectors.toList()))
+                .hour(alarmGroup.getTime().getHour())
+                .minute(alarmGroup.getTime().getMinute())
+                .dayOfWeek(dayOfWeekToBoolean(alarmGroup.getAlarmDays()))
                 .alarmSound(alarmGroup.getAlarmSound().getName())
                 .alarmMission(alarmGroup.getAlarmMission().getName())
                 .isLock(alarmGroup.getLock())
@@ -40,5 +44,17 @@ public class AlarmGroupElement {
                         .map(AlarmGroupMemberElement::from)
                         .collect(Collectors.toList()))
                 .build();
+    }
+
+    public static List<Boolean> dayOfWeekToBoolean(List<AlarmDay> alarmDays) {
+        Boolean[] dayOfWeek = new Boolean[]{false, false, false, false, false, false, false};
+        List<String> days = Arrays.stream(DayOfWeek.values())
+                .map(DayOfWeek::getName)
+                .collect(Collectors.toList());
+
+        for (AlarmDay alarmDay : alarmDays) {
+            dayOfWeek[days.indexOf(alarmDay.getDayOfWeek().getName())] = true;
+        }
+        return Arrays.asList(dayOfWeek);
     }
 }
