@@ -33,6 +33,7 @@ class FcmProvider with ChangeNotifier {
     // });
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       // 여기에 특정 페이지로 이동하는 로직을 정의
+      // Navigator.pushNamed(context, '/'); // 알림창 화면으로 이동
       // Navigator.of(context).push(
       //   MaterialPageRoute(builder: (context) => YourTargetPage()),
       // );
