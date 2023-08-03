@@ -1,14 +1,15 @@
 pipeline {
     agent any
     stages {
-        stage('Project Prepare') {
+        stage('Project Clone') {
             steps {
                 git url: "https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A502.git",
                     branch: 'test',
                     credentialsId: 'gitlab'
             }
         }
-        stage('Private key Setting'){
+
+        stage('Setting Files Clone'){
             steps {
                 dir('/var/jenkins_home/workspace/moyeolam-private-key'){
                     git url: "https://github.com/jjuny0310/moyeolam-private-key.git",
@@ -18,19 +19,12 @@ pipeline {
             }
         }
 
-        stage('yml Copy'){
+        stage('Setting Files Copy'){
             steps{
-                sshagent(['ec2-server']){
-                    sh """
-                        pwd
-                        ssh -o StrictHostKeyChecking=no ubuntu@i9a502.p.ssafy.io 'sudo cp /home/ubuntu/application-setting-files/application.yml /jenkins/workspace/moyeolam/moyeolam-be/src/main/resources/'
-                        ssh -o StrictHostKeyChecking=no ubuntu@i9a502.p.ssafy.io 'sudo cp /home/ubuntu/application-setting-files/application-local.yml /jenkins/workspace/moyeolam/moyeolam-be/src/main/resources/'
-                        ssh -o StrictHostKeyChecking=no ubuntu@i9a502.p.ssafy.io 'sudo cp /home/ubuntu/application-setting-files/application-jwt.yml /jenkins/workspace/moyeolam/moyeolam-be/src/main/resources/'
-                        ssh -o StrictHostKeyChecking=no ubuntu@i9a502.p.ssafy.io 'sudo cp /home/ubuntu/application-setting-files/application-oauth.yml /jenkins/workspace/moyeolam/moyeolam-be/src/main/resources/'
-                        ssh -o StrictHostKeyChecking=no ubuntu@i9a502.p.ssafy.io 'sudo cp /home/ubuntu/application-setting-files/application-s3.yml /jenkins/workspace/moyeolam/moyeolam-be/src/main/resources/'
-                        ssh -o StrictHostKeyChecking=no ubuntu@i9a502.p.ssafy.io 'sudo cp /home/ubuntu/application-setting-files/firebase-service-account.json /jenkins/workspace/moyeolam/moyeolam-be/src/main/resources/'
-                    """
-                }
+                sh """
+                    pwd
+                    cp -r /var/jenkins_home/workspace/moyeolam-private-key/* /jenkins/workspace/moyeolam-be/src/main/resources/
+                """
             }
         }
         
