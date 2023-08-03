@@ -1,14 +1,10 @@
 pipeline {
     agent any
     stages {
-        stage('Project Prepare') {
-            steps {
-                dir('/var/jenkins_home/workspace/moyeolam-project'){
-                    git url: "https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A502.git",
-                        branch: 'test',
-                        credentialsId: 'gitlab'
-                }
-            }
+        steps {
+            git url: "https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A502.git",
+                branch: 'test',
+                credentialsId: 'gitlab'
         }
         stage('Private key Setting'){
             steps {
@@ -24,6 +20,7 @@ pipeline {
             steps{
                 sshagent(['ec2-server']){
                     sh """
+                        pwd
                         ssh -o StrictHostKeyChecking=no ubuntu@i9a502.p.ssafy.io 'sudo cp /home/ubuntu/application-setting-files/application.yml /jenkins/workspace/moyeolam/moyeolam-be/src/main/resources/'
                         ssh -o StrictHostKeyChecking=no ubuntu@i9a502.p.ssafy.io 'sudo cp /home/ubuntu/application-setting-files/application-local.yml /jenkins/workspace/moyeolam/moyeolam-be/src/main/resources/'
                         ssh -o StrictHostKeyChecking=no ubuntu@i9a502.p.ssafy.io 'sudo cp /home/ubuntu/application-setting-files/application-jwt.yml /jenkins/workspace/moyeolam/moyeolam-be/src/main/resources/'
