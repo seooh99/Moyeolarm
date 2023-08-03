@@ -15,22 +15,20 @@ final alarmRepositoryProvider = Provider<AlarmListRepository>((ref){
 
   final dio = Dio();
 
-  final repository = AlarmListRepository(dio, baseUrl: 'http://$ip/alarmgroups');
+  final repository = AlarmListRepository(dio, baseUrl: 'http://i9a502.p.ssafy.io:8080');
 
   return repository;
 
 });
 
-@RestApi(baseUrl: BASE_URL)
+@RestApi(baseUrl: 'http://i9a502.p.ssafy.io:8080')
 abstract class AlarmListRepository {
-  // http://$ip/restaurant
+  // http://i9a502.p.ssafy.io:8080
   factory AlarmListRepository(Dio dio, {String baseUrl}) =
   _AlarmListRepository;
 
-  // http://$ip/restaurant/
+  //http://i9a502.p.ssafy.io:8080/alarmgroup
   @GET('/alarmgroups')
-
-  Future<Alarm> getAlarmList({
-    required String id,
-  });
+  Future<AlarmListModel> getAlarmList(
+  );
 }

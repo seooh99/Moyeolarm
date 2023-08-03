@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:youngjun/alarm/component/alarm_list.dart';
+import 'package:youngjun/alarm/repository/alarm_list_repository.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/layout/main_nav.dart';
 import 'package:youngjun/common/layout/title_bar.dart';
@@ -20,9 +21,10 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
 
   @override
   Widget build(BuildContext context) {
-    List<Alarm> data = ref.watch(alarmListProvider);
-    print(ref.read(alarmListProvider.notifier).toString());
-    
+
+    final data = ref.watch(alarmListProvider);
+
+    print(data.toList());
 
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
@@ -33,11 +35,16 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
         appBar: AppBar(),
         titleIcon: Icons.alarm,
         title: '모여람',
+        testBtn: null,
       ),
-      body: ListView(
-        children: data
-            .map(
-              (e) => AlarmList(
+      body: FutureBuilder<List<AlarmListModel>>(
+        future: null,
+        builder: (BuildContext context,
+            AsyncSnapshot<List<AlarmListModel>> snapshot) {
+          return ListView(
+            children: data
+                .map(
+                  (e) => AlarmList(
                 alarmGroupId: e.alarmGroupId,
                 hour: e.hour,
                 minute: e.minute,
@@ -45,7 +52,9 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                 title: e.title,
               ),
             )
-            .toList(),
+                .toList(),
+          );
+        },
       ),
       bottomSheet: MainNav(),
     );

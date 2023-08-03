@@ -13,6 +13,7 @@ class AlarmList extends StatelessWidget {
     required this.minute,
     required this.toggle,
     required this.title,
+    this.isLock,
 
   });
 
@@ -22,6 +23,8 @@ class AlarmList extends StatelessWidget {
   final int minute;
   final bool toggle;
   final String title;
+  final bool? isLock;
+
   @override
   Widget build(BuildContext context) {
     return Column(

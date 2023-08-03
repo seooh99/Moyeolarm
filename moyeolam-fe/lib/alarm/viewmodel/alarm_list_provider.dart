@@ -1,21 +1,43 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:youngjun/alarm/model/alarm_list_model.dart';
+import 'package:youngjun/alarm/repository/alarm_list_repository.dart';
+import 'package:youngjun/common/secure_storage/secure_storage.dart';
 
-final alarmListProvider =
-    StateNotifierProvider<AlarmListNotifier, List<Alarm>>((ref) {
-  return AlarmListNotifier();
+
+final dioProvider =FutureProvider<Dio>((ref) {
+
+  final dio = Dio();
+
+  final storage =ref.watch(secureStorageProvider);
+
+  return dio;
 });
 
-class AlarmListNotifier extends StateNotifier<List<Alarm>> {
-  AlarmListNotifier() : super([]);
+final alarmListProvider =
+StateNotifierProvider<AlarmListNotifier, List<AlarmListModel>>((ref) {
 
-  // 할 일 추가
-  void addTodo(Alarm alarm) {
+  final repository =ref.watch(alarmRepositoryProvider);
+
+  final notifier = AlarmListNotifier(repository: repository);
+
+  return notifier;
+
+});
+
+class AlarmListNotifier extends StateNotifier<List<AlarmListModel>> {
+
+  final AlarmListRepository repository;
+
+  AlarmListNotifier({required this.repository}) : super([]);
+
+
+  void addAlarm(AlarmListModel alarm) {
     state = [...state, alarm];
   }
 
-  // 할 일 삭제
-  void removeTodo(int alarmGroupId) {
+
+  void removeAlarm(int alarmGroupId) {
     state = [
       for (final Alarm in state)
         if (Alarm.alarmGroupId != alarmGroupId) Alarm,
@@ -25,14 +47,14 @@ class AlarmListNotifier extends StateNotifier<List<Alarm>> {
   void changeToggle(int alarmGroupId) {
     state = state
         .map((e) => e.alarmGroupId == alarmGroupId
-            ? Alarm(
-                alarmGroupId: e.alarmGroupId,
-                hour: e.hour,
-                minute: e.minute,
-                toggle: !e.toggle,
-                title: e.title,
-              )
-            : e)
+        ? AlarmListModel(
+      alarmGroupId: e.alarmGroupId,
+      hour: e.hour,
+      minute: e.minute,
+      toggle: !e.toggle,
+      title: e.title,
+    )
+        : e)
         .toList();
   }
 }

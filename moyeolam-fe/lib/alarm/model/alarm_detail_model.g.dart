@@ -1,31 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'alarm_list_model.dart';
+part of 'alarm_detail_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-AlarmListModel _$AlarmListModelFromJson(Map<String, dynamic> json) =>
-    AlarmListModel(
+AlarmDetailModel _$AlarmDetailModelFromJson(Map<String, dynamic> json) =>
+    AlarmDetailModel(
       alarmGroupId: json['alarmGroupId'] as int,
-      weekday:
-          (json['weekday'] as List<dynamic>?)?.map((e) => e as bool).toList() ??
-              const [true, true, true, true, true, true, true],
       hour: json['hour'] as int,
       minute: json['minute'] as int,
-      toggle: json['toggle'] as bool,
+      ampm: json['ampm'] as String,
       title: json['title'] as String,
-      isLock: json['isLock'] as bool?,
     );
 
-Map<String, dynamic> _$AlarmListModelToJson(AlarmListModel instance) =>
+Map<String, dynamic> _$AlarmDetailModelToJson(AlarmDetailModel instance) =>
     <String, dynamic>{
       'alarmGroupId': instance.alarmGroupId,
-      'weekday': instance.weekday,
       'hour': instance.hour,
       'minute': instance.minute,
-      'toggle': instance.toggle,
+      'ampm': instance.ampm,
       'title': instance.title,
-      'isLock': instance.isLock,
     };
