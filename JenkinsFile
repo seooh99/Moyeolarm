@@ -19,14 +19,13 @@ pipeline {
             }
         }
 
-        stage('Setting Files Copy'){
-            steps{
-                sh """
-                    pwd
-                    cp -r /var/jenkins_home/workspace/moyeolam-private-key/* /var/jenkins_home/workspace/moyeolam/moyeolam-be/src/main/resources/
-                """
-            }
-        }
+        // stage('Setting Files Copy'){
+        //     steps{
+        //         sh """
+        //             cp -r /var/jenkins_home/workspace/moyeolam-private-key/* /var/jenkins_home/workspace/moyeolam/moyeolam-be/src/main/resources/
+        //         """
+        //     }
+        // }
         
         stage('Build'){
             steps{
