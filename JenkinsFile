@@ -29,9 +29,10 @@ pipeline {
         
         stage('Build'){
             steps{
-                sh """           
+                sh """
+                    cd moyeolam-be                    
                     chmod +x gradlew
-                    moyeolam-be/gradlew clean build
+                    ./gradlew clean build
                 """
             }
         }
