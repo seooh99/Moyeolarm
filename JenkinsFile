@@ -23,7 +23,7 @@ pipeline {
             steps{
                 sh """
                     pwd
-                    cp -r /var/jenkins_home/workspace/moyeolam-private-key/* /jenkins/workspace/moyeolam-be/src/main/resources/
+                    cp -r /var/jenkins_home/workspace/moyeolam-private-key/* /var/jenkins_home/workspace/moyeolam-be/src/main/resources/
                 """
             }
         }
