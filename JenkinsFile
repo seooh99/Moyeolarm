@@ -1,10 +1,12 @@
 pipeline {
     agent any
     stages {
-        steps {
-            git url: "https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A502.git",
-                branch: 'test',
-                credentialsId: 'gitlab'
+        stage('Project Prepare') {
+            steps {
+                git url: "https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A502.git",
+                    branch: 'test',
+                    credentialsId: 'gitlab'
+            }
         }
         stage('Private key Setting'){
             steps {
