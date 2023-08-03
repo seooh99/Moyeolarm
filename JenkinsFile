@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+    stages {
+        stage('Project Clone') {
+            steps {
+                git url: "https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A502.git",
+                    branch: 'test',
+                    credentialsId: 'gitlab'
+            }
+        }
+
+        stage('Setting Files Clone'){
+            steps {
+                dir('/var/jenkins_home/workspace/moyeolam-private-key'){
+                    git url: "https://github.com/jjuny0310/moyeolam-private-key.git",
+                        branch: 'main',
+                        credentialsId: 'github'
+                }
+            }
+        }
+
+        stage('Setting Files Copy'){
+            steps{
+                sh """
+                    cp -r /var/jenkins_home/workspace/moyeolam-private-key/* /var/jenkins_home/workspace/moyeolam/moyeolam-be/src/main/resources/
+                """
+            }
+        }
+        
+        stage('Build'){
+            steps{
+                sh """
+                    cd moyeolam-be                    
+                    chmod +x gradlew
+                    ./gradlew clean build
+                """
+            }
+        }
+        stage('Deploy'){
+            steps{
+                sshagent(['ec2-server']){
+                    sh """
+                        ssh -o StrictHostKeyChecking=no -f ubuntu@i9a502.p.ssafy.io 'fuser -k -n tcp 8080'
+                        sleep 5
+                        ssh -o StrictHostKeyChecking=no -f ubuntu@i9a502.p.ssafy.io 'java -jar /jenkins/workspace/moyeolam/moyeolam-be/build/libs/moyeolam-0.0.1-SNAPSHOT.jar'
+                    """
+                }
+            }
+        }
+    }
+}

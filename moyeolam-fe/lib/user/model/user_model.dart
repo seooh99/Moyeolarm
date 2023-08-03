@@ -14,7 +14,7 @@ class User {
   // late String accessToken;
   // late String refreshToken;
 
-  User({
+  User(
     this.nickname,
     // required this.friendsList,
     // required this.roomList,
@@ -22,7 +22,7 @@ class User {
     //   required this.accessToken,
     //   required this.refreshToken,
     // }
-  });
+  );
 
   // factory User.fromJson(Map<String, dynamic> json) => User(
   //       nickname: json['nickname'],
