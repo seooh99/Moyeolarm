@@ -36,9 +36,7 @@ class _UserDataSource implements UserDataSource {
               queryParameters: queryParameters,
               data: _data,
             )
-
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-
     final value = User.fromJson(_result.data!);
     return value;
   }
