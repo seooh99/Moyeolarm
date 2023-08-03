@@ -29,7 +29,7 @@ class _AlarmDetailScreenState extends State<AlarmDetailScreen> {
         body: Column(
           children: [
             Clock(),
-            AlarmMiddleSelect(),
+            // AlarmMiddleSelect(),
             SizedBox(
               height: 20,
             ),
