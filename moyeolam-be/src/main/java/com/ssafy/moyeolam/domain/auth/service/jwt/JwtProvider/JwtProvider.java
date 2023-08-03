@@ -1,7 +1,9 @@
 package com.ssafy.moyeolam.domain.auth.service.jwt.JwtProvider;
 
+import antlr.Token;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.ssafy.moyeolam.domain.auth.dto.TokenMapping;
 import com.ssafy.moyeolam.domain.member.domain.Member;
 import com.ssafy.moyeolam.domain.member.repository.MemberRepository;
 import lombok.Data;
@@ -43,6 +45,13 @@ public class JwtProvider {
     private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
     private static final String USERNAME_CLAIM = "username";
     private static final String BEARER = "Bearer ";
+
+    public TokenMapping createToken(String username){
+        return TokenMapping.builder()
+                .accessToken(createAccessToken(username))
+                .refreshToken(createRefreshToken())
+                .build();
+    }
 
     public String createAccessToken(String username){
         Date now = new Date();
