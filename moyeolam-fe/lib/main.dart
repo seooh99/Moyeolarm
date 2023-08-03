@@ -12,37 +12,14 @@ import 'package:youngjun/user/view/set_nickname.dart';
 import 'common/layout/main_nav.dart';
 // import 'main/view/alarm_list.dart';
 
-import 'dart:io';
-
-
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:provider/provider.dart';
-import 'package:youngjun/fcm/provider/fcm_provider.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  if (Platform.isAndroid) {
-    const channel = const AndroidNotificationChannel(
-      'default_channel', // id
-      'Default Channel', // name
-      importance: Importance.high,
-    );
-    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
-  }
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  await FcmProvider().initNotifications();
 
   runApp(
     ChangeNotifierProvider(
@@ -50,6 +27,16 @@ void main() async {
       child: _Moyuram(),
     ),
   );
+}
+
+Future<void> _configureFirebaseMessaging() async {
+  var fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: "BCbCyGkfT1KJoi7vI-4oS96nXrzxejo1Hb9Boa0b4a17OIAoBNVsYzZdkx");
+
+  FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
+    // save token to server
+  });
+
+  FirebaseMessaging.instance.deleteToken();
 }
 
 class _Moyuram extends StatelessWidget {
