@@ -37,6 +37,17 @@ pipeline {
             }
         }
 
+        stage('Dockerize'){
+            steps{
+                sh """
+                    docker stop spring-boot-container || true
+                    docker rm spring-boot-container || true
+                    docker rmi spring-boot-image || true
+                    docker build -t spring-boot-image .
+                """
+            }
+        }
+
         // stage('Python Server Prepare'){
         //     steps{
         //         sh """
@@ -49,15 +60,23 @@ pipeline {
         //     }
         // }
 
+        // stage('Deploy'){
+        //     steps{
+        //         sshagent(['ec2-server']){
+        //             sh """
+        //                 ssh -o StrictHostKeyChecking=no -f ubuntu@i9a502.p.ssafy.io 'fuser -k -n tcp 8080'
+        //                 sleep 10
+        //                 ssh -o StrictHostKeyChecking=no -f ubuntu@i9a502.p.ssafy.io 'java -jar /jenkins/workspace/moyeolam/moyeolam-be/build/libs/moyeolam-0.0.1-SNAPSHOT.jar'
+        //             """
+        //         }
+        //     }
+        // }
+
         stage('Deploy'){
             steps{
-                sshagent(['ec2-server']){
-                    sh """
-                        ssh -o StrictHostKeyChecking=no -f ubuntu@i9a502.p.ssafy.io 'fuser -k -n tcp 8080'
-                        sleep 10
-                        ssh -o StrictHostKeyChecking=no -f ubuntu@i9a502.p.ssafy.io 'java -jar /jenkins/workspace/moyeolam/moyeolam-be/build/libs/moyeolam-0.0.1-SNAPSHOT.jar'
-                    """
-                }
+                sh """
+                    docker run -d --name spring-boot-container -p 8080:8080 spring-boot-image
+                """
             }
         }
     }
