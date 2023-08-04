@@ -7,6 +7,11 @@ class SetNickname extends StatefulWidget {
   const SetNickname({super.key});
 
   @override
+  State<SetNickname> createState() => _SetNicknameState();
+}
+
+class _SetNicknameState extends State<SetNickname> {
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
@@ -18,8 +23,8 @@ class SetNickname extends StatefulWidget {
               height: 120,
               child: Text(NicknameViewModel().nName),
             ),
-            Container(
-              child: const TextFieldbox(),
+            TextFieldbox(
+              setContents: NicknameViewModel().setNickname,
             ),
             const SizedBox(
               width: 200,
@@ -27,7 +32,9 @@ class SetNickname extends StatefulWidget {
             ),
             Center(
                 child: ElevatedButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                print("1235");
+              },
               child: const Text("시작하기"),
             )),
           ],
