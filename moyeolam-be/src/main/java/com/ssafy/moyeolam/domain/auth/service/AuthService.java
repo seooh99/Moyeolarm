@@ -2,7 +2,7 @@ package com.ssafy.moyeolam.domain.auth.service;
 
 import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroupMember;
 import com.ssafy.moyeolam.domain.alarmgroup.repository.AlarmGroupMemberRepository;
-import com.ssafy.moyeolam.domain.auth.dto.GetMemberDataResponseDto;
+import com.ssafy.moyeolam.domain.auth.dto.LoginResponseDto;
 import com.ssafy.moyeolam.domain.auth.exception.AuthErrorInfo;
 import com.ssafy.moyeolam.domain.auth.exception.AuthException;
 import com.ssafy.moyeolam.domain.auth.service.jwt.JwtProvider.JwtProvider;
@@ -45,7 +45,7 @@ public class AuthService {
 //        return GetMemberDataResponseDto.of(member, profileImage, friends, alarmGroupMembers);
 //    }
 
-    public GetMemberDataResponseDto login(String oauthIdentifier){
+    public LoginResponseDto login(String oauthIdentifier){
 
         if(oauthIdentifier == null){
             throw new AuthException(AuthErrorInfo.NOT_FOUND_OAUTH_IDENTIFIER);
@@ -79,6 +79,6 @@ public class AuthService {
 
         jwtProvider.updateRefreshToken(oauthIdentifier, refreshToken);
 
-        return GetMemberDataResponseDto.of(member, profileImage, friends, alarmGroupMembers, accessToken, refreshToken);
+        return LoginResponseDto.of(member, profileImage, friends, alarmGroupMembers, accessToken, refreshToken);
     }
 }
