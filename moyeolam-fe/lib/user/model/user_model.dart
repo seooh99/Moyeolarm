@@ -5,7 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 //     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 part 'user_model.g.dart';
-
+1
 @JsonSerializable()
 class User {
   late String? nickname;
