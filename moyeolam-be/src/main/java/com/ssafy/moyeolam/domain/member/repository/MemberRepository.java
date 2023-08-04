@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,4 +24,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("SELECT m FROM member m WHERE m.nickname = :nickname")
     Optional<Member> findByNickname(@Param("nickname") String nickname);
+
+    List<Member> findByNicknameLike(String keyword);
 }

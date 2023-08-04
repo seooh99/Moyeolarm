@@ -3,6 +3,7 @@ package com.ssafy.moyeolam.domain.member.service;
 import com.ssafy.moyeolam.domain.member.domain.Member;
 import com.ssafy.moyeolam.domain.member.domain.ProfileImage;
 import com.ssafy.moyeolam.domain.member.dto.SaveNicknameRequestDto;
+import com.ssafy.moyeolam.domain.member.dto.SearchMembereResponseDto;
 import com.ssafy.moyeolam.domain.member.dto.UploadProfileImageRequestDto;
 import com.ssafy.moyeolam.domain.member.dto.UploadProfileImageResponseDto;
 import com.ssafy.moyeolam.domain.member.exception.MemberErrorInfo;
@@ -11,6 +12,7 @@ import com.ssafy.moyeolam.domain.member.repository.MemberRepository;
 import com.ssafy.moyeolam.domain.member.repository.ProfileImageRepository;
 import com.ssafy.moyeolam.infra.storage.service.S3Service;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -20,14 +22,13 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberService {
     private final MemberRepository memberRepository;
     private final ProfileImageRepository profileImageRepository;
     private final S3Service s3Service;
 
-    public Optional<Member> findByOauthIdentifier(String username){
-        return memberRepository.findByOauthIdentifier(username);
-    }
+
 
     public UploadProfileImageResponseDto uploadProfileImage(Member member, UploadProfileImageRequestDto uploadProfileImageRequestDto) throws IOException {
 
@@ -80,5 +81,14 @@ public class MemberService {
         memberRepository.save(member);
 
         return member.getId();
+    }
+
+    public SearchMembereResponseDto searchMember(String keyword) {
+
+        List<Member> members = memberRepository.findByNicknameLike("%"+keyword+"%");
+
+        log.info(members.toString());
+
+        return SearchMembereResponseDto.of(members);
     }
 }
