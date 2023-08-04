@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../common/clock.dart';
 import '../../common/const/colors.dart';
-import '../../common/layout/alarm_middle_select.dart';
 import '../../common/layout/title_bar.dart';
 
 class AlarmDetailScreen extends StatefulWidget {
@@ -24,12 +23,12 @@ class _AlarmDetailScreenState extends State<AlarmDetailScreen> {
           },
           appBar: AppBar(),
           title: '싸피 끝나고 여행가즈아',
-          testBtn: '수정하기', titleIcon: null,
         ),
         body: Column(
           children: [
             Clock(),
-            // AlarmMiddleSelect(),
+
+            AlarmMiddleSelect(),
             SizedBox(
               height: 20,
             ),
