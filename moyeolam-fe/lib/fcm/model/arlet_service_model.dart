@@ -8,7 +8,7 @@ class Alarm {
 
   Alarm({required this.title});
 
-  // factory Alarm.fromJson(Map<String, dynamic> json) => _$AlarmFromJson(json);
-  //
-  // Map<String, dynamic> toJson() => _$AlarmToJson(this);
+// factory Alarm.fromJson(Map<String, dynamic> json) => _$AlarmFromJson(json);
+//
+// Map<String, dynamic> toJson() => _$AlarmToJson(this);
 }
