@@ -4,7 +4,7 @@ import '../model/user_model.dart';
 final userProvider = StateNotifierProvider((ref) => NicknameViewModel());
 
 class NicknameViewModel extends StateNotifier<User> {
-  NicknameViewModel() : super(User(nickname: ''));
+  NicknameViewModel() : super(User(''));
   String nName = '';
   // void setNickname(String newNickname) {
   //   state = state.copyWith(nickname: newNickname);
@@ -18,6 +18,6 @@ class NicknameViewModel extends StateNotifier<User> {
 
 extension UserCopyWithExtension on User {
   User copyWith({String? nickname}) {
-    return User(nickname: nickname ?? this.nickname);
+    return User(nickname ?? this.nickname);
   }
 }
