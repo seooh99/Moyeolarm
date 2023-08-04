@@ -33,7 +33,7 @@ class _SetNicknameState extends State<SetNickname> {
             Center(
                 child: ElevatedButton(
               onPressed: () {
-                // print("${_content.text} 1235");
+                print("1235");
               },
               child: const Text("시작하기"),
             )),
