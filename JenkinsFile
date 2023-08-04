@@ -65,7 +65,7 @@ pipeline {
             steps{
                 sh """
                     docker run -d --name spring-boot-container -p 8080:8080 spring-boot-image
-                    docker run -d --name python-container -p 8081:8080 python-image
+                    docker run -d --name python-container -p 8081:8000 python-image
                 """
             }
         }
