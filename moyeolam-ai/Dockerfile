@@ -3,7 +3,8 @@ FROM python:3.8
 WORKDIR /usr/src/app
 
 # libGL.so.1 라이브러리 설치
-RUN apt-get update && apt-get install -y libgl1-mesa-glx
+RUN apt-get update && apt-get -y install libgl1-mesa-glx
+RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 
 ## Install packages
 COPY requirements.txt ./
