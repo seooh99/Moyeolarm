@@ -55,7 +55,7 @@ pipeline {
                     sh """
                         ssh -o StrictHostKeyChecking=no -f ubuntu@i9a502.p.ssafy.io 'fuser -k -n tcp 8080'
                         sleep 5
-                        ssh -o StrictHostKeyChecking=no -f ubuntu@i9a502.p.ssafy.io 'java -jar /jenkins/workspace/moyeolam/moyeolam-be/build/libs/moyeolam-0.0.1-SNAPSHOT.jar'
+                        ssh -o StrictHostKeyChecking=no ubuntu@i9a502.p.ssafy.io 'java -jar /jenkins/workspace/moyeolam/moyeolam-be/build/libs/moyeolam-0.0.1-SNAPSHOT.jar'
                     """
                 }
             }
