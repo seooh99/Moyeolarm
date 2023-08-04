@@ -37,12 +37,13 @@ pipeline {
             }
         }
 
-        stage('Dockerize'){
+        stage('Spring boot Dockerize'){
             steps{
                 sh """
                     docker stop spring-boot-container || true
                     docker rm spring-boot-container || true
                     docker rmi spring-boot-image || true
+                    cd moyeolam-be
                     docker build -t spring-boot-image .
                 """
             }
