@@ -12,7 +12,7 @@ class NicknameViewModel extends StateNotifier<User> {
 
   void setNickname(String newNickname) {
     nName = newNickname;
-    print(nName);
+    // print(nName);
   }
 }
 
