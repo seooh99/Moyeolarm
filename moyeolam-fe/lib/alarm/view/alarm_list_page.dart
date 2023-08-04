@@ -24,7 +24,7 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
 
     final data = ref.watch(alarmListProvider);
 
-    print(data.toList());
+    // print(data.toList());
 
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
@@ -45,7 +45,7 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
             children: data
                 .map(
                   (e) => AlarmList(
-                alarmGroupId: e.alarmGroupId,
+                alarmGroupId: e.alarmGroupId!,
                 hour: e.hour,
                 minute: e.minute,
                 toggle: e.toggle,

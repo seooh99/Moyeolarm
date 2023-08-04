@@ -28,12 +28,12 @@ class AlarmListModel {
         assert(weekday.length == 7);
 
   int callbacIdOf(int weekday) {
-    return alarmGroupId + weekday;
+    return alarmGroupId! + weekday;
   }
 
   AlarmListModel copyWith(int? alarmGroupId, int? hour, int? minute, bool? toggle, String? title, bool? isLock) {
     return AlarmListModel(
-      alarmGroupId: this.alarmGroupId,
+      alarmGroupId: alarmGroupId ?? this.alarmGroupId,
       hour: hour ?? this.hour,
       minute: minute ?? this.minute,
       toggle: toggle ?? this.toggle,

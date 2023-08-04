@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:youngjun/alarm/model/alarm_list_model.dart';
+import 'package:youngjun/alarm/viewmodel/alarm_list_provider.dart';
 import 'package:youngjun/common/const/data.dart';
 
 import '../../common/const/address_config.dart';
@@ -29,6 +30,6 @@ abstract class AlarmListRepository {
 
   //http://i9a502.p.ssafy.io:8080/alarmgroup
   @GET('/alarmgroups')
-  Future<AlarmListModel> getAlarmList(
+  Future<List<AlarmListModel>> getAlarmList(
   );
 }
