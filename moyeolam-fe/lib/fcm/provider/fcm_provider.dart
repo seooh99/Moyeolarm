@@ -14,7 +14,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 // ChangeNotifier를 상속하고 있으며, FCM 관련 기능을 제공하는 Provider 클래스입니다. FCM을 초기화하고, 토큰을 얻어오며, 백그라운드 메시지 핸들러를 등록하고, 수신한 메시지를 저장하는 등의 기능이 포함되어 있습니다.
-class FcmProvider with ChangeNotifier {
+class FirebaseApi with ChangeNotifier {
   final _firebaseMessaging = FirebaseMessaging.instance;
   // String? fcmToken;
 
