@@ -23,11 +23,11 @@ class _AlarmDetailScreenState extends State<AlarmDetailScreen> {
           },
           appBar: AppBar(),
           title: '싸피 끝나고 여행가즈아',
-          testBtn: '수정하기', titleIcon: null,
         ),
         body: Column(
           children: [
             Clock(),
+
             AlarmMiddleSelect(),
             SizedBox(
               height: 20,

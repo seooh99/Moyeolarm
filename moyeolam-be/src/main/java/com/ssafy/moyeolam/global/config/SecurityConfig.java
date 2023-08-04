@@ -43,7 +43,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-
         http
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -60,9 +59,10 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
                 .and()
                 .oauth2Login()
-                .successHandler(oAuth2LoginSuccessHandler)
-                .userInfoEndpoint()
-                .userService(principalOauth2UserService);
+                .disable();
+//                .successHandler(oAuth2LoginSuccessHandler)
+//                .userInfoEndpoint()
+//                .userService(principalOauth2UserService);
 
         return http.build();
     }
