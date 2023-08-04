@@ -36,6 +36,19 @@ pipeline {
                 """
             }
         }
+
+        // stage('Python Server Prepare'){
+        //     steps{
+        //         sh """
+        //             cd /var/jenkins_home/workspace/moyeolam/moyeolam-ai
+        //             python3 -m venv venv
+        //             source /var/jenkins_home/workspace/moyeolam/moyeolam-ai/venv/bin/activate
+        //             pwd
+        //             pip install -r requirements.txt
+        //         """
+        //     }
+        // }
+
         stage('Deploy'){
             steps{
                 sshagent(['ec2-server']){
