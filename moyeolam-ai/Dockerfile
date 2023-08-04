@@ -2,6 +2,9 @@
 FROM python:3.8
 WORKDIR /usr/src/app
 
+# libGL.so.1 라이브러리 설치
+RUN apt-get update && apt-get install -y libgl1-mesa-glx
+
 ## Install packages
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
