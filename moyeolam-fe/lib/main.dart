@@ -1,125 +1,98 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'package:youngjun/main/view/settings.dart';
+// import 'package:youngjun/user/view/login.dart';
+
+import 'package:youngjun/user/view/set_nickname.dart';
+
+// import 'package:youngjun/user/view/sign_in.dart';
+
+// import 'common/const/alarm_list.dart';
+import 'common/layout/main_nav.dart';
+// import 'main/view/alarm_list.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => FcmProvider(),
+      child: _Moyuram(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+Future<void> _configureFirebaseMessaging() async {
+  var fcmToken = await FirebaseMessaging.instance.getToken(vapidKey: "BCbCyGkfT1KJoi7vI-4oS96nXrzxejo1Hb9Boa0b4a17OIAoBNVsYzZdkx");
 
-  // This widget is the root of your application.
+  FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
+    // save token to server
+  });
+
+  FirebaseMessaging.instance.deleteToken();
+}
+
+class _Moyuram extends StatelessWidget {
+  const _Moyuram({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+
+    // context.read<FcmProvider>().configureFirebaseMessaging();
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+        debugShowCheckedModeBanner: false,
+        // home: Scaffold(
+        //       body: MainNav(
+        //     appBar: AppBar(
+        //     title: Text('Main Navigation'),
+        // ),
+        // bodyWidgets: [
+        // Center(child: Text('First Page')),
+        // Center(child: Text('Second Page')),
+        // Center(child: Text('Third Page')),
+        // ],
+        // ),
+
+
+      initialRoute: '/settings',
+      routes: {
+          // '/': (context) => Login(), // 초기 라우트로 카카오로그인페이지 설정
+          // '/set_nickname' : (context) => SignIn(),
+          // '/main_alarm_list' : (context) => MainAlarmList(),
+          // '/arlat_list' : (context) => AlarmList(), // 알림보기
+          // 알람 초대 confirm (모달창 주소필요없음)
+          // 친구 초대 confirm (모달창 주소필요없음)
+          // 친구목록리스트(nav)
+          // setting(nav)
+          '/settings' : (context) => Settings(),
+          // '/alarm_build' : (context) => ,
+          // '/alarm_rebuild' : (context) => ,
+          // '/alarm_room_king' : (context) =>, // 이건 방장(닉네임 or 아이디으로도 차별 줘야함)
+          // '/alarm_room_sub' : (context) =>, // 이건 방장칭구칭구(닉네임 or 아이디으로도 차별 줘야함)
+          // 반복요일 설정
+          // 알람음 설정
+          // 인증방식 설정1
+
+          // 개발자정보 필요해?? -> 회의 필요~~~
+          // 로그아웃 confirm (모달창 주소필요없음)
+          // 회원탈퇴 페이지
+          // 닉네임 변경은 그냥?
+          // 친구검색은 페이지 변경 X?
+          // 친구 삭제 confirm (모달창 주소필요없음)
+          // '/on_alarm' : (context) => ,알람 울리는 page
+          // 'web_rtc' : (context) => , 화상 알람
+
+
+
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-}
