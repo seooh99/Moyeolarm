@@ -9,6 +9,7 @@ Django==4.2.4
 djangorestframework==3.14.0
 flatbuffers==23.5.26
 fonttools==4.42.0
+gunicorn==21.2.0
 importlib-resources==6.0.0
 kiwisolver==1.4.4
 matplotlib==3.7.2
