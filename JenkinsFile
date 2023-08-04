@@ -49,34 +49,23 @@ pipeline {
             }
         }
 
-        // stage('Python Server Prepare'){
-        //     steps{
-        //         sh """
-        //             cd /var/jenkins_home/workspace/moyeolam/moyeolam-ai
-        //             python3 -m venv venv
-        //             source /var/jenkins_home/workspace/moyeolam/moyeolam-ai/venv/bin/activate
-        //             pwd
-        //             pip install -r requirements.txt
-        //         """
-        //     }
-        // }
-
-        // stage('Deploy'){
-        //     steps{
-        //         sshagent(['ec2-server']){
-        //             sh """
-        //                 ssh -o StrictHostKeyChecking=no -f ubuntu@i9a502.p.ssafy.io 'fuser -k -n tcp 8080'
-        //                 sleep 10
-        //                 ssh -o StrictHostKeyChecking=no -f ubuntu@i9a502.p.ssafy.io 'java -jar /jenkins/workspace/moyeolam/moyeolam-be/build/libs/moyeolam-0.0.1-SNAPSHOT.jar'
-        //             """
-        //         }
-        //     }
-        // }
+        stage('Python Dockerize'){
+                steps{
+                    sh """
+                        docker stop python-container || true
+                        docker rm python-container || true
+                        docker rmi python-image || true
+                        cd moyeolam-ai
+                        docker build -t python-image .
+                    """
+                }
+        }
 
         stage('Deploy'){
             steps{
                 sh """
                     docker run -d --name spring-boot-container -p 8080:8080 spring-boot-image
+                    docker run -d --name python-container -p 8081:8080 python-image
                 """
             }
         }
