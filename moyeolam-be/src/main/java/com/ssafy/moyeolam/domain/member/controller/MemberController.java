@@ -3,6 +3,7 @@ package com.ssafy.moyeolam.domain.member.controller;
 import com.ssafy.moyeolam.domain.auth.dto.PrincipalDetails;
 import com.ssafy.moyeolam.domain.member.domain.Member;
 import com.ssafy.moyeolam.domain.member.dto.SaveNicknameRequestDto;
+import com.ssafy.moyeolam.domain.member.dto.SearchMembereResponseDto;
 import com.ssafy.moyeolam.domain.member.dto.UploadProfileImageRequestDto;
 import com.ssafy.moyeolam.domain.member.dto.UploadProfileImageResponseDto;
 import com.ssafy.moyeolam.domain.member.exception.MemberErrorInfo;
@@ -16,7 +17,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -58,7 +58,16 @@ public class MemberController {
                 .build();
     }
 
+    @GetMapping("/member")
+    public EnvelopeResponse<SearchMembereResponseDto> searchMember(@AuthenticationPrincipal PrincipalDetails principal, @RequestParam String keyword){
 
+        return EnvelopeResponse.<SearchMembereResponseDto>builder()
+                .data(memberService.searchMember(keyword))
+                .build();
+
+    }
+
+    //== 테스트 코드 ==//
 
     static class ResponseData {
         private int code;
