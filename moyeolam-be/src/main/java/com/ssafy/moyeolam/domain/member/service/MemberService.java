@@ -14,6 +14,7 @@ import com.ssafy.moyeolam.infra.storage.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,8 +30,14 @@ public class MemberService {
     private final S3Service s3Service;
 
 
-
+    @Transactional
     public UploadProfileImageResponseDto uploadProfileImage(Member member, UploadProfileImageRequestDto uploadProfileImageRequestDto) throws IOException {
+
+        profileImageRepository.findByMember(member)
+                .ifPresent(profileImage -> {
+                    this.deleteProfileImage(member);
+                        }
+                );
 
         String dirName = "profile_image";
         Map<String, String> result = s3Service.uploadFile(uploadProfileImageRequestDto.getFile(), dirName);
@@ -51,6 +58,7 @@ public class MemberService {
         return UploadProfileImageResponseDto.of(profileImage);
     }
 
+    @Transactional
     public Long deleteProfileImage(Member member){
 
         ProfileImage profileImage = profileImageRepository.findByMember(member)
@@ -68,6 +76,7 @@ public class MemberService {
         return all;
     }
 
+    @Transactional
     public Long saveNickname(Member member, SaveNicknameRequestDto saveNicknameRequestDto) {
 
         String newNickname = saveNicknameRequestDto.getNickname();
@@ -83,6 +92,7 @@ public class MemberService {
         return member.getId();
     }
 
+    @Transactional
     public SearchMembereResponseDto searchMember(String keyword) {
 
         List<Member> members = memberRepository.findByNicknameLike("%"+keyword+"%");
