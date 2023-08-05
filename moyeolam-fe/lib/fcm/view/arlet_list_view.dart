@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../../common/layout/title_bar.dart';
+
 void main() {
 
   runApp(const ListApp());
 }
 
+
+@override
+State<ListApp> createState() => _ListApp()
 
 class ListApp extends StatelessWidget {
   const ListApp({Key? key}) : super(key: key);
@@ -119,14 +124,20 @@ class _ArletListViewState extends State<ArletListView> {
     });
   }
 
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-            '임시제목'
-        ),
-      ),
+      appBar: TitleBar(
+        onPressed: () {  },
+        titleIcon: null,
+        appBar: null,
+        title: '',
+        actions: [],),
       body: ListView.builder(
         itemCount: titleList.length,
         itemBuilder: (context, index) {
