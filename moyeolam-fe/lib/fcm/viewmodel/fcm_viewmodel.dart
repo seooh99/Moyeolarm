@@ -7,7 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 // import 'package:youngjun/fcm/provider/fcm_provider.dart';
 
 class FcmViewModel {
-  final FcmProvider _fcmProvider;
+  final FirebaseApi _fcmProvider;
 
   FcmViewModel(this._fcmProvider);
 
