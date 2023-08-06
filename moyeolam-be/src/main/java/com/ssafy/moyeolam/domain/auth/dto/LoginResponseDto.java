@@ -9,23 +9,23 @@ import com.ssafy.moyeolam.domain.member.domain.ProfileImage;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Getter
 @Builder
-public class GetMemberDataResponseDto {
+public class LoginResponseDto {
 
     private String nickname;
     private String profileImageUrl;
     private List<FriendElement> friends;
     private List<AlarmGroupsElement> alarmGroups;
+    private String accessToken;
+    private String refreshToken;
 
-    public static GetMemberDataResponseDto of(Member member, ProfileImage profileImage, List<Friend> friends, List<AlarmGroupMember> alarmGroupMembers){
+    public static LoginResponseDto of(Member member, ProfileImage profileImage, List<Friend> friends, List<AlarmGroupMember> alarmGroupMembers, String accessToken, String refreshToken){
 
-        return GetMemberDataResponseDto.builder()
+        return LoginResponseDto.builder()
                 .nickname(member.getNickname())
                 .profileImageUrl(profileImage.getImageUrl())
                 .friends(friends.stream()
@@ -34,6 +34,8 @@ public class GetMemberDataResponseDto {
                 .alarmGroups(alarmGroupMembers.stream()
                         .map(AlarmGroupsElement::of)
                         .collect(Collectors.toList()))
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 

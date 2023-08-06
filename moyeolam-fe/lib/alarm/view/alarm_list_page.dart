@@ -33,7 +33,6 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
         appBar: AppBar(),
         titleIcon: Icons.alarm,
         title: '모여람',
-        testBtn: '버튼 텍스트', // 필수 매개변수에 값을 제공
       ),
       body: ListView(
         children: data

@@ -1,8 +1,15 @@
-part of 'alarm_list_repository.dart';
+// GENERATED CODE - DO NOT MODIFY BY HAND
 
+part of 'alarm_detail_repository.dart';
 
-class _AlarmListRepository implements AlarmListRepository {
-  _AlarmListRepository(
+// **************************************************************************
+// RetrofitGenerator
+// **************************************************************************
+
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
+
+class _AlarmDetailRepository implements AlarmDetailRepository {
+  _AlarmDetailRepository(
     this._dio, {
     this.baseUrl,
   }) {
@@ -14,25 +21,28 @@ class _AlarmListRepository implements AlarmListRepository {
   String? baseUrl;
 
   @override
-  Future<Alarm> getAlarmList({required id}) async {
+  Future<List<AlarmDetailModel>> getAlarmList({required alarmGroupId}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch<Map<String, dynamic>>(_setStreamType<Alarm>(Options(
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<AlarmDetailModel>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/alarmgroups',
+              '//alarmgroups/${alarmGroupId}',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = Alarm.fromJson(_result.data!);
+    var value = _result.data!
+        .map(
+            (dynamic i) => AlarmDetailModel.fromJson(i as Map<String, dynamic>))
+        .toList();
     return value;
   }
 
