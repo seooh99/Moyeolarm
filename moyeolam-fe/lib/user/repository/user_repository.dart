@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:retrofit/http.dart';
 import 'package:youngjun/common/const/address_config.dart';
 
 import '../data_source/user_data_source.dart';
@@ -10,8 +11,10 @@ class UserRepository {
     baseUrl: BASE_URL,
   );
 
-  Future<User>? getUserList() {
-    print("repository");
-    return _userDataSource.getUser();
+  Future<Map<String, UserModel>> isSigned(String request) {
+    print("$request repository");
+    IsSigned params = IsSigned(oauthIdentifier: request);
+    // print(params.oauthIdentifier);
+    return _userDataSource.isSigned(params);
   }
 }

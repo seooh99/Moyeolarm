@@ -32,7 +32,17 @@ class AuthView extends StatelessWidget {
                 'assets/images/kakao_login_medium_wide.png',
               ),
               onTap: () {
-                AuthViewModel();
+                AuthViewModel auth = AuthViewModel();
+                if(auth.isLogin()==true){
+                  Navigator.pushNamed(context, "main_alarm_list");
+                }else{
+                  var isSigned = auth.login();
+                  if(isSigned == "main"){
+                    Navigator.pushNamed(context, "main_alarm_list");
+                  }else if(isSigned == "signin") {
+                    Navigator.pushNamed(context, "set_nickname");
+                  }
+                }
                 // var storage = const FlutterSecureStorage();
               },
             ),

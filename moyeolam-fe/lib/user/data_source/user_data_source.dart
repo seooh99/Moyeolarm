@@ -12,6 +12,12 @@ abstract class UserDataSource {
   //   "accessToken": "true",
   //   'refreshToken': "true",
   // })
-  @GET('/loginSuccess')
-  Future<User>? getUser();
+
+
+
+  @POST('/login')
+  Future<Map<String, UserModel>> isSigned(@Body() IsSigned params,);
+  
+  @POST("/members/nickname")
+  Future<Map<String, String>> updateNickname(@Body() )
 }

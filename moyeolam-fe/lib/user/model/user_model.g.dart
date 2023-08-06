@@ -6,10 +6,24 @@ part of 'user_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-User _$UserFromJson(Map<String, dynamic> json) => User(
-      json['nickname'] as String?,
+IsSigned _$IsSignedFromJson(Map<String, dynamic> json) => IsSigned(
+      oauthIdentifier: json['oauthIdentifier'] as String,
     );
 
-Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
+Map<String, dynamic> _$IsSignedToJson(IsSigned instance) => <String, dynamic>{
+      'oauthIdentifier': instance.oauthIdentifier,
+    };
+
+UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
+      json['nickname'] as String?,
+      json['accessToken'] as String,
+      json['refreshToken'] as String,
+      json['profileImageUrl'] as String?,
+    );
+
+Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'nickname': instance.nickname,
+      'accessToken': instance.accessToken,
+      'refreshToken': instance.refreshToken,
+      'profileImageUrl': instance.profileImageUrl,
     };

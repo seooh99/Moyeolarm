@@ -18,11 +18,11 @@ class _SetNicknameState extends State<SetNickname> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              width: 200,
-              height: 120,
-              child: Text(NicknameViewModel().nName),
-            ),
+            // SizedBox(
+            //   width: 200,
+            //   height: 120,
+            //   child: Text(NicknameViewModel().nName),
+            // ),
             TextFieldbox(
               setContents: NicknameViewModel().setNickname,
             ),
