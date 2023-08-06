@@ -1,4 +1,4 @@
-import 'package:youngjun/fcm/provider/fcm_provider.dart';
+import 'package:youngjun/fcm/api/fcm_api.dart';
 
 
 import 'package:firebase_core/firebase_core.dart';
