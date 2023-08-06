@@ -1,13 +1,9 @@
-
-import 'dart:convert';
-
 import 'package:json_annotation/json_annotation.dart';
 
-part 'api_model.g.dart';
+part 'arlet_service_model.g.dart';
 
 @JsonSerializable()
 class ApiArletModel {
-
   String fromNickname;
   String title;
   bool time;
@@ -20,9 +16,5 @@ class ApiArletModel {
     required this.time,
     required this.alertType,
     required this.createAt,
-
-});
-
-  factory ApiArletModel.fromJson(Map<String, dynamic> json) => _$ApiArletModelFromJson(json);
-  Map<String,dynamic> toJson() => _$ApiArletModelFromJson(this);
+  });
 }
