@@ -2,17 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../common/layout/title_bar.dart';
 
-void main() {
 
-  runApp(const ListApp());
-}
-
-
-@override
-State<ListApp> createState() => _ListApp()
 
 class ListApp extends StatelessWidget {
   const ListApp({Key? key}) : super(key: key);
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +20,7 @@ class ListApp extends StatelessWidget {
 
 class ArletListView extends StatefulWidget {
   const ArletListView({super.key});
-
+  static const route = '/arlet-screen';
   @override
   State<ArletListView> createState() => _ArletListViewState();
 }
@@ -131,6 +126,8 @@ class _ArletListViewState extends State<ArletListView> {
 
   @override
   Widget build(BuildContext context) {
+
+    final message = ModalRoute.of(context)!.settings.arguments;
     return Scaffold(
       appBar: TitleBar(
         onPressed: () {  },
@@ -145,8 +142,7 @@ class _ArletListViewState extends State<ArletListView> {
             onTap: () {
               debugPrint(alertTypeList[index]);
               showPopup(context, fromNickname[index], titleList[index], alertTypeList[index]);
-            }
-            ,
+            },
             child: Card(
               child: Row(
                 children: [
