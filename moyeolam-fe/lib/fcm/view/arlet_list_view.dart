@@ -132,7 +132,7 @@ class _ArletListViewState extends State<ArletListView> {
       appBar: TitleBar(
         onPressed: () {  },
         titleIcon: null,
-        appBar: null,
+        appBar: AppBar(),
         title: '',
         actions: [],),
       body: ListView.builder(
