@@ -1,30 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:youngjun/common/const/colors.dart';
+import 'package:youngjun/user/repository/user_repository.dart';
 import 'package:youngjun/user/viewmodel/auth_view_model.dart';
 
-class AuthView extends StatelessWidget {
+class AuthView extends StatefulWidget {
   const AuthView({super.key});
 
+  @override
+  State<AuthView> createState() => _AuthViewState();
+}
+
+class _AuthViewState extends State<AuthView> {
+  static FlutterSecureStorage storage = FlutterSecureStorage();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    var userInfo = storage.read(key: "userInfo");
+    if (userInfo != null){
+    //  메인페이지 이동
+
+    }
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(
-            width: 200,
-            height: 120,
-          ),
+          // const SizedBox(
+          //   width: 200,
+          //   height: 120,
+          // ),
           Center(
             child: Container(
-              color: Colors.red,
-              width: 280,
-              height: 280,
+              child: Image.asset(
+                'assets/images/moyeolam.png',
+              ),
+              // color: Colors.red,
+              width: 240,
+              height: 240,
             ),
           ),
           const SizedBox(
             width: 200,
-            height: 120,
+            height: 36,
+          ),
+          const Text("모여람",style: TextStyle(color: FONT_COLOR,fontSize: 72,),),
+          const SizedBox(
+            width: 200,
+            height: 80,
           ),
           Center(
             child: InkWell(
@@ -32,7 +59,17 @@ class AuthView extends StatelessWidget {
                 'assets/images/kakao_login_medium_wide.png',
               ),
               onTap: () {
-                AuthViewModel();
+                AuthViewModel auth = AuthViewModel();
+                if(auth.isLogin()==true){
+                  Navigator.pushNamed(context, "main_alarm_list");
+                }else{
+                  var isSigned = auth.login();
+                  if(isSigned == "main"){
+                    Navigator.pushNamed(context, "main_alarm_list");
+                  }else if(isSigned == "signin") {
+                    Navigator.pushNamed(context, "set_nickname");
+                  }
+                }
                 // var storage = const FlutterSecureStorage();
               },
             ),
