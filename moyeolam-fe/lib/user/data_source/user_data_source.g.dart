@@ -19,25 +19,57 @@ class _UserDataSource implements UserDataSource {
   String? baseUrl;
 
   @override
-  Future<User>? getUser() async {
+  Future<Map<String, UserModel>> isSigned(params) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch<Map<String, dynamic>>(_setStreamType<User>(Options(
-      method: 'GET',
+    final _headers = <String, dynamic>{r'Content-Type': 'application/json'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(params.toJson());
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, UserModel>>(Options(
+      method: 'POST',
       headers: _headers,
       extra: _extra,
+      contentType: 'application/json',
     )
             .compose(
               _dio.options,
-              '/loginSuccess',
+              '/login',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = User.fromJson(_result.data!);
+    var value = _result.data!.map((k, dynamic v) =>
+        MapEntry(k, UserModel.fromJson(v as Map<String, dynamic>)));
+    print("$value datasource 통신");
+    return value;
+  }
+
+  @override
+  Future<Map<String, NicknameResposne>> updateNickname(nickname) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Content-Type': 'application/json'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(nickname.toJson());
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<Map<String, NicknameResposne>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'application/json',
+    )
+            .compose(
+              _dio.options,
+              '/member/nickname',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!.map((k, dynamic v) =>
+        MapEntry(k, NicknameResposne.fromJson(v as Map<String, dynamic>)));
     return value;
   }
 

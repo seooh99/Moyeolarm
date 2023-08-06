@@ -1,6 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:youngjun/kakao/kakao_login.dart';
+import 'package:youngjun/kakao/main_view_model.dart';
+import 'package:youngjun/user/model/user_model.dart';
 import '../repository/user_repository.dart';
 
 // final userProvider =
@@ -15,22 +18,18 @@ import '../repository/user_repository.dart';
 class AuthViewModel {
   final UserRepository _userRepository = UserRepository();
   static const storage = FlutterSecureStorage();
+  final kakaoViewModel = MainViewModel(KakaoLogin());
   dynamic userInfo;
 
-  AuthViewModel() {
-    var logined = isLogin();
-    if (logined == true) {
-      userInfo = storage.read(key: 'userInfo');
-    } else {
-      login().then((res) {
-        print("$res 나는 뷰모델");
-      });
-    }
-  }
+  // AuthViewModel() {
+  //
+  //
+  //
+  // }
 
   isLogin() async {
     // userInfo = await storage.read(key: 'userInfo');
-
+    userInfo = await storage.read(key: 'userInfo');
     if (userInfo != null) {
       // print("isLo");
       return true;
@@ -42,29 +41,34 @@ class AuthViewModel {
 
   login() async {
     try {
-      var response = await _userRepository.getUserList();
+      // var response = await _userRepository.getUserList();
       // print(response);
+      var kakaoLogin = await kakaoViewModel.login();
+      print("$kakaoLogin 카카오로그인 auth 뷰모델");
+      // var jsonRequest = KakaoUser.fromJson(kakaoLogin);
 
+      // print("카카오로그인 ${kakaoLogin["id"]}");
+      var rawResponse = await _userRepository.isSigned(kakaoLogin.id.toString());
+      print("$rawResponse 심기불편");
       // return response!.nickname != null ? "main" : "sigin";
       // if (response != null) {
       //   print(" error: null");
       //   return "false";
       // } else
+      var response = UserModel.fromJson(rawResponse as Map<String, dynamic>);
+
       if (response!.nickname != null) {
-        // print(response.nickname);
+        print(response.nickname);
         await storage.write(key: "userInfo", value: jsonEncode(response));
-        storage.deleteAll();
         // print(await storage.read(key: "userInfo"));
         return "main";
-      } else if (response.nickname == null) {
-        // print("sigin");
-        return 'signin';
       } else {
-        return "false";
+        print("sigin");
+        return 'signin';
       }
     } catch (e) {
-      // print("$e 1234");
-      return "$e";
+      print("$e auth_view_model_error");
+      return "false";
     }
   }
 }
