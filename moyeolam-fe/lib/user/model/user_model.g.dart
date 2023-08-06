@@ -14,6 +14,25 @@ Map<String, dynamic> _$IsSignedToJson(IsSigned instance) => <String, dynamic>{
       'oauthIdentifier': instance.oauthIdentifier,
     };
 
+NicknamePost _$NicknamePostFromJson(Map<String, dynamic> json) => NicknamePost(
+      nickname: json['nickname'] as String,
+    );
+
+Map<String, dynamic> _$NicknamePostToJson(NicknamePost instance) =>
+    <String, dynamic>{
+      'nickname': instance.nickname,
+    };
+
+NicknameResposne _$NicknameResposneFromJson(Map<String, dynamic> json) =>
+    NicknameResposne(
+      memberId: json['memberId'] as int,
+    );
+
+Map<String, dynamic> _$NicknameResposneToJson(NicknameResposne instance) =>
+    <String, dynamic>{
+      'memberId': instance.memberId,
+    };
+
 UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       json['nickname'] as String?,
       json['accessToken'] as String,

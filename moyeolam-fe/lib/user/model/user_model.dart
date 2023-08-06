@@ -27,6 +27,14 @@ class NicknamePost{
   Map<String, dynamic> toJson() => _$NicknamePostToJson(this);
 }
 
+@JsonSerializable()
+class NicknameResposne{
+  int memberId;
+  NicknameResposne({required this.memberId});
+  factory NicknameResposne.fromJson(Map<String, dynamic> json) => _$NicknameResposneFromJson(json);
+  Map<String, dynamic> toJson() => _$NicknameResposneToJson(this);
+}
+
 // response용 User 모델
 @JsonSerializable()
 class UserModel {

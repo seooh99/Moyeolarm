@@ -18,3 +18,12 @@ class UserRepository {
     return _userDataSource.isSigned(params);
   }
 }
+
+class UserNicknameRepository{
+  final UserDataSource _dataSource = UserDataSource(Dio(), baseUrl: BASE_URL);
+
+  Future<Map<String, dynamic>> updateNickname(String newNickname){
+    NicknamePost params = NicknamePost(nickname: newNickname);
+    return _dataSource.updateNickname(params);
+  }
+}

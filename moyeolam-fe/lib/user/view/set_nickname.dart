@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/textfield_bar.dart';
 import 'package:youngjun/user/viewmodel/set_nickname_view_model.dart';
@@ -11,8 +12,11 @@ class SetNickname extends StatefulWidget {
 }
 
 class _SetNicknameState extends State<SetNickname> {
+  
+
   @override
   Widget build(BuildContext context) {
+    // final nickname = ref.watch(nicknameProvider);
     return MaterialApp(
       home: Scaffold(
         body: Column(
@@ -33,7 +37,12 @@ class _SetNicknameState extends State<SetNickname> {
             Center(
                 child: ElevatedButton(
               onPressed: () {
-                print("1235");
+                print("닉네임 설정 뷰");
+                try {
+                  NicknameViewModel().apiNickname();
+                }catch(e){
+
+                }
               },
               child: const Text("시작하기"),
             )),
