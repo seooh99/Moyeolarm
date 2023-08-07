@@ -22,15 +22,14 @@ class _AlarmAddScreenState extends State<AlarmAddScreen> {
       appBar: TitleBar(
         onPressed: () {},
         appBar: AppBar(),
-        title: '알람생성하기',
-        testBtn: '저장하기',
+        title: '알람생성하기', titleIcon: null, actions: [],
       ),
       body: Column(
         children: [
           SizedBox(
             height: 30,
           ),
-          Center(child: TextFieldbox()),
+          Center(child: TextFieldbox(setContents: (String ) {  },)),
           SizedBox(
             height: 20,
           ),
@@ -44,7 +43,6 @@ class _AlarmAddScreenState extends State<AlarmAddScreen> {
           SizedBox(
             height: 16,
           ),
-          AlarmMiddleSelect(),
         ],
       ),
     );
