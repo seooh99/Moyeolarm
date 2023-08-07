@@ -38,3 +38,9 @@ out/
 
 # Application Setting Files
 /src/main/resources/application-local.yml
+/src/main/resources/application-jwt.yml
+/src/main/resources/application-oauth.yml
+/src/main/resources/application-s3.yml
+
+# json Files
+/src/main/resources/firebase-service-account.json
