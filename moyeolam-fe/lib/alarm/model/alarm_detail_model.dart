@@ -23,7 +23,7 @@ class AlarmDetailModel {
     required this.title,
 });
 
-  AlarmDetailModel copyWith(int? alarmGroupId, int? hour, int? minute,String? title) {
+  AlarmDetailModel copyWith(int? alarmGroupId, int? hour, int? minute,String? title, String? ampm) {
     return AlarmDetailModel(
       alarmGroupId: this.alarmGroupId,
       hour: hour ?? this.hour,
