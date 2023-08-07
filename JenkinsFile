@@ -1,0 +1,74 @@
+pipeline {
+    agent any
+    stages {
+        stage('Project Clone') {
+            steps {
+                git url: "https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A502.git",
+                    branch: 'test',
+                    credentialsId: 'gitlab'
+            }
+        }
+
+        stage('Setting Files Clone'){
+            steps {
+                dir('/var/jenkins_home/workspace/moyeolam-private-key'){
+                    git url: "https://github.com/jjuny0310/moyeolam-private-key.git",
+                        branch: 'main',
+                        credentialsId: 'github'
+                }
+            }
+        }
+
+        stage('Setting Files Copy'){
+            steps{
+                sh """
+                    cp -r /var/jenkins_home/workspace/moyeolam-private-key/* /var/jenkins_home/workspace/moyeolam/moyeolam-be/src/main/resources/
+                """
+            }
+        }
+        
+        stage('Build'){
+            steps{
+                sh """
+                    cd moyeolam-be                    
+                    chmod +x gradlew
+                    ./gradlew clean build
+                """
+            }
+        }
+
+        stage('Spring boot Dockerize'){
+            steps{
+                sh """
+                    docker stop spring-boot-container || true
+                    docker rm spring-boot-container || true
+                    docker rmi spring-boot-image || true
+                    cd moyeolam-be
+                    docker build -t spring-boot-image .
+                """
+            }
+        }
+
+        // stage('Python Dockerize'){
+        //         steps{
+        //             sh """
+        //                 docker stop python-container || true
+        //                 docker rm python-container || true
+        //                 docker rmi python-image || true
+        //                 cd moyeolam-ai/ai_server
+        //                 docker build -t python-image .
+        //             """
+        //         }
+        // }
+
+        stage('Deploy'){
+            steps{
+                sh """
+                    docker run -d --name spring-boot-container -p 8080:8080 spring-boot-image
+                """
+
+                // sh 'docker run -d --name python-container -p 8081:8000 python-image'
+            }
+        }
+    }
+}
