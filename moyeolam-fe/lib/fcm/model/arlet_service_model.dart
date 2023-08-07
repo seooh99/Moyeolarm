@@ -1,14 +1,20 @@
 import 'package:json_annotation/json_annotation.dart';
 
-// part 'alarm.g.dart';
+part 'arlet_service_model.g.dart';
 
 @JsonSerializable()
-class Alarm {
-  final String title;
+class ApiArletModel {
+  String fromNickname;
+  String title;
+  bool time;
+  String alertType;
+  int createAt;
 
-  Alarm({required this.title});
-
-// factory Alarm.fromJson(Map<String, dynamic> json) => _$AlarmFromJson(json);
-//
-// Map<String, dynamic> toJson() => _$AlarmToJson(this);
+  ApiArletModel({
+    required this.fromNickname,
+    required this.title,
+    required this.time,
+    required this.alertType,
+    required this.createAt,
+  });
 }

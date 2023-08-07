@@ -1,69 +1,185 @@
-// import 'package:json_annotation/json_annotation.dart';
-// import 'package:dio/dio.dart';
-// import 'package:retrofit/retrofit.dart';
-// import 'package:flutter/material.dart';
-//
-// // part 'alarm.g.dart';
-//
-// @JsonSerializable()
-// class Alarm {
-//   final String title;
-//
-//   Alarm({required this.title});
-//
-//   factory Alarm.fromJson(Map<String, dynamic> json) => _$AlarmFromJson(json);
-//
-//   Map<String, dynamic> toJson() => _$AlarmToJson(this);
-// }
-//
-//
-//
-// @RestApi()
-// abstract class AlarmService {
-//   factory AlarmService(Dio dio, {String? baseUrl}) = _AlarmService;
-//
-//   @GET("/alarms")
-//   Future<List<Alarm>> getAlarms();
-// }
-//
-// @RestApi(baseUrl: "your_base_url_here")
-// abstract class _AlarmService extends AlarmService {
-//   _AlarmService(Dio dio, {String? baseUrl}): super(dio, baseUrl: baseUrl);
-// }
-//
-//
-// class AlarmList extends StatefulWidget {
-//   @override
-//   _AlarmListState createState() => _AlarmListState();
-// }
-//
-// class _AlarmListState extends State<AlarmList> {
-//   List<Alarm> alarms = [];
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     fetchAlarms();
-//   }
-//
-//   fetchAlarms() async {
-//     final dio = Dio();
-//     final alarmService = AlarmService(dio);
-//     alarms = await alarmService.getAlarms();
-//     setState(() {}); // UI를 갱신합니다.
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView.builder(
-//       itemCount: alarms.length,
-//       itemBuilder: (context, index) {
-//         final alarm = alarms[index];
-//         return ListTile(
-//           title: Text(alarm.title),
-//           // 여기에 더 많은 디자인과 로직을 추가할 수 있습니다.
-//         );
-//       },
-//     );
-//   }
-// }
+import 'package:flutter/material.dart';
+
+import '../../common/layout/title_bar.dart';
+
+
+
+class ListApp extends StatelessWidget {
+  const ListApp({Key? key}) : super(key: key);
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: ArletListView(),
+    );
+  }
+}
+
+
+class ArletListView extends StatefulWidget {
+  const ArletListView({super.key});
+  static const route = '/arlet-screen';
+  @override
+  State<ArletListView> createState() => _ArletListViewState();
+}
+
+class _ArletListViewState extends State<ArletListView> {
+
+  var fromNickname = [
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+  ];
+  var titleList = [
+    '1번입니다',
+    '2번입니다',
+    '3번입니다',
+    '4번입니다',
+    '5번입니다',
+    '6번입니다',
+    '1번입니다',
+    '2번입니다',
+    '3번입니다',
+    '4번입니다',
+    '5번입니다',
+    '6번입니다',
+
+  ];
+  var alertTypeList = [
+    "친구 수락",
+    "친구 요청",
+    "알람그룹 수락",
+    "알람그룹 탈퇴",
+    "알람그룹 강퇴",
+    "알람그룹 요청",
+    "친구 수락",
+    "친구 요청",
+    "알람그룹 수락",
+    "알람그룹 탈퇴",
+    "알람그룹 강퇴",
+    "알람그룹 요청",
+  ];
+
+
+  void showPopup(context, fromNickname, titleList, alertTypeList) {
+    showDialog(context: context, builder: (context) {
+      return Dialog(
+        child: Container(
+          width: MediaQuery.of(context).size.width*0.7 ,
+          height: 380,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white
+          ),
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Text(fromNickname, style: TextStyle(
+                  fontSize: 25,
+                ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                alertTypeList,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Padding(padding: EdgeInsets.all(8),
+                child: Text(
+                  titleList,
+                  maxLines: 6,
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.grey
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+
+
+
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    final message = ModalRoute.of(context)!.settings.arguments;
+    return Scaffold(
+      appBar: TitleBar(
+        onPressed: () {  },
+        titleIcon: null,
+        appBar: AppBar(),
+        title: '',
+        actions: [],),
+      body: ListView.builder(
+        itemCount: titleList.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              debugPrint(alertTypeList[index]);
+              showPopup(context, fromNickname[index], titleList[index], alertTypeList[index]);
+            },
+            child: Card(
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 100,
+                    height: 100,
+                  ),
+                  Padding(padding: EdgeInsets.all(10),
+                      child: Column(
+                        children: [Text(alertTypeList[index],
+                          style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black
+                          ),
+                        ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          SizedBox(
+                            width: 360,
+                            child: Text(
+                                titleList[index],
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.grey
+                                )),
+                          )
+                        ],
+                      )
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
