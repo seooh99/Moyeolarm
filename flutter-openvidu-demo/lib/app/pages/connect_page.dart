@@ -3,8 +3,8 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:openvidu_client_example/app/pages/room_page.dart';
-import 'package:openvidu_client_example/app/utils/logger.dart';
+import 'package:flutter_openvidu_demo/app/pages/room_page.dart';
+import 'package:flutter_openvidu_demo/app/utils/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/session.dart';

@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.nunez.openvidu" "\0"
-            VALUE "FileDescription", "openvidu_client_example" "\0"
+            VALUE "FileDescription", "flutter_openvidu_demo" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "openvidu_client_example" "\0"
+            VALUE "InternalName", "flutter_openvidu_demo" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.nunez.openvidu. All rights reserved." "\0"
-            VALUE "OriginalFilename", "openvidu_client_example.exe" "\0"
-            VALUE "ProductName", "openvidu_client_example" "\0"
+            VALUE "OriginalFilename", "flutter_openvidu_demo.exe" "\0"
+            VALUE "ProductName", "flutter_openvidu_demo" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

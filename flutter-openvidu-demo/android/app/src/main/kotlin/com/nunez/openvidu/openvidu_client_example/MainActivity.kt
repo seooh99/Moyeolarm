@@ -1,4 +1,4 @@
-package com.nunez.openvidu.openvidu_client_example
+package com.nunez.openvidu.flutter_openvidu_demo
 
 import io.flutter.embedding.android.FlutterActivity
 

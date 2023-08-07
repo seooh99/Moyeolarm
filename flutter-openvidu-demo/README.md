@@ -1,4 +1,4 @@
-# openvidu_client_example
+# flutter_openvidu_demo
 
 Demonstrates how to use the openvidu_client plugin.
 

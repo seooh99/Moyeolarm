@@ -5,7 +5,7 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = openvidu_client_example
+PRODUCT_NAME = flutter_openvidu_demo
 
 // The application's bundle identifier
 PRODUCT_BUNDLE_IDENTIFIER = com.nunez.openvidu.openviduClientExample

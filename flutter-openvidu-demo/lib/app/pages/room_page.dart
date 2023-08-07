@@ -4,8 +4,8 @@ import 'dart:math' as math;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:openvidu_client/openvidu_client.dart';
-import 'package:openvidu_client_example/app/utils/extensions.dart';
-import 'package:openvidu_client_example/app/widgets/config_view.dart';
+import 'package:flutter_openvidu_demo/app/utils/extensions.dart';
+import 'package:flutter_openvidu_demo/app/widgets/config_view.dart';
 
 import '../models/connection.dart';
 import '../models/session.dart';
