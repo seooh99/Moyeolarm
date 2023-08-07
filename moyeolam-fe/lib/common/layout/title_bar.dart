@@ -21,8 +21,12 @@ class TitleBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       centerTitle: true,
       backgroundColor: BACKGROUND_COLOR,
-      title: Text(title),
+      title: Text(title, style:
+        TextStyle(color: Colors.white),),
       actions: actions,
+      leading: IconButton(onPressed: (){
+        Navigator.of(context).pop();
+      }, icon: Icon(Icons.arrow_back,color: Colors.white,)),
       // actions: [
       //
       //   IconButton(
