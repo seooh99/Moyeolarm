@@ -1,43 +1,43 @@
 import 'dart:convert';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:youngjun/user/repository/user_repository.dart';
-import '../model/user_model.dart';
 
-
+FlutterSecureStorage storage = FlutterSecureStorage();
 // final nicknameProvider = StateNotifierProvider((ref) => NicknameViewModel(''));
 
-class NicknameViewModel  {
-  // static const storage = FlutterSecureStorage();
-  // NicknameViewModel() : super(User.fromJson(userInfo));
-  String nName='';
-
-  // NicknameViewModel(String nName): super(nName ?? '');
+class NicknameViewModel {
+  late String nName;
   UserNicknameRepository _nicknameRepository = UserNicknameRepository();
 
-  // void setNickname(String newNickname) {
-  //   state = state.copyWith(nickname: newNickname);
-  // }
-
   void setNickname(String newNickname) {
-    // var userInfo = await storage.read(key: "useInfo");
-    // print("$userInfo 닉네임 설정 view model");
-    // userInfo =  userInfo;
     nName = newNickname;
-
-    // state = newNickname;
-
-    // print(nName);
   }
 
-  void apiNickname(){
-    _nicknameRepository.updateNickname(nName);
+  apiNickname() async {
+    try {
+      var userInfo = await storage
+          .read(key: 'userInfo')
+          .then((value) => jsonDecode(value!));
+      print("$userInfo 토큰 닉넴뷰모델");
+      _nicknameRepository
+          .updateNickname(
+        nName,
+        userInfo["accessToken"],
+      )
+          .then((value) async {
+        if (value.code == "200") {
+          print("${value.code} nickname view model");
+          userInfo["nickname"] = nName;
+          await storage.write(key: "userInfo", value: jsonEncode(userInfo));
+          print("write storage in setnickname view model");
+          return 'accept';
+        } else if (value.code == "603") {
+          return 'false';
+        }
+      });
+    } catch (e) {
+      print("$e setNickNameError");
+    }
   }
 }
-
-// extension UserCopyWithExtension on User {
-//   User copyWith({String? nickname}) {
-//     return User(nickname ?? this.nickname);
-//   }
-// }
