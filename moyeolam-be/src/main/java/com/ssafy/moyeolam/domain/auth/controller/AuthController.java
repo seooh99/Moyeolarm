@@ -6,6 +6,7 @@ import com.ssafy.moyeolam.domain.auth.service.AuthService;
 import com.ssafy.moyeolam.global.common.response.EnvelopeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -15,7 +16,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public EnvelopeResponse<LoginResponseDto> login(LoginRequestDto loginRequestDto){
+    public EnvelopeResponse<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto){
 
         String oauthIdentifier = loginRequestDto.getOauthIdentifier();
 

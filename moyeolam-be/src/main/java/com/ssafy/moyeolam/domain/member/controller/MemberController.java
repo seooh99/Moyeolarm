@@ -25,7 +25,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/member/profileImage")
-    public EnvelopeResponse<UploadProfileImageResponseDto> uploadProfileImage(@AuthenticationPrincipal PrincipalDetails principal, UploadProfileImageRequestDto uploadProfileImageRequestDto) throws IOException {
+    public EnvelopeResponse<UploadProfileImageResponseDto> uploadProfileImage(@AuthenticationPrincipal PrincipalDetails principal, @RequestBody UploadProfileImageRequestDto uploadProfileImageRequestDto) throws IOException {
 
         Member member = principal.getMember();
 
@@ -45,7 +45,7 @@ public class MemberController {
     }
 
     @PostMapping("/member/nickname")
-    public EnvelopeResponse<Long> saveNickname(@AuthenticationPrincipal PrincipalDetails principal, SaveNicknameRequestDto saveNicknameRequestDto){
+    public EnvelopeResponse<Long> saveNickname(@AuthenticationPrincipal PrincipalDetails principal, @RequestBody SaveNicknameRequestDto saveNicknameRequestDto){
 
         if (principal==null){
             throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
@@ -66,6 +66,17 @@ public class MemberController {
                 .build();
 
     }
+
+    @DeleteMapping("/member")
+    public EnvelopeResponse<Long> deleteMember(@AuthenticationPrincipal PrincipalDetails principal){
+
+        Member member = principal.getMember();
+
+        return EnvelopeResponse.<Long>builder()
+                .data(memberService.deleteMember(member))
+                .build();
+    }
+
 
     //== 테스트 코드 ==//
 
