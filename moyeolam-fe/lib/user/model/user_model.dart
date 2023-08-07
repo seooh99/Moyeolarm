@@ -13,33 +13,37 @@ class User {
   // late List<Map<String, dynamic>> roomList;
   // late String accessToken;
   // late String refreshToken;
+}
 
 // SignIn 확인용 request 모델
 @JsonSerializable()
-class IsSigned{
+class IsSigned {
   @JsonKey(name: "oauthIdentifier")
   String oauthIdentifier;
 
   IsSigned({required this.oauthIdentifier});
-  factory IsSigned.fromJson(Map<String, dynamic> json) => _$IsSignedFromJson(json);
+  factory IsSigned.fromJson(Map<String, dynamic> json) =>
+      _$IsSignedFromJson(json);
   Map<String, dynamic> toJson() => _$IsSignedToJson(this);
 }
 
 @JsonSerializable()
-class NicknamePost{
+class NicknamePost {
   @JsonKey(name: "nickname")
   String nickname;
 
   NicknamePost({required this.nickname});
-  factory NicknamePost.fromJson(Map<String, dynamic> json) => _$NicknamePostFromJson(json);
+  factory NicknamePost.fromJson(Map<String, dynamic> json) =>
+      _$NicknamePostFromJson(json);
   Map<String, dynamic> toJson() => _$NicknamePostToJson(this);
 }
 
 @JsonSerializable()
-class NicknameResposne{
+class NicknameResposne {
   int memberId;
   NicknameResposne({required this.memberId});
-  factory NicknameResposne.fromJson(Map<String, dynamic> json) => _$NicknameResposneFromJson(json);
+  factory NicknameResposne.fromJson(Map<String, dynamic> json) =>
+      _$NicknameResposneFromJson(json);
   Map<String, dynamic> toJson() => _$NicknameResposneToJson(this);
 }
 
@@ -58,7 +62,8 @@ class UserModel {
     this.profileImageUrl,
   );
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
   // factory User.fromJson(Map<String, dynamic> json) => User(
