@@ -21,7 +21,8 @@ class TitleBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       centerTitle: true,
       backgroundColor: BACKGROUND_COLOR,
-      title: Text(title),
+      title: Text(title, style:
+        TextStyle(color: Colors.white),),
       actions: actions,
       // actions: [
       //
