@@ -20,10 +20,8 @@ class _AlarmDetailScreenState extends State<AlarmDetailScreen> {
     return Scaffold(
         backgroundColor: BACKGROUND_COLOR,
         appBar: TitleBar(
-          onPressed: () {},
           appBar: AppBar(),
           title: '싸피 끝나고 여행가즈아',
-          titleIcon: null,
           actions: [
             TextButton(
               onPressed: () {
@@ -36,7 +34,7 @@ class _AlarmDetailScreenState extends State<AlarmDetailScreen> {
                   fontSize: 16,
                 ),),
             )
-          ],
+          ], leading: null,
         ),
         body: SingleChildScrollView(
           child: Column(
