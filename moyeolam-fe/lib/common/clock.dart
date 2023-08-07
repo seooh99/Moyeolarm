@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Clock extends StatefulWidget {
   const Clock({super.key});
@@ -12,19 +14,23 @@ class ClockState extends State<Clock> {
   @override
   Widget build(BuildContext context) {
     return
-      Container(
-        height: 150,
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Container(
+          height: 150,
 
-        child: CupertinoDatePicker(
-        initialDateTime: time,
-        mode: CupertinoDatePickerMode.time,
-        // use24hFormat: true,
-        // minimumDate: DateTime.now()
-        // This is called when the user changes the time.
-        onDateTimeChanged: (DateTime newTime) {
-          setState(() => time = newTime);
-          print(time);
-        },
+          child: CupertinoDatePicker(
+            backgroundColor: Colors.white,
+          initialDateTime: time,
+          mode: CupertinoDatePickerMode.time,
+          // use24hFormat: true,
+          // minimumDate: DateTime.now()
+          // This is called when the user changes the time.
+          onDateTimeChanged: (DateTime newTime) {
+            setState(() => time = newTime);
+            print(time);
+          },
+          ),
         ),
       );
   }
