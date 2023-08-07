@@ -9,12 +9,15 @@ import com.ssafy.moyeolam.domain.auth.service.jwt.JwtProvider.JwtProvider;
 import com.ssafy.moyeolam.domain.friend.domain.Friend;
 import com.ssafy.moyeolam.domain.friend.repository.FriendRepository;
 import com.ssafy.moyeolam.domain.member.domain.Member;
+import com.ssafy.moyeolam.domain.member.domain.MemberToken;
 import com.ssafy.moyeolam.domain.member.domain.ProfileImage;
 import com.ssafy.moyeolam.domain.member.exception.MemberErrorInfo;
 import com.ssafy.moyeolam.domain.member.exception.MemberException;
 import com.ssafy.moyeolam.domain.member.repository.MemberRepository;
+import com.ssafy.moyeolam.domain.member.repository.MemberTokenRepository;
 import com.ssafy.moyeolam.domain.member.repository.ProfileImageRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +33,7 @@ public class AuthService {
     private final ProfileImageRepository profileImageRepository;
     private final MemberRepository memberRepository;
     private final JwtProvider jwtProvider;
+    private final MemberTokenRepository memberTokenRepository;
 
 //    public GetMemberDataResponseDto getMemberData(Member member) {
 //
@@ -80,6 +84,23 @@ public class AuthService {
         String refreshToken = jwtProvider.createRefreshToken();
 
         jwtProvider.updateRefreshToken(oauthIdentifier, refreshToken);
+
+        memberTokenRepository.findByMember(member).ifPresentOrElse(
+                memberToken -> {
+                    memberToken.setRefreshToken(refreshToken);
+                    memberToken.setAccessToken(accessToken);
+                },
+                () -> {
+                    MemberToken newMemberToken = MemberToken.builder()
+                            .acessToken(accessToken)
+                            .refreshToken(refreshToken)
+                            .member(member)
+                            .build();
+                    member.setMemberToken(newMemberToken);
+                }
+        );
+
+        memberRepository.save(member);
 
         return LoginResponseDto.of(member, profileImage, friends, alarmGroupMembers, accessToken, refreshToken);
     }
