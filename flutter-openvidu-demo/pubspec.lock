@@ -219,7 +219,7 @@ packages:
   openvidu_client:
     dependency: "direct main"
     description:
-      path: openvidu_client
+      path: "../openvidu_client"
       relative: true
     source: path
     version: "0.0.2"
