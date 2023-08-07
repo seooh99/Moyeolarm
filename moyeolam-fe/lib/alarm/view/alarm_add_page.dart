@@ -21,10 +21,8 @@ class _AlarmAddScreenState extends State<AlarmAddScreen> {
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
       appBar: TitleBar(
-        onPressed: () {},
         appBar: AppBar(),
         title: '알람생성하기',
-        titleIcon: null,
         actions: [
           TextButton(
             onPressed: () {
@@ -42,6 +40,7 @@ class _AlarmAddScreenState extends State<AlarmAddScreen> {
             ),
           )
         ],
+        leading: null,
       ),
       body: Column(
         children: [
@@ -53,6 +52,8 @@ class _AlarmAddScreenState extends State<AlarmAddScreen> {
               width: 320,
               child: TextFieldbox(
                 setContents: (String) {},
+                suffixIcon: null,
+                suffixIconColor: null,
               ),
             ),
           ),
