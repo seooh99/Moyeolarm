@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -92,7 +91,7 @@ public class MemberService {
         return member.getId();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public SearchMembereResponseDto searchMember(String keyword) {
 
         List<Member> members = memberRepository.findByNicknameLike("%"+keyword+"%");
@@ -100,5 +99,13 @@ public class MemberService {
         log.info(members.toString());
 
         return SearchMembereResponseDto.of(members);
+    }
+
+    @Transactional
+    public Long deleteMember(Member member) {
+        Long memberId = member.getId();
+        memberRepository.deleteById(memberId);
+
+        return memberId;
     }
 }
