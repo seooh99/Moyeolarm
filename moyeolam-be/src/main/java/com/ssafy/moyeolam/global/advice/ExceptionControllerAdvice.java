@@ -1,6 +1,7 @@
 package com.ssafy.moyeolam.global.advice;
 
 import com.ssafy.moyeolam.domain.alarmgroup.exception.AlarmGroupException;
+import com.ssafy.moyeolam.domain.auth.exception.AuthException;
 import com.ssafy.moyeolam.domain.friend.exception.FriendException;
 import com.ssafy.moyeolam.domain.member.exception.MemberException;
 import com.ssafy.moyeolam.domain.notification.exception.NotificationException;
@@ -70,6 +71,16 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(NotificationException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public EnvelopeResponse NotificationExceptionHandler(NotificationException e) {
+        e.printStackTrace();
+        return EnvelopeResponse.builder()
+                .code(e.getInfo().getCode())
+                .message(e.getInfo().getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(AuthException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public EnvelopeResponse AuthExceptionHandler(AuthException e) {
         e.printStackTrace();
         return EnvelopeResponse.builder()
                 .code(e.getInfo().getCode())
