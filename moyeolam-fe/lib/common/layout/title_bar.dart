@@ -4,17 +4,17 @@ import 'package:youngjun/common/const/colors.dart';
 class TitleBar extends StatelessWidget implements PreferredSizeWidget {
   const TitleBar({
     super.key,
-    required this.onPressed,
-    required this.titleIcon,
+
     required this.appBar,
     required this.title,
     required this.actions,
+    required this.leading,
   });
-  final VoidCallback onPressed;
-  final IconData? titleIcon;
+
   final AppBar appBar;
   final String title;
-  final List<Widget> actions;
+  final List<Widget>? actions;
+  final Widget? leading;
 
   @override
   Widget build(BuildContext context) {
