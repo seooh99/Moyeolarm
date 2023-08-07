@@ -1,8 +1,9 @@
 library alarm_detail_model;
 
+import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-// part 'alarm_detail_part.dart';
+part 'alarm_detail_model.g.dart';
 
 @JsonSerializable()
 @immutable
