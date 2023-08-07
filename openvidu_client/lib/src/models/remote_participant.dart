@@ -33,7 +33,9 @@ class RemoteParticipant extends Participant {
             {"id": id, "stream": stream, "metadata": metadata});
       };
 
-      await connection.addStream(localStream);
+      localStream.getTracks().forEach((track) async {
+        await connection.addTrack(track, localStream);
+      });
     } catch (e) {
       logger.e(e);
     }
