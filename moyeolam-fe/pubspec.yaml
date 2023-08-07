@@ -41,6 +41,7 @@ dependencies:
   logger: any
   flutter_riverpod: ^2.3.6
   skeletons: ^0.0.3
+  kakao_flutter_sdk_user: ^1.4.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -77,6 +78,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/kakao_login_medium_wide.png
+    - assets/images/moyeolam.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
