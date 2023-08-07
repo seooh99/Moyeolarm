@@ -6,6 +6,14 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user_model.g.dart';
 
+@JsonSerializable()
+class User {
+  late String? nickname;
+  // late List<String> friendsList;
+  // late List<Map<String, dynamic>> roomList;
+  // late String accessToken;
+  // late String refreshToken;
+
 // SignIn 확인용 request 모델
 @JsonSerializable()
 class IsSigned{
