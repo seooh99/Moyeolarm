@@ -1,5 +1,8 @@
 package com.ssafy.moyeolam.domain.auth.exception;
 
+import lombok.Getter;
+
+@Getter
 public enum AuthErrorInfo {
     NOT_FOUND_OAUTH_IDENTIFIER("604", "oauthIdentifier가 없습니다.");
 

@@ -16,6 +16,7 @@ import com.ssafy.moyeolam.domain.member.repository.MemberRepository;
 import com.ssafy.moyeolam.domain.member.repository.ProfileImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,6 +46,7 @@ public class AuthService {
 //        return GetMemberDataResponseDto.of(member, profileImage, friends, alarmGroupMembers);
 //    }
 
+    @Transactional
     public LoginResponseDto login(String oauthIdentifier){
 
         if(oauthIdentifier == null){
