@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'custom_ice_erver.dart';
+import 'custom_ice_server.dart';
 import 'kurento_options.dart';
 import 'publisher.dart';
 import 'subscriber.dart';
