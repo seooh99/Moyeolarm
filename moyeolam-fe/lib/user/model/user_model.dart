@@ -5,7 +5,10 @@ import 'package:json_annotation/json_annotation.dart';
 //     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 part 'user_model.g.dart';
+<<<<<<< HEAD
 
+=======
+>>>>>>> 595937e (fix: 공백)
 @JsonSerializable()
 class User {
   late String? nickname;
