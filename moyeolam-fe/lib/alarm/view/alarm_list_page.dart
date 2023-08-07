@@ -20,7 +20,7 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
 
   @override
   Widget build(BuildContext context) {
-    List<Alarm> data = ref.watch(alarmListProvider);
+    List<AlarmListModel> data = ref.watch(alarmListProvider);
     print(ref.read(alarmListProvider.notifier).toString());
     
 
@@ -31,8 +31,9 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         },
         appBar: AppBar(),
-        titleIcon: Icons.alarm,
-        title: '모여람',
+        title: '모여람', 
+        actions: [Icon(Icons.alarm)],
+        titleIcon: null,
       ),
       body: ListView(
         children: data

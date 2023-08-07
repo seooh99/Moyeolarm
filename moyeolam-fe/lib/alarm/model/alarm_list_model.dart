@@ -5,7 +5,7 @@ part 'alarm_list_model.g.dart';
 
 @JsonSerializable()
 @immutable
-class Alarm {
+class AlarmListModel {
 
   final int alarmGroupId;
   final List<bool> weekday;
@@ -14,7 +14,7 @@ class Alarm {
   final bool toggle;
   final String title;
 
-  const Alarm({
+  const AlarmListModel({
     required this.alarmGroupId,
     this.weekday = const [true, true, true, true, true, true, true],
     required this.hour,
@@ -29,8 +29,8 @@ class Alarm {
   //   return alarmGroupId + weekday;
   // }
 
-  Alarm copyWith(int? alarmGroupId, int? hour, int? minute, bool? toggle, String? title) {
-    return Alarm(
+  AlarmListModel copyWith(int? alarmGroupId, int? hour, int? minute, bool? toggle, String? title) {
+    return AlarmListModel(
       alarmGroupId: this.alarmGroupId,
       hour: hour ?? this.hour,
       minute: minute ?? this.minute,
@@ -42,7 +42,7 @@ class Alarm {
 
   TimeOfDay get timeOfDay =>TimeOfDay(hour: hour, minute: minute);
 
-  factory Alarm.fromJson(Map<String, dynamic> json) => _$AlarmFromJson(json);
+  factory AlarmListModel.fromJson(Map<String, dynamic> json) => _$AlarmListModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$AlarmToJson(this);
+  Map<String, dynamic> toJson() => _$AlarmListModelToJson(this);
 }
