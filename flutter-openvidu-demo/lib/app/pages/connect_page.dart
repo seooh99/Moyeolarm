@@ -52,18 +52,7 @@ class _ConnectPageState extends State<ConnectPage> {
     logger.i('Saved user inputs values.');
   }
 
-  _connect(BuildContext ctx) async {
-    String path = '${_textUrlController.text}:${_textPortController.text}';
-    if (!path.startsWith('http://') || !path.startsWith('https://')) {
-      path = 'https://${_textUrlController.text}:${_textPortController.text}';
-    }
-    _dio.options.baseUrl = '$path/openvidu/api';
-    _dio.options.headers['content-Type'] = 'application/json';
-    _dio.options.headers["authorization"] =
-        'Basic ${base64Encode(utf8.encode('OPENVIDUAPP:${_textSecretController.text}'))}';
-
-    final nav = Navigator.of(ctx);
-
+  Future<bool> _createSession() async {
     try {
       var response = await _dio.post(
         '/sessions',
@@ -76,30 +65,60 @@ class _ConnectPageState extends State<ConnectPage> {
         },
       );
       final statusCode = response.statusCode ?? 400;
+      logger.i(statusCode);
       if (statusCode >= 200 && statusCode < 300) {
-        var response2 = await _dio.post(
-          '/sessions/${_textSessionController.text}/connection',
-          data: {
-            "type": "WEBRTC",
-            "data": "My Server Data",
-            "record": true,
-            "role": "PUBLISHER",
-          },
+        return true;
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 409) {
+        return true;
+      }
+      logger.e(e);
+    }
+    return false;
+  }
+
+  _connect(BuildContext ctx) async {
+    String path = '${_textUrlController.text}:${_textPortController.text}';
+    if (!path.startsWith('http://') || !path.startsWith('https://')) {
+      path = 'https://${_textUrlController.text}:${_textPortController.text}';
+    }
+    _dio.options.baseUrl = '$path/openvidu/api';
+    _dio.options.headers['content-Type'] = 'application/json';
+    _dio.options.headers["authorization"] =
+    'Basic ${base64Encode(utf8.encode('OPENVIDUAPP:${_textSecretController.text}'))}';
+
+    final nav = Navigator.of(ctx);
+
+    bool sessionCreated = await _createSession();
+
+    if (!sessionCreated) {
+      return;
+    }
+
+    try {
+      var response = await _dio.post(
+        '/sessions/${_textSessionController.text}/connection',
+        data: {
+          "type": "WEBRTC",
+          "data": "My Server Data",
+          // "record": true,
+          "role": "PUBLISHER",
+        },
+      );
+      final statusCode = response.statusCode ?? 400;
+      if (statusCode >= 200 && statusCode < 300) {
+        logger.i(response.data);
+        final connection = Session.fromJson(response.data);
+        await nav.push(
+          MaterialPageRoute(
+              builder: (_) => RoomPage(
+                room: connection,
+                userName: _textUserNameController.text,
+                serverUrl: path,
+                secret: _textSecretController.text,
+              )),
         );
-        final statusCode2 = response2.statusCode ?? 400;
-        if (statusCode2 >= 200 && statusCode2 < 300) {
-          logger.i(response2.data);
-          final connection = Session.fromJson(response2.data);
-          await nav.push(
-            MaterialPageRoute(
-                builder: (_) => RoomPage(
-                      room: connection,
-                      userName: _textUserNameController.text,
-                      serverUrl: path,
-                      secret: _textSecretController.text,
-                    )),
-          );
-        }
       }
     } catch (e) {
       logger.e(e);
