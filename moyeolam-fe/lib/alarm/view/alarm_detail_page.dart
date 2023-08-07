@@ -22,13 +22,12 @@ class _AlarmDetailScreenState extends State<AlarmDetailScreen> {
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
           },
           appBar: AppBar(),
-          title: '싸피 끝나고 여행가즈아',
+          title: '싸피 끝나고 여행가즈아', titleIcon: null, actions: [],
         ),
         body: Column(
           children: [
             Clock(),
 
-            AlarmMiddleSelect(),
             SizedBox(
               height: 20,
             ),
