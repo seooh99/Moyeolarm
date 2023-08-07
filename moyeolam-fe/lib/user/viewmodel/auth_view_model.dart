@@ -31,44 +31,61 @@ class AuthViewModel {
     // userInfo = await storage.read(key: 'userInfo');
     userInfo = await storage.read(key: 'userInfo');
     if (userInfo != null) {
-      // print("isLo");
+      print("isLogin true");
       return true;
     } else {
-      // print("not lg");
+      print("isLogin false");
       return false;
     }
   }
 
   login() async {
     try {
-      // var response = await _userRepository.getUserList();
-      // print(response);
       var kakaoLogin = await kakaoViewModel.login();
-      print("$kakaoLogin 카카오로그인 auth 뷰모델");
-      // var jsonRequest = KakaoUser.fromJson(kakaoLogin);
+      // print("$kakaoLogin 카카오로그인 auth 뷰모델");
 
-      // print("카카오로그인 ${kakaoLogin["id"]}");
-      var rawResponse = await _userRepository.isSigned(kakaoLogin.id.toString());
-      print("$rawResponse 심기불편");
-      // return response!.nickname != null ? "main" : "sigin";
-      // if (response != null) {
-      //   print(" error: null");
-      //   return "false";
-      // } else
-      var response = UserModel.fromJson(rawResponse as Map<String, dynamic>);
+      var rawResponse =
+          await _userRepository.isSigned(kakaoLogin.id.toString());
+      // print("${rawResponse.data} 심기불편");
 
-      if (response!.nickname != null) {
+      var response = rawResponse.data;
+      await storage.write(key: "userInfo", value: jsonEncode(response));
+      print(await storage.readAll());
+      if (response.nickname != null) {
         print(response.nickname);
-        await storage.write(key: "userInfo", value: jsonEncode(response));
         // print(await storage.read(key: "userInfo"));
         return "main";
       } else {
-        print("sigin");
+        var userInfo = await storage.read(key: 'userInfo');
+        print("$userInfo sigin");
         return 'signin';
       }
     } catch (e) {
       print("$e auth_view_model_error");
       return "false";
+    }
+  }
+
+  logOut() async {
+    try {
+      await storage.delete(key: 'userInfo');
+      print("logOut in auth view model");
+    } catch (e) {
+      print("$e logOut error in auth view model");
+    }
+  }
+
+  signOut() async {
+    try {
+      var userInfo = await storage
+          .read(key: 'userInfo')
+          .then((value) => jsonDecode(value!));
+      var token = userInfo["accessToken"];
+      await _userRepository.signOut(token).then((value) {
+        print("$value 회원탈퇴 auth view model");
+      });
+    } catch (e) {
+      print("$e signOut error in authViewmodel");
     }
   }
 }
