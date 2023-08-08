@@ -7,21 +7,21 @@ import 'package:dio/dio.dart';
 import '../service/fcm_api_service.dart';
 import 'package:youngjun/common/const/colors.dart';
 
-void main() async {
-  final dio = Dio(); // Dio 인스턴스 생성
-  final fcmapiService = FcmApiService(dio);
-
-  try {
-    final alerts = await fcmapiService.getPosts(); // API로부터 데이터 가져오기
-    // alerts 리스트는 API에서 받아온 알림 데이터의 리스트입니다.
-
-    for (var alert in alerts) {
-      print('${alert.fromNickname} 님이 ${alert.alertType} 하셨습니다');
-    }
-  } catch (e) {
-    print('에러입니다: $e');
-  }
-}
+// void main() async {
+//   final dio = Dio(); // Dio 인스턴스 생성
+//   final fcmapiService = FcmApiService(dio);
+//
+//   try {
+//     final alerts = await fcmapiService.getPosts(); // API로부터 데이터 가져오기
+//     // alerts 리스트는 API에서 받아온 알림 데이터의 리스트입니다.
+//
+//     for (var alert in alerts) {
+//       print('${alert.fromNickname} 님이 ${alert.alertType} 하셨습니다');
+//     }
+//   } catch (e) {
+//     print('에러입니다: $e');
+//   }
+// }
 
 
 
@@ -33,7 +33,7 @@ class ListApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: ArletListView(),
     );
@@ -50,50 +50,36 @@ class ArletListView extends StatefulWidget {
 }
 
 class _ArletListViewState extends State<ArletListView> {
+  final dio = Dio();
+  final fcmapiService = FcmApiService(Dio());
 
-  var fromNickname = [
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-  ];
-  var titleList = [
-    '1번입니다',
-    '2번입니다',
-    '3번입니다',
-    '4번입니다',
-    '5번입니다',
-    '6번입니다',
-    '1번입니다',
-    '2번입니다',
-    '3번입니다',
-    '4번입니다',
-    '5번입니다',
-    '6번입니다',
+  var fromNickname = [];
+  var titleList = [];
+  var alertTypeList = [];
 
-  ];
-  var alertTypeList = [
-    "친구 수락",
-    "친구 요청",
-    "알람그룹 수락",
-    "알람그룹 탈퇴",
-    "알람그룹 강퇴",
-    "알람그룹 요청",
-    "친구 수락",
-    "친구 요청",
-    "알람그룹 수락",
-    "알람그룹 탈퇴",
-    "알람그룹 강퇴",
-    "알람그룹 요청",
-  ];
+  @override
+  void initState() {
+    super.initState();
+    fetchData(); // API 요청 함수 호출
+  }
+
+  // API 요청을 처리하고 데이터를 할당하는 함수
+  Future<void> fetchData() async {
+
+
+    try {
+      final alerts = await fcmapiService.getPosts(); // API로부터 데이터 가져오기
+
+      setState(() {
+        // 받아온 데이터를 변수에 할당
+        fromNickname = alerts.map((alert) => alert.fromNickname).toList();
+        titleList = alerts.map((alert) => alert.title).toList();
+        alertTypeList = alerts.map((alert) => alert.alertType).toList();
+      });
+    } catch (e) {
+      print('에러입니다: $e');
+    }
+  }
 
 
   void showPopup(context, fromNickname, titleList, alertTypeList) {
@@ -156,11 +142,10 @@ class _ArletListViewState extends State<ArletListView> {
     return Scaffold(
 
       appBar: TitleBar(
-        onPressed: () {  },
-        titleIcon: null,
         appBar: AppBar(),
         title: ' 알림함',
-        actions: [],),
+        actions: [],
+        leading: null,),
       body: Container(
         color: LIST_BLACK_COLOR,
         padding: EdgeInsets.all(16), // 간격 조정
