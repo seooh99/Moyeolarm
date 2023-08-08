@@ -41,7 +41,7 @@ void handleMessage(RemoteMessage? message, bool notificationStatus) {
   }
 }
 
-Future<void> initLocalNotifications(BuildContext context) async {
+Future<void> initLocalNotifications() async {
   const android = AndroidInitializationSettings('drawable/ic_launcher');
   const setting = InitializationSettings(android: android);
 
@@ -53,7 +53,7 @@ Future<void> initLocalNotifications(BuildContext context) async {
       final payload = response.payload ?? '';
       final parsedJson = jsonDecode(payload);
       if (parsedJson.containsKey('routeTo') && parsedJson['routeTo'] == '/arlet_list') {
-        // 알림을 눌렀을 때 '/arlet_list'로 이동하는 로직 추가
+
 
       }
     },
