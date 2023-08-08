@@ -1,48 +1,106 @@
-import 'package:flutter/material.dart';
+// To parse this JSON data, do
+//
+//     final alarmListModel = alarmListModelFromJson(jsonString);
+
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'alarm_list_model.g.dart';
 
-@JsonSerializable()
-@immutable
-class Alarm {
+// AlarmListModel alarmListModelFromJson(String str) => AlarmListModel.fromJson(json.decode(str));
+//
+// String alarmListModelToJson(AlarmListModel data) => json.encode(data.toJson());
 
+@JsonSerializable()
+class AlarmListModel {
+  final String code;
+  final String message;
+  final Data data;
+
+  AlarmListModel({
+    required this.code,
+    required this.message,
+    required this.data,
+  });
+
+  // AlarmListModel copyWith({
+  //   String? code,
+  //   String? message,
+  //   Data? data,
+  // }) =>
+  //     AlarmListModel(
+  //       code: code ?? this.code,
+  //       message: message ?? this.message,
+  //       data: data ?? this.data,
+  //     );
+
+  factory AlarmListModel.fromJson(Map<String, dynamic> json) => _$AlarmListModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AlarmListModelToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class Data {
+  final List<AlarmGroups> alarmGroups;
+
+  Data({
+    required this.alarmGroups,
+  });
+
+  // Data copyWith({
+  //   List<AlarmGroups>? alarmGroups,
+  // }) =>
+  //     Data(
+  //       alarmGroups: alarmGroups ?? this.alarmGroups,
+  //     );
+
+  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DataToJson(this);
+}
+
+
+@JsonSerializable()
+class AlarmGroups {
   final int alarmGroupId;
-  final List<bool> weekday;
+  final String title;
   final int hour;
   final int minute;
+  final List<bool> dayOfWeek;
+  final bool isLock;
   final bool toggle;
-  final String title;
 
-  const Alarm({
+  AlarmGroups({
     required this.alarmGroupId,
-    this.weekday = const [true, true, true, true, true, true, true],
+    required this.title,
     required this.hour,
     required this.minute,
+    required this.dayOfWeek,
+    required this.isLock,
     required this.toggle,
-    required this.title,
-  })  : assert(0 <= hour && hour < 24),
-        assert(0 <= minute && minute < 60),
-        assert(weekday.length == 7);
+  });
 
-  // int callbacIdOf(int weekday) {
-  //   return alarmGroupId + weekday;
-  // }
+  // AlarmGroups copyWith({
+  //   int? alarmGroupId,
+  //   String? title,
+  //   int? hour,
+  //   int? minute,
+  //   List<bool>? dayOfWeek,
+  //   bool? isLock,
+  //   bool? toggle,
+  // }) =>
+  //     AlarmGroups(
+  //       alarmGroupId: alarmGroupId ?? this.alarmGroupId,
+  //       title: title ?? this.title,
+  //       hour: hour ?? this.hour,
+  //       minute: minute ?? this.minute,
+  //       dayOfWeek: dayOfWeek ?? this.dayOfWeek,
+  //       isLock: isLock ?? this.isLock,
+  //       toggle: toggle ?? this.toggle,
+  //     );
 
-  Alarm copyWith(int? alarmGroupId, int? hour, int? minute, bool? toggle, String? title) {
-    return Alarm(
-      alarmGroupId: this.alarmGroupId,
-      hour: hour ?? this.hour,
-      minute: minute ?? this.minute,
-      toggle: toggle ?? this.toggle,
-      title: title ?? this.title,
-      weekday: weekday ?? this.weekday,
-    );
-  }
+  factory AlarmGroups.fromJson(Map<String, dynamic> json) => _$AlarmGroupsFromJson(json);
 
-  TimeOfDay get timeOfDay =>TimeOfDay(hour: hour, minute: minute);
-
-  factory Alarm.fromJson(Map<String, dynamic> json) => _$AlarmFromJson(json);
-
-  Map<String, dynamic> toJson() => _$AlarmToJson(this);
+  Map<String, dynamic> toJson() => _$AlarmGroupsToJson(this);
 }

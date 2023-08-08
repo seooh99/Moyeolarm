@@ -3,10 +3,20 @@ import 'package:youngjun/common/const/colors.dart';
 
 class TextFieldbox extends StatefulWidget {
   final Function(String) setContents;
+  final Color? colors;
+  final Widget? suffixIcon;
+  final Color? suffixIconColor;
+
+
 
   const TextFieldbox({
     super.key,
     required this.setContents,
+    this.colors,
+    this.suffixIcon,
+    this.suffixIconColor,
+
+
   });
 
   @override
@@ -27,7 +37,7 @@ class _TextFieldboxState extends State<TextFieldbox> {
         // TextField의 텍스트 스타일 설정
         color: MAIN_COLOR,
       ),
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         border: OutlineInputBorder(
           borderSide: BorderSide(
             color: MAIN_COLOR,

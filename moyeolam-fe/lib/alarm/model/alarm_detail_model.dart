@@ -1,8 +1,9 @@
 library alarm_detail_model;
 
+import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-// part 'alarm_detail_part.dart';
+part 'alarm_detail_model.g.dart';
 
 @JsonSerializable()
 @immutable
@@ -22,7 +23,7 @@ class AlarmDetailModel {
     required this.title,
 });
 
-  AlarmDetailModel copyWith(int? alarmGroupId, int? hour, int? minute,String? title) {
+  AlarmDetailModel copyWith(int? alarmGroupId, int? hour, int? minute,String? title, String? ampm) {
     return AlarmDetailModel(
       alarmGroupId: this.alarmGroupId,
       hour: hour ?? this.hour,
