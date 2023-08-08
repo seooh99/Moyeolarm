@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 const MAIN_COLOR = Color(0xFF6750A4);
-const SUB_COLOR = Color(0xFF36343B);
-const BACKGROUND_COLOR = Color(0xFF49454F);
+const SUB_COLOR = Color(0xFFEADDFF);
+const BACKGROUND_COLOR = Color(0xFF141218);
 const FONT_COLOR = Color(0xFFFFFFFF);
 const BACK_FONT_COLOR = Color(0xFFEADDFF);
 
@@ -12,3 +12,5 @@ const LIST_BLACK_COLOR = Color(0xFF141218);
 const CALLOFF_COLOR = Color(0xFFFF4343);
 
 const CKECK_GRAY_COLOR = Color(0xFF8B8B8B);
+
+const BEFORE_SELECT_ICON_COLOR = Color(0x55F8F8F8);

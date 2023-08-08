@@ -44,3 +44,6 @@ out/
 
 # json Files
 /src/main/resources/firebase-service-account.json
+
+# .sql Files
+/src/main/resources/data.sql

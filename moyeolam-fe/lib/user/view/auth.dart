@@ -18,14 +18,15 @@ class _AuthViewState extends State<AuthView> {
   void initState() {
     // TODO: implement initState
     var userInfo = storage.read(key: "userInfo");
-    if (userInfo != null){
-    //  메인페이지 이동
-
+    if (userInfo != null) {
+      //  메인페이지 이동
     }
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
+    AuthViewModel auth = AuthViewModel();
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -34,6 +35,16 @@ class _AuthViewState extends State<AuthView> {
           //   width: 200,
           //   height: 120,
           // ),
+          TextButton(
+              onPressed: () {
+                auth.signOut();
+              },
+              child: Text("SignOut")),
+          TextButton(
+              onPressed: () {
+                auth.logOut();
+              },
+              child: Text("Logout")),
           Center(
             child: Container(
               child: Image.asset(
@@ -48,7 +59,13 @@ class _AuthViewState extends State<AuthView> {
             width: 200,
             height: 36,
           ),
-          const Text("모여람",style: TextStyle(color: FONT_COLOR,fontSize: 72,),),
+          const Text(
+            "모여람",
+            style: TextStyle(
+              color: FONT_COLOR,
+              fontSize: 72,
+            ),
+          ),
           const SizedBox(
             width: 200,
             height: 80,
@@ -58,16 +75,18 @@ class _AuthViewState extends State<AuthView> {
               child: Image.asset(
                 'assets/images/kakao_login_medium_wide.png',
               ),
-              onTap: () {
-                AuthViewModel auth = AuthViewModel();
-                if(auth.isLogin()==true){
+              onTap: () async {
+                var hi = auth.isLogin();
+                print("hi");
+                if (hi == true) {
                   Navigator.pushNamed(context, "main_alarm_list");
-                }else{
-                  var isSigned = auth.login();
-                  if(isSigned == "main"){
-                    Navigator.pushNamed(context, "main_alarm_list");
-                  }else if(isSigned == "signin") {
-                    Navigator.pushNamed(context, "set_nickname");
+                } else {
+                  var isSigned = await auth.login();
+                  print("$isSigned 나는 뷰");
+                  if (isSigned == "main") {
+                    Navigator.pushNamed(context, "/main_alarm_list");
+                  } else if (isSigned == "signin") {
+                    Navigator.pushNamed(context, "/set_nickname");
                   }
                 }
                 // var storage = const FlutterSecureStorage();

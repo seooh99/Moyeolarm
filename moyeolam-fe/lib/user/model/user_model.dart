@@ -6,15 +6,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user_model.g.dart';
 
-@JsonSerializable()
-class User {
-  late String? nickname;
-  // late List<String> friendsList;
-  // late List<Map<String, dynamic>> roomList;
-  // late String accessToken;
-  // late String refreshToken;
-}
-
 // SignIn 확인용 request 모델
 @JsonSerializable()
 class IsSigned {
@@ -28,32 +19,30 @@ class IsSigned {
 }
 
 @JsonSerializable()
-class NicknamePost {
-  @JsonKey(name: "nickname")
-  String nickname;
+class ResponseUserModel {
+  String code;
+  String message;
+  UserModel data;
 
-  NicknamePost({required this.nickname});
-  factory NicknamePost.fromJson(Map<String, dynamic> json) =>
-      _$NicknamePostFromJson(json);
-  Map<String, dynamic> toJson() => _$NicknamePostToJson(this);
-}
+  ResponseUserModel({
+    required this.code,
+    required this.message,
+    required this.data,
+  });
 
-@JsonSerializable()
-class NicknameResposne {
-  int memberId;
-  NicknameResposne({required this.memberId});
-  factory NicknameResposne.fromJson(Map<String, dynamic> json) =>
-      _$NicknameResposneFromJson(json);
-  Map<String, dynamic> toJson() => _$NicknameResposneToJson(this);
+  factory ResponseUserModel.fromJson(Map<String, dynamic> json) =>
+      _$ResponseUserModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ResponseUserModelToJson(this);
 }
 
 // response용 User 모델
 @JsonSerializable()
 class UserModel {
   String? nickname;
+  String? profileImageUrl;
   String accessToken;
   String refreshToken;
-  String? profileImageUrl;
 
   UserModel(
     this.nickname,
@@ -66,18 +55,4 @@ class UserModel {
       _$UserModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
-  // factory User.fromJson(Map<String, dynamic> json) => User(
-  //       nickname: json['nickname'],
-  //       // friendsList: json['friendsList'],
-  //       // roomList: json['roomList'],
-  //       // accessToken: json['accessToken'],
-  //       // refreshToken: json['refreshTokens'],
-  //     );
-  // Map<String, dynamic> toJson() => {
-  //       'nickname': nickname,
-  //       // 'accessToken': accessToken,
-  //       // 'refreshToken': refreshToken,
-  //       // 'friendsList': friendsList,
-  //       // 'roomList': roomList,
-  //     };
 }

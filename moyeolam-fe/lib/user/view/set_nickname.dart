@@ -12,8 +12,8 @@ class SetNickname extends StatefulWidget {
 }
 
 class _SetNicknameState extends State<SetNickname> {
-  
-
+  NicknameViewModel nicknameViewModel = NicknameViewModel();
+  bool overlaped = false;
   @override
   Widget build(BuildContext context) {
     // final nickname = ref.watch(nicknameProvider);
@@ -28,7 +28,8 @@ class _SetNicknameState extends State<SetNickname> {
             //   child: Text(NicknameViewModel().nName),
             // ),
             TextFieldbox(
-              setContents: NicknameViewModel().setNickname,
+              setContents: nicknameViewModel.setNickname,
+              colors: overlaped ? Color.fromARGB(255, 239, 51, 37) : MAIN_COLOR,
             ),
             const SizedBox(
               width: 200,
@@ -36,12 +37,24 @@ class _SetNicknameState extends State<SetNickname> {
             ),
             Center(
                 child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 print("닉네임 설정 뷰");
                 try {
-                  NicknameViewModel().apiNickname();
-                }catch(e){
+                  await nicknameViewModel.apiNickname().then((value) {
+                    print("$value 닉네임 모델");
+                    if (value == "false") {
+                      setState(() {
+                        overlaped = true;
+                      });
+                    } else {
+                      print("$value 닉네임 모델");
 
+                      Navigator.pushNamed(context, "/main_alarm_list");
+                    }
+                    print("nickname setting ok nicknameView");
+                  });
+                } catch (e) {
+                  print("setNicknameView error $e");
                 }
               },
               child: const Text("시작하기"),

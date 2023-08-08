@@ -4,8 +4,9 @@ import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/layout/title_bar.dart';
 
 import '../../common/button/btn_save_update.dart';
-import '../../common/layout/alarm_middle_select.dart';
+import '../component/alarm_middle_select.dart';
 import '../../common/textfield_bar.dart';
+import 'alarm_list_page.dart';
 
 class AlarmAddScreen extends StatefulWidget {
   const AlarmAddScreen({super.key});
@@ -20,30 +21,75 @@ class _AlarmAddScreenState extends State<AlarmAddScreen> {
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
       appBar: TitleBar(
-        onPressed: () {},
         appBar: AppBar(),
-        title: '알람생성하기', titleIcon: null, actions: [],
+        title: '알람생성하기',
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => MainAlarmList(),
+                ),
+              );
+            },
+            child: Text(
+              '생성하기',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+          )
+        ],
+        leading: null,
       ),
       body: Column(
         children: [
           SizedBox(
-            height: 30,
+            height: 24,
           ),
-          Center(child: TextFieldbox(setContents: (String ) {  },)),
+          Center(
+            child: Container(
+              width: 320,
+              child: TextFieldbox(
+                setContents: (String) {},
+                colors: Colors.black,
+              ),
+            ),
+          ),
           SizedBox(
             height: 20,
           ),
           Divider(
-            color: Colors.white,
+            indent: 20,
+            endIndent: 20,
           ),
           SizedBox(
-            height: 16,
+            height: 20,
           ),
           Clock(),
           SizedBox(
-            height: 16,
+            height: 20,
+          ),
+          AlarmMiddleSelect(
+            dayOfDay: '월 수 금',
+            alarmSound: '희망♬',
+            certification: '희망',
           ),
         ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(bottom: 28, right: 28, left: 28),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: MAIN_COLOR,
+            minimumSize: Size(10, 60),
+          ),
+          onPressed: () {},
+          child: Text('저장',
+              style: TextStyle(
+                color: Colors.white,
+              )),
+        ),
       ),
     );
   }
