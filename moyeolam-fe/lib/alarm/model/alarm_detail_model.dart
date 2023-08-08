@@ -1,44 +1,129 @@
-library alarm_detail_model;
+import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
-import 'package:json_annotation/json_annotation.dart';
+AlarmGroupDetail alarmGroupDetailFromJson(String str) => AlarmGroupDetail.fromJson(json.decode(str));
 
-part 'alarm_detail_model.g.dart';
+String alarmGroupDetailToJson(AlarmGroupDetail data) => json.encode(data.toJson());
 
-@JsonSerializable()
-@immutable
-class AlarmDetailModel {
+class AlarmGroupDetail {
+  String code;
+  String message;
+  Data data;
 
-  final int alarmGroupId;
-  final int hour;
-  final int minute;
-  final String ampm;
-  final String title;
+  AlarmGroupDetail({
+    required this.code,
+    required this.message,
+    required this.data,
+  });
 
-  const AlarmDetailModel({
+  factory AlarmGroupDetail.fromJson(Map<String, dynamic> json) => AlarmGroupDetail(
+    code: json["code"],
+    message: json["message"],
+    data: Data.fromJson(json["data"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "code": code,
+    "message": message,
+    "data": data.toJson(),
+  };
+}
+
+class Data {
+  AlarmGroup alarmGroup;
+
+  Data({
+    required this.alarmGroup,
+  });
+
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+    alarmGroup: AlarmGroup.fromJson(json["alarmGroup"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "alarmGroup": alarmGroup.toJson(),
+  };
+}
+
+class AlarmGroup {
+  int alarmGroupId;
+  String title;
+  int hour;
+  int minute;
+  List<bool> dayOfWeek;
+  String alarmSound;
+  String alarmMission;
+  bool isLock;
+  bool isHost;
+  List<Member> members;
+
+  AlarmGroup({
     required this.alarmGroupId,
+    required this.title,
     required this.hour,
     required this.minute,
-    required this.ampm,
-    required this.title,
-});
+    required this.dayOfWeek,
+    required this.alarmSound,
+    required this.alarmMission,
+    required this.isLock,
+    required this.isHost,
+    required this.members,
+  });
 
-  AlarmDetailModel copyWith(int? alarmGroupId, int? hour, int? minute,String? title, String? ampm) {
-    return AlarmDetailModel(
-      alarmGroupId: this.alarmGroupId,
-      hour: hour ?? this.hour,
-      minute: minute ?? this.minute,
-      title: title ?? this.title,
-      ampm: ampm ?? this.ampm,
+  factory AlarmGroup.fromJson(Map<String, dynamic> json) => AlarmGroup(
+    alarmGroupId: json["alarmGroupId"],
+    title: json["title"],
+    hour: json["hour"],
+    minute: json["minute"],
+    dayOfWeek: List<bool>.from(json["dayOfWeek"].map((x) => x)),
+    alarmSound: json["alarmSound"],
+    alarmMission: json["alarmMission"],
+    isLock: json["isLock"],
+    isHost: json["isHost"],
+    members: List<Member>.from(json["members"].map((x) => Member.fromJson(x))),
+  );
 
-    );
-  }
+  Map<String, dynamic> toJson() => {
+    "alarmGroupId": alarmGroupId,
+    "title": title,
+    "hour": hour,
+    "minute": minute,
+    "dayOfWeek": List<dynamic>.from(dayOfWeek.map((x) => x)),
+    "alarmSound": alarmSound,
+    "alarmMission": alarmMission,
+    "isLock": isLock,
+    "isHost": isHost,
+    "members": List<dynamic>.from(members.map((x) => x.toJson())),
+  };
+}
 
-  factory AlarmDetailModel.fromJson(Map<String, dynamic> json) => _$AlarmDetailModelFromJson(json);
+class Member {
+  int memberId;
+  String nickname;
+  String profileImageUrl;
+  bool isHost;
+  bool toggle;
 
-  Map<String, dynamic> toJson() => _$AlarmDetailModelToJson(this);
+  Member({
+    required this.memberId,
+    required this.nickname,
+    required this.profileImageUrl,
+    required this.isHost,
+    required this.toggle,
+  });
 
+  factory Member.fromJson(Map<String, dynamic> json) => Member(
+    memberId: json["memberId"],
+    nickname: json["nickname"],
+    profileImageUrl: json["profileImageUrl"],
+    isHost: json["isHost"],
+    toggle: json["toggle"],
+  );
 
-
-
+  Map<String, dynamic> toJson() => {
+    "memberId": memberId,
+    "nickname": nickname,
+    "profileImageUrl": profileImageUrl,
+    "isHost": isHost,
+    "toggle": toggle,
+  };
 }

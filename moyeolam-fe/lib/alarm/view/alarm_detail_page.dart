@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:youngjun/alarm/model/alarm_detail_model.dart';
+import 'package:youngjun/alarm/provider/alarm_detail_provider.dart';
 
 import '../../common/clock.dart';
 import '../../common/const/colors.dart';
@@ -7,16 +10,9 @@ import '../component/alarm_guest_list.dart';
 import '../component/alarm_middle_select.dart';
 import 'alarm_list_page.dart';
 
-class AlarmDetailScreen extends StatefulWidget {
-  const AlarmDetailScreen({Key? key}) : super(key: key);
-
+class AlarmDetailScreen extends ConsumerWidget {
   @override
-  State<AlarmDetailScreen> createState() => _AlarmDetailScreenState();
-}
-
-class _AlarmDetailScreenState extends State<AlarmDetailScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
         backgroundColor: BACKGROUND_COLOR,
         appBar: TitleBar(
