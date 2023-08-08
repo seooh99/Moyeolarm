@@ -21,6 +21,8 @@ class MainAlarmList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final HideNavBar hiding = HideNavBar();
+
     AsyncValue<List<AlarmGroups>?> alarmgroups = ref.watch(alarmListProvider);
 
     return Scaffold(
@@ -30,28 +32,44 @@ class MainAlarmList extends ConsumerWidget {
         title: '모여람',
         actions: [Icon(Icons.alarm)],
         leading: null,
-
       ),
       body: alarmgroups.when(
           data: (data) {
-            if(data != null){
-            return ListView.builder(
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                AlarmGroups alarmGroup = data[index];
-                return AlarmList(
-                  alarmGroupId: alarmGroup.alarmGroupId!,
-                  hour: alarmGroup.hour!,
-                  minute: alarmGroup.minute!,
-                  toggle: alarmGroup.toggle!,
-                  title: alarmGroup.title!,
-                );
-              },
-            );}
+            if (data != null) {
+              return CustomScrollView(
+                controller: hiding.controller,
+                slivers: [
+                  SliverList.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      AlarmGroups alarmGroup = data[index];
+                      return AlarmList(
+                        alarmGroupId: alarmGroup.alarmGroupId!,
+                        hour: alarmGroup.hour!,
+                        minute: alarmGroup.minute!,
+                        toggle: alarmGroup.toggle!,
+                        title: alarmGroup.title!,
+                      );
+                    },
+                  ),
+                ],
+              );
+            }
           },
           error: (error, stackTrace) {},
           loading: () {}),
-      bottomSheet: MainNav(),
+      bottomSheet: ValueListenableBuilder(
+        valueListenable: hiding.visible,
+        builder: (context, bool value, child) => AnimatedContainer(
+          duration: Duration(milliseconds: 500),
+          height: value ? kBottomNavigationBarHeight : 0.0,
+          child: Wrap(
+            children: <Widget>[
+              MainNav(),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
