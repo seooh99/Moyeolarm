@@ -3,7 +3,7 @@ import 'package:youngjun/common/const/colors.dart';
 
 class TextFieldbox extends StatefulWidget {
   final Function(String) setContents;
-  final Color colors;
+  final Color? colors;
   final Widget? suffixIcon;
   final Color? suffixIconColor;
 
@@ -12,7 +12,7 @@ class TextFieldbox extends StatefulWidget {
   const TextFieldbox({
     super.key,
     required this.setContents,
-    required this.colors,
+    this.colors,
     this.suffixIcon,
     this.suffixIconColor,
 

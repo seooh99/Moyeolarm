@@ -7,8 +7,8 @@ class TitleBar extends StatelessWidget implements PreferredSizeWidget {
 
     required this.appBar,
     required this.title,
-    required this.actions,
-    required this.leading,
+    this.actions,
+    this.leading,
   });
 
   final AppBar appBar;
