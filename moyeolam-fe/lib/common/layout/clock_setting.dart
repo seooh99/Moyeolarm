@@ -46,6 +46,8 @@ class ClockSetting extends StatelessWidget {
             height: 50,
           ),
           Clock(
+            timeSet: DateTime(DateTime.now().year, DateTime.now().month,
+                DateTime.now().day, 10, 11),
           ),
           SizedBox(
             height: 50,

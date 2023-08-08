@@ -66,14 +66,17 @@ class _AlarmAddScreenState extends State<AlarmAddScreen> {
           SizedBox(
             height: 20,
           ),
-          Clock(),
+          Clock(
+            timeSet: DateTime(DateTime.now().year, DateTime.now().month,
+                DateTime.now().day, 10, 11),
+          ),
           SizedBox(
             height: 20,
           ),
           AlarmMiddleSelect(
-            dayOfDay: '월 수 금',
+            dayOfDay: "None",
             alarmSound: '희망♬',
-            certification: '희망',
+            alarmMission: '희망',
           ),
         ],
       ),
