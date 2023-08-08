@@ -26,15 +26,17 @@ class _AlarmDetailScreenState extends State<AlarmDetailScreen> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context)
-                    => MainAlarmList()));
+                    MaterialPageRoute(builder: (context) => MainAlarmList()));
               },
-              child: Text('수정하기',
+              child: Text(
+                '수정하기',
                 style: TextStyle(
                   fontSize: 16,
-                ),),
+                ),
+              ),
             )
-          ], leading: null,
+          ],
+          leading: null,
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -59,7 +61,10 @@ class _AlarmDetailScreenState extends State<AlarmDetailScreen> {
               SizedBox(
                 height: 18,
               ),
-              AlarmGuestList(nickname: '성공할췅년!', profileImage: Image.asset('assets/images/moyeolam.png'),),
+              AlarmGuestList(
+                nickname: '성공할췅년!',
+                profileImage: Image.asset('assets/images/moyeolam.png'),
+              ),
             ],
           ),
         ));

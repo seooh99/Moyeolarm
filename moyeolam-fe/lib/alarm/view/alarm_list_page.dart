@@ -131,15 +131,15 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
 
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
-      appBar: TitleBar(
-        onPressed: () {
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        },
-        appBar: AppBar(),
-        title: '모여람',
-        actions: [Icon(Icons.alarm)],
-        titleIcon: null,
-      ),
+//       appBar: TitleBar(
+//         onPressed: () {
+// //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//         },
+//         appBar: AppBar(),
+//         title: '모여람',
+//         actions: [Icon(Icons.alarm)],
+//         titleIcon: null,
+//       ),
       body: ListView.builder(
         itemCount: _AlarmList.length,
         itemBuilder: (context, index) {
@@ -153,7 +153,8 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
           //   title: alarmGroup.title!,);
         },
       ),
-      bottomSheet: MainNav(),
+      bottomSheet: MainNav(
+      ),
     );
   }
 }
