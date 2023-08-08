@@ -52,8 +52,7 @@ class _AlarmAddScreenState extends State<AlarmAddScreen> {
               width: 320,
               child: TextFieldbox(
                 setContents: (String) {},
-                suffixIcon: null,
-                suffixIconColor: null,
+                colors: Colors.black,
               ),
             ),
           ),
