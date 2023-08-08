@@ -53,13 +53,11 @@ class MainAlarmList extends ConsumerWidget {
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
       appBar: TitleBar(
-        onPressed: () {
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        },
         appBar: AppBar(),
         title: '모여람',
         actions: [Icon(Icons.alarm)],
-        titleIcon: null,
+        leading: null,
+
       ),
       body: alarmgroups.when(
           data: (data) {
