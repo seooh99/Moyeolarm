@@ -17,34 +17,7 @@ import '../provider/alarm_list_provider.dart';
 class MainAlarmList extends ConsumerWidget {
   final ScrollController controller = ScrollController();
 
-  // late AlarmListRepository alarms;
-
   List<AlarmListModel> alarmList = <AlarmListModel>[];
-
-  //
-  // late AlarmListModel response;
-  // bool isLoading = false;
-  //
-  // getAlarms() async {
-  //   final dio = Dio();
-  //   final alarms = AlarmListRepository(dio);
-  //
-  //   // print(alarms.getAlarmList())
-  //
-  //   await alarms.getAlarmList().then((value) {
-  //     // response = value['data'] as AlarmListModel;
-  //     // isLoading = true;
-  //
-  //     for (var o in value.data.alarmGroups) {
-  //       print(o.alarmGroupId);
-  //       print(o.title);
-  //       print(o.hour);
-  //       print(o.minute);
-  //       print(o.dayOfWeek);
-  //       print(o.toggle);
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
