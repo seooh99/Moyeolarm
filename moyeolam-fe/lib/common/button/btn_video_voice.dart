@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
-class BtnVoice extends StatefulWidget {
-  const BtnVoice({super.key});
+import '../const/colors.dart';
 
-  @override
-  State<BtnVoice> createState() => _BtnVoice();
-}
+class BtnMedia extends StatelessWidget {
+  final Icon icons;
+  final VoidCallback? onPressed;
+  const BtnMedia({
+    super.key,
+    required this.icons,
+    required this.onPressed,
+  });
 
-class _BtnVoice extends State<BtnVoice> {
   @override
   Widget build(BuildContext context) {
 
@@ -15,47 +18,14 @@ class _BtnVoice extends State<BtnVoice> {
     ElevatedButton.styleFrom(
         shape: CircleBorder(),
         padding: EdgeInsets.all(10),
-        primary: Colors.white);
-
-    return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          style: style,
-          onPressed: () {},
-          child: Icon(Icons.voice_over_off,
-            color: Colors.black,),
-        ),
-      ),
+      backgroundColor: BACKGROUND_COLOR,
     );
+
+    return ElevatedButton(
+          style: style,
+          onPressed: onPressed,
+          child: icons,
+        );
   }
 }
 
-class BtnVideo extends StatefulWidget {
-  const BtnVideo({super.key});
-
-  @override
-  State<BtnVideo> createState() => _BtnVideo();
-}
-
-class _BtnVideo extends State<BtnVideo> {
-  @override
-  Widget build(BuildContext context) {
-
-    final ButtonStyle style =
-    ElevatedButton.styleFrom(
-        shape: CircleBorder(),
-        padding: EdgeInsets.all(10),
-        primary: Colors.white);
-
-    return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          style: style,
-          onPressed: () {},
-          child: Icon(Icons.videocam_off,
-            color: Colors.black,),
-        ),
-      ),
-    );
-  }
-}
