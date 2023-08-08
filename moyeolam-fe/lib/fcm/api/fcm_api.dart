@@ -8,11 +8,31 @@ import 'package:youngjun/main.dart';
 
 import '../view/arlet_list_view.dart';
 
-void handleMessage(RemoteMessage? message) {
-  // 푸시 알림을 처리하는 로직 구현
-  // 푸시 알림이 눌렸을 때 특정 화면으로 이동하거나 알림 내용을 표시하는 등의 작업 수행
+import 'package:youngjun/main/view/settings.dart';
 
-  // 예를 들어, 푸시 알림이 어떤 내용을 담고 있는지 확인하여 해당 정보를 알려주는 화면으로 이동
+
+import 'package:dio/dio.dart';
+
+Future<bool> fetchNotificationStatus() async {
+  final dio = Dio();
+  try {
+    final response = await dio.get('API 주소');
+    if (response.statusCode == 200) {
+      return response.data['notificationStatus'];
+    } else {
+      throw Exception('Failed to fetch notification status');
+    }
+  } catch (error) {
+    print('Error fetching notification status: $error');
+    throw Exception('Failed to fetch notification status');
+  }
+}
+
+void handleMessage(RemoteMessage? message, bool notificationStatus) {
+  if (!notificationStatus) {
+    return;
+  }
+
   if (message != null && message.notification != null) {
     Navigator.of(navigatorKey.currentContext!).pushNamed(
       ArletListView.route,
@@ -21,7 +41,7 @@ void handleMessage(RemoteMessage? message) {
   }
 }
 
-Future<void> initLocalNotifications() async {
+Future<void> initLocalNotifications(BuildContext context) async {
   const android = AndroidInitializationSettings('drawable/ic_launcher');
   const setting = InitializationSettings(android: android);
 
@@ -29,40 +49,23 @@ Future<void> initLocalNotifications() async {
 
   await FlutterLocalNotificationsPlugin().initialize(
     setting,
-      onDidReceiveNotificationResponse: (NotificationResponse response) async {
-    final payload = response.payload ?? '';
-
-    final parsedJson = jsonDecode(payload);
-    if (!parsedJson.containsKey('routeTo')) {
-      return;
-    }
-
-    final routeTo = parsedJson['routeTo'];
-
-    if (routeTo == 'arlet_list_view') {
-  //     Navigator.push(
-  //       response.notification?.android?.channelId ?? '',
-  //       MaterialPageRoute(
-  //         builder: (context) => ArletListView(),
-  //       ),
-  //     );
-  //   } else if (routeTo == 'another_page') {
-  //     // 다른 페이지로 이동하는 로직 처리
-  //     // 예: Navigator.push(context, MaterialPageRoute(builder: (context) => AnotherPage()));
-    }
-  },
-
-
-      );
+    onDidReceiveNotificationResponse: (NotificationResponse response) async {
+      final payload = response.payload ?? '';
+      final parsedJson = jsonDecode(payload);
+      if (parsedJson.containsKey('routeTo') && parsedJson['routeTo'] == '/arlet_list') {
+        // 알림을 눌렀을 때 '/arlet_list'로 이동하는 로직 추가
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => ArletListView()));
+      }
+    },
+  );
 
   final platform = _localNotification.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
   await platform?.createNotificationChannel(AndroidNotificationChannel(
-    'high_importance_channel',
-    '중요한 알림',
-    importance: Importance.high,
+    'my_notification_channel', // 'default_notification_channel_id'와 일치해야 함
+    'My Notification Channel', // 적절한 채널 이름
+    importance: Importance.high, // 중요도 설정
   ));
 }
-
 
 
 // @pragma('vm:entry-point')
@@ -73,7 +76,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('Body: ${message.notification?.body}');
   print(message.notification?.body);
   initPushNotifications();
-  return handleMessage(message);
+  // return handleMessage(message);
 
 }
 
@@ -86,17 +89,24 @@ Future<void> initPushNotifications() async {
     sound: true,
   );
 
+  // 알림 설정 상태를 가져와서 handleMessage 함수에 전달
+  bool notificationStatus = await fetchNotificationStatus();
+
   FirebaseMessaging.instance.getInitialMessage().then((message) {
-    handleMessage(message); // 앱이 백그라운드에서 열렸을 때 처리하는 함수 호출
+    handleMessage(message, notificationStatus); // 앱이 백그라운드에서 열렸을 때 처리하는 함수 호출
   });
 
   FirebaseMessaging.onMessageOpenedApp.listen((message) {
-    handleMessage(message); // 앱이 백그라운드 상태에서 푸시 알림을 눌렀을 때 처리하는 함수 호출
+    handleMessage(message, notificationStatus); // 앱이 백그라운드 상태에서 푸시 알림을 눌렀을 때 처리하는 함수 호출
+
   });
 
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   initLocalNotifications();
+
+
+
 }
 
 
