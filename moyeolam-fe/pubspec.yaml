@@ -83,6 +83,7 @@ flutter:
     - assets/images/kakao_login_medium_wide.png
     - assets/images/moyeolam.png
     - assets/gif/moyeolam.gif
+    - assets/images/moyeolam_logo.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
