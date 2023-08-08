@@ -20,22 +20,25 @@ class NicknameViewModel {
           .read(key: 'userInfo')
           .then((value) => jsonDecode(value!));
       print("$userInfo 토큰 닉넴뷰모델");
-      _nicknameRepository
+      var response= await _nicknameRepository
           .updateNickname(
         nName,
         userInfo["accessToken"],
       )
-          .then((value) async {
-        if (value.code == "200") {
-          print("${value.code} nickname view model");
-          userInfo["nickname"] = nName;
-          await storage.write(key: "userInfo", value: jsonEncode(userInfo));
-          print("write storage in setnickname view model");
-          return 'accept';
-        } else if (value.code == "603") {
-          return 'false';
-        }
+          .then((value) {
+            print("${value.code} 나는 코드");
+            return value.code;
+        // if (value.code == "200") {
+        //   print("${value.code} nickname view model");
+        //   userInfo["nickname"] = nName;
+        //   await storage.write(key: "userInfo", value: jsonEncode(userInfo));
+        //   print("write storage in setnickname view model");
+        //   return 'accept';
+        // } else if (value.code == "603") {
+        //   return 'false';
+        // }
       });
+      return response;
     } catch (e) {
       print("$e setNickNameError");
     }
