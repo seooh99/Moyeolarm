@@ -1,33 +1,28 @@
 import 'dart:convert';
 
-AlarmGroupDetail alarmGroupDetailFromJson(String str) => AlarmGroupDetail.fromJson(json.decode(str));
+import 'package:json_annotation/json_annotation.dart';
 
-String alarmGroupDetailToJson(AlarmGroupDetail data) => json.encode(data.toJson());
+part 'alarm_detail_model.g.dart';
 
-class AlarmGroupDetail {
+@JsonSerializable()
+class AlarmGroupModel {
   String code;
   String message;
   Data data;
 
-  AlarmGroupDetail({
+  AlarmGroupModel({
     required this.code,
     required this.message,
     required this.data,
   });
 
-  factory AlarmGroupDetail.fromJson(Map<String, dynamic> json) => AlarmGroupDetail(
-    code: json["code"],
-    message: json["message"],
-    data: Data.fromJson(json["data"]),
-  );
+  factory AlarmGroupModel.fromJson(Map<String, dynamic> json) =>
+      _$AlarmGroupModelFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-    "code": code,
-    "message": message,
-    "data": data.toJson(),
-  };
+  Map<String, dynamic> toJson() => _$AlarmGroupModelToJson(this);
 }
 
+@JsonSerializable()
 class Data {
   AlarmGroup alarmGroup;
 
@@ -35,15 +30,12 @@ class Data {
     required this.alarmGroup,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-    alarmGroup: AlarmGroup.fromJson(json["alarmGroup"]),
-  );
+  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-    "alarmGroup": alarmGroup.toJson(),
-  };
+  Map<String, dynamic> toJson() => _$DataToJson(this);
 }
 
+@JsonSerializable()
 class AlarmGroup {
   int alarmGroupId;
   String title;
@@ -54,7 +46,7 @@ class AlarmGroup {
   String alarmMission;
   bool isLock;
   bool isHost;
-  List<Member> members;
+  List<Member>? members;
 
   AlarmGroup({
     required this.alarmGroupId,
@@ -66,64 +58,31 @@ class AlarmGroup {
     required this.alarmMission,
     required this.isLock,
     required this.isHost,
-    required this.members,
+    this.members,
   });
 
-  factory AlarmGroup.fromJson(Map<String, dynamic> json) => AlarmGroup(
-    alarmGroupId: json["alarmGroupId"],
-    title: json["title"],
-    hour: json["hour"],
-    minute: json["minute"],
-    dayOfWeek: List<bool>.from(json["dayOfWeek"].map((x) => x)),
-    alarmSound: json["alarmSound"],
-    alarmMission: json["alarmMission"],
-    isLock: json["isLock"],
-    isHost: json["isHost"],
-    members: List<Member>.from(json["members"].map((x) => Member.fromJson(x))),
-  );
+  factory AlarmGroup.fromJson(Map<String, dynamic> json) => _$AlarmGroupFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-    "alarmGroupId": alarmGroupId,
-    "title": title,
-    "hour": hour,
-    "minute": minute,
-    "dayOfWeek": List<dynamic>.from(dayOfWeek.map((x) => x)),
-    "alarmSound": alarmSound,
-    "alarmMission": alarmMission,
-    "isLock": isLock,
-    "isHost": isHost,
-    "members": List<dynamic>.from(members.map((x) => x.toJson())),
-  };
+  Map<String, dynamic> toJson() => _$AlarmGroupToJson(this);
 }
 
+@JsonSerializable()
 class Member {
   int memberId;
   String nickname;
-  String profileImageUrl;
+  String? profileImageUrl;
   bool isHost;
   bool toggle;
 
   Member({
     required this.memberId,
     required this.nickname,
-    required this.profileImageUrl,
+    this.profileImageUrl,
     required this.isHost,
     required this.toggle,
   });
 
-  factory Member.fromJson(Map<String, dynamic> json) => Member(
-    memberId: json["memberId"],
-    nickname: json["nickname"],
-    profileImageUrl: json["profileImageUrl"],
-    isHost: json["isHost"],
-    toggle: json["toggle"],
-  );
+  factory Member.fromJson(Map<String, dynamic> json) => _$MemberFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-    "memberId": memberId,
-    "nickname": nickname,
-    "profileImageUrl": profileImageUrl,
-    "isHost": isHost,
-    "toggle": toggle,
-  };
+  Map<String, dynamic> toJson() => _$MemberToJson(this);
 }
