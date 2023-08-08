@@ -22,6 +22,7 @@ class MainAlarmList extends ConsumerWidget {
     final HideNavBar hiding = HideNavBar();
 
     AsyncValue<List<AlarmGroups>?> alarmgroups = ref.watch(alarmListProvider);
+    print("테스트");
 
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
