@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:youngjun/alarm/model/alarm_detail_model.dart';
+import 'package:youngjun/alarm/provider/alarm_detail_provider.dart';
 
 import '../../common/clock.dart';
 import '../../common/const/colors.dart';
@@ -7,21 +10,21 @@ import '../component/alarm_guest_list.dart';
 import '../component/alarm_middle_select.dart';
 import 'alarm_list_page.dart';
 
-class AlarmDetailScreen extends StatefulWidget {
-  const AlarmDetailScreen({Key? key}) : super(key: key);
+class AlarmDetailScreen extends ConsumerWidget {
+  final ScrollController controller = ScrollController();
 
   @override
-  State<AlarmDetailScreen> createState() => _AlarmDetailScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    AsyncValue<AlarmGroup?> alarmGroupDetail = ref.watch(alarmGroupDetailProvider);
 
-class _AlarmDetailScreenState extends State<AlarmDetailScreen> {
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: BACKGROUND_COLOR,
         appBar: TitleBar(
           appBar: AppBar(),
-          title: '싸피 끝나고 여행가즈아',
+          title: alarmGroupDetail.when(
+              data: (alarmGroup) => alarmGroup?.title ?? 'None',
+              loading: () => 'Loading...',
+              error: (error, stackTrace) => 'Error'),
           actions: [
             TextButton(
               onPressed: () {
@@ -29,7 +32,7 @@ class _AlarmDetailScreenState extends State<AlarmDetailScreen> {
                     MaterialPageRoute(builder: (context) => MainAlarmList()));
               },
               child: Text(
-                '수정하기',
+                '수정',
                 style: TextStyle(
                   fontSize: 16,
                 ),
@@ -42,14 +45,26 @@ class _AlarmDetailScreenState extends State<AlarmDetailScreen> {
           child: Column(
             children: [
               SizedBox(height: 20),
-              Clock(),
+              Clock(
+                timeSet: DateTime(DateTime.now().year, DateTime.now().month,
+                    DateTime.now().day, 10, 11),
+              ),
               SizedBox(
                 height: 20,
               ),
               AlarmMiddleSelect(
-                dayOfDay: '월, 수, 금',
-                alarmSound: '희망',
-                certification: '화상',
+                dayOfDay: alarmGroupDetail.when(
+                    data: (alarmGroup) => "월, 화, 수" ?? "None",
+                    loading: () => "None",
+                    error: (error, stackTrace) => "None"),
+                alarmSound: alarmGroupDetail.when(
+                    data: (alarmGroup) => alarmGroup?.alarmSound ?? 'None',
+                    loading: () => 'Loading...',
+                    error: (error, stackTrace) => 'Error'),
+                alarmMission: alarmGroupDetail.when(
+                    data: (alarmGroup) => alarmGroup?.alarmMission ?? 'None',
+                    loading: () => 'Loading...',
+                    error: (error, stackTrace) => 'Error'),
               ),
               Text(
                 '참여목록',
@@ -61,10 +76,26 @@ class _AlarmDetailScreenState extends State<AlarmDetailScreen> {
               SizedBox(
                 height: 18,
               ),
-              AlarmGuestList(
-                nickname: '성공할췅년!',
-                profileImage: Image.asset('assets/images/moyeolam.png'),
-              ),
+              // Container(
+              //   child: alarmGroupDetail.when(
+              //       data: (alarmGroup) {
+              //         if (alarmGroup != null) {
+              //           return ListView.builder(
+              //             itemCount: alarmGroup.members?.length,
+              //             itemBuilder: (context, index) {
+              //               Member member = alarmGroup.members![index];
+              //               return AlarmGuestList(
+              //                 nickname: member.nickname!,
+              //                 profileImage: Image.asset("assets/images/moyeolam.png"),
+              //
+              //               );
+              //             },
+              //           );
+              //         }
+              //       },
+              //       error: (error, stackTrace) {},
+              //       loading: () {}),
+              // )
             ],
           ),
         ));

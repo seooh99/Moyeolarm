@@ -1,15 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:youngjun/common/const/colors.dart';
 
 class Clock extends StatefulWidget {
-  const Clock({super.key});
+
+  DateTime timeSet;
+  Clock({super.key,
+    required this.timeSet,
+  });
 
   @override
   State<Clock> createState() => ClockState();
 }
 class ClockState extends State<Clock> {
-  DateTime time = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 22, 35);
+  // int _hour = widget.hour;
+  // DateTime time = DateTime(
+  //   DateTime.now().year,
+  //   DateTime.now().month,
+  //   DateTime.now().day,
+  // widget.hour,
+  //     widget.minute,
+  // );
 
   @override
   Widget build(BuildContext context) {
@@ -17,18 +29,18 @@ class ClockState extends State<Clock> {
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Container(
+          color: BACKGROUND_COLOR,
           height: 150,
-
           child: CupertinoDatePicker(
             backgroundColor: Colors.white,
-          initialDateTime: time,
+          initialDateTime: widget.timeSet,
           mode: CupertinoDatePickerMode.time,
           // use24hFormat: true,
           // minimumDate: DateTime.now()
           // This is called when the user changes the time.
           onDateTimeChanged: (DateTime newTime) {
-            setState(() => time = newTime);
-            print(time);
+            setState(() => widget.timeSet = newTime);
+            print(widget.timeSet);
           },
           ),
         ),
