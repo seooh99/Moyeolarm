@@ -40,7 +40,7 @@ class _TextFieldboxState extends State<TextFieldbox> {
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderSide: BorderSide(
-            color: widget.colors,
+            color: MAIN_COLOR,
             width: 3.0,
           ),
           // borderRadius: BorderRadius.circular(5.0),// borderColor 사용
@@ -49,7 +49,7 @@ class _TextFieldboxState extends State<TextFieldbox> {
           // 입력창이 선택되지 않았을 때의 border 설정 (optional)
 
           borderSide: BorderSide(
-            color: widget.colors,
+            color: MAIN_COLOR,
             width: 3.0,
           ),
         ),
@@ -57,14 +57,14 @@ class _TextFieldboxState extends State<TextFieldbox> {
           // 입력창이 선택되었을 때의 border 설정 (optional)
 
           borderSide: BorderSide(
-            color: widget.colors,
+            color: MAIN_COLOR,
             width: 3.0,
           ),
         ),
         labelText: '제목입력',
         labelStyle: TextStyle(
           // label의 텍스트 스타일 설정
-          color: widget.colors,
+          color: MAIN_COLOR,
         ),
         alignLabelWithHint: true, // label을 TextField의 가운데로 이동
       ),
