@@ -8,10 +8,15 @@ final alarmGroupDetailProvider = FutureProvider<AlarmGroup?>((ref) async {
   final dio = Dio();
   final alarmGroupDetail = AlarmDetailRepository(dio);
 
-  return await alarmGroupDetail.getAlarmGroupDetail(1).then((value) => value.data.alarmGroup);
+  return await alarmGroupDetail.getAlarmGroupDetail(3).then((value) => value.data.alarmGroup);
 });
-
-// class AlarmGroupDetailProvider extends FutureProvider<AlarmGroupDetail>{
-//   AlarmGroupDetailProvider(this.ref):super(AlarmGroupDetail());
+//
+// class AlarmGroupDetailProvider extends FutureProvider{
+//   AlarmGroupDetailProvider(super.createFn);
+//
+//   getAlarmGroupDetail(int id) asyn {
+//
+//   }
+//
 //
 // }

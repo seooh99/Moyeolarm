@@ -9,22 +9,11 @@ import '../../common/const/address_config.dart';
 
 part 'alarm_detail_repository.g.dart';
 
-
-// final alarmDetailRepositoryProvider = Provider<AlarmDetailRepository>((ref){
-//
-//   final dio = Dio();
-//
-//   final repository = AlarmDetailRepository(dio, baseUrl: '$ip/alarmgroups/{alarmGroupId}');
-//
-//   return repository;
-//
-// });
-
 @RestApi(baseUrl: BASE_URL)
 abstract class AlarmDetailRepository {
   factory AlarmDetailRepository(Dio dio, {String baseUrl}) =
   _AlarmDetailRepository;
 
   @GET('/alarmgroups/{alarmGroupId}')
-  Future<AlarmGroupDetail> getAlarmGroupDetail(@Path("alarmGroupId") int alarmGroupId);
+  Future<AlarmGroupModel> getAlarmGroupDetail(@Path('alarmGroupId') int alarmGroupId);
 }

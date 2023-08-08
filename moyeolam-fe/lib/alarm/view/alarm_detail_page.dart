@@ -11,13 +11,20 @@ import '../component/alarm_middle_select.dart';
 import 'alarm_list_page.dart';
 
 class AlarmDetailScreen extends ConsumerWidget {
+  final ScrollController controller = ScrollController();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    AsyncValue<AlarmGroup?> alarmGroupDetail = ref.watch(alarmGroupDetailProvider);
+
     return Scaffold(
         backgroundColor: BACKGROUND_COLOR,
         appBar: TitleBar(
           appBar: AppBar(),
-          title: '싸피 끝나고 여행가즈아',
+          title: alarmGroupDetail.when(
+              data: (alarmGroup) => alarmGroup?.title ?? 'None',
+              loading: () => 'Loading...',
+              error: (error, stackTrace) => 'Error'),
           actions: [
             TextButton(
               onPressed: () {
@@ -25,7 +32,7 @@ class AlarmDetailScreen extends ConsumerWidget {
                     MaterialPageRoute(builder: (context) => MainAlarmList()));
               },
               child: Text(
-                '수정하기',
+                '수정',
                 style: TextStyle(
                   fontSize: 16,
                 ),
@@ -38,14 +45,26 @@ class AlarmDetailScreen extends ConsumerWidget {
           child: Column(
             children: [
               SizedBox(height: 20),
-              Clock(),
+              Clock(
+                timeSet: DateTime(DateTime.now().year, DateTime.now().month,
+                    DateTime.now().day, 10, 11),
+              ),
               SizedBox(
                 height: 20,
               ),
               AlarmMiddleSelect(
-                dayOfDay: '월, 수, 금',
-                alarmSound: '희망',
-                certification: '화상',
+                dayOfDay: alarmGroupDetail.when(
+                    data: (alarmGroup) => "월, 화, 수" ?? "None",
+                    loading: () => "None",
+                    error: (error, stackTrace) => "None"),
+                alarmSound: alarmGroupDetail.when(
+                    data: (alarmGroup) => alarmGroup?.alarmSound ?? 'None',
+                    loading: () => 'Loading...',
+                    error: (error, stackTrace) => 'Error'),
+                alarmMission: alarmGroupDetail.when(
+                    data: (alarmGroup) => alarmGroup?.alarmMission ?? 'None',
+                    loading: () => 'Loading...',
+                    error: (error, stackTrace) => 'Error'),
               ),
               Text(
                 '참여목록',
@@ -57,10 +76,26 @@ class AlarmDetailScreen extends ConsumerWidget {
               SizedBox(
                 height: 18,
               ),
-              AlarmGuestList(
-                nickname: '성공할췅년!',
-                profileImage: Image.asset('assets/images/moyeolam.png'),
-              ),
+              // Container(
+              //   child: alarmGroupDetail.when(
+              //       data: (alarmGroup) {
+              //         if (alarmGroup != null) {
+              //           return ListView.builder(
+              //             itemCount: alarmGroup.members?.length,
+              //             itemBuilder: (context, index) {
+              //               Member member = alarmGroup.members![index];
+              //               return AlarmGuestList(
+              //                 nickname: member.nickname!,
+              //                 profileImage: Image.asset("assets/images/moyeolam.png"),
+              //
+              //               );
+              //             },
+              //           );
+              //         }
+              //       },
+              //       error: (error, stackTrace) {},
+              //       loading: () {}),
+              // )
             ],
           ),
         ));

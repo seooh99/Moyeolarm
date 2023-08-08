@@ -4,12 +4,12 @@ class AlarmMiddleSelect extends StatelessWidget {
   const AlarmMiddleSelect(
       {required this.dayOfDay,
       required this.alarmSound,
-      required this.certification,
+      required this.alarmMission,
       super.key});
 
   final String dayOfDay;
   final String alarmSound;
-  final String certification;
+  final String alarmMission;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class AlarmMiddleSelect extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    '월,수,금',
+                    dayOfDay,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -60,7 +60,7 @@ class AlarmMiddleSelect extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    '희망♬',
+                    alarmSound,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -91,7 +91,7 @@ class AlarmMiddleSelect extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    '화상',
+                    alarmMission,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
