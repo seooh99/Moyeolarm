@@ -124,7 +124,6 @@ class Settings extends StatelessWidget {
   // FCM 알림을 처리하는 함수
   Future<void> handleFCMNotification(RemoteMessage? message) async {
     bool notificationStatus = await fetchNotificationStatus();
-
     // 다른 파일에 있는 handleMessage 함수 호출 부분
     handleMessage(message, notificationStatus);
 
@@ -137,24 +136,25 @@ class Settings extends StatelessWidget {
     }
   }
 
-
-
 // 서버에 새로운 알림 상태를 업데이트하는 함수
   void updateNotificationStatus(bool status) async {
     var dio = Dio();
     dio.options.baseUrl = BASE_URL;
-
     final alarmGroupId = 'API 요청한 ID!!! 사용 -> 뭔데~~~~~~~~';
-
     try {
       await dio.post('/alarmgroups/$alarmGroupId/toggle', data: {'status': status});
       print('알림 설정이 업데이트되었습니다.');
-
       // 토글된 상태로 변경한 후 다시 알림 상태를 가져와서 화면을 업데이트
       fetchAndRefreshNotificationStatus();
+      RemoteMessage tempMessage = RemoteMessage(
+        notification: RemoteNotification(
+          title: 'Temp',
+          body: 'FCM notification',
+        ),
+      );
 
-      // FCM 알림 설정을 업데이트한 후 FCM 알림 처리 함수를 호출------> 오류남(데이터타입에서 문제같음)
-      handleFCMNotification();
+      // FCM 알림 처리 함수를 호출할 때 임의의 RemoteMessage 객체를 넘겨줍니다.
+      handleFCMNotification(tempMessage);
     } catch (e) {
       print('알림 설정 업데이트 오류: $e');
     }
