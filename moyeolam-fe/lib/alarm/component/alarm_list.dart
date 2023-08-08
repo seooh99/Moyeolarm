@@ -73,24 +73,26 @@ class AlarmList extends StatelessWidget {
             ),
           ),
         ),
-        Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: BorderSide(
-                      color: MAIN_COLOR,
-                      width: 2,
-                    )),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 40),
-                  child: Center(
-                    child: Icon(
-                      Icons.add,
-                      color: MAIN_COLOR,
-                    ),
-                  ),
-                ))),
+        // Padding(
+        //     padding: EdgeInsets.symmetric(vertical: 10),
+        //     child: Card(
+        //         shape: RoundedRectangleBorder(
+        //             borderRadius: BorderRadius.circular(10),
+        //             side: BorderSide(
+        //               color: MAIN_COLOR,
+        //               width: 2,
+        //             )),
+        //         child: Padding(
+        //           padding: const EdgeInsets.symmetric(vertical: 40),
+        //           child: Center(
+        //             child: Icon(
+        //               Icons.add,
+        //               color: MAIN_COLOR,
+        //             ),
+        //           ),
+        //         )
+        //     )
+        // ),
       ],
     );
   }
