@@ -17,13 +17,12 @@ import '../provider/alarm_list_provider.dart';
 class MainAlarmList extends ConsumerWidget {
   final ScrollController controller = ScrollController();
 
-  List<AlarmListModel> alarmList = <AlarmListModel>[];
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final HideNavBar hiding = HideNavBar();
 
     AsyncValue<List<AlarmGroups>?> alarmgroups = ref.watch(alarmListProvider);
+    print("테스트");
 
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
@@ -53,6 +52,21 @@ class MainAlarmList extends ConsumerWidget {
                     },
                   ),
                 ],
+              // return ListView.builder(
+              //   itemCount: data.length,
+              //
+              //   itemBuilder: (context, index) {
+              //     AlarmGroups alarmGroup = data[index];
+              //
+              //     // Navigator.pushNamed(context, arguments: data[index].alarmGroupId, "/main_alarm_list");
+              //     return AlarmList(
+              //       alarmGroupId: alarmGroup.alarmGroupId!,
+              //       hour: alarmGroup.hour!,
+              //       minute: alarmGroup.minute!,
+              //       toggle: alarmGroup.toggle!,
+              //       title: alarmGroup.title!,
+              //     );
+              //   },
               );
             }
           },
