@@ -39,7 +39,7 @@ public class ExceptionControllerAdvice {
     }
 
     @ExceptionHandler(AlarmGroupException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public EnvelopeResponse AlarmGroupExceptionHandler(AlarmGroupException e) {
         e.printStackTrace();
         return EnvelopeResponse.builder()
@@ -49,7 +49,7 @@ public class ExceptionControllerAdvice {
     }
 
     @ExceptionHandler(FriendException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public EnvelopeResponse FriendExceptionHandler(FriendException e) {
         e.printStackTrace();
         return EnvelopeResponse.builder()
@@ -59,7 +59,7 @@ public class ExceptionControllerAdvice {
     }
 
     @ExceptionHandler(MemberException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public EnvelopeResponse MemberExceptionHandler(MemberException e) {
         e.printStackTrace();
         return EnvelopeResponse.builder()
@@ -69,7 +69,7 @@ public class ExceptionControllerAdvice {
     }
 
     @ExceptionHandler(NotificationException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public EnvelopeResponse NotificationExceptionHandler(NotificationException e) {
         e.printStackTrace();
         return EnvelopeResponse.builder()
@@ -79,7 +79,7 @@ public class ExceptionControllerAdvice {
     }
 
     @ExceptionHandler(AuthException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public EnvelopeResponse AuthExceptionHandler(AuthException e) {
         e.printStackTrace();
         return EnvelopeResponse.builder()
