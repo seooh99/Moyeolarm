@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
@@ -16,23 +18,11 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public EnvelopeResponse<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto){
-
-        String oauthIdentifier = loginRequestDto.getOauthIdentifier();
+    public EnvelopeResponse<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
 
         return EnvelopeResponse.<LoginResponseDto>builder()
-                .data(authService.login(oauthIdentifier))
+                .data(authService.login(loginRequestDto))
                 .build();
     }
-
-    //    @GetMapping("/login/success")
-//    public EnvelopeResponse<GetMemberDataResponseDto> getMemberData(@AuthenticationPrincipal PrincipalDetails principal){
-//
-//        Member member = principal.getMember();
-//
-//        return EnvelopeResponse.<GetMemberDataResponseDto>builder()
-//                .data(authService.getMemberData(member))
-//                .build();
-//    }
 
 }
