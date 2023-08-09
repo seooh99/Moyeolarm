@@ -11,9 +11,13 @@ class UserRepository {
     baseUrl: BASE_URL,
   );
 
-  Future<ResponseUserModel> isSigned(String request) {
+  Future<ResponseUserModel> isSigned(String request, String fcmToken, String deviceIdentifier) {
     print("$request repository");
-    IsSigned params = IsSigned(oauthIdentifier: request);
+    IsSigned params = IsSigned(
+      oauthIdentifier: request,
+      fcmToken: fcmToken,
+      deviceIdentifier: deviceIdentifier,
+    );
     // print(params.oauthIdentifier);
     return _userDataSource.isSigned(params);
   }

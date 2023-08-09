@@ -11,8 +11,17 @@ part 'user_model.g.dart';
 class IsSigned {
   @JsonKey(name: "oauthIdentifier")
   String oauthIdentifier;
+  @JsonKey(name: 'fcmToken')
+  String fcmToken;
+  @JsonKey(name: 'deviceIdentifier')
+  String deviceIdentifier;
 
-  IsSigned({required this.oauthIdentifier});
+  IsSigned({
+    required this.oauthIdentifier,
+    required this.fcmToken,
+    required this.deviceIdentifier,
+  });
+
   factory IsSigned.fromJson(Map<String, dynamic> json) =>
       _$IsSignedFromJson(json);
   Map<String, dynamic> toJson() => _$IsSignedToJson(this);

@@ -1,64 +1,66 @@
 import 'dart:convert';
-
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:youngjun/kakao/kakao_login.dart';
 import 'package:youngjun/kakao/main_view_model.dart';
+import 'package:youngjun/main/view/main_page.dart';
 import 'package:youngjun/user/model/user_model.dart';
+import '../../firebase_options.dart';
 import '../repository/user_repository.dart';
 
-// final userProvider =
-
-// class AuthViewModel extends StatefulWidget {
-//   const AuthViewModel({super.key});
-
-//   @override
-//   State<AuthViewModel> createState() => _AuthViewModelState();
-// }
+const storage = FlutterSecureStorage();
 
 class AuthViewModel {
   final UserRepository _userRepository = UserRepository();
-  static const storage = FlutterSecureStorage();
   final kakaoViewModel = MainViewModel(KakaoLogin());
   dynamic userInfo;
 
-  // AuthViewModel() {
-  //
-  //
-  //
-  // }
-
-  isLogin() async {
-    // userInfo = await storage.read(key: 'userInfo');
-    userInfo = await storage.read(key: 'userInfo');
-    if (userInfo != null) {
-      print("isLogin true");
-      return true;
-    } else {
-      print("isLogin false");
-      return false;
-    }
-  }
+  final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+  late String deviceIndentifier;
 
   login() async {
     try {
       var kakaoLogin = await kakaoViewModel.login();
       // print("$kakaoLogin 카카오로그인 auth 뷰모델");
 
-      var rawResponse =
-          await _userRepository.isSigned(kakaoLogin.id.toString());
-      // print("${rawResponse.data} 심기불편");
+      final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+      WidgetsFlutterBinding.ensureInitialized();
 
-      var response = rawResponse.data;
-      await storage.write(key: "userInfo", value: jsonEncode(response));
-      print(await storage.readAll());
-      if (response.nickname != null) {
-        print(response.nickname);
-        // print(await storage.read(key: "userInfo"));
-        return "main";
-      } else {
-        var userInfo = await storage.read(key: 'userInfo');
-        print("$userInfo sigin");
-        return 'signin';
+      var fcmToken = await FirebaseMessaging.instance.getToken().then((token) {
+        print('FCM Token: $token'); // FCM 토큰을 터미널에 출력
+        return token;
+      });
+      print("hi");
+
+      AndroidDeviceInfo androidData = await deviceInfoPlugin.androidInfo;
+      deviceIndentifier = androidData.id;
+
+      if(kakaoLogin != null && fcmToken != null && deviceIndentifier != null) {
+        var rawResponse =
+        await _userRepository.isSigned(
+          kakaoLogin.id.toString(),
+          fcmToken,
+          deviceIndentifier
+        );
+        // print("${rawResponse.data} 심기불편");
+
+        var response = rawResponse.data;
+        await storage.write(key: "userInfo", value: jsonEncode(response));
+        print(await storage.readAll());
+        if (response.nickname != null) {
+          print(response.nickname);
+          // print(await storage.read(key: "userInfo"));
+          return "main";
+        } else {
+          var userInfo = await storage.read(key: 'userInfo');
+          print("$userInfo sigin");
+          return 'signin';
+        }
+      }else{
+        print("Error KakaoLogin or FcmToken or DeviceIdentifier is null");
       }
     } catch (e) {
       print("$e auth_view_model_error");
