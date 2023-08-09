@@ -2,10 +2,7 @@ package com.ssafy.moyeolam.domain.member.service;
 
 import com.ssafy.moyeolam.domain.member.domain.Member;
 import com.ssafy.moyeolam.domain.member.domain.ProfileImage;
-import com.ssafy.moyeolam.domain.member.dto.SaveNicknameRequestDto;
-import com.ssafy.moyeolam.domain.member.dto.SearchMembereResponseDto;
-import com.ssafy.moyeolam.domain.member.dto.UploadProfileImageRequestDto;
-import com.ssafy.moyeolam.domain.member.dto.UploadProfileImageResponseDto;
+import com.ssafy.moyeolam.domain.member.dto.*;
 import com.ssafy.moyeolam.domain.member.exception.MemberErrorInfo;
 import com.ssafy.moyeolam.domain.member.exception.MemberException;
 import com.ssafy.moyeolam.domain.member.repository.MemberRepository;
@@ -34,7 +31,7 @@ public class MemberService {
 
         profileImageRepository.findByMember(member)
                 .ifPresent(profileImage -> {
-                    this.deleteProfileImage(member);
+                            this.deleteProfileImage(member);
                         }
                 );
 
@@ -58,10 +55,10 @@ public class MemberService {
     }
 
     @Transactional
-    public Long deleteProfileImage(Member member){
+    public Long deleteProfileImage(Member member) {
 
         ProfileImage profileImage = profileImageRepository.findByMember(member)
-                .orElseThrow(()-> new MemberException(MemberErrorInfo.NOT_FOUND_PROFILEIMAGE));
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_PROFILEIMAGE));
 
         String imagePath = profileImage.getImagePath();
         s3Service.deleteFile(imagePath);
@@ -81,7 +78,7 @@ public class MemberService {
         String newNickname = saveNicknameRequestDto.getNickname();
 
         memberRepository.findByNickname(newNickname)
-                .ifPresent((foundedMember)->{
+                .ifPresent((foundedMember) -> {
                     throw new MemberException(MemberErrorInfo.NICKNAME_ALREADY_IN_USE);
                 });
 
@@ -94,7 +91,7 @@ public class MemberService {
     @Transactional(readOnly = true)
     public SearchMembereResponseDto searchMember(String keyword) {
 
-        List<Member> members = memberRepository.findByNicknameLike("%"+keyword+"%");
+        List<Member> members = memberRepository.findByNicknameLike("%" + keyword + "%");
 
         log.info(members.toString());
 
@@ -108,4 +105,11 @@ public class MemberService {
 
         return memberId;
     }
+
+    @Transactional(readOnly = true)
+    public FindMemberSettingResponseDto findMemberSetting(Member loginMember) {
+        return new FindMemberSettingResponseDto(loginMember.getNotificationToggle());
+    }
+
+
 }
