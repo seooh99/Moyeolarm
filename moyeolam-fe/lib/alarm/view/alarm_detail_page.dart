@@ -110,41 +110,7 @@ backgroundColor: BACKGROUND_COLOR,
                             profileImage: Image.network("${widget.alarmGroup.members[index].profileUrl}")??Image.asset("assets/images/moyeolam"),
                           )
                         ,
-                        SizedBox(
-                          width: 10,
-                          height: 10,
-                          child: Container(
-                            color: Colors.red,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                          height: 10,
-                          child: Container(
-                            color: Colors.red,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                          height: 10,
-                          child: Container(
-                            color: Colors.red,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                          height: 10,
-                          child: Container(
-                            color: Colors.red,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                          height: 10,
-                          child: Container(
-                            color: Colors.red,
-                          ),
-                        ),
+
 
 
                       ],
