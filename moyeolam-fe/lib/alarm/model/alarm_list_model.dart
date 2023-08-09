@@ -9,35 +9,54 @@ import 'package:json_annotation/json_annotation.dart';
 part 'alarm_list_model.g.dart';
 
 @JsonSerializable()
-class AlarmListModel {
+class AlarmListResponseModel {
   final String code;
   final String message;
-  final Data data;
+  final AlarmListModel data;
 
-  AlarmListModel({
+  AlarmListResponseModel({
     required this.code,
     required this.message,
     required this.data,
   });
 
-  factory AlarmListModel.fromJson(Map<String, dynamic> json) => _$AlarmListModelFromJson(json);
+  // AlarmListModel copyWith({
+  //   String? code,
+  //   String? message,
+  //   Data? data,
+  // }) =>
+  //     AlarmListModel(
+  //       code: code ?? this.code,
+  //       message: message ?? this.message,
+  //       data: data ?? this.data,
+  //     );
 
-  Map<String, dynamic> toJson() => _$AlarmListModelToJson(this);
+  factory AlarmListResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$AlarmListResponseModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AlarmListResponseModelToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class Data {
+class AlarmListModel {
   final List<AlarmGroups> alarmGroups;
 
-  Data({
+  AlarmListModel({
     required this.alarmGroups,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
+  // Data copyWith({
+  //   List<AlarmGroups>? alarmGroups,
+  // }) =>
+  //     Data(
+  //       alarmGroups: alarmGroups ?? this.alarmGroups,
+  //     );
 
-  Map<String, dynamic> toJson() => _$DataToJson(this);
+  factory AlarmListModel.fromJson(Map<String, dynamic> json) =>
+      _$AlarmListModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AlarmListModelToJson(this);
 }
-
 
 @JsonSerializable()
 class AlarmGroups {
@@ -59,7 +78,8 @@ class AlarmGroups {
     required this.toggle,
   });
 
-  factory AlarmGroups.fromJson(Map<String, dynamic> json) => _$AlarmGroupsFromJson(json);
+  factory AlarmGroups.fromJson(Map<String, dynamic> json) =>
+      _$AlarmGroupsFromJson(json);
 
   Map<String, dynamic> toJson() => _$AlarmGroupsToJson(this);
 }
