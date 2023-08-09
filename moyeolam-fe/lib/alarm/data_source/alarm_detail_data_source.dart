@@ -15,6 +15,6 @@ abstract class AlarmListDataSource {
 
   @GET('/alarmgroups/{alarmGroupId}')
   Future<AlarmDetailResponseModel> getAlarmDetail(
-      @Path() int id,
+      @Path("alarmGroupId") int alarmGroupId,
       );
 }
