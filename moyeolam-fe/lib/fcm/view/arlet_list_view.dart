@@ -40,20 +40,32 @@ class _ArletListViewState extends State<ArletListView> {
     fetchData(); // API 요청 함수 호출
   }
 
-  // API 요청을 처리하고 데이터를 할당하는 함수
   Future<void> fetchData() async {
     try {
-      final response = await fcmapiService.getPosts(); // List<ApiArletModel> 형식의 데이터 가져오기
-      print('API 응답: $response'); // 응답 데이터 출력
-      final alerts = response; // 실제 데이터 추출
-      setState(() {
-        alertData = alerts; // 그대로 할당
-        print('Fetching data...');
-      });
+      final response = await fcmapiService.getPosts();
+      print('API 응답 데이터: $response');
+
+      if (response != null) {
+        final ApiArletModel alert = response; // response를 그대로 할당
+        setState(() {
+          alertData = [alert]; // 리스트에 하나의 alert 추가
+          print('데이터 가져오는 중...');
+        });
+      } else {
+        print('null값임!');
+        // 응답이 null인 경우 "알림없음"을 화면에 출력
+        setState(() {
+          alertData = []; // alertData를 비우고
+        });
+      }
+    } on DioError catch (e) {
+      print('DioError 발생: $e');
     } catch (e) {
-      print('에러입니다 여기에요!! 여기로 들어와요!!: $e');
+      print('기타 에러 발생~~~: $e');
     }
   }
+
+
 
   void showPopup(context, fromNickname, titleList, alertTypeList) {
     showDialog(
