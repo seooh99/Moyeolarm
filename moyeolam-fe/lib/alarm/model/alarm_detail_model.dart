@@ -143,3 +143,25 @@ class AlarmMember {
 
   Map<String, dynamic> toJson() => _$AlarmMemberToJson(this);
 }
+
+@JsonSerializable()
+class AlarmMember {
+  final int memberId;
+  final String nickname;
+  final String profileUrl;
+  final bool isHost;
+  final bool toggle;
+
+  AlarmMember({
+    required this.memberId,
+    required this.nickname,
+    required this.profileUrl,
+    required this.isHost,
+    required this.toggle,
+  });
+
+  factory AlarmMember.fromJson(Map<String, dynamic> json) =>
+      _$AlarmMemberFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AlarmMemberToJson(this);
+}
