@@ -75,23 +75,29 @@ public class MemberController {
 
     @GetMapping("/settings")
     public EnvelopeResponse<FindMemberSettingResponseDto> findMemberSetting(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        if (principalDetails == null) {
-            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
-        }
+//        if (principalDetails == null) {
+//            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+//        }
+        AuthenticatedMember member = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
 
         return EnvelopeResponse.<FindMemberSettingResponseDto>builder()
-                .data(memberService.findMemberSetting(principalDetails.getMember()))
+                .data(memberService.findMemberSetting(member.getMemberId()))
                 .build();
     }
 
     @PatchMapping("/settings/notification-toggle")
     public EnvelopeResponse<Boolean> toggleMemberNotification(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        if (principalDetails == null) {
-            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
-        }
+//        if (principalDetails == null) {
+//            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+//        }
+        AuthenticatedMember member = AuthenticatedMember.builder()
+                .memberId(1L)
+                .build();
 
         return EnvelopeResponse.<Boolean>builder()
-                .data(memberService.toggleMemberNotification(principalDetails.getMember()))
+                .data(memberService.toggleMemberNotification(member.getMemberId()))
                 .build();
     }
 }
