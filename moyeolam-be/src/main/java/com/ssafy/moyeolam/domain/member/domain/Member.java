@@ -61,11 +61,13 @@ public class Member extends BaseTimeEntity {
         this.memberToken.setRefreshToken(updateRefreshToken);
     }
 
-    public void setNickname(String nickname){
-        this.nickname=nickname;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public void setMemberToken(MemberToken memberToken) {this.memberToken = memberToken;}
+    public void setMemberToken(MemberToken memberToken) {
+        this.memberToken = memberToken;
+    }
 
     public void setNotificationToggle(Boolean notificationToggle) {
         this.notificationToggle = notificationToggle;
