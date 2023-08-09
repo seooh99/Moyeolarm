@@ -31,6 +31,8 @@ class RoomPage extends StatefulWidget {
 
 class _RoomPageState extends State<RoomPage> {
   Map<String, RemoteParticipant> remoteParticipants = {};
+  bool localPressed = false;
+  Map<String, bool> remotePressed = {};
   MediaDeviceInfo? input;
   bool isInside = false;
   late OpenViduClient _openvidu;
@@ -62,20 +64,36 @@ class _RoomPageState extends State<RoomPage> {
 
     _openvidu.on(OpenViduEvent.addStream, (params) {
       remoteParticipants = {..._openvidu.participants};
+      remotePressed = _openvidu.participants.keys.fold(<String, bool>{},(res, id){
+        res[id] = false;
+        return res;
+      });
       setState(() {});
     });
 
     _openvidu.on(OpenViduEvent.removeStream, (params) {
       remoteParticipants = {..._openvidu.participants};
+      remotePressed = _openvidu.participants.keys.fold(<String, bool>{},(res, id){
+        res[id] = false;
+        return res;
+      });
       setState(() {});
     });
 
     _openvidu.on(OpenViduEvent.publishVideo, (params) {
       remoteParticipants = {..._openvidu.participants};
+      remotePressed = _openvidu.participants.keys.fold(<String, bool>{},(res, id){
+        res[id] = false;
+        return res;
+      });
       setState(() {});
     });
     _openvidu.on(OpenViduEvent.publishAudio, (params) {
       remoteParticipants = {..._openvidu.participants};
+      remotePressed = _openvidu.participants.keys.fold(<String, bool>{},(res, id){
+        res[id] = false;
+        return res;
+      });
       setState(() {});
     });
     _openvidu.on(OpenViduEvent.updatedLocal, (params) {
@@ -83,10 +101,26 @@ class _RoomPageState extends State<RoomPage> {
       setState(() {});
     });
     _openvidu.on(OpenViduEvent.reciveMessage, (params) {
-      context.showMessageRecivedDialog(params["data"] ?? '');
+      String? data = params["data"];
+      String? type = params["type"];
+      String? from = params["from"];
+
+      if (remoteParticipants.containsKey(from)) {
+        remotePressed.update(from!, (value) => true);
+        setState(() {});
+        if (localPressed && !remotePressed.containsValue(false)) {
+          _onDisconnect();
+        }
+      }
+
+      // context.showMessageRecivedDialog(params["data"] ?? '');
     });
     _openvidu.on(OpenViduEvent.userUnpublished, (params) {
       remoteParticipants = {..._openvidu.participants};
+      remotePressed = _openvidu.participants.keys.fold(<String, bool>{},(res, id){
+        res[id] = false;
+        return res;
+      });
       setState(() {});
     });
 
@@ -120,6 +154,12 @@ class _RoomPageState extends State<RoomPage> {
     } catch (e) {
       logger.e(e);
     }
+  }
+
+  void _onDisconnect() async {
+    final nav = Navigator.of(context);
+    await _openvidu.disconnect();
+    nav.pop();
   }
 
   @override
@@ -164,6 +204,29 @@ class _RoomPageState extends State<RoomPage> {
                         top: false,
                         child: ControlsWidget(_openvidu, localParticipant!),
                       ),
+                    SizedBox(
+                      height: 100,
+                      child: ListView.builder(itemCount: math.max(0, remotePressed.length), itemBuilder: (BuildContext context, int index) {
+                        final pressed = remotePressed.values.elementAt(index);
+                        return Text("$pressed");
+                      }),
+                    ),
+                    SizedBox(
+                      height: 100,
+                      child: Text("$localPressed")
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        _openvidu.sendMessage(OvMessage.fromJson(<String, dynamic>{"data": "true", "type": "pressed"}));
+                        setState(() {
+                          localPressed = true;
+                        });
+                        if (!remotePressed.containsValue(false)) {
+                          _onDisconnect();
+                        }
+                      },
+                      child: const Text('CHECK'),
+                    ),
                   ],
                 ),
     );

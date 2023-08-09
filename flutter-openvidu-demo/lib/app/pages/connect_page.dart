@@ -65,7 +65,6 @@ class _ConnectPageState extends State<ConnectPage> {
         },
       );
       final statusCode = response.statusCode ?? 400;
-      logger.i(statusCode);
       if (statusCode >= 200 && statusCode < 300) {
         return true;
       }
