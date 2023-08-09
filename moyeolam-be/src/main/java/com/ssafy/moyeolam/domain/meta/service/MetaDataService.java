@@ -23,7 +23,6 @@ public class MetaDataService {
         this.putMetaData(MetaDataType.DAY_OF_WEEK.name(), DayOfWeek.class);
         this.putMetaData(MetaDataType.MATCH_STATUS.name(), MatchStatus.class);
         this.putMetaData(MetaDataType.OAUTH_TYPE.name(), OauthType.class);
-        this.putMetaData(MetaDataType.PUSH_ALERT_TYPE.name(), PushAlertType.class);
     }
 
     public MetaData getMetaData(String type, String name) {

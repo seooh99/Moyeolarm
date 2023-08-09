@@ -45,10 +45,19 @@ class _AuthViewState extends State<AuthView> {
                 auth.logOut();
               },
               child: Text("Logout")),
+          // Container(
+          //   child: FittedBox(
+          //     child: Image.asset('assets/images/moyeolam_logo.png'),
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
+          
           Center(
             child: Container(
-              child: Image.asset(
-                'assets/images/moyeolam.png',
+              child: FittedBox(
+                child: Image.asset(
+                  'assets/images/moyeolam.png',
+                ),
               ),
               // color: Colors.red,
               width: 240,
@@ -59,13 +68,7 @@ class _AuthViewState extends State<AuthView> {
             width: 200,
             height: 36,
           ),
-          const Text(
-            "모여람",
-            style: TextStyle(
-              color: FONT_COLOR,
-              fontSize: 72,
-            ),
-          ),
+          
           const SizedBox(
             width: 200,
             height: 80,

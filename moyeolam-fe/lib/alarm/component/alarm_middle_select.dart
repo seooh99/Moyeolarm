@@ -1,55 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:youngjun/common/const/colors.dart';
 
 class AlarmMiddleSelect extends StatelessWidget {
+static List<String> week = ["월 ", "화 ", "수 ", "목 ", "금 ", "토 ", "일 "];
   const AlarmMiddleSelect(
-      {required this.dayOfDay,
+      {required this.dayOfWeek,
       required this.alarmSound,
-      required this.certification,
+      required this.alarmMission,
       super.key});
 
-  final String dayOfDay;
+  final List<bool> dayOfWeek;
   final String alarmSound;
-  final String certification;
+  final String alarmMission;
+
+
+
+  // var dayOfDay = dayOfWeek[];
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(
-                '반복 요일',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                ),
-              ),
-              Row(
-                children: [
-                  Text(
-                    '월,수,금',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.arrow_right_sharp,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+
           SizedBox(height: 18,),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              SizedBox(
+                width: 60,
+              ),
               Text(
                 '알림음',
                 style: TextStyle(
@@ -57,15 +37,19 @@ class AlarmMiddleSelect extends StatelessWidget {
                   fontSize: 18,
                 ),
               ),
+              SizedBox(
+                width: 152,
+              ),
               Row(
                 children: [
                   Text(
-                    '희망♬',
+                    alarmSound,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
                     ),
                   ),
+                  SizedBox(width: 12,),
                   IconButton(
                     onPressed: () {},
                     icon: Icon(
@@ -79,8 +63,11 @@ class AlarmMiddleSelect extends StatelessWidget {
           ),
           SizedBox(height: 18,),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              SizedBox(
+                width: 60,
+              ),
               Text(
                 '인증방식',
                 style: TextStyle(
@@ -88,14 +75,20 @@ class AlarmMiddleSelect extends StatelessWidget {
                   fontSize: 18,
                 ),
               ),
+              SizedBox(
+                width: 136,
+              ),
               Row(
                 children: [
                   Text(
-                    '화상',
+                    alarmMission,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
                     ),
+                  ),
+                  SizedBox(
+                    width: 12,
                   ),
                   IconButton(
                     onPressed: () {},
@@ -109,6 +102,50 @@ class AlarmMiddleSelect extends StatelessWidget {
             ],
           ),
           SizedBox(height: 18,),
+          Row(mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 60,
+              ),
+              Text(
+                '반복 요일',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+              SizedBox(
+                width: 54,
+              ),
+              Row(
+
+                children: [
+                  Row(
+                    children: [
+                      for (int index=0;index<7;index++)
+                        Text(week[index],
+                          style: TextStyle(
+                            color: dayOfWeek[index]?MAIN_COLOR:Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.arrow_right_sharp,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        SizedBox(height: 18,),
         ],
       ),
     );

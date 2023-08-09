@@ -13,9 +13,7 @@ class AlarmList extends StatelessWidget {
     required this.minute,
     required this.toggle,
     required this.title,
-
   });
-
   final int alarmGroupId;
   final List<bool> weekday;
   final int hour;
@@ -29,49 +27,49 @@ class AlarmList extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 30),
           child: Card(
-            margin: const EdgeInsets.only(right: 10, left: 10),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          title,
-                          style: TextStyle(
-                            fontSize: 16.0,
+              margin: const EdgeInsets.only(right: 10, left: 10),
+              shape:
+                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            title,
+                            style: TextStyle(
+                              fontSize: 16.0,
+                            ),
                           ),
                         ),
-                      ),
-                      BtnToggle(
-                        value: toggle,
-                        onChanged: (bool value) {},
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        '$hour : $minute',
-                        style: TextStyle(
-                          fontSize: 34.0,
+                        BtnToggle(
+                          value: toggle,
+                          onChanged: (bool value) {},
                         ),
-                      ),
-                      SizedBox(
-                        width: 150,
-                      ),
-                      Text(
-                        'M T W T F S S',
-                      )
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          '$hour : $minute',
+                          style: TextStyle(
+                            fontSize: 34.0,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 150,
+                        ),
+                        Text(
+                          'M T W T F S S',
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
         ),
         // Padding(
         //     padding: EdgeInsets.symmetric(vertical: 10),
