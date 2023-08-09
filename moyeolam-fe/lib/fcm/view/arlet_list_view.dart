@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import '../model/arlet_service_model.dart';
 import '../service/fcm_api_service.dart';
 import 'package:youngjun/common/const/colors.dart';
+import 'dart:convert'; // import this
 
 class ListApp extends StatelessWidget {
   const ListApp({Key? key}) : super(key: key);
@@ -32,7 +33,7 @@ class _ArletListViewState extends State<ArletListView> {
   final dio = Dio();
   final fcmapiService = FcmApiService(Dio());
 
-  List<ApiArletModel> alertData = []; // 변경된 데이터 타입
+  ApiArletModel? alertData; // 단일 객체로 변경
 
   @override
   void initState() {
@@ -40,22 +41,25 @@ class _ArletListViewState extends State<ArletListView> {
     fetchData(); // API 요청 함수 호출
   }
 
+
   Future<void> fetchData() async {
     try {
       final response = await fcmapiService.getPosts();
       print('API 응답 데이터: $response');
-
+      // 데이터를 가져오는 부분에서 ApiArletModel으로 받아오고, 그 안에 있는 ApiArletData를 사용하는 예시
       if (response != null) {
-        final ApiArletModel alert = response; // response를 그대로 할당
-        setState(() {
-          alertData = [alert]; // 리스트에 하나의 alert 추가
-          print('데이터 가져오는 중...');
-        });
+        if (response is ApiArletModel) {
+          print('API 응답 데이터는 ApiArletModel 타입입니다.');
+          setState(() {
+            alertData = response;
+          });
+        } else {
+          print('API 응답 데이터가 ApiArletModel 타입이 아닙니다.');
+        }
       } else {
-        print('null값임!');
-        // 응답이 null인 경우 "알림없음"을 화면에 출력
+        print('response가 null입니다.');
         setState(() {
-          alertData = []; // alertData를 비우고
+          alertData = null;
         });
       }
     } on DioError catch (e) {
@@ -66,14 +70,16 @@ class _ArletListViewState extends State<ArletListView> {
   }
 
 
-
   void showPopup(context, fromNickname, titleList, alertTypeList) {
     showDialog(
       context: context,
       builder: (context) {
         return Dialog(
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.7,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width * 0.7,
             height: 380,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -120,6 +126,7 @@ class _ArletListViewState extends State<ArletListView> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,56 +139,78 @@ class _ArletListViewState extends State<ArletListView> {
       body: Container(
         color: LIST_BLACK_COLOR,
         padding: EdgeInsets.all(16),
-        child: ListView.builder(
-          itemCount: alertData.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                if (alertData.isEmpty) {
-                  return;
-                }
-                debugPrint(alertData[index].alertType);
-                showPopup(
-                  context,
-                  alertData[index].fromNickname,
-                  alertData[index].title,
-                  alertData[index].alertType,
-                );
-              },
-              child: Card(
-                color: Colors.black,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 20,
-                      height: 80,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${alertData[index].fromNickname} 님이 ${alertData[index].alertType} 하셨습니다',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
+        child: _buildAlertList(),
       ),
     );
+  }
+
+  Widget _buildAlertList() {
+    if (alertData?.data?.alerts != null) {
+      final List<ApiArletItem> alertItems = alertData!.data!.alerts!;
+
+      return ListView.builder(
+        itemCount: alertItems.length,
+        itemBuilder: (context, index) {
+          final ApiArletItem alertItem = alertItems[index];
+          final String? fromNickname = alertItem.fromNickname;
+          final String? alertType = alertItem.alertType;
+
+          return GestureDetector(
+            onTap: () {
+              if (fromNickname == null || alertType == null) {
+                return;
+              }
+
+              debugPrint(alertType);
+              showPopup(
+                context,
+                fromNickname,
+                alertItem.title,
+                alertType,
+              );
+            },
+            child: Card(
+              color: Colors.black,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 20,
+                    height: 80,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${fromNickname ?? "Unknown"} 님이 ${alertType ??
+                              "알림"} 하셨습니다',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    } else {
+      return Center(
+        child: Text(
+          '알림없음',
+          style: TextStyle(
+              fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+      );
+    }
   }
 }
