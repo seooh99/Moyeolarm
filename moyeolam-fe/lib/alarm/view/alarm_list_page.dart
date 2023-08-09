@@ -24,39 +24,54 @@ class MainAlarmList extends ConsumerWidget {
             data: (data) {
               if (data!=null && data.alarmGroups != null) {
                 var alarmGroups = data.alarmGroups;
-                return CustomScrollView(
-                  slivers: [
-                    SliverList.builder(
-                      itemCount: alarmGroups.length,
-                      itemBuilder: (context, index) {
-                        AlarmGroups alarmGroup = alarmGroups[index];
-                        return  AlarmList(
-                              alarmGroupId: alarmGroup.alarmGroupId!,
-                              hour: alarmGroup.hour!,
-                              minute: alarmGroup.minute!,
-                              toggle: alarmGroup.toggle!,
-                              title: alarmGroup.title!,
-                              weekday: [],
-                              onTap: ()=>{
-                                Navigator.pushNamed(context, "/alarm_group_detail")
-                              },
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      for (var alarmGroup in alarmGroups)
+                         AlarmList(
+                          alarmGroupId: alarmGroup.alarmGroupId!,
+                          hour: alarmGroup.hour!,
+                          minute: alarmGroup.minute!,
+                          toggle: alarmGroup.toggle!,
+                          title: alarmGroup.title!,
+                          weekday: [],
+                          onTap: ()=>{
+                          Navigator.pushNamed(context, "/alarm_group_detail")
 
-                            );
-                      },
-                    ),
-                    // Card(
-                    //   margin: EdgeInsets.only(left: 10, right: 10),
-                    //   shape: RoundedRectangleBorder(
-                    //     borderRadius: BorderRadius.circular(10),
-                    //     side: BorderSide(color: MAIN_COLOR),
-                    //   ),
-                    //   color: BACKGROUND_COLOR,
-                    //   child: Center(
-                    //     child: Text("+"),
-                    //   ),
-                    // ),
+                        },
+                         ),
+                      SizedBox(height: 30),
+                      GestureDetector(
+                        onTap: (){
+                          print("눌림");
+                        },
+                        child: Card(
+                            margin: EdgeInsets.only(left: 10, right: 10),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: const BorderSide(
+                                  style:BorderStyle.solid,
+                                  color: MAIN_COLOR,
+                              ),
+                            ),
 
-                  ],
+                            color: BACKGROUND_COLOR,
+                            child: const Center(
+                                heightFactor: 2,
+                                child: Text("+",
+                                style: TextStyle(
+                                  color: MAIN_COLOR,
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold,
+
+                                ),
+                                ),
+                              ),
+
+                          ),
+                      ),
+                    ],
+                  ),
                 );
               }else{
                 return Center(
@@ -80,3 +95,4 @@ class MainAlarmList extends ConsumerWidget {
 
   }
 }
+
