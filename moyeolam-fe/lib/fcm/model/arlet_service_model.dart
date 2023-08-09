@@ -5,10 +5,10 @@ part 'arlet_service_model.g.dart';
 @JsonSerializable()
 class ApiArletModel {
   String fromNickname;
-  String title;
-  bool time;
+  String? title;
+  DateTime? time;
   String alertType;
-  int createAt;
+  int? createAt;
 
   ApiArletModel({
     required this.fromNickname,
@@ -17,8 +17,13 @@ class ApiArletModel {
     required this.alertType,
     required this.createAt,
   });
-  factory ApiArletModel.fromJson(Map<String, dynamic> json) =>
-      _$ApiArletModelFromJson(json); // 추가
-
-  Map<String, dynamic> toJson() => _$ApiArletModelToJson(this); // 추가
+  factory ApiArletModel.fromJson(Map<String, dynamic> json) {
+    return ApiArletModel(
+      fromNickname: json['fromNickname'],
+      title: json['title'] ?? '',
+      alertType: json['alertType'],
+      time: null,
+      createAt: null,
+    );
+  }
 }

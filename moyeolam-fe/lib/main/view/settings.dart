@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/button/btn_toggle.dart';
+import 'package:youngjun/common/const/address_config.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../../common/confirm.dart';
 import '../../common/layout/main_nav.dart';
-
+import '../../fcm/api/fcm_api.dart';
 
 
 class Settings extends StatelessWidget {
@@ -35,11 +37,12 @@ class Settings extends StatelessWidget {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return CircularProgressIndicator();
                       } else {
+                        bool currentStatus = snapshot.data ?? false;
                         return BtnToggle(
-                          value: snapshot.data ?? false,
+                          value: currentStatus,
                           onChanged: (bool newValue) {
                             print('바뀌었다!');
-                            updateNotificationStatus(newValue);
+                            updateNotificationStatus(!currentStatus); // 토글 동작 실행
                           },
                         );
                       }
@@ -117,20 +120,54 @@ class Settings extends StatelessWidget {
     );
   }
 
-  // 서버에서 현재 알림 상태를 가져오는 함수
-  Future<bool> fetchNotificationStatus() async {
-    var dio = Dio();
-    var response = await dio.get('YOUR_API_ENDPOINT');
-    return response.data['status']; // API 응답에 따라 적절히 수정해야 합니다.
+
+  // FCM 알림을 처리하는 함수
+  Future<void> handleFCMNotification(RemoteMessage? message) async {
+    bool notificationStatus = await fetchNotificationStatus();
+    // 다른 파일에 있는 handleMessage 함수 호출 부분
+    handleMessage(message, notificationStatus);
+
+    if (notificationStatus) {
+      print('FCM 알림을 처리');
+
+    } else {
+      // 알림 설정이 비활성화된 상태일 때
+      print('알림 설정이 비활성화되어 알림을 무시합니다.');
+    }
   }
 
 // 서버에 새로운 알림 상태를 업데이트하는 함수
   void updateNotificationStatus(bool status) async {
     var dio = Dio();
-    await dio.post('YOUR_API_ENDPOINT', data: {'status': status});
-    // API 엔드포인트와 전송하는 데이터는 실제 API에 맞게 조정해야 합니다.
+    dio.options.baseUrl = BASE_URL;
+    final alarmGroupId = 'API 요청한 ID!!! 사용 -> 뭔데~~~~~~~~';
+    try {
+      await dio.post('/alarmgroups/$alarmGroupId/toggle', data: {'status': status});
+      print('알림 설정이 업데이트되었습니다.');
+      // 토글된 상태로 변경한 후 다시 알림 상태를 가져와서 화면을 업데이트
+      fetchAndRefreshNotificationStatus();
+      RemoteMessage tempMessage = RemoteMessage(
+        notification: RemoteNotification(
+          title: 'Temp',
+          body: 'FCM notification',
+        ),
+      );
+
+      // FCM 알림 처리 함수를 호출할 때 임의의 RemoteMessage 객체를 넘겨줍니다.
+      handleFCMNotification(tempMessage);
+    } catch (e) {
+      print('알림 설정 업데이트 오류: $e');
+    }
   }
 
+
+  // 알림 상태를 가져와서 화면을 업데이트
+  void fetchAndRefreshNotificationStatus() {
+    // 토글한 후 알림 상태를 다시 가져오고 화면을 업데이트합니다.
+    fetchNotificationStatus().then((status) {
+      // 화면 업데이트 관련
+    });
+  }
 
 
   Widget buildText(String text, BuildContext context) {
