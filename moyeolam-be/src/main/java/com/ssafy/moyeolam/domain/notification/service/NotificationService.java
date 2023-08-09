@@ -42,7 +42,8 @@ public class NotificationService {
         try {
             firebaseMessaging.send(message);
         } catch (FirebaseMessagingException e) {
-            throw new NotificationException(NotificationErrorInfo.NOTIFICATION_SEND_ERROR);
+            log.info(NotificationErrorInfo.NOTIFICATION_SEND_ERROR.getMessage());
+//            throw new NotificationException(NotificationErrorInfo.NOTIFICATION_SEND_ERROR);
         }
     }
 }
