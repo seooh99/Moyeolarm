@@ -56,6 +56,10 @@ dependencies:
   scroll_to_hide_bottom_navigation_bar: ^0.0.1
   flutter_spinkit: ^5.2.0
 
+  permission_handler: ^10.2.0
+  openvidu_client:
+    path: ./openvidu_client
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
