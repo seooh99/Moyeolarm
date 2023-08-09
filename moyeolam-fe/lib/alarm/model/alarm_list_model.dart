@@ -13,12 +13,12 @@ part 'alarm_list_model.g.dart';
 // String alarmListModelToJson(AlarmListModel data) => json.encode(data.toJson());
 
 @JsonSerializable()
-class AlarmListModel {
+class AlarmListResponseModel {
   final String code;
   final String message;
-  final Data data;
+  final AlarmListModel data;
 
-  AlarmListModel({
+  AlarmListResponseModel({
     required this.code,
     required this.message,
     required this.data,
@@ -35,16 +35,16 @@ class AlarmListModel {
   //       data: data ?? this.data,
   //     );
 
-  factory AlarmListModel.fromJson(Map<String, dynamic> json) => _$AlarmListModelFromJson(json);
+  factory AlarmListResponseModel.fromJson(Map<String, dynamic> json) => _$AlarmListResponseModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$AlarmListModelToJson(this);
+  Map<String, dynamic> toJson() => _$AlarmListResponseModelToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class Data {
+class AlarmListModel {
   final List<AlarmGroups> alarmGroups;
 
-  Data({
+  AlarmListModel({
     required this.alarmGroups,
   });
 
@@ -55,9 +55,9 @@ class Data {
   //       alarmGroups: alarmGroups ?? this.alarmGroups,
   //     );
 
-  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
+  factory AlarmListModel.fromJson(Map<String, dynamic> json) => _$AlarmListModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$DataToJson(this);
+  Map<String, dynamic> toJson() => _$AlarmListModelToJson(this);
 }
 
 

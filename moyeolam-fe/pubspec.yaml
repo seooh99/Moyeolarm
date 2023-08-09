@@ -54,6 +54,7 @@ dependencies:
   firebase_messaging: ^14.6.5
   flutter_local_notifications: ^15.1.0+1
   scroll_to_hide_bottom_navigation_bar: ^0.0.1
+  flutter_spinkit: ^5.2.0
 
 dev_dependencies:
   flutter_test:
