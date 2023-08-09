@@ -8,8 +8,6 @@ import com.ssafy.moyeolam.domain.member.exception.MemberException;
 import com.ssafy.moyeolam.domain.member.service.MemberService;
 import com.ssafy.moyeolam.global.common.response.EnvelopeResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -76,13 +74,24 @@ public class MemberController {
     }
 
     @GetMapping("/settings")
-    public EnvelopeResponse findMemberSetting(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public EnvelopeResponse<FindMemberSettingResponseDto> findMemberSetting(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         if (principalDetails == null) {
             throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
         }
 
-        return EnvelopeResponse.builder()
+        return EnvelopeResponse.<FindMemberSettingResponseDto>builder()
                 .data(memberService.findMemberSetting(principalDetails.getMember()))
+                .build();
+    }
+
+    @PatchMapping("/settings/notification-toggle")
+    public EnvelopeResponse<Boolean> toggleMemberNotification(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if (principalDetails == null) {
+            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+        }
+
+        return EnvelopeResponse.<Boolean>builder()
+                .data(memberService.toggleMemberNotification(principalDetails.getMember()))
                 .build();
     }
 }

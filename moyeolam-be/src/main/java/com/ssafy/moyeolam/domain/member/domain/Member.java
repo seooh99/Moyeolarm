@@ -64,4 +64,8 @@ public class Member extends BaseTimeEntity {
     }
 
     public void setMemberToken(MemberToken memberToken) {this.memberToken = memberToken;}
+
+    public void setNotificationToggle(Boolean notificationToggle) {
+        this.notificationToggle = notificationToggle;
+    }
 }

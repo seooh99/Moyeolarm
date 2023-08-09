@@ -107,9 +107,17 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public FindMemberSettingResponseDto findMemberSetting(Member loginMember) {
-        return new FindMemberSettingResponseDto(loginMember.getNotificationToggle());
+    public FindMemberSettingResponseDto findMemberSetting(Member authenticationMember) {
+        return new FindMemberSettingResponseDto(authenticationMember.getNotificationToggle());
     }
 
 
+    @Transactional
+    public Boolean toggleMemberNotification(Member authenticationMember) {
+        Member loginMember = memberRepository.findById(authenticationMember.getId())
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+        loginMember.setNotificationToggle(!loginMember.getNotificationToggle());
+
+        return loginMember.getNotificationToggle();
+    }
 }
