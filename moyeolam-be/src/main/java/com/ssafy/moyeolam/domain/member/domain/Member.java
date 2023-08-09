@@ -38,6 +38,10 @@ public class Member extends BaseTimeEntity {
     @Column
     private String nickname;
 
+    @Builder.Default
+    @Column
+    private Boolean notificationToggle = Boolean.TRUE;
+
     @OneToMany(mappedBy = "member")
     private List<Friend> friends = new ArrayList<>();
 
