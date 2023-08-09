@@ -90,12 +90,10 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public SearchMembereResponseDto searchMember(String keyword) {
+        Member searchMember = memberRepository.findByNickname(keyword)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER_BY_NICKNAME));
 
-        List<Member> members = memberRepository.findByNicknameLike("%" + keyword + "%");
-
-        log.info(members.toString());
-
-        return SearchMembereResponseDto.of(members);
+        return SearchMembereResponseDto.from(searchMember);
     }
 
     @Transactional
