@@ -42,12 +42,14 @@ public class Member extends BaseTimeEntity {
     @Column
     private Boolean notificationToggle = Boolean.TRUE;
 
+    @Builder.Default
     @OneToMany(mappedBy = "member")
     private List<Friend> friends = new ArrayList<>();
 
     @OneToOne(mappedBy = "member")
     private ProfileImage profileImage;
 
+    @Builder.Default
     @OneToMany(mappedBy = "member")
     private Set<FcmToken> fcmTokens = new HashSet<>();
 
