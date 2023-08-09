@@ -8,7 +8,7 @@ part 'alarm_detail_model.g.dart';
 class AlarmDetailResponseModel {
   final String code;
   final String message;
-  final AlarmDetailModel data;
+  final AlarmDetailData data;
 
   AlarmDetailResponseModel({
     required this.code,
@@ -20,39 +20,49 @@ class AlarmDetailResponseModel {
       _$AlarmDetailResponseModelFromJson(json);
   Map<String, dynamic> toJson() => _$AlarmDetailResponseModelToJson(this);
 }
-
 @JsonSerializable()
-@immutable
-class AlarmDetailModel {
-  final int alarmGroupId;
-  final String title;
-  final int hour;
-  final int minute;
-  final List<bool> dayOfWeek;
-  final String alarmSound;
-  final String alarmMission;
-  final bool isHost;
-  final List<AlarmMember> members;
-  // final String ampm;
-
-  factory AlarmGroupModel.fromJson(Map<String, dynamic> json) =>
-      _$AlarmGroupModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$AlarmGroupModelToJson(this);
-}
-
-@JsonSerializable()
-class Data {
-  AlarmGroup alarmGroup;
-
-  Data({
+class AlarmDetailData{
+  final AlarmGroup alarmGroup;
+  AlarmDetailData({
     required this.alarmGroup,
-  });
+});
+  factory AlarmDetailData.fromJson(Map<String, dynamic> json) =>
+      _$AlarmDetailDataFromJson(json);
 
-  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
-
-  Map<String, dynamic> toJson() => _$DataToJson(this);
+  Map<String, dynamic> toJson() => _$AlarmDetailDataToJson(this);
 }
+
+// @JsonSerializable()
+// class AlarmDetailModel {
+//   final int alarmGroupId;
+//   final String title;
+//   final int hour;
+//   final int minute;
+//   final List<bool> dayOfWeek;
+//   final String alarmSound;
+//   final String alarmMission;
+//   final bool isHost;
+//   final List<AlarmMember?> members;
+//   // final String ampm;
+//
+//   AlarmDetailModel({
+//     required this.alarmGroupId,
+//     required this.title,
+//     required this.hour,
+//     required this.minute,
+//     required this.dayOfWeek,
+//     required this.alarmSound,
+//     required this.alarmMission,
+//     required this.isHost,
+//     required this.members,
+// });
+//
+//   factory AlarmDetailModel.fromJson(Map<String, dynamic> json) =>
+//       _$AlarmDetailModelFromJson(json);
+//
+//   Map<String, dynamic> toJson() => _$AlarmDetailModelToJson(this);
+// }
+
 
 @JsonSerializable()
 class AlarmGroup {
@@ -65,7 +75,7 @@ class AlarmGroup {
   String alarmMission;
   bool isLock;
   bool isHost;
-  List<Member>? members;
+  List<AlarmMember> members;
 
   AlarmGroup({
     required this.alarmGroupId,
@@ -76,6 +86,7 @@ class AlarmGroup {
     required this.alarmSound,
     required this.alarmMission,
     required this.isHost,
+    required this.isLock,
     required this.members,
   });
 
@@ -90,11 +101,6 @@ class AlarmGroup {
   //   );
   // }
 
-  factory AlarmDetailModel.fromJson(Map<String, dynamic> json) =>
-      _$AlarmDetailModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$AlarmDetailModelToJson(this);
-
   factory AlarmGroup.fromJson(Map<String, dynamic> json) =>
       _$AlarmGroupFromJson(json);
 
@@ -102,53 +108,10 @@ class AlarmGroup {
 }
 
 @JsonSerializable()
-class Member {
-  int memberId;
-  String nickname;
-  String? profileImageUrl;
-  bool isHost;
-  bool toggle;
-
-  Member({
-    required this.memberId,
-    required this.nickname,
-    this.profileImageUrl,
-    required this.isHost,
-    required this.toggle,
-  });
-
-  factory Member.fromJson(Map<String, dynamic> json) => _$MemberFromJson(json);
-
-  Map<String, dynamic> toJson() => _$MemberToJson(this);
-}
-
-@JsonSerializable()
 class AlarmMember {
   final int memberId;
   final String nickname;
-  final String profileUrl;
-  final bool isHost;
-  final bool toggle;
-
-  AlarmMember({
-    required this.memberId,
-    required this.nickname,
-    required this.profileUrl,
-    required this.isHost,
-    required this.toggle,
-  });
-
-  factory AlarmMember.fromJson(Map<String, dynamic> json) =>
-      _$AlarmMemberFromJson(json);
-
-  Map<String, dynamic> toJson() => _$AlarmMemberToJson(this);
-}
-
-@JsonSerializable()
-class AlarmMember {
-  final int memberId;
-  final String nickname;
-  final String profileUrl;
+  final String? profileUrl;
   final bool isHost;
   final bool toggle;
 

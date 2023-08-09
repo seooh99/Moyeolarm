@@ -13,9 +13,7 @@ class AlarmList extends StatelessWidget {
     required this.minute,
     required this.toggle,
     required this.title,
-    required this.onTap,
   });
-  final GestureTapCallback onTap;
   final int alarmGroupId;
   final List<bool> weekday;
   final int hour;
@@ -28,9 +26,7 @@ class AlarmList extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 30),
-          child: GestureDetector(
-            onTap: onTap,
-            child: Card(
+          child: Card(
               margin: const EdgeInsets.only(right: 10, left: 10),
               shape:
                   RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -74,7 +70,6 @@ class AlarmList extends StatelessWidget {
                 ),
               ),
             ),
-          ),
         ),
         // Padding(
         //     padding: EdgeInsets.symmetric(vertical: 10),

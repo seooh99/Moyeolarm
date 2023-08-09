@@ -32,7 +32,8 @@ class ClockState extends State<Clock> {
           color: BACKGROUND_COLOR,
           height: 150,
           child: CupertinoDatePicker(
-            backgroundColor: Colors.white,
+
+            backgroundColor: BACKGROUND_COLOR,
           initialDateTime: widget.timeSet,
           mode: CupertinoDatePickerMode.time,
           // use24hFormat: true,
