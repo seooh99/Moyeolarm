@@ -14,5 +14,5 @@ abstract class FcmApiService {
   factory FcmApiService(Dio dio, {String baseUrl}) = _FcmApiService;
 
   @GET('/alerts')
-  Future<List<ApiArletModel>> getPosts();
+  Future<ApiArletModel?> getPosts();
 }
