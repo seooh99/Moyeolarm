@@ -54,6 +54,7 @@ dependencies:
   firebase_messaging: ^14.6.5
   flutter_local_notifications: ^15.1.0+1
   scroll_to_hide_bottom_navigation_bar: ^0.0.1
+  flutter_spinkit: ^5.2.0
 
 dev_dependencies:
   flutter_test:
@@ -83,6 +84,7 @@ flutter:
     - assets/images/kakao_login_medium_wide.png
     - assets/images/moyeolam.png
     - assets/gif/moyeolam.gif
+    - assets/images/moyeolam_logo.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
