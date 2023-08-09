@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 
 
 class BtnSaveUpdate extends StatelessWidget {
-  const BtnSaveUpdate({super.key, required this.onPressed,});
-
+  const BtnSaveUpdate({
+    super.key,
+    required this.onPressed,
+    required this.text,
+  });
+  final String text;
   final VoidCallback onPressed;
 
   @override
@@ -17,8 +21,8 @@ class BtnSaveUpdate extends StatelessWidget {
               ),
             ),
             onPressed: onPressed,
-            child: const Text('저장',
-              style: TextStyle(
+            child: Text(text,
+              style: const TextStyle(
                   fontSize: 18,
                   color:Colors.purple,
                 ),

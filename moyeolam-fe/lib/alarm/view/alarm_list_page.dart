@@ -1,89 +1,71 @@
-import 'dart:convert';
-import 'dart:math';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:youngjun/alarm/component/alarm_list.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:youngjun/common/const/colors.dart';
-import 'package:youngjun/common/layout/main_nav.dart';
-import 'package:youngjun/common/layout/title_bar.dart';
-
-import '../../common/const/address_config.dart';
+import '../component/alarm_list.dart';
 import '../model/alarm_list_model.dart';
-import '../repository/alarm_list_repository.dart';
-import '../provider/alarm_list_provider.dart';
+import '../viewmodel/alarm_list_view_model.dart';
 
 class MainAlarmList extends ConsumerWidget {
   final ScrollController controller = ScrollController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final HideNavBar hiding = HideNavBar();
+    // final HideNavBar hiding = HideNavBar();
 
-    AsyncValue<List<AlarmGroups>?> alarmgroups = ref.watch(alarmListProvider);
-    print("테스트");
+    AsyncValue<AlarmListModel> alarmgroups = ref.watch(alarmListProvider);
 
-    return Scaffold(
-      backgroundColor: BACKGROUND_COLOR,
-      appBar: TitleBar(
-        appBar: AppBar(),
-        title: '모여람',
-        actions: [Icon(Icons.alarm)],
-        leading: null,
-      ),
-      body: alarmgroups.when(
-          data: (data) {
-            if (data != null) {
-              return CustomScrollView(
-                controller: hiding.controller,
-                slivers: [
-                  SliverList.builder(
-                    itemCount: data.length,
-                    itemBuilder: (context, index) {
-                      AlarmGroups alarmGroup = data[index];
-                      return AlarmList(
-                        alarmGroupId: alarmGroup.alarmGroupId!,
-                        hour: alarmGroup.hour!,
-                        minute: alarmGroup.minute!,
-                        toggle: alarmGroup.toggle!,
-                        title: alarmGroup.title!,
-                      );
-                    },
-                  ),
-                ],
-              // return ListView.builder(
-              //   itemCount: data.length,
-              //
-              //   itemBuilder: (context, index) {
-              //     AlarmGroups alarmGroup = data[index];
-              //
-              //     // Navigator.pushNamed(context, arguments: data[index].alarmGroupId, "/main_alarm_list");
-              //     return AlarmList(
-              //       alarmGroupId: alarmGroup.alarmGroupId!,
-              //       hour: alarmGroup.hour!,
-              //       minute: alarmGroup.minute!,
-              //       toggle: alarmGroup.toggle!,
-              //       title: alarmGroup.title!,
-              //     );
-              //   },
-              );
-            }
-          },
-          error: (error, stackTrace) {},
-          loading: () {}),
-      bottomSheet: ValueListenableBuilder(
-        valueListenable: hiding.visible,
-        builder: (context, bool value, child) => AnimatedContainer(
-          duration: Duration(milliseconds: 500),
-          height: value ? kBottomNavigationBarHeight : 0.0,
-          child: Wrap(
-            children: <Widget>[
-              MainNav(),
+    return Padding(
+      padding: EdgeInsets.only(bottom: 68),
+      child: alarmgroups.when(data: (data) {
+        if (data != null && data.alarmGroups != null) {
+          var alarmGroups = data.alarmGroups;
+          return CustomScrollView(
+            slivers: [
+              SliverList.builder(
+                itemCount: alarmGroups.length,
+                itemBuilder: (context, index) {
+                  AlarmGroups alarmGroup = alarmGroups[index];
+                  return AlarmList(
+                    alarmGroupId: alarmGroup.alarmGroupId!,
+                    hour: alarmGroup.hour!,
+                    minute: alarmGroup.minute!,
+                    toggle: alarmGroup.toggle!,
+                    title: alarmGroup.title!,
+                    weekday: [],
+                    onTap: () =>
+                        {Navigator.pushNamed(context, "/alarm_group_detail")},
+                  );
+                },
+              ),
+              // Card(
+              //   margin: EdgeInsets.only(left: 10, right: 10),
+              //   shape: RoundedRectangleBorder(
+              //     borderRadius: BorderRadius.circular(10),
+              //     side: BorderSide(color: MAIN_COLOR),
+              //   ),
+              //   color: BACKGROUND_COLOR,
+              //   child: Center(
+              //     child: Text("+"),
+              //   ),
+              // ),
             ],
-          ),
-        ),
-      ),
+          );
+        } else {
+          return Center(
+            child: Text("값이 없습니다."),
+          );
+        }
+      }, error: (error, stackTrace) {
+        return Text("$error");
+      }, loading: () {
+        return SpinKitFadingCube(
+          // FadingCube 모양 사용
+          color: Colors.blue, // 색상 설정
+          size: 50.0, // 크기 설정
+          duration: Duration(seconds: 2), //속도 설정
+        );
+      }),
     );
   }
 }
