@@ -50,9 +50,11 @@ public class AlarmGroup extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member hostMember;
 
+    @Builder.Default
     @OneToMany(mappedBy = "alarmGroup")
     private List<AlarmDay> alarmDays = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "alarmGroup")
     private List<AlarmGroupMember> alarmGroupMembers = new ArrayList<>();
 
