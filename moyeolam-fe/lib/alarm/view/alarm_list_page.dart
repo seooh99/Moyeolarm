@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:youngjun/alarm/viewmodel/alarm_detail_view_model.dart';
 import 'package:youngjun/common/const/colors.dart';
 import '../component/alarm_list.dart';
 import '../model/alarm_list_model.dart';
 import '../viewmodel/alarm_list_view_model.dart';
+import 'alarm_detail_page.dart';
 
 class MainAlarmList extends ConsumerWidget {
   final ScrollController controller = ScrollController();
@@ -24,15 +26,23 @@ class MainAlarmList extends ConsumerWidget {
             child: Column(
               children: [
                 for (var alarmGroup in alarmGroups)
-                  AlarmList(
-                    alarmGroupId: alarmGroup.alarmGroupId!,
-                    hour: alarmGroup.hour!,
-                    minute: alarmGroup.minute!,
-                    toggle: alarmGroup.toggle!,
-                    title: alarmGroup.title!,
-                    weekday: [],
-                    onTap: () =>
-                        {Navigator.pushNamed(context, "/alarm_group_detail")},
+                  GestureDetector(
+                    onTap: () async{
+                      // Navigator.of(context).pushNamed("/alarm_group_detail ", arguments: alarmGroup.alarmGroupId);
+                      var response = await AlarmListDetailViewModel().getAlarmListDetail(alarmGroup.alarmGroupId);
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => AlarmDetailScreen(alarmGroup: response,)),
+
+                      );
+                    },
+                    child: AlarmList(
+                      alarmGroupId: alarmGroup.alarmGroupId!,
+                      hour: alarmGroup.hour!,
+                      minute: alarmGroup.minute!,
+                      toggle: alarmGroup.toggle!,
+                      title: alarmGroup.title!,
+                      weekday: [],
+                    ),
                   ),
                 SizedBox(height: 30),
                 GestureDetector(
