@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:youngjun/alarm/view/alarm_add_page.dart';
 import 'package:youngjun/alarm/viewmodel/alarm_detail_view_model.dart';
 import 'package:youngjun/common/const/colors.dart';
+import '../../common/confirm.dart';
 import '../component/alarm_list.dart';
 import '../model/alarm_list_model.dart';
 import '../viewmodel/alarm_list_view_model.dart';
@@ -19,7 +20,7 @@ class MainAlarmList extends ConsumerStatefulWidget {
 }
 
 class _MainAlarmListState extends ConsumerState<MainAlarmList> {
-
+  AlarmListViewModel _alarmListViewModel = AlarmListViewModel();
   @override
   Widget build(BuildContext context) {
     AsyncValue<AlarmListModel> alarmgroups = ref.watch(alarmListProvider);
@@ -38,6 +39,42 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                   children: [
                     for (var alarmGroup in alarmGroups)
                       GestureDetector(
+                        onLongPress: ()async{
+                          print("${alarmGroup.alarmGroupId}");
+                          showDialog(
+                              context: context,
+                              builder: (context) => ConfirmDialog(
+                                  cancelOnPressed: (){
+                                    Navigator.pop(context);
+                                  }, 
+                                  okOnPressed:  () async {
+                                    await _alarmListViewModel.deleteAlarmGroup(alarmGroup.alarmGroupId);
+                                    ref.refresh(alarmListProvider);
+                                    Navigator.pop(context);
+                                  },
+                                  title: "삭제요청", 
+                                  content: "삭제?", 
+                                  okTitle: "삭제", 
+                                  cancelTitle: "취소",
+                              ),
+                              // builder: (context) => ConfirmDialog(
+                              //   title: alarmGroup.isHost?"알람 그룹 삭제":"알람 그룹 나가기",
+                              //   content: alarmGroup.isHost?
+                              //   "알람 그룹을 삭제하시겠습니까?":
+                              //   "알람 그룹을 나가시겠습니까?",
+                              //   okTitle: "삭제",
+                              //   cancelTitle: "취소",
+                              //   okOnPressed: () async {
+                              //     await _alarmListViewModel.deleteAlarmGroup(alarmGroup.alarmGroupId);
+                              //     ref.refresh(alarmListProvider);
+                              //     Navigator.pop(context);
+                              //   },
+                              //   cancelOnPressed: (){
+                              //     Navigator.pop(context);
+                              //   },
+                              // ),
+                          );
+                        },
                         onTap: () async{
                           // Navigator.of(context).pushNamed("/alarm_group_detail ", arguments: alarmGroup.alarmGroupId);
                           var response = await AlarmListDetailViewModel().getAlarmListDetail(alarmGroup.alarmGroupId);
@@ -98,7 +135,12 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
             );
           }
         }, error: (error, stackTrace) {
-          return Text("$error");
+          return SpinKitFadingCube(
+            // FadingCube 모양 사용
+            color: Colors.blue, // 색상 설정
+            size: 50.0, // 크기 설정
+            duration: Duration(seconds: 2), //속도 설정
+          );
         }, loading: () {
           return SpinKitFadingCube(
             // FadingCube 모양 사용
