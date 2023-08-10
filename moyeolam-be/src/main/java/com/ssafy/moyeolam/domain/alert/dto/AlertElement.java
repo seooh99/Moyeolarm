@@ -9,6 +9,9 @@ import java.time.LocalTime;
 @Getter
 @Builder
 public class AlertElement {
+    private Long alarmGroupId;
+    private Long friendRequestId;
+
     private String fromNickname;
 
     @JsonFormat(pattern = "HH:mm")

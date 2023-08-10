@@ -6,6 +6,10 @@ class TextFieldbox extends StatefulWidget {
   final Color? colors;
   final Widget? suffixIcon;
   final Color? suffixIconColor;
+  final TextEditingController? controller;
+  final String? hint;
+
+
 
 
 
@@ -15,6 +19,10 @@ class TextFieldbox extends StatefulWidget {
     this.colors,
     this.suffixIcon,
     this.suffixIconColor,
+    this.controller,
+    this.hint,
+
+
 
 
   });
@@ -61,11 +69,14 @@ class _TextFieldboxState extends State<TextFieldbox> {
             width: 3.0,
           ),
         ),
-        labelText: '제목입력',
+        labelText: '입력하세요',
         labelStyle: TextStyle(
           // label의 텍스트 스타일 설정
           color: MAIN_COLOR,
         ),
+        suffixIcon: IconButton(onPressed: (){}, icon: Icon(Icons.search_outlined)),
+        suffixIconColor: Colors.white,
+
         alignLabelWithHint: true, // label을 TextField의 가운데로 이동
       ),
     );

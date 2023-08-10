@@ -20,13 +20,13 @@ abstract class UserDataSource {
   );
 
   @POST("/member/nickname")
-  Future<NicknameResposne> updateNickname(
+  Future<NicknameResponse> updateNickname(
     @Body() NicknamePost nickname,
     @Header('Authorization') String token,
   );
 
   @DELETE("/member")
-  Future<NicknameResposne> signOut(
+  Future<NicknameResponse> signOut(
     @Header('Authorization') String token,
   );
 }

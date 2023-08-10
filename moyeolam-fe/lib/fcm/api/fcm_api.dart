@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:youngjun/main.dart';
 
+import '../../common/const/address_config.dart';
 import '../view/arlet_list_view.dart';
 
 import 'package:youngjun/main/view/settings.dart';
@@ -15,15 +16,18 @@ import 'package:dio/dio.dart';
 
 Future<bool> fetchNotificationStatus() async {
   final dio = Dio();
+  const ApiBaseUrl = BASE_URL; // 여기에 실제 API 주소를 지정하세요
   try {
-    final response = await dio.get('API 주소');
+    final response = await dio.get('$ApiBaseUrl/alarmgroups/{alarmGroupId}/toggle'); // 여기에 실제 API 엔드포인트를 지정하세요
     if (response.statusCode == 200) {
       return response.data['notificationStatus'];
+      print('200ok잘됩니다~~');
     } else {
       throw Exception('Failed to fetch notification status');
+      print('fetch실패');
     }
   } catch (error) {
-    print('Error fetching notification status: $error');
+    print('무슨오류임: $error');
     throw Exception('Failed to fetch notification status');
   }
 }

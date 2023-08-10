@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/textfield_bar.dart';
+import 'package:youngjun/main/view/main_page.dart';
 import 'package:youngjun/user/viewmodel/set_nickname_view_model.dart';
 
 class SetNickname extends StatefulWidget {
@@ -61,7 +62,7 @@ class _SetNicknameState extends State<SetNickname> {
                     });
                     print("$overlaped 오버랩");
                   }else if(code == "200"){
-                    Navigator.pushNamed(context, "/main_alarm_list");
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>MainPage()));
                   }
                   //     .then((value) {
                   //         print("$value 닉네임 모델");

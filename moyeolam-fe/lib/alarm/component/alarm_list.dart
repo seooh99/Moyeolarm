@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import '../../common/button/btn_toggle.dart';
 import '../../common/const/colors.dart';
 
+List<String> week = ["M", "T", "W", "T", "F", "S", "S"];
+
 class AlarmList extends StatelessWidget {
 
   const AlarmList({super.key,
 
     required this.alarmGroupId,
-    this.weekday = const [true, true, true, true, true, true, true],
+    required this.weekday,
     required this.hour,
     required this.minute,
     required this.toggle,
@@ -53,6 +55,12 @@ class AlarmList extends StatelessWidget {
                     Row(
                       children: [
                         Text(
+                          hour.toString().length == 1 && minute.toString().length == 2?
+                          '0$hour : $minute':
+                          minute.toString().length == 2 && minute.toString().length == 1?
+                          '$hour : 0$minute':
+                          minute.toString().length == 1 && minute.toString().length == 1?
+                          '0$hour : 0$minute':
                           '$hour : $minute',
                           style: TextStyle(
                             fontSize: 34.0,
@@ -61,8 +69,22 @@ class AlarmList extends StatelessWidget {
                         SizedBox(
                           width: 150,
                         ),
-                        Text(
-                          'M T W T F S S',
+                        Row(
+                          children: [
+                            for(int index = 0;index < 7; index ++)
+
+                              Padding(
+                                padding: const EdgeInsets.only(left: 2,right: 2),
+                                child: Text(
+                                  week[index],
+                                  style: TextStyle(
+                                      color: weekday[index]?MAIN_COLOR:Colors.grey,
+                                    fontSize:12,
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                              )
+                          ],
                         )
                       ],
                     ),
