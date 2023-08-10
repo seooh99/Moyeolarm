@@ -19,4 +19,9 @@ abstract class FriendsRepository {
       );
   @GET('/friends/search')
   Future<FriendsSearchModel> searchFriends(@Query('keyword') String keyword);
+
+  @DELETE('/friends/{myFriendId}')
+  Future<void> deleteFriend(@Path() int myFriendId);
+
 }
+
