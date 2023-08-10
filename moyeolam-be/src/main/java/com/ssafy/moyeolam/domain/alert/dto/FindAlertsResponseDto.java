@@ -31,10 +31,13 @@ public class FindAlertsResponseDto {
     }
 
     private static List<AlertElement> getAlertLogs(List<AlertLog> alertLogs) {
+        // 친구 수락, 알람그룹 수락, 알람그룹 탈퇴, 알람그룹 강퇴 로그
         List<AlertElement> alertElements = new ArrayList<>();
         for (AlertLog alertLog : alertLogs) {
             if (alertLog.getAlertType().getName().equals(AlertType.FRIEND_APPROVE.getName())) {
                 alertElements.add(AlertElement.builder()
+                        .alarmGroupId(null)
+                        .friendRequestId(null)
                         .fromNickname(alertLog.getToMember().getNickname())
                         .alertType(alertLog.getAlertType().getName())
                         .createAt(alertLog.getCreatedAt())
@@ -45,6 +48,8 @@ public class FindAlertsResponseDto {
                     alertLog.getAlertType().getName().equals(AlertType.ALARM_GROUP_BAN.getName())) {
 
                 alertElements.add(AlertElement.builder()
+                        .alarmGroupId(null)
+                        .friendRequestId(null)
                         .fromNickname(alertLog.getToMember().getNickname())
                         .title(alertLog.getAlarmGroup().getTitle())
                         .alertType(alertLog.getAlertType().getName())
@@ -57,10 +62,13 @@ public class FindAlertsResponseDto {
     }
 
     private static List<AlertElement> getFriendRequests(List<FriendRequest> friendRequests) {
+        // 친구 요청 로그
         List<AlertElement> alertElements = new ArrayList<>();
         for (FriendRequest friendRequest : friendRequests) {
             if (friendRequest.getMatchStatus().getName().equals(MatchStatus.REQUEST_STATUS.getName())) {
                 alertElements.add(AlertElement.builder()
+                        .alarmGroupId(null)
+                        .friendRequestId(friendRequest.getId())
                         .fromNickname(friendRequest.getToMember().getNickname())
                         .alertType(AlertType.FRIEND_REQUEST.getName())
                         .createAt(friendRequest.getCreatedAt())
@@ -71,10 +79,13 @@ public class FindAlertsResponseDto {
     }
 
     private static List<AlertElement> getAlarmGroupRequests(List<AlarmGroupRequest> alarmGroupRequests) {
+        // 알람그룹 요청 로그
         List<AlertElement> alertElements = new ArrayList<>();
         for (AlarmGroupRequest alarmGroupRequest : alarmGroupRequests) {
             if (alarmGroupRequest.getMatchStatus().getName().equals(MatchStatus.REQUEST_STATUS.getName())) {
                 alertElements.add(AlertElement.builder()
+                        .alarmGroupId(alarmGroupRequest.getAlarmGroup().getId())
+                        .friendRequestId(null)
                         .fromNickname(alarmGroupRequest.getToMember().getNickname())
                         .alertType(AlertType.ALARM_GROUP_REQUEST.getName())
                         .time(alarmGroupRequest.getAlarmGroup().getTime())
