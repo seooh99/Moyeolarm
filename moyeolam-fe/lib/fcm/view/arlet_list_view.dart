@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../../common/confirm.dart';
 import '../../common/layout/title_bar.dart';
 
 import 'package:dio/dio.dart';
 
+import '../api/arlet_modal_api.dart';
+import '../api/strategies/friend_accept_strategy.dart';
 import '../model/arlet_service_model.dart';
 import '../service/fcm_api_service.dart';
 import 'package:youngjun/common/const/colors.dart';
-import 'dart:convert'; // import this
+import 'dart:convert';
+
+import 'arlet_modal_view.dart'; // import this
 
 class ListApp extends StatelessWidget {
   const ListApp({Key? key}) : super(key: key);
@@ -49,14 +54,14 @@ class _ArletListViewState extends State<ArletListView> {
       if (response != null) {
         final ApiArletModel alert = response; // response를 그대로 할당
         setState(() {
-          alertData = [alert]; // 리스트에 하나의 alert 추가
+          alertData = alert; // 리스트에 하나의 alert 추가
           print('데이터 가져오는 중...');
         });
       } else {
         print('null값임!');
         // 응답이 null인 경우 "알림없음"을 화면에 출력
         setState(() {
-          alertData = []; // alertData를 비우고
+          alertData = ApiArletModel(); // alertData를 비우고
         });
       }
     } on DioError catch (e) {
@@ -66,63 +71,6 @@ class _ArletListViewState extends State<ArletListView> {
     }
   }
 
-
-
-  void showPopup(context, fromNickname, titleList, alertTypeList) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          child: Container(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width * 0.7,
-            height: 380,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
-            ),
-            child: Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Text(
-                    fromNickname ?? "알림없음",
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  alertTypeList ?? "알림없음",
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Text(
-                    titleList ?? "알림없음",
-                    maxLines: 6,
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
 
 
   @override
@@ -158,16 +106,22 @@ class _ArletListViewState extends State<ArletListView> {
               if (fromNickname == null || alertType == null) {
                 return;
               }
-
               debugPrint(alertType);
               showPopup(
                 context,
                 fromNickname,
-                alertItem.title,
+                alertItem.title ?? "Default Title",
                 alertType,
+                alertItem.alarmGroupId, // 수정된 부분
+                alertItem.friendRequestId, // 수정된 부분
+
               );
             },
-            child: Card(
+            // ...
+
+          // ... rest of the GestureDetector code ...
+
+          child: Card(
               color: Colors.black,
               child: Row(
                 children: [
@@ -212,3 +166,35 @@ class _ArletListViewState extends State<ArletListView> {
     }
   }
 }
+
+void showPopup(
+    BuildContext context,
+    String fromNickname,
+    String title,
+    String alertType,
+    int? alarmGroupId,
+    int? friendRequestId,
+    ) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return APIDialog(
+        fromNickname: fromNickname,
+        titleList: title,
+        alertTypeList: alertType,
+        alarmGroupId: alarmGroupId.toString(), // 그대로 int 값 전달
+        friendRequestId: friendRequestId.toString(), // 그대로 int 값 전달
+        acceptOnPressed: () {
+        },
+        declineOnPressed: () {
+
+        },
+      );
+    },
+  );
+}
+
+
+
+
+
