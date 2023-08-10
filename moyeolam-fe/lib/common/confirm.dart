@@ -1,24 +1,35 @@
 import 'package:flutter/material.dart';
 
-class DialogExample extends StatelessWidget {
-  const DialogExample(
-      {super.key, required this.cancelOnPressed, required this.okOnPressed});
+class ConfirmDialog extends StatelessWidget {
+  const ConfirmDialog(
+      {super.key,
+        required this.cancelOnPressed,
+        required this.okOnPressed,
+        required this.title,
+        required this.content,
+        required this.okTitle,
+        required this.cancelTitle,
+      });
   final VoidCallback cancelOnPressed;
   final VoidCallback okOnPressed;
+  final String title;
+  final String content;
+  final String okTitle;
+  final String cancelTitle;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('AlertDialog Title'),
-      content: const Text('AlertDialog description'),
+      title: Text(title),
+      content: Text(content),
       actions: <Widget>[
         TextButton(
           onPressed: () => cancelOnPressed(),
-          child: const Text('Cancel'),
+          child: Text(cancelTitle),
         ),
         TextButton(
           onPressed: () => okOnPressed(),
-          child: const Text('OK'),
+          child: Text(okTitle),
         ),
       ],
     );
