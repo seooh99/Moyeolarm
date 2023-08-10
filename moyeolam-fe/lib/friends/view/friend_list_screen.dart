@@ -1,24 +1,26 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart';
+
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/layout/title_bar.dart';
-import 'package:youngjun/friends/model/friends_list_model.dart';
-import 'package:youngjun/friends/provider/friends_list_provider.dart';
+import 'package:youngjun/friends/provider/friends_search_provider.dart';
+import 'package:youngjun/friends/repository/friends_repository.dart';
 
 import '../../common/layout/main_nav.dart';
 import '../../common/textfield_bar.dart';
 import '../component/friends_list.dart';
+import '../model/friends_list_model.dart';
 
-class FriendListScreen extends ConsumerStatefulWidget {
-  const FriendListScreen({super.key});
+import '../provider/friends_delete_provider.dart';
+import '../provider/friends_list_provider.dart';
+import 'add_friend.dart';
 
-  @override
-  ConsumerState<FriendListScreen> createState() => _FriendListScreenState();
-}
-
-class _FriendListScreenState extends ConsumerState<FriendListScreen> {
+class FriendListScreen extends ConsumerWidget {
   List<FriendsListModel> friendsList = <FriendsListModel>[];
   final ScrollController controller = ScrollController();
+  final FriendsDeleteNotifier _friendsDeleteNotifier = FriendsDeleteNotifier();
 
   void moveScroll() {
     controller.animateTo(controller.position.maxScrollExtent,
@@ -26,10 +28,31 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<List<Friend>?> friends = ref.watch(friendsListProvider);
 
-    return Column(
+    return Scaffold(
+      appBar: TitleBar(
+        appBar: AppBar(),
+        title: '모여람',
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const AddFriends(),
+                ),
+              );
+            },
+            icon: Icon(
+              Icons.person_add,
+              color: Colors.white,
+            ),
+          )
+        ],
+      ),
+      backgroundColor: BACKGROUND_COLOR,
+      body: Column(
         children: [
           Column(
             children: [
@@ -126,27 +149,32 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
                           slivers: [
                             SliverList.builder(
                               itemCount: data.length,
-                              itemBuilder: (context, index){
+                              itemBuilder: (context, index) {
                                 Friend friend = data[index];
                                 return ListTile(
-                                  leading: CircleAvatar(
-                                    backgroundColor: Colors.lightBlue,
-                                  ),
-                                  title: Text(
-                                    friend.nickname,
-                                    style: TextStyle(
-                                      color: Colors.white,
+                                    leading: CircleAvatar(
+                                      backgroundColor: Colors.lightBlue,
                                     ),
-                                  ),
-                                  trailing: Icon(Icons.close,
-                                    color: Colors.white,),
-                                );
+                                    title: Text(
+                                      friend.nickname,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    trailing: IconButton(
+                                      onPressed: () {
+                                        _showDeleteConfirmationDialog(
+                                            context, friend);
+                                      },
+                                      icon: Icon(Icons.close),
+                                    ));
                               },
                             ),
                           ],
                         ),
                       );
-                    };
+                    }
+                    ;
                     return Text('데이터없음');
                   },
                   error: (e, stackTrace) {
@@ -163,7 +191,34 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
             height: 10,
           )
         ],
-      );
+      ),
+    );
+  }
+
+  Future<void> _showDeleteConfirmationDialog(
+      BuildContext context, Friend friend) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('친구 삭제'),
+          content: Text('${friend.nickname} 친구를 삭제하시겠습니까?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('취소'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await _friendsDeleteNotifier.removeFriend(friend);
+                Navigator.pop(context);
+              },
+              child: Text('삭제'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
