@@ -16,7 +16,14 @@ class AlarmListViewModel{
   getAlarmList() async {
     var response = await _alarmListRepository.getAlarmList();
     if (response.code == "200"){
-      return response.data!;
+      return response.data;
+    }
+  }
+
+  deleteAlarmGroup(int alarmGroupId) async{
+    var response = await _alarmListRepository.deleteAlarmGroup(alarmGroupId);
+    if (response.code == '200'){
+      return response.data;
     }
   }
 }
