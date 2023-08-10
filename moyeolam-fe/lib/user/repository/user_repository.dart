@@ -11,14 +11,18 @@ class UserRepository {
     baseUrl: BASE_URL,
   );
 
-  Future<ResponseUserModel> isSigned(String request) {
+  Future<ResponseUserModel> isSigned(String request, String fcmToken, String deviceIdentifier) {
     print("$request repository");
-    IsSigned params = IsSigned(oauthIdentifier: request);
+    IsSigned params = IsSigned(
+      oauthIdentifier: request,
+      fcmToken: fcmToken,
+      deviceIdentifier: deviceIdentifier,
+    );
     // print(params.oauthIdentifier);
     return _userDataSource.isSigned(params);
   }
 
-  Future<NicknameResposne> signOut(String token) {
+  Future<NicknameResponse> signOut(String token) {
     print("sign out user repository");
     return _userDataSource.signOut('Bearer $token');
   }
@@ -27,7 +31,7 @@ class UserRepository {
 class UserNicknameRepository {
   final UserDataSource _dataSource = UserDataSource(Dio(), baseUrl: BASE_URL);
 
-  Future<NicknameResposne> updateNickname(String newNickname, String token) {
+  Future<NicknameResponse> updateNickname(String newNickname, String token) {
     NicknamePost params = NicknamePost(nickname: newNickname);
     return _dataSource.updateNickname(
       params,

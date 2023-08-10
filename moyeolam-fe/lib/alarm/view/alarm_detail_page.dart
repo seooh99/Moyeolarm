@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:youngjun/alarm/viewmodel/add_alarm_group_view_model.dart';
 import 'package:youngjun/alarm/viewmodel/alarm_detail_view_model.dart';
 import 'package:youngjun/common/button/btn_back.dart';
 
@@ -11,7 +12,7 @@ import '../../common/layout/title_bar.dart';
 import '../component/alarm_guest_list.dart';
 import '../component/alarm_middle_select.dart';
 import '../model/alarm_detail_model.dart';
-import 'alarm_list_page.dart';
+
 
 class AlarmDetailScreen extends StatefulWidget {
   final AlarmGroup alarmGroup;
@@ -59,17 +60,17 @@ backgroundColor: BACKGROUND_COLOR,
       body: SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(height: 20),
+                  SizedBox(height: 24),
                   // Clock(timeSet: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, widget.alarmGroup.hour, widget.alarmGroup.minute)),
 
                   Container(
-                    height: 120,
+                    height: 144,
                     alignment: Alignment.center,
                     child: Text("${widget.alarmGroup.hour%12} : ${widget.alarmGroup.minute}   ${widget.alarmGroup.hour>=12?"PM":"AM"}",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: FONT_COLOR,
-                        fontSize: 40,
+                        fontSize: 44,
 
                       )),
                   ),
@@ -77,23 +78,145 @@ backgroundColor: BACKGROUND_COLOR,
                   SizedBox(
                     height: 20,
                   ),
-                  AlarmMiddleSelect(
-                    dayOfWeek: widget.alarmGroup.dayOfWeek,
-                    alarmSound: widget.alarmGroup.alarmMission,
-                    alarmMission: widget.alarmGroup.alarmMission,
+        Container(
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 60,
                   ),
                   Text(
-                    '참여목록',
+                    '알림음',
                     style: TextStyle(
+                      color: FONT_COLOR,
                       fontSize: 18,
-                      color: Colors.white,
                     ),
                   ),
                   SizedBox(
-                    height: 18,
+                    width: 100,
                   ),
                   Container(
-                    // color: Colors.white,
+                    width: 180,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          widget.alarmGroup.alarmSound,
+                          style: TextStyle(
+                            color: FONT_COLOR,
+                            fontSize: 20,
+                          ),
+                        ),
+                        SizedBox(width: 12,),
+                        Icon(
+                          Icons.arrow_right_sharp,
+                          color: FONT_COLOR,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20,),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 60,
+                  ),
+                  Text(
+                    '인증방식',
+                    style: TextStyle(
+                      color: FONT_COLOR,
+                      fontSize: 20,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 80,
+                  ),
+                  Container(
+                    width: 180,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          widget.alarmGroup.alarmMission,
+                          style: TextStyle(
+                            color: FONT_COLOR,
+                            fontSize: 20,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 12,
+                        ),
+                        Icon(
+                            Icons.arrow_right_sharp,
+                            color: FONT_COLOR,
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20,),
+
+              Row(mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 60,
+                  ),
+                  Text(
+                    '반복 요일',
+                    style: TextStyle(
+                      color: FONT_COLOR,
+                      fontSize: 20,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 72,
+                  ),
+                  Container(
+                    width: 180,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        for (int index=0;index<7;index++)
+                          if(widget.alarmGroup.dayOfWeek[index])
+                            Padding(
+                              padding: const EdgeInsets.only(left: 4, right: 4),
+                              child: Text(
+                                week[index],
+                                style: TextStyle(
+                                  color: FONT_COLOR,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                      ],
+                    ),
+                  ),
+
+                ],
+              ),
+              SizedBox(height: 24,),
+            ],
+          ),
+        ),
+
+                  Text(
+                    '참여목록',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: FONT_COLOR,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  Container(
+                    // color: FONT_COLOR,
                     // alignment: Alignment.center,
                     width: 360,
                     height: 360,
@@ -110,41 +233,7 @@ backgroundColor: BACKGROUND_COLOR,
                             profileImage: Image.network("${widget.alarmGroup.members[index].profileUrl}")??Image.asset("assets/images/moyeolam"),
                           )
                         ,
-                        SizedBox(
-                          width: 10,
-                          height: 10,
-                          child: Container(
-                            color: Colors.red,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                          height: 10,
-                          child: Container(
-                            color: Colors.red,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                          height: 10,
-                          child: Container(
-                            color: Colors.red,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                          height: 10,
-                          child: Container(
-                            color: Colors.red,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                          height: 10,
-                          child: Container(
-                            color: Colors.red,
-                          ),
-                        ),
+
 
 
                       ],
@@ -232,7 +321,7 @@ backgroundColor: BACKGROUND_COLOR,
 //                     '참여목록',
 //                     style: TextStyle(
 //                       fontSize: 18,
-//                       color: Colors.white,
+//                       color: FONT_COLOR,
 //                     ),
 //                   ),
 //                   SizedBox(
