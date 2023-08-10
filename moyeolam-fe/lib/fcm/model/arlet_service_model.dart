@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'arlet_service_model.g.dart';
@@ -37,7 +39,6 @@ class ApiArletData {
   }
 }
 
-
 @JsonSerializable()
 class ApiArletItem {
   String? fromNickname;
@@ -45,6 +46,8 @@ class ApiArletItem {
   String? time;
   String? alertType;
   String? createAt;
+  int? alarmGroupId; // Change to int?
+  int? friendRequestId; // Change to int?
 
   ApiArletItem({
     this.fromNickname,
@@ -52,6 +55,8 @@ class ApiArletItem {
     this.time,
     this.alertType,
     this.createAt,
+    this.alarmGroupId,
+    this.friendRequestId,
   });
 
   factory ApiArletItem.fromJson(Map<String, dynamic> json) {
@@ -61,8 +66,11 @@ class ApiArletItem {
       time: json['time'] as String?,
       alertType: json['alertType'] as String?,
       createAt: json['createAt'] as String?,
+      alarmGroupId: json['alarmGroupId'] as int?, // Change to int
+      friendRequestId: json['friendRequestId'] as int?, // Change to int
     );
   }
 }
+
 
 

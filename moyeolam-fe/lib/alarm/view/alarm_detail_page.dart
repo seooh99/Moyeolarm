@@ -66,7 +66,14 @@ backgroundColor: BACKGROUND_COLOR,
                   Container(
                     height: 144,
                     alignment: Alignment.center,
-                    child: Text("${widget.alarmGroup.hour%12} : ${widget.alarmGroup.minute}   ${widget.alarmGroup.hour>=12?"PM":"AM"}",
+                    child: Text(
+                      (widget.alarmGroup.hour%12).toString().length == 1 && widget.alarmGroup.minute.toString().length == 2?
+                        "0${widget.alarmGroup.hour%12} : ${widget.alarmGroup.minute}   ${widget.alarmGroup.hour>=12?"PM":"AM"}":
+                      (widget.alarmGroup.hour%12).toString().length == 2 && widget.alarmGroup.minute.toString().length == 1?
+                      "${widget.alarmGroup.hour%12} : 0${widget.alarmGroup.minute}   ${widget.alarmGroup.hour>=12?"PM":"AM"}":
+                      (widget.alarmGroup.hour%12).toString().length == 1 && widget.alarmGroup.minute.toString().length == 1?
+                      "0${widget.alarmGroup.hour%12} : 0${widget.alarmGroup.minute}   ${widget.alarmGroup.hour>=12?"PM":"AM"}":
+                      "${widget.alarmGroup.hour%12} : ${widget.alarmGroup.minute}   ${widget.alarmGroup.hour>=12?"PM":"AM"}",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: FONT_COLOR,

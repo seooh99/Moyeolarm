@@ -11,7 +11,7 @@ import java.time.LocalTime;
 public class AlertElement {
     private Long alarmGroupId;
     private Long friendRequestId;
-
+    private Long fromMemberId;
     private String fromNickname;
 
     @JsonFormat(pattern = "HH:mm")
