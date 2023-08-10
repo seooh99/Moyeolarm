@@ -1,9 +1,16 @@
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:youngjun/common/button/btn_call.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/web_rtc/view/real_time_view.dart';
+import 'package:youngjun/web_rtc/view/web_rtc_room_view.dart';
 import 'package:youngjun/web_rtc/viewmodel/alarm_ring_view_model.dart';
+
+import '../../common/const/openvidu_confiig.dart';
+import '../model/connection.dart';
 
 class AlarmRingView extends StatefulWidget {
   const AlarmRingView({super.key});
@@ -15,22 +22,98 @@ class AlarmRingView extends StatefulWidget {
 class _AlarmRingViewState extends State<AlarmRingView> {
   TimeService _timeService = TimeService();
 
+  final Dio _dio = Dio();
+
+  final TextEditingController _textSessionController = TextEditingController();
+  final TextEditingController _textUserNameController = TextEditingController();
+
+  Future<bool> _createSession() async {
+    try {
+      var response = await _dio.post(
+        '/sessions',
+        data: {
+          "mediaMode": "ROUTED",
+          "recordingMode": "MANUAL",
+          "customSessionId": _textSessionController.text,
+          "forcedVideoCodec": "VP8",
+          "allowTranscoding": false
+        },
+      );
+      final statusCode = response.statusCode ?? 400;
+      if (statusCode >= 200 && statusCode < 300) {
+        return true;
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 409) {
+        return true;
+      }
+      print(e);
+    }
+    return false;
+  }
+
+  _connect(BuildContext ctx) async {
+    final nav = Navigator.of(ctx);
+    bool sessionCreated = await _createSession();
+
+    if (!sessionCreated) {
+      return;
+    }
+
+    try {
+      var response = await _dio.post(
+        '/sessions/${_textSessionController.text}/connection',
+        data: {
+          "type": "WEBRTC",
+          "data": "My Server Data",
+          "role": "PUBLISHER",
+        },
+      );
+      final statusCode = response.statusCode ?? 400;
+      if (statusCode >= 200 && statusCode < 300) {
+        print(response.data);
+        final connection = Connection.fromJson(response.data);
+        await nav.push(
+          MaterialPageRoute(
+              builder: (_) => WebRtcRoomView(
+                    room: connection,
+                    userName: _textUserNameController.text,
+                  )),
+        );
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _dio.options.baseUrl = '$OPENVIDU_URL/openvidu/api';
+    _dio.options.headers['content-Type'] = 'application/json';
+    _dio.options.headers["authorization"] =
+        'Basic ${base64Encode(utf8.encode('OPENVIDUAPP:$OPENVIDU_SECRET'))}';
+
+    _textSessionController.text = 'Session${Random().nextInt(1000)}';
+    _textUserNameController.text = 'Participant${Random().nextInt(1000)}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
-
         children: <Widget>[
           // 날짜
           RealTimeClock(
-              streamMethod: _timeService.currentDateStream(),
+            streamMethod: _timeService.currentDateStream(),
             isTime: false,
           ),
           // 시간
           RealTimeClock(
-              streamMethod: _timeService.currentTimeStream(),
+            streamMethod: _timeService.currentTimeStream(),
             isTime: true,
           ),
           const SizedBox(
@@ -45,13 +128,54 @@ class _AlarmRingViewState extends State<AlarmRingView> {
               child: Image.asset("assets/gif/moyeolam.gif"),
             ),
           ),
-          const SizedBox(
-            width: 200,
-            height: 120,
+
+          /* ===== test ===== */
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 13),
+            child: SizedBox(
+              width: 280,
+              child: TextField(
+                style: const TextStyle(color: Colors.white),
+                controller: _textSessionController,
+                decoration: const InputDecoration(
+                  suffixStyle: TextStyle(color: Colors.white),
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.deepPurple,
+                  labelText: "Room name",
+                  labelStyle: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
           ),
+
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+            child: SizedBox(
+              width: 280,
+              child: TextField(
+                style: const TextStyle(color: Colors.white),
+                controller: _textUserNameController,
+                decoration: const InputDecoration(
+                  suffixStyle: TextStyle(color: Colors.white),
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.deepPurple,
+                  labelText: "Username",
+                  labelStyle: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+          /* ==== test ==== */
+
+          // const SizedBox(
+          //   width: 200,
+          //   height: 120,
+          // ),
           BtnCalling(
             icons: Icon(Icons.call),
-            onPressed: (){},
+            onPressed: () => _connect(context)
           ),
           const SizedBox(
             width: 200,
