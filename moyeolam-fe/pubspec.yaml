@@ -57,6 +57,10 @@ dependencies:
   flutter_spinkit: ^5.2.0
   device_info_plus: ^9.0.3
 
+  permission_handler: ^10.2.0
+  openvidu_client:
+    path: ./openvidu_client
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
