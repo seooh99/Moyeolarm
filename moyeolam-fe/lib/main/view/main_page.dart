@@ -5,7 +5,7 @@ import 'package:youngjun/common/layout/title_bar.dart';
 import 'package:youngjun/main/view/settings.dart';
 import '../../alarm/view/alarm_list_page.dart';
 import '../../common/const/colors.dart';
-import 'friend_list_screen.dart';
+import '../../friends/view/friend_list_screen.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
