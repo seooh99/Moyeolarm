@@ -11,6 +11,8 @@ class TextFieldbox extends StatefulWidget {
 
 
 
+
+
   const TextFieldbox({
     super.key,
     required this.setContents,
@@ -18,7 +20,9 @@ class TextFieldbox extends StatefulWidget {
     this.suffixIcon,
     this.suffixIconColor,
     this.controller,
-    this.hint
+    this.hint,
+
+
 
 
   });
@@ -70,6 +74,9 @@ class _TextFieldboxState extends State<TextFieldbox> {
           // label의 텍스트 스타일 설정
           color: MAIN_COLOR,
         ),
+        suffixIcon: IconButton(onPressed: (){}, icon: Icon(Icons.search_outlined)),
+        suffixIconColor: Colors.white,
+
         alignLabelWithHint: true, // label을 TextField의 가운데로 이동
       ),
     );
