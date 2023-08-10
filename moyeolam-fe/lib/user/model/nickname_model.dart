@@ -17,17 +17,17 @@ class NicknamePost {
 }
 
 @JsonSerializable()
-class NicknameResposne {
+class NicknameResponse {
   String code;
   String message;
   int? data;
 
-  NicknameResposne({
+  NicknameResponse({
     required this.code,
     required this.message,
     required this.data,
   });
-  factory NicknameResposne.fromJson(Map<String, dynamic> json) =>
-      _$NicknameResposneFromJson(json);
-  Map<String, dynamic> toJson() => _$NicknameResposneToJson(this);
+  factory NicknameResponse.fromJson(Map<String, dynamic> json) =>
+      _$NicknameResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$NicknameResponseToJson(this);
 }
