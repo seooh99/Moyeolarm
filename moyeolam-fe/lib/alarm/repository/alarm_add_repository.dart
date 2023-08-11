@@ -25,4 +25,21 @@ class AddAlarmGroupRepository {
     print("alarmMission: ${params.alarmMission}");
     return _addAlarmDataSource.addAlarmGroup(params);
   }
+
+  Future<AddAlarmGroupResponseModel> updateAlarmGroup(int alarmGroupId, String title, String time, List<String?> dayOfWeek, String alarmSound, String alarmMission){
+    AddAlarmGroupRequestModel params = AddAlarmGroupRequestModel(
+      title: title,
+      time: time,
+      dayOfWeek: dayOfWeek,
+      alarmSound: alarmSound,
+      alarmMission: alarmMission,
+    );
+    print("title: ${params.title}");
+    print("time: ${params.time}");
+    print("dayOfWeek: ${params.dayOfWeek}");
+    print("alarmSound: ${params.alarmSound}");
+    print("alarmMission: ${params.alarmMission}");
+    return _addAlarmDataSource.updateAlarmGroup(alarmGroupId, params);
+  }
+
 }

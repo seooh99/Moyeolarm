@@ -3,19 +3,27 @@ import 'package:youngjun/alarm/viewmodel/add_alarm_group_view_model.dart';
 import 'package:youngjun/common/const/colors.dart';
 
 class AlarmMiddleSelect extends StatefulWidget {
-  static List<String> week = ["월 ", "화 ", "수 ", "목 ", "금 ", "토 ", "일 "];
+  static List<Widget> week = [
+    Text("월"),
+    Text("화"),
+    Text("수"),
+    Text("목"),
+    Text("금"),
+    Text("토"),
+    Text("일"),
+    ];
 
   AlarmMiddleSelect({
-    // required this.dayOfWeek,
-    // required this.alarmSound,
-    // required this.alarmMission,
+    this.dayOfWeek,
+    this.alarmSound,
+    this.alarmMission,
     required this.addAlarmGroupViewModel,
     super.key
   });
   final AddAlarmGroupViewModel addAlarmGroupViewModel;
-  // final List<bool> dayOfWeek;
-  // final String alarmSound;
-  // final String alarmMission;
+  final List<bool>? dayOfWeek;
+  final String? alarmSound;
+  final String? alarmMission;
 
   @override
   State<AlarmMiddleSelect> createState() => _AlarmMiddleSelectState();
@@ -33,6 +41,7 @@ class _AlarmMiddleSelectState extends State<AlarmMiddleSelect> {
             const SizedBox(height: 18,),
             GestureDetector(
               onTap: (){
+                print(widget.dayOfWeek);
                 dialogList(context,"기본 알림음");
                 setState(() {
 
@@ -57,7 +66,7 @@ class _AlarmMiddleSelectState extends State<AlarmMiddleSelect> {
                   Row(
                     children: [
                       Text(
-                        widget.addAlarmGroupViewModel.alarmSound,
+                        widget.alarmSound??widget.addAlarmGroupViewModel.alarmSound,
                         style: TextStyle(
                           color: FONT_COLOR,
                           fontSize: 18,
@@ -102,7 +111,7 @@ class _AlarmMiddleSelectState extends State<AlarmMiddleSelect> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        widget.addAlarmGroupViewModel.alarmMission,
+                        widget.alarmMission??widget.addAlarmGroupViewModel.alarmMission,
                         style: const TextStyle(
                           color: FONT_COLOR,
                           fontSize: 18,
@@ -136,26 +145,32 @@ class _AlarmMiddleSelectState extends State<AlarmMiddleSelect> {
                   height: 20,
                 ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(width: 10),
-                  for (int index=0;index<7;index++)
-                    GestureDetector(
-                      onTap: (){
+                  // const SizedBox(width: 10),
+                    ToggleButtons(
+                      borderColor: Colors.grey,
+                      borderRadius: BorderRadius.circular(50),
+                      selectedBorderColor: MAIN_COLOR,
+                      selectedColor: MAIN_COLOR,
+                      color: FONT_COLOR,
+                      onPressed: (index){
                         widget.addAlarmGroupViewModel.setDayOfWeek(index);
                         setState(() {
-
+                          if(widget.dayOfWeek != null) {
+                            widget.dayOfWeek![index] = !widget.dayOfWeek![index];
+                          }
                         });
                       },
-                      child: Text(AlarmMiddleSelect.week[index],
-                          style: TextStyle(
-                            color: widget.addAlarmGroupViewModel.dayOfWeek[index]?MAIN_COLOR:FONT_COLOR,
-                            fontSize: 24,
-                          ),
-                        ),
+                        isSelected:
+                        widget.dayOfWeek ?? widget.addAlarmGroupViewModel.dayOfWeek,
+                        children: AlarmMiddleSelect.week,
+                      textStyle: TextStyle(
+                        fontSize: 20,
+                      ),
 
-                    ),
-                  const SizedBox(width: 10),
+                    )
+                  // const SizedBox(width: 10),
                 ],
               ),
             const SizedBox(height: 18,),
@@ -164,6 +179,23 @@ class _AlarmMiddleSelectState extends State<AlarmMiddleSelect> {
       );
   }
 }
+
+// TextButton(
+// style: TextButton.styleFrom(
+// textStyle: TextStyle(
+// color: (widget.dayOfWeek!= null ?
+// widget.dayOfWeek![index]:
+// widget.addAlarmGroupViewModel.dayOfWeek[index])?MAIN_COLOR:FONT_COLOR,
+// fontSize: 20,
+// ),
+// ),
+// onPressed: (){
+// widget.addAlarmGroupViewModel.setDayOfWeek(index);
+// setState(() {});
+// },
+// child: Text(AlarmMiddleSelect.week[index]
+// ),
+// ),
 
 dialogList(
     BuildContext context,

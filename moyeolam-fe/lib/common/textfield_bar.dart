@@ -8,6 +8,7 @@ class TextFieldbox extends StatefulWidget {
   final Color? suffixIconColor;
   final TextEditingController? controller;
   final String? hint;
+  final String? defualtText;
 
 
 
@@ -21,10 +22,7 @@ class TextFieldbox extends StatefulWidget {
     this.suffixIconColor,
     this.controller,
     this.hint,
-
-
-
-
+    this.defualtText,
   });
 
   @override
@@ -33,8 +31,18 @@ class TextFieldbox extends StatefulWidget {
 
 class _TextFieldboxState extends State<TextFieldbox> {
   @override
+  void initState() {
+    // TODO: implement initState
+    if(widget.defualtText != null){
+      widget.setContents(widget.defualtText!);
+    }
+
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return TextField(
+      textAlign: TextAlign.center,
       onChanged: (text) {
         widget.setContents(text);
       },
@@ -46,14 +54,21 @@ class _TextFieldboxState extends State<TextFieldbox> {
         color: MAIN_COLOR,
       ),
       decoration: InputDecoration(
-        border: OutlineInputBorder(
+
+        border: UnderlineInputBorder(
           borderSide: BorderSide(
             color: MAIN_COLOR,
-            width: 3.0,
+            width: 1.5,
           ),
-          // borderRadius: BorderRadius.circular(5.0),// borderColor 사용
         ),
-        enabledBorder: OutlineInputBorder(
+        // border: OutlineInputBorder(
+        //   borderSide: BorderSide(
+        //     color: MAIN_COLOR,
+        //     width: 3.0,
+        //   ),
+          // borderRadius: BorderRadius.circular(5.0),// borderColor 사용
+        // ),
+        enabledBorder: UnderlineInputBorder(
           // 입력창이 선택되지 않았을 때의 border 설정 (optional)
 
           borderSide: BorderSide(
@@ -61,7 +76,7 @@ class _TextFieldboxState extends State<TextFieldbox> {
             width: 3.0,
           ),
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: UnderlineInputBorder(
           // 입력창이 선택되었을 때의 border 설정 (optional)
 
           borderSide: BorderSide(
@@ -69,13 +84,15 @@ class _TextFieldboxState extends State<TextFieldbox> {
             width: 3.0,
           ),
         ),
-        labelText: '입력하세요',
+        labelText: widget.defualtText??'입력하세요',
         labelStyle: TextStyle(
           // label의 텍스트 스타일 설정
           color: MAIN_COLOR,
+          locale: Locale("ko"),
+          fontSize: 20,
         ),
-        suffixIcon: IconButton(onPressed: (){}, icon: Icon(Icons.search_outlined)),
-        suffixIconColor: Colors.white,
+        suffixIcon: widget.suffixIcon,
+        suffixIconColor: widget.suffixIconColor,
 
         alignLabelWithHint: true, // label을 TextField의 가운데로 이동
       ),
