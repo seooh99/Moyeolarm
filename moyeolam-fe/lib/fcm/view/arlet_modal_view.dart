@@ -14,8 +14,9 @@ class APIDialog extends StatelessWidget {
     required this.fromNickname,
     required this.titleList,
     required this.alertTypeList,
-    required this.alarmGroupId,
-    required this.friendRequestId,
+    this.alarmGroupId,
+    this.friendRequestId,
+    required this.fromMemberId,
   }) : super(key: key);
 
   final VoidCallback acceptOnPressed;
@@ -23,8 +24,11 @@ class APIDialog extends StatelessWidget {
   final String fromNickname;
   final String titleList;
   final String alertTypeList;
-  final String alarmGroupId;
-  final String friendRequestId;
+  final int? alarmGroupId;
+  final int? friendRequestId;
+  final int fromMemberId;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,13 +70,20 @@ class APIDialog extends StatelessWidget {
         else
           TextButton(
             onPressed: () {
-              if (alertTypeList == '친구 요청') {
-                ArletModalApi().handleApiRequest('친구 요청', friendRequestId: friendRequestId, userWantsToAccept: false,);
-              } else {
-                ArletModalApi().handleApiRequest('알람그룹 요청', alarmGroupId: alarmGroupId, userWantsToAccept: false);
+              if (alertTypeList == '친구 요청' ) {
+                ArletModalApi().handleApiRequest('친구 요청',
+                    friendRequestId: friendRequestId,
+                    isAccepted: false,
+                    fromMemberId: fromMemberId);
+              } else if (fromMemberId != null) {
+                ArletModalApi().handleApiRequest('알람그룹 요청',
+                    alarmGroupId: alarmGroupId,
+                    isAccepted: false,
+                    fromMemberId: fromMemberId);
               }
               Navigator.of(context).pop(); // Dialog 닫기
             },
+
             child: Text(
               '거절',
               style: TextStyle(
@@ -91,12 +102,20 @@ class APIDialog extends StatelessWidget {
           TextButton(
             onPressed: () {
               if (alertTypeList == '친구 요청') {
-                ArletModalApi().handleApiRequest('친구 요청', friendRequestId: friendRequestId, userWantsToAccept: true);
-              } else {
-                ArletModalApi().handleApiRequest('알람그룹 요청', alarmGroupId: alarmGroupId, userWantsToAccept: true);
+                ArletModalApi().handleApiRequest('친구 요청',
+                    friendRequestId: friendRequestId,
+                    isAccepted: true,
+                    fromMemberId: fromMemberId);
+              } else if (fromMemberId != null) {
+                ArletModalApi().handleApiRequest('알람그룹 요청',
+                    alarmGroupId: alarmGroupId,
+                    isAccepted: true,
+                    fromMemberId: fromMemberId);
               }
               Navigator.of(context).pop(); // Dialog 닫기
             },
+
+
             child: Text(
               '수락',
               style: TextStyle(
