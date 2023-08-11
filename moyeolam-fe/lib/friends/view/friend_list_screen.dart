@@ -17,9 +17,19 @@ import '../provider/friends_delete_provider.dart';
 import '../provider/friends_list_provider.dart';
 import 'add_friend.dart';
 
-class FriendListScreen extends ConsumerWidget {
+class FriendListScreen extends ConsumerStatefulWidget {
+
+  FriendListScreen({super.key});
+
+  @override
+  ConsumerState<FriendListScreen> createState() => _FriendListScreenState();
+}
+
+class _FriendListScreenState extends ConsumerState<FriendListScreen> {
   List<FriendsListModel> friendsList = <FriendsListModel>[];
+
   final ScrollController controller = ScrollController();
+
   final FriendsDeleteNotifier _friendsDeleteNotifier = FriendsDeleteNotifier();
 
   void moveScroll() {
@@ -28,7 +38,7 @@ class FriendListScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     AsyncValue<List<Friend>?> friends = ref.watch(friendsListProvider);
 
     return Scaffold(
@@ -210,8 +220,10 @@ class FriendListScreen extends ConsumerWidget {
             ),
             TextButton(
               onPressed: () async {
-                await _friendsDeleteNotifier.removeFriend(friend);
+
                 Navigator.pop(context);
+                await _friendsDeleteNotifier.removeFriend(friend);
+                ref.refresh(friendsListProvider); // 수정된 부분
               },
               child: Text('삭제'),
             ),
