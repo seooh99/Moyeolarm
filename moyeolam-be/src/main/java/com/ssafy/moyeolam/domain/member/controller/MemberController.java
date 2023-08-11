@@ -56,9 +56,12 @@ public class MemberController {
 
     @GetMapping()
     public EnvelopeResponse<SearchMembereResponseDto> searchMember(@AuthenticationPrincipal PrincipalDetails principal, @RequestParam String keyword) {
+        if (principal == null) {
+            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+        }
 
         return EnvelopeResponse.<SearchMembereResponseDto>builder()
-                .data(memberService.searchMember(keyword))
+                .data(memberService.searchMember(principal.getMember(), keyword))
                 .build();
 
     }
