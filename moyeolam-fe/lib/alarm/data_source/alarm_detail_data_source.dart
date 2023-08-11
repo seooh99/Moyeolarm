@@ -4,6 +4,7 @@ import 'package:youngjun/alarm/model/alarm_list_model.dart';
 
 import '../model/add_alarm_group_model.dart';
 import '../model/alarm_detail_model.dart';
+import '../model/alarm_toggle_model.dart';
 
 part 'alarm_detail_data_source.g.dart';
 
@@ -23,5 +24,10 @@ abstract class AlarmListDataSource {
   Future<AddAlarmGroupResponseModel> deleteAlarmGroup(
       @Path("alarmGroupId") int alarmGroupId,
       );
+
+  @POST("/alarmgroups/{alarmGroupId}/toggle")
+  Future<AlarmToggleResponseModel> updateToggle(
+      @Path("alarmGroupId") int alarmGroupId,
+    );
 
 }

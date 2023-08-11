@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:youngjun/alarm/viewmodel/add_alarm_group_view_model.dart';
 import 'package:youngjun/alarm/viewmodel/alarm_detail_view_model.dart';
 import 'package:youngjun/common/button/btn_back.dart';
+import 'package:youngjun/main/view/main_page.dart';
 
 import '../../common/button/btn_save_update.dart';
 import '../../common/clock.dart';
@@ -12,6 +13,7 @@ import '../../common/layout/title_bar.dart';
 import '../component/alarm_guest_list.dart';
 import '../component/alarm_middle_select.dart';
 import '../model/alarm_detail_model.dart';
+import 'alarm_add_page.dart';
 
 
 class AlarmDetailScreen extends StatefulWidget {
@@ -34,27 +36,29 @@ backgroundColor: BACKGROUND_COLOR,
         title: widget.alarmGroup.title,
       appBar: AppBar(),
       actions: [
-        widget.alarmGroup.isHost?
-                  BtnSaveUpdate(
+        BtnSaveUpdate(
                         onPressed: () {
-                          Navigator.of(context).pushNamed(
-                              //수정페이지
-                              "/");
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AlarmAddScreen(detailAlarmGroup: widget.alarmGroup,)))
+                          .then((value) => setState((){}));
                         },
                         text: "수정",
-                      ):BtnSaveUpdate(
-                        onPressed: () {
-                          // Navigator.of(context).pushNamed(
-                          //   //
-                          //     "/"
-                          // );
-                          //  방나가기
-                        },
-                        text: "나가기",
                       ),
+        // widget.alarmGroup.isHost?
+        //           BtnSaveUpdate(
+        //                 onPressed: () {
+        //                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AlarmAddScreen(detailAlarmGroup: widget.alarmGroup,)))
+        //                   .then((value) => setState((){}));
+        //                 },
+        //                 text: "수정",
+        //               ):BtnSaveUpdate(
+        //                 onPressed: () {
+        //
+        //                 },
+        //                 text: "나가기",
+        //               ),
       ],
         leading: BtnBack(onPressed: (){
-          Navigator.of(context).pop();
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => MainPage()));
         }),
       ),
       body: SingleChildScrollView(

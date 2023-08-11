@@ -103,21 +103,23 @@ class _ArletListViewState extends State<ArletListView> {
 
           return GestureDetector(
             onTap: () {
-              if (fromNickname == null || alertType == null) {
+              if (fromNickname == null || alertType == null || alertItem.fromMemberId == null) {
                 return;
               }
-              debugPrint(alertType);
-              showPopup(
-                context,
-                fromNickname,
-                alertItem.title ?? "Default Title",
-                alertType,
-                alertItem.alarmGroupId, // 수정된 부분
-                alertItem.friendRequestId, // 수정된 부분
-
-              );
+              if (alertType ==  '친구 요청' ||
+                  alertType == '알람그룹 요청') {
+                debugPrint(alertType);
+                showPopup(
+                  context,
+                  fromNickname,
+                  alertItem.title ?? "Default Title",
+                  alertType,
+                  alertItem.alarmGroupId,
+                  alertItem.friendRequestId,
+                  alertItem.fromMemberId,
+                );
+              }
             },
-            // ...
 
           // ... rest of the GestureDetector code ...
 
@@ -138,9 +140,10 @@ class _ArletListViewState extends State<ArletListView> {
                           '${fromNickname ?? "Unknown"} 님이 ${alertType ??
                               "알림"} 하셨습니다',
                           style: TextStyle(
+                            overflow: TextOverflow.ellipsis,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: FONT_COLOR,
                           ),
                         ),
                         const SizedBox(
@@ -160,7 +163,7 @@ class _ArletListViewState extends State<ArletListView> {
         child: Text(
           '알림없음',
           style: TextStyle(
-              fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+              fontSize: 16, fontWeight: FontWeight.bold, color: FONT_COLOR),
         ),
       );
     }
@@ -174,6 +177,7 @@ void showPopup(
     String alertType,
     int? alarmGroupId,
     int? friendRequestId,
+    int fromMemberId,
     ) {
   showDialog(
     context: context,
@@ -182,13 +186,15 @@ void showPopup(
         fromNickname: fromNickname,
         titleList: title,
         alertTypeList: alertType,
-        alarmGroupId: alarmGroupId.toString(), // 그대로 int 값 전달
-        friendRequestId: friendRequestId.toString(), // 그대로 int 값 전달
+        alarmGroupId: alarmGroupId, // 그대로 int 값 전달
+        friendRequestId: friendRequestId, // 그대로 int 값 전달
+        fromMemberId: fromMemberId,
         acceptOnPressed: () {
         },
         declineOnPressed: () {
 
         },
+
       );
     },
   );
