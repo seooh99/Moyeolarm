@@ -64,8 +64,11 @@ class _AlarmAddScreenState extends State<AlarmAddScreen> {
                             AlarmDetailScreen(alarmGroup: widget.detailAlarmGroup!,)));
                   }
                 }else {
-                  await _addAlarmGroupViewModel.addAlarmGroup();
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MainPage()));
+                  var newGroupId = await _addAlarmGroupViewModel.addAlarmGroup();
+                  var response = await _alarmListDetailViewModel.getAlarmListDetail(newGroupId);
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          AlarmDetailScreen(alarmGroup: response,)));
                 }
 
               },
