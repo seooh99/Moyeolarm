@@ -26,4 +26,11 @@ class AlarmListViewModel{
       return response.data;
     }
   }
+
+  updateAlarmToggle(int alarmGroupId) async {
+    var response = await _alarmListRepository.updateToggle(alarmGroupId);
+    if (response.code == "200"){
+      return response.data;
+    }
+  }
 }

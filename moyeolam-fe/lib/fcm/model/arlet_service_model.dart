@@ -46,8 +46,9 @@ class ApiArletItem {
   String? time;
   String? alertType;
   String? createAt;
-  int? alarmGroupId; // Change to int?
-  int? friendRequestId; // Change to int?
+  int? alarmGroupId;
+  int? friendRequestId;
+  int fromMemberId;
 
   ApiArletItem({
     this.fromNickname,
@@ -57,6 +58,7 @@ class ApiArletItem {
     this.createAt,
     this.alarmGroupId,
     this.friendRequestId,
+    required this.fromMemberId,
   });
 
   factory ApiArletItem.fromJson(Map<String, dynamic> json) {
@@ -68,6 +70,7 @@ class ApiArletItem {
       createAt: json['createAt'] as String?,
       alarmGroupId: json['alarmGroupId'] as int?, // Change to int
       friendRequestId: json['friendRequestId'] as int?, // Change to int
+      fromMemberId: json['fromMemberId'] as int,
     );
   }
 }

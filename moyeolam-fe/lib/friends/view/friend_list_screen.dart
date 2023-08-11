@@ -31,6 +31,8 @@ class FriendListScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<List<Friend>?> friends = ref.watch(friendsListProvider);
 
+
+
     return Scaffold(
       appBar: TitleBar(
         appBar: AppBar(),
