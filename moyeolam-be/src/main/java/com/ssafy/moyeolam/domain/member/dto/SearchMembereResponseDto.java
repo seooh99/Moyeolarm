@@ -1,6 +1,7 @@
 package com.ssafy.moyeolam.domain.member.dto;
 
 import com.ssafy.moyeolam.domain.member.domain.Member;
+import com.ssafy.moyeolam.domain.member.domain.ProfileImage;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,10 +14,12 @@ public class SearchMembereResponseDto {
     private Boolean isFriend;
 
     public static SearchMembereResponseDto from(Member searchMember, Boolean isFriend) {
+        ProfileImage profileImage = searchMember.getProfileImage();
+
         return SearchMembereResponseDto.builder()
                 .memberId(searchMember.getId())
                 .nickname(searchMember.getNickname())
-                .profileImageUrl(searchMember.getProfileImage().getImageUrl())
+                .profileImageUrl(profileImage == null ? null : profileImage.getImageUrl())
                 .isFriend(isFriend)
                 .build();
     }
