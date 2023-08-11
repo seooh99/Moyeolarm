@@ -87,7 +87,7 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                           Navigator.push(context,
                             MaterialPageRoute(builder: (context) => AlarmDetailScreen(alarmGroup: response,)),
 
-                          ).then((value) {setState(() { });});
+                          );
                         },
                         child: AlarmList(
                           alarmGroupId: alarmGroup.alarmGroupId!,
@@ -96,6 +96,10 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                           toggle: alarmGroup.toggle!,
                           title: alarmGroup.title!,
                           weekday: alarmGroup.dayOfWeek!,
+                          toggleChanged: (bool value) async {
+                            await _alarmListViewModel.updateAlarmToggle(alarmGroup.alarmGroupId);
+                            ref.refresh(alarmListProvider);
+                          },
                         ),
                       ),
                     SizedBox(height: 30),
