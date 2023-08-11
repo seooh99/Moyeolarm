@@ -16,11 +16,9 @@ class AddFriends extends ConsumerStatefulWidget {
 }
 
 class _AddFriendsState extends ConsumerState<AddFriends> {
-
   final TextEditingController _searchController = TextEditingController();
 
   List<Friend>? _searchResults; // 검색 결과를 저장할 변수
-
 
   Future<void> _performSearch() async {
     final dio = Dio();
@@ -31,19 +29,15 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
 
     final filteredFriends = searchResult.data.friends
         .where((friend) =>
-        friend.nickname.toLowerCase().contains(keyword.toLowerCase()))
+            friend.nickname.toLowerCase().contains(keyword.toLowerCase()))
         .toList();
 
+    print('왱 ㅏㄴ됨');
     setState(() {
       _searchResults = filteredFriends.isEmpty ? null : filteredFriends;
+      print('@@@@@@@@@@@@@@@');
     });
   }
-
-
-
-
-
-
 
   @override
   void dispose() {
@@ -51,6 +45,18 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
     super.dispose();
   }
 
+  Future<void> _sendFriendRequest(String memberId) async {
+    final dio = Dio();
+    final friendRepository = FriendsRepository(dio);
+
+    try {
+      await friendRepository.friendRequestPost(memberId as Friend);
+      print('Friend request sent successfully');
+      // 요청을 보내고 나서 원하는 동작을 수행할 수 있습니다.
+    } catch (e) {
+      print('Error sending friend request: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +67,14 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
       backgroundColor: BACKGROUND_COLOR,
       appBar: AppBar(
         backgroundColor: BACKGROUND_COLOR,
-        leading: Icon(
-          Icons.arrow_back,
-          color: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
         ),
       ),
       body: Column(
@@ -73,19 +84,19 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: GestureDetector(
-              onDoubleTap: _performSearch,
-              child: TextFieldbox(
-                controller: _searchController,
-                setContents: (String) {},
-                suffixIcon: IconButton(
-                  onPressed: (){},
-                  icon: Icon(Icons.search_outlined,
-                  ),
-                ),
-                suffixIconColor: Colors.white,
-
-              ),
+            child: TextFieldbox(
+              controller: _searchController,
+              setContents: (String) {},
+              suffixIcon: IconButton(
+                  onPressed: () async {
+                    await _performSearch();
+                    print('IconButton Clicked');
+                    _performSearch();
+                  },
+                  icon: Icon(
+                    Icons.search_outlined,
+                  )),
+              suffixIconColor: Colors.white,
             ),
           ),
           SizedBox(
@@ -125,29 +136,41 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
         itemBuilder: (context, index) {
           final friend = _searchResults![index];
           return
-          //   ListTile(
-          //   title: Text(friend.nickname ?? ''),
-          //   subtitle: Text(friend.memberId?.toString() ?? ''),
-          //   leading: CircleAvatar(
-          //     backgroundImage: NetworkImage(friend.profileImageUrl ?? ''),
-          //   ),
-          //
-          // );
-            ListTile(
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(friend.profileImageUrl ?? ''),
+              //   ListTile(
+              //   title: Text(friend.nickname ?? ''),
+              //   subtitle: Text(friend.memberId?.toString() ?? ''),
+              //   leading: CircleAvatar(
+              //     backgroundImage: NetworkImage(friend.profileImageUrl ?? ''),
+              //   ),
+              //
+              // );
+              ListTile(
+            leading: CircleAvatar(
+              backgroundImage: NetworkImage(friend.profileImageUrl ?? ''),
+            ),
+            title: Text(
+              friend.nickname ?? '',
+              style: TextStyle(
+                color: Colors.white,
               ),
-              title: Text(
-                friend.nickname ?? '',
+            ),
+            trailing: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: MAIN_COLOR,
+              ),
+              onPressed: () {
+                _sendFriendRequest(friend.memberId.toString());
+              },
+              child: Text(
+                '요청',
                 style: TextStyle(
                   color: Colors.white,
                 ),
               ),
-              trailing: Icon(Icons.close),
-            );
+            ),
+          );
         },
       ),
     );
   }
 }
-

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-const MAIN_COLOR = Color(0xFF6750A4);
+const MAIN_COLOR = Color(0xFF8463DC);
 const SUB_COLOR = Color(0xFFEADDFF);
-const BACKGROUND_COLOR = Color(0xFF141218);
-const FONT_COLOR = Color(0xFFFFFFFF);
+// const BACKGROUND_COLOR = Color(0xFF141218);
+const BACKGROUND_COLOR = Color(0xFF2D2A33);
+const FONT_COLOR = Color(0xFFF8F8F8);
 const BACK_FONT_COLOR = Color(0xFFEADDFF);
 
 const LIST_BLACK_COLOR = Color(0xFF141218);

@@ -33,6 +33,12 @@ class AddAlarmGroupViewModel{
     title = newTitle;
     print(title);
   }
+  void defaultDayOfWeek(List<bool> defaultWeek){
+    if(defaultWeek != null) {
+      dayOfWeek = [...defaultWeek];
+      print("default setting $dayOfWeek");
+    }
+  }
 
   void setDayOfWeek(int index){
     var newDayOfWeek = [...dayOfWeek];
@@ -52,6 +58,31 @@ class AddAlarmGroupViewModel{
     alarmMission = newAlarmMission;
   }
 
+  updateAlarmGroup(int alarmGroupId) async {
+    try{
+      List<String?> weekDay = [];
+      for(int index=0;index<7;index++){
+        print("${dayOfWeek[index]}");
+        if(dayOfWeek[index]) {
+          weekDay.add("${week[index]}요일");
+        }
+      }
+
+      // for (int index=0; index<7;index++) {
+      //   dayOfWeek[index]?weekDay.add(week[index]);
+      // }
+      print("$weekDay check weekDay");
+      var response = await _addAlarmGroupRepository.updateAlarmGroup(
+          alarmGroupId, title, time, weekDay, alarmSound, alarmMission);
+      if (response != null && response.code == "200") {
+        return response.data;
+      }
+      return ;
+    }catch(error){
+      print("Update alarm group viewModel Error: $error");
+    }
+  }
+
   addAlarmGroup() async{
     try {
       print(dayOfWeek);
@@ -69,9 +100,10 @@ class AddAlarmGroupViewModel{
       print("$weekDay check weekDay");
       var response = await _addAlarmGroupRepository.addAlarmGroup(
           title, time, weekDay, alarmSound, alarmMission);
-      if (response != null) {
+      if (response != null && response.code == "200") {
         return response.data;
       }
+      return ;
     }catch(error){
       print("AddAlarmError: $error");
     }
