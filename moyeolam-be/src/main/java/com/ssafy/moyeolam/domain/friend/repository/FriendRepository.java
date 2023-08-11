@@ -19,4 +19,6 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
             "left join fetch fm.profileImage " +
             "where f.member.id = :memberId and fm.nickname like concat('%', :keyword, '%') ")
     List<Friend> findAllByMemberIdAndKeyword(@Param("memberId") Long memberId, @Param("keyword") String keyword);
+
+    Boolean existsByMemberIdAndMyFriendId(Long memberId, Long myFriendId);
 }
