@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:youngjun/alarm/viewmodel/alarm_list_view_model.dart';
 
 import '../../common/button/btn_toggle.dart';
 import '../../common/const/colors.dart';
@@ -7,8 +8,8 @@ List<String> week = ["M", "T", "W", "T", "F", "S", "S"];
 
 class AlarmList extends StatelessWidget {
 
-  const AlarmList({super.key,
-
+  AlarmList({super.key,
+    this.toggleChanged,
     required this.alarmGroupId,
     required this.weekday,
     required this.hour,
@@ -16,6 +17,8 @@ class AlarmList extends StatelessWidget {
     required this.toggle,
     required this.title,
   });
+  final AlarmListViewModel _alarmListViewModel = AlarmListViewModel();
+  final ValueChanged<bool>? toggleChanged;
   final int alarmGroupId;
   final List<bool> weekday;
   final int hour;
@@ -29,31 +32,44 @@ class AlarmList extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 30),
           child: Card(
+            // color: ,
               margin: const EdgeInsets.only(right: 10, left: 10),
               shape:
                   RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                // padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.only(bottom: 28.0, left: 16, right: 16, top: 12),
                 child: Column(
                   children: [
                     Row(
                       children: [
+                        SizedBox(
+                          width: 20,
+                        ),
                         Expanded(
                           child: Text(
                             title,
                             style: TextStyle(
                               fontSize: 16.0,
+                              fontWeight: FontWeight.w500
                             ),
                           ),
                         ),
                         BtnToggle(
                           value: toggle,
-                          onChanged: (bool value) {},
+                          onChanged: (value) async{
+                            if(toggleChanged != null) {
+                              toggleChanged!(value);
+                            }
+                          },
                         ),
                       ],
                     ),
                     Row(
                       children: [
+                        SizedBox(
+                        width: 20,
+                      ),
                         Text(
                           hour.toString().length == 1 && minute.toString().length == 2?
                           '0$hour : $minute':
@@ -63,11 +79,12 @@ class AlarmList extends StatelessWidget {
                           '0$hour : 0$minute':
                           '$hour : $minute',
                           style: TextStyle(
-                            fontSize: 34.0,
+                            fontSize: 40.0,
+                            fontWeight: FontWeight.w600
                           ),
                         ),
                         SizedBox(
-                          width: 150,
+                          width: 92,
                         ),
                         Row(
                           children: [
@@ -79,7 +96,7 @@ class AlarmList extends StatelessWidget {
                                   week[index],
                                   style: TextStyle(
                                       color: weekday[index]?MAIN_COLOR:Colors.grey,
-                                    fontSize:12,
+                                    fontSize:16,
                                     fontWeight: FontWeight.bold
                                   ),
                                 ),
