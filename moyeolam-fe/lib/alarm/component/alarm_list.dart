@@ -57,9 +57,9 @@ class AlarmList extends StatelessWidget {
                         Text(
                           hour.toString().length == 1 && minute.toString().length == 2?
                           '0$hour : $minute':
-                          minute.toString().length == 2 && minute.toString().length == 1?
+                          hour.toString().length == 2 && minute.toString().length == 1?
                           '$hour : 0$minute':
-                          minute.toString().length == 1 && minute.toString().length == 1?
+                          hour.toString().length == 1 && minute.toString().length == 1?
                           '0$hour : 0$minute':
                           '$hour : $minute',
                           style: TextStyle(

@@ -13,4 +13,10 @@ abstract class AddAlarmDataSource {
   Future<AddAlarmGroupResponseModel> addAlarmGroup(
       @Body() AddAlarmGroupRequestModel alarmGroup,
       );
+
+  @PATCH("/alarmgroups/{alarmGroupId}")
+  Future<AddAlarmGroupResponseModel> updateAlarmGroup(
+    @Path("alarmGroupId") int alarmGroupId,
+    @Body() AddAlarmGroupRequestModel alarmGroup,
+  );
 }
