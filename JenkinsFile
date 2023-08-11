@@ -49,17 +49,17 @@ pipeline {
             }
         }
 
-        // stage('Python Dockerize'){
-        //         steps{
-        //             sh """
-        //                 docker stop python-container || true
-        //                 docker rm python-container || true
-        //                 docker rmi python-image || true
-        //                 cd moyeolam-ai/ai_server
-        //                 docker build -t python-image .
-        //             """
-        //         }
-        // }
+        stage('Python Dockerize'){
+                steps{
+                    sh """
+                        docker stop python-container || true
+                        docker rm python-container || true
+                        docker rmi python-image || true
+                        cd moyeolam-ai/ai_server
+                        docker build -t python-image .
+                    """
+                }
+        }
 
         stage('Deploy'){
             steps{
