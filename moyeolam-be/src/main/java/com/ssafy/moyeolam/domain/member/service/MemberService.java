@@ -93,12 +93,14 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public SearchMembereResponseDto searchMember(Member loginMember, String keyword) {
+    public SearchMembereResponseDto searchMember(Long loginMemberId, String keyword) {
         Member searchMember = memberRepository.findByNickname(keyword)
                 .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER_BY_NICKNAME));
 
-        Boolean isFriend = friendRepository.existsByMemberIdAndMyFriendId(loginMember.getId(), searchMember.getId());
-
+        if (loginMemberId.equals(searchMember.getId())) {
+            throw new MemberException(MemberErrorInfo.SEARCH_MEMBER_MYSELF);
+        }
+        Boolean isFriend = friendRepository.existsByMemberIdAndMyFriendId(loginMemberId, searchMember.getId());
 
         return SearchMembereResponseDto.from(searchMember, isFriend);
     }
