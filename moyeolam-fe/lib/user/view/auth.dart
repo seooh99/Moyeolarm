@@ -4,6 +4,8 @@ import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/user/repository/user_repository.dart';
 import 'package:youngjun/user/viewmodel/auth_view_model.dart';
 
+import '../../main/view/main_page.dart';
+
 class AuthView extends StatefulWidget {
   const AuthView({super.key});
 
@@ -13,89 +15,106 @@ class AuthView extends StatefulWidget {
 
 class _AuthViewState extends State<AuthView> {
   static FlutterSecureStorage storage = FlutterSecureStorage();
-
+  String? userInfo;
   @override
   void initState() {
     // TODO: implement initState
-    var userInfo = storage.read(key: "userInfo");
-    if (userInfo != null) {
-      //  메인페이지 이동
-    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _asyncMethod();
+    });
     super.initState();
   }
+
+  _asyncMethod() async {
+    //read 함수를 통하여 key값에 맞는 정보를 불러오게 됩니다. 이때 불러오는 결과의 타입은 String 타입임을 기억해야 합니다.
+    //(데이터가 없을때는 null을 반환을 합니다.)
+    userInfo = await storage.read(key: 'userInfo');
+    //user의 정보가 있다면 바로 로그아웃 페이지로 넝어가게 합니다.
+    if (userInfo != null) {
+      Navigator.pushNamed(
+          context,
+          "/home");
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
     AuthViewModel auth = AuthViewModel();
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // const SizedBox(
-          //   width: 200,
-          //   height: 120,
-          // ),
-          TextButton(
-              onPressed: () {
-                auth.signOut();
-              },
-              child: Text("SignOut")),
-          TextButton(
-              onPressed: () {
-                auth.logOut();
-              },
-              child: Text("Logout")),
-          Center(
-            child: Container(
-              child: Image.asset(
-                'assets/images/moyeolam.png',
+    return MaterialApp(
+      home: Scaffold(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // const SizedBox(
+            //   width: 200,
+            //   height: 120,
+            // ),
+            TextButton(
+                onPressed: () {
+                  auth.signOut();
+                },
+                child: Text("SignOut")),
+            TextButton(
+                onPressed: () {
+                  auth.logOut();
+                },
+                child: Text("Logout")),
+            // Container(
+            //   child: FittedBox(
+            //     child: Image.asset('assets/images/moyeolam_logo.png'),
+            //     fit: BoxFit.cover,
+            //   ),
+            // ),
+            
+            Center(
+              child: Container(
+                child: FittedBox(
+                  child: Image.asset(
+                    'assets/images/moyeolam.png',
+                  ),
+                ),
+                // color: Colors.red,
+                width: 240,
+                height: 240,
               ),
-              // color: Colors.red,
-              width: 240,
-              height: 240,
             ),
-          ),
-          const SizedBox(
-            width: 200,
-            height: 36,
-          ),
-          const Text(
-            "모여람",
-            style: TextStyle(
-              color: FONT_COLOR,
-              fontSize: 72,
+            const SizedBox(
+              width: 200,
+              height: 36,
             ),
-          ),
-          const SizedBox(
-            width: 200,
-            height: 80,
-          ),
-          Center(
-            child: InkWell(
-              child: Image.asset(
-                'assets/images/kakao_login_medium_wide.png',
-              ),
-              onTap: () async {
-                var hi = auth.isLogin();
-                print("hi");
-                if (hi == true) {
-                  Navigator.pushNamed(context, "main_alarm_list");
-                } else {
-                  var isSigned = await auth.login();
-                  print("$isSigned 나는 뷰");
-                  if (isSigned == "main") {
-                    Navigator.pushNamed(context, "/main_alarm_list");
-                  } else if (isSigned == "signin") {
-                    Navigator.pushNamed(context, "/set_nickname");
+            
+            const SizedBox(
+              width: 200,
+              height: 80,
+            ),
+            Center(
+              child: InkWell(
+                child: Image.asset(
+                  'assets/images/kakao_login_medium_wide.png',
+                ),
+                onTap: () async {
+                  if (userInfo != null) {
+                    Navigator.pushNamed(context, "/home");
+                  } else {
+                    var isSigned = await auth.login();
+                    print("$isSigned 나는 뷰");
+                    if (isSigned == "main") {
+                      // Navigator.pushNamed(context, "/home");
+                      Navigator.pushNamed(context, "/home");
+                    } else if (isSigned == "signin") {
+                      Navigator.pushNamed(context, "/set_nickname");
+                    }
                   }
-                }
-                // var storage = const FlutterSecureStorage();
-              },
+                  // var storage = const FlutterSecureStorage();
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+        backgroundColor: BACKGROUND_COLOR,
       ),
-      backgroundColor: BACKGROUND_COLOR,
     );
   }
 }

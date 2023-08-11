@@ -38,12 +38,18 @@ public class Member extends BaseTimeEntity {
     @Column
     private String nickname;
 
+    @Builder.Default
+    @Column
+    private Boolean notificationToggle = Boolean.TRUE;
+
+    @Builder.Default
     @OneToMany(mappedBy = "member")
     private List<Friend> friends = new ArrayList<>();
 
     @OneToOne(mappedBy = "member")
     private ProfileImage profileImage;
 
+    @Builder.Default
     @OneToMany(mappedBy = "member")
     private Set<FcmToken> fcmTokens = new HashSet<>();
 
@@ -55,9 +61,15 @@ public class Member extends BaseTimeEntity {
         this.memberToken.setRefreshToken(updateRefreshToken);
     }
 
-    public void setNickname(String nickname){
-        this.nickname=nickname;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public void setMemberToken(MemberToken memberToken) {this.memberToken = memberToken;}
+    public void setMemberToken(MemberToken memberToken) {
+        this.memberToken = memberToken;
+    }
+
+    public void setNotificationToggle(Boolean notificationToggle) {
+        this.notificationToggle = notificationToggle;
+    }
 }

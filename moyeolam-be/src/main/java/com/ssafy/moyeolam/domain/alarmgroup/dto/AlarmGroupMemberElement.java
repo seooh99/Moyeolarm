@@ -21,7 +21,7 @@ public class AlarmGroupMemberElement {
         ProfileImage profileImage = member.getProfileImage();
 
         return AlarmGroupMemberElement.builder()
-                .memberId(alarmGroupMember.getId())
+                .memberId(member.getId())
                 .nickname(member.getNickname())
                 .profileImageUrl(profileImage != null ? profileImage.getImageUrl() : null)
                 .isHost(alarmGroupMember.getAlarmGroupMemberRole().getName().equals(AlarmGroupMemberRole.HOST.getName()))

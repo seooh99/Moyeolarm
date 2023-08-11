@@ -1,24 +1,76 @@
+import 'dart:ffi';
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'arlet_service_model.g.dart';
 
 @JsonSerializable()
 class ApiArletModel {
-  String fromNickname;
-  String title;
-  bool time;
-  String alertType;
-  int createAt;
+  String? code; // 에러 코드
+  String? message; // 에러 메시지
+  ApiArletData? data; // 실제 데이터
 
   ApiArletModel({
-    required this.fromNickname,
-    required this.title,
-    required this.time,
-    required this.alertType,
-    required this.createAt,
+    this.code,
+    this.message,
+    this.data,
   });
-  factory ApiArletModel.fromJson(Map<String, dynamic> json) =>
-      _$ApiArletModelFromJson(json); // 추가
 
-  Map<String, dynamic> toJson() => _$ApiArletModelToJson(this); // 추가
+  factory ApiArletModel.fromJson(Map<String, dynamic> json) {
+    return ApiArletModel(
+      code: json['code'],
+      message: json['message'],
+      data: ApiArletData.fromJson(json['data']),
+    );
+  }
 }
+@JsonSerializable()
+class ApiArletData {
+  List<ApiArletItem>? alerts;
+
+  ApiArletData({
+    this.alerts,
+  });
+
+  factory ApiArletData.fromJson(Map<String, dynamic> json) {
+    return ApiArletData(
+      alerts: (json['alerts'] as List<dynamic>?)?.map((e) => ApiArletItem.fromJson(e as Map<String, dynamic>)).toList(),
+    );
+  }
+}
+
+@JsonSerializable()
+class ApiArletItem {
+  String? fromNickname;
+  String? title;
+  String? time;
+  String? alertType;
+  String? createAt;
+  int? alarmGroupId; // Change to int?
+  int? friendRequestId; // Change to int?
+
+  ApiArletItem({
+    this.fromNickname,
+    this.title,
+    this.time,
+    this.alertType,
+    this.createAt,
+    this.alarmGroupId,
+    this.friendRequestId,
+  });
+
+  factory ApiArletItem.fromJson(Map<String, dynamic> json) {
+    return ApiArletItem(
+      fromNickname: json['fromNickname'] as String?,
+      title: json['title'] as String?,
+      time: json['time'] as String?,
+      alertType: json['alertType'] as String?,
+      createAt: json['createAt'] as String?,
+      alarmGroupId: json['alarmGroupId'] as int?, // Change to int
+      friendRequestId: json['friendRequestId'] as int?, // Change to int
+    );
+  }
+}
+
+
+

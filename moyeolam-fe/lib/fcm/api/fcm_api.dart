@@ -6,13 +6,37 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:youngjun/main.dart';
 
+import '../../common/const/address_config.dart';
 import '../view/arlet_list_view.dart';
 
-void handleMessage(RemoteMessage? message) {
-  // 푸시 알림을 처리하는 로직 구현
-  // 푸시 알림이 눌렸을 때 특정 화면으로 이동하거나 알림 내용을 표시하는 등의 작업 수행
+import 'package:youngjun/main/view/settings.dart';
 
-  // 예를 들어, 푸시 알림이 어떤 내용을 담고 있는지 확인하여 해당 정보를 알려주는 화면으로 이동
+
+import 'package:dio/dio.dart';
+
+Future<bool> fetchNotificationStatus() async {
+  final dio = Dio();
+  const ApiBaseUrl = BASE_URL; // 여기에 실제 API 주소를 지정하세요
+  try {
+    final response = await dio.get('$ApiBaseUrl/alarmgroups/{alarmGroupId}/toggle'); // 여기에 실제 API 엔드포인트를 지정하세요
+    if (response.statusCode == 200) {
+      return response.data['notificationStatus'];
+      print('200ok잘됩니다~~');
+    } else {
+      throw Exception('Failed to fetch notification status');
+      print('fetch실패');
+    }
+  } catch (error) {
+    print('무슨오류임: $error');
+    throw Exception('Failed to fetch notification status');
+  }
+}
+
+void handleMessage(RemoteMessage? message, bool notificationStatus) {
+  if (!notificationStatus) {
+    return;
+  }
+
   if (message != null && message.notification != null) {
     Navigator.of(navigatorKey.currentContext!).pushNamed(
       ArletListView.route,
@@ -29,51 +53,30 @@ Future<void> initLocalNotifications() async {
 
   await FlutterLocalNotificationsPlugin().initialize(
     setting,
-      onDidReceiveNotificationResponse: (NotificationResponse response) async {
-    final payload = response.payload ?? '';
-
-    final parsedJson = jsonDecode(payload);
-    if (!parsedJson.containsKey('routeTo')) {
-      return;
-    }
-
-    final routeTo = parsedJson['routeTo'];
-
-    if (routeTo == 'arlet_list_view') {
-  //     Navigator.push(
-  //       response.notification?.android?.channelId ?? '',
-  //       MaterialPageRoute(
-  //         builder: (context) => ArletListView(),
-  //       ),
-  //     );
-  //   } else if (routeTo == 'another_page') {
-  //     // 다른 페이지로 이동하는 로직 처리
-  //     // 예: Navigator.push(context, MaterialPageRoute(builder: (context) => AnotherPage()));
-    }
-  },
+    onDidReceiveNotificationResponse: (NotificationResponse response) async {
+      final payload = response.payload ?? '';
+      final parsedJson = jsonDecode(payload);
+      if (parsedJson.containsKey('routeTo') && parsedJson['routeTo'] == '/arlet_list') {
 
 
-      );
+      }
+    },
+  );
 
   final platform = _localNotification.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
   await platform?.createNotificationChannel(AndroidNotificationChannel(
-    'high_importance_channel',
-    '중요한 알림',
+    'my_notification_channel',
+    'My Notification Channel',
     importance: Importance.high,
   ));
 }
 
 
-
-// @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // 이 함수는 FCM 메시지를 백그라운드에서 처리하는 핸들러입니다.
-  // 백그라운드에서 FCM 메시지를 수신할 때 호출되며, 수신한 메시지의 타이틀과 내용을 출력합니다.
   print('Title: ${message.notification?.title}');
   print('Body: ${message.notification?.body}');
   print(message.notification?.body);
   initPushNotifications();
-  return handleMessage(message);
 
 }
 
@@ -86,25 +89,28 @@ Future<void> initPushNotifications() async {
     sound: true,
   );
 
+  // 알림 설정 상태를 가져와서 handleMessage 함수에 전달
+  bool notificationStatus = await fetchNotificationStatus();
+
   FirebaseMessaging.instance.getInitialMessage().then((message) {
-    handleMessage(message); // 앱이 백그라운드에서 열렸을 때 처리하는 함수 호출
+    handleMessage(message, notificationStatus); // 앱이 백그라운드에서 열렸을 때 처리하는 함수 호출
   });
 
   FirebaseMessaging.onMessageOpenedApp.listen((message) {
-    handleMessage(message); // 앱이 백그라운드 상태에서 푸시 알림을 눌렀을 때 처리하는 함수 호출
+    handleMessage(message, notificationStatus); // 앱이 백그라운드 상태에서 푸시 알림을 눌렀을 때 처리하는 함수 호출
+
   });
 
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   initLocalNotifications();
+
+
+
 }
 
 
 
-
-
-
-// ChangeNotifier를 상속하고 있으며, FCM 관련 기능을 제공하는 Provider 클래스입니다. FCM을 초기화하고, 토큰을 얻어오며, 백그라운드 메시지 핸들러를 등록하고, 수신한 메시지를 저장하는 등의 기능이 포함되어 있습니다.
 class FirebaseApi with ChangeNotifier {
   final _firebaseMessaging = FirebaseMessaging.instance;
   // String? fcmToken;
@@ -117,25 +123,15 @@ class FirebaseApi with ChangeNotifier {
     final fcmToken = await _firebaseMessaging.getToken();
     print('Token:  $fcmToken');
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-    // FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
-    //   // save token to server
-    // });
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      // 여기에 특정 페이지로 이동하는 로직을 정의
-      // Navigator.of(context).push(
-      //   MaterialPageRoute(builder: (context) => YourTargetPage()),
-      // );
 
       latestMessage = message; // 메시지 저장
       notifyListeners(); // 변경 알림
     });
-
-    // FirebaseMessaging.instance.deleteToken();
 
     notifyListeners();
     initPushNotifications();
     initLocalNotifications();
   }
 
-// Further FCM methods can go here
 }
