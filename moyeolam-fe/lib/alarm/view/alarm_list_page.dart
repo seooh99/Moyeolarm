@@ -22,6 +22,12 @@ class MainAlarmList extends ConsumerStatefulWidget {
 class _MainAlarmListState extends ConsumerState<MainAlarmList> {
   AlarmListViewModel _alarmListViewModel = AlarmListViewModel();
   @override
+  void initState() {
+    // TODO: implement initState
+    ref.refresh(alarmListProvider);
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     AsyncValue<AlarmListModel> alarmgroups = ref.watch(alarmListProvider);
     return RefreshIndicator(
