@@ -45,6 +45,19 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
     super.dispose();
   }
 
+  Future<void> _sendFriendRequest(String memberId) async {
+    final dio = Dio();
+    final friendRepository = FriendsRepository(dio);
+
+    try {
+      await friendRepository.friendRequestPost(memberId as Friend);
+      print('Friend request sent successfully');
+      // 요청을 보내고 나서 원하는 동작을 수행할 수 있습니다.
+    } catch (e) {
+      print('Error sending friend request: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Dio dio = Dio();
@@ -54,9 +67,14 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
       backgroundColor: BACKGROUND_COLOR,
       appBar: AppBar(
         backgroundColor: BACKGROUND_COLOR,
-        leading: Icon(
-          Icons.arrow_back,
-          color: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
         ),
       ),
       body: Column(
@@ -66,16 +84,15 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: TextFieldbox (
+            child: TextFieldbox(
               controller: _searchController,
               setContents: (String) {},
               suffixIcon: IconButton(
                   onPressed: () async {
-                     await _performSearch();
+                    await _performSearch();
                     print('IconButton Clicked');
                     _performSearch();
                   },
-
                   icon: Icon(
                     Icons.search_outlined,
                   )),
@@ -137,7 +154,20 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
                 color: Colors.white,
               ),
             ),
-            trailing: Icon(Icons.close),
+            trailing: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: MAIN_COLOR,
+              ),
+              onPressed: () {
+                _sendFriendRequest(friend.memberId.toString());
+              },
+              child: Text(
+                '요청',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
           );
         },
       ),
