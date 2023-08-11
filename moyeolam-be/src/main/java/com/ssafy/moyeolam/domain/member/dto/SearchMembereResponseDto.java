@@ -10,12 +10,14 @@ public class SearchMembereResponseDto {
     private Long memberId;
     private String nickname;
     private String profileImageUrl;
+    private Boolean isFriend;
 
-    public static SearchMembereResponseDto from(Member member) {
+    public static SearchMembereResponseDto from(Member searchMember, Boolean isFriend) {
         return SearchMembereResponseDto.builder()
-                .memberId(member.getId())
-                .nickname(member.getNickname())
-                .profileImageUrl(member.getProfileImage().getImageUrl())
+                .memberId(searchMember.getId())
+                .nickname(searchMember.getNickname())
+                .profileImageUrl(searchMember.getProfileImage().getImageUrl())
+                .isFriend(isFriend)
                 .build();
     }
 }
