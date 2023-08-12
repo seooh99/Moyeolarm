@@ -50,7 +50,7 @@ public class Member extends BaseTimeEntity {
     private ProfileImage profileImage;
 
     @Builder.Default
-    @OneToMany(mappedBy = "member")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")
     private Set<FcmToken> fcmTokens = new HashSet<>();
 
     public void updateRefreshToken(String updateRefreshToken) {
