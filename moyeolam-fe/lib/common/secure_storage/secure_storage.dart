@@ -11,9 +11,10 @@ class UserInformation {
     if(stringUserInfo !=null){
       var result = jsonDecode(stringUserInfo);
       print("${result["nickname"]}");
-      return result;
+      
+      return UserModel.fromJson(result);
     }else{
-      print("Erorr: userInfo is $stringUserInfo");
+      print("Check: userInfo is $stringUserInfo");
     }
   }
 

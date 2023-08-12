@@ -17,12 +17,12 @@ class AuthView extends StatefulWidget {
 }
 
 class _AuthViewState extends State<AuthView> {
-  UserInformation _userInformation = UserInformation();
-  String? userInfo;
+  late UserInformation _userInformation;
+  UserModel? userInfo;
   @override
   void initState() {
     // TODO: implement initState
-
+    _userInformation = UserInformation();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _asyncMethod();
     });
@@ -33,8 +33,7 @@ class _AuthViewState extends State<AuthView> {
     //read 함수를 통하여 key값에 맞는 정보를 불러오게 됩니다. 이때 불러오는 결과의 타입은 String 타입임을 기억해야 합니다.
     //(데이터가 없을때는 null을 반환을 합니다.)
     // userInfo = await storage.read(key: 'userInfo');
-    var storeData = await _userInformation.getUserInfo();
-    userInfo = storeData["nickname"];
+    userInfo= await _userInformation.getUserInfo();
     print("$userInfo 123");
     //user의 정보가 있다면 바로 로그아웃 페이지로 넝어가게 합니다.
     if (userInfo != null) {
