@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:youngjun/common/const/colors.dart';
+import 'package:youngjun/common/secure_storage/secure_storage.dart';
 import 'package:youngjun/common/textfield_bar.dart';
 import 'package:youngjun/main/view/main_page.dart';
 import 'package:youngjun/user/viewmodel/set_nickname_view_model.dart';
@@ -14,6 +15,7 @@ class SetNickname extends StatefulWidget {
 
 class _SetNicknameState extends State<SetNickname> {
   NicknameViewModel nicknameViewModel = NicknameViewModel();
+  UserInformation _userInformation = UserInformation();
   String? overlaped;
   @override
 
@@ -61,7 +63,10 @@ class _SetNicknameState extends State<SetNickname> {
 
                     });
                     print("$overlaped 오버랩");
-                  }else if(code == "200"){
+                  }else if(code == "200") {
+                    var userInfo = await _userInformation.getUserInfo();
+                    userInfo["nickname"] = nicknameViewModel.nName;
+                    await _userInformation.setUserInfo(userInfo);
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>MainPage()));
                   }
                   //     .then((value) {
