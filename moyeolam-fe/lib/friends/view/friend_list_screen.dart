@@ -163,10 +163,10 @@ Widget build(BuildContext context) {
                           );
                         } else if (snapshot.hasData) {
                           var userInfo =
-                          snapshot.data as Map<String, dynamic>;
-                          var profileImageUrl = userInfo['profileImageUrl'];
+                          snapshot.data;
+                          // var profileImageUrl = userInfo['profileImageUrl'];
                           return CircleAvatar(
-                            backgroundImage: NetworkImage(profileImageUrl),
+                            // backgroundImage: NetworkImage(profileImageUrl),
                           );
                         } else {
                           return CircleAvatar(
