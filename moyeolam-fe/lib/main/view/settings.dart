@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:openvidu_client/openvidu_client.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/button/btn_toggle.dart';
-import 'package:youngjun/common/const/address_config.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../../common/confirm.dart';
-import '../../common/layout/main_nav.dart';
+
 import '../../fcm/view/arlet_list_view.dart';
 import '../../user/viewmodel/auth_view_model.dart';
 import '../service/setting_service.dart';
@@ -15,21 +13,9 @@ import '../service/setting_service.dart';
 
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:youngjun/main.dart';
-
-import '../../common/const/address_config.dart';
-
-
-import 'package:youngjun/main/view/settings.dart';
-
-import 'package:youngjun/main/view/settings.dart';
-
-
-import 'package:dio/dio.dart';
 
 
 void handleMessage(RemoteMessage? message, bool notificationStatus) {
@@ -89,10 +75,8 @@ Future<void> initPushNotifications() async {
     sound: true,
   );
 
-  // `_SettingsContentState` 클래스의 인스턴스 생성
   _SettingsContentState settingsContentState = _SettingsContentState();
 
-  // `_notificationStatus` 값을 가져와서 사용
   bool notificationStatus = settingsContentState._notificationStatus;
 
   FirebaseMessaging.instance.getInitialMessage().then((message) {
@@ -255,8 +239,8 @@ class _SettingsContentState extends State<_SettingsContent> {
             onTap: () {
               showpopup(
                 context,
-                '로그아웃',  // 타이틀 수정
-                '지금 로그아웃 하시겠습니까?', // 컨텐츠 수정
+                '로그아웃',
+                '지금 로그아웃 하시겠습니까?',
                 '예',
                 '아니오',
                     () {
@@ -281,17 +265,16 @@ class _SettingsContentState extends State<_SettingsContent> {
             onTap: () {
               showpopup(
                 context,
-                '회원탈퇴', // 적절한 회원탈퇴 메시지로 수정
-                '지금 회원탈퇴 하시겠습니까?', // 적절한 회원탈퇴 메시지로 수정
+                '회원탈퇴',
+                '지금 회원탈퇴 하시겠습니까?',
                 '예',
                 '아니오',
                     () {
-                  // 예를 눌렀을 때 실행할 함수
                   AuthViewModel().signOut();
                 },
                     () {
-                  // 아니오를 눌렀을 때 실행할 함수
-                  Navigator.pop(context); // 모달 창 닫기
+
+                  Navigator.pop(context);
                 },
               );
             },
@@ -345,23 +328,23 @@ void showpopup(
     ) {
   showDialog(
     context: context,
-    barrierDismissible: true, // 모달 외부 터치 시 닫히도록 설정
+    barrierDismissible: true,
     builder: (context) {
       return ConfirmDialog(
         cancelOnPressed: () {
           if (cancelOnPressed != null) {
-            cancelOnPressed(); // 취소 버튼 누를 때 실행할 함수 호출
-            Navigator.pop(context); // 모달 닫기
+            cancelOnPressed();
+            Navigator.pop(context);
           }
         },
         okOnPressed: () {
           if (okOnPressed != null) {
-            okOnPressed(); // 확인 버튼 누를 때 실행할 함수 호출
-            Navigator.pop(context); // 모달 닫기
+            okOnPressed();
+            Navigator.pop(context);
           }
         },
-        title: title, // title 변수 사용
-        content: content, // content 변수 사용
+        title: title,
+        content: content,
         okTitle: okTitle,
         cancelTitle: cancelTitle,
       );

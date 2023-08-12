@@ -121,8 +121,6 @@ class _ArletListViewState extends State<ArletListView> {
               }
             },
 
-          // ... rest of the GestureDetector code ...
-
           child: Card(
               color: Colors.black,
               child: Row(
