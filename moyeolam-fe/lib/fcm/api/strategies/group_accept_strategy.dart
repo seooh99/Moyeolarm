@@ -8,7 +8,7 @@ class GroupAcceptStrategy {
   // 현재 로그인된 사용자의 아이디를 가져오는 함수
   Future<int?> getCurrentUserId() async {
     // 로그인된 사용자의 아이디를 가져오는 로직을 추가
-    return 1; // 임시로 지정한 값
+    return 2; // 임시로 지정한 값
   }
 
   Future<void> execute(int alarmGroupId, bool isAccepted, int fromMemberId ) async {
@@ -20,7 +20,7 @@ class GroupAcceptStrategy {
         return;
       }
 
-      // 초기 GET 요청 수행
+
       Response response = await _dio.get('/alerts');
 
       if (response.statusCode == 200) {
