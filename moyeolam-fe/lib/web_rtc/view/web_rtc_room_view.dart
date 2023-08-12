@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,8 @@ import 'package:youngjun/common/button/btn_call.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/web_rtc/component/config_view.dart';
 import 'package:youngjun/web_rtc/model/connection.dart';
+import 'package:youngjun/web_rtc/model/face_recognition_model.dart';
+import 'package:youngjun/web_rtc/repository/face_recognition_repository.dart';
 
 import '../../common/const/openvidu_confiig.dart';
 import '../component/media_stream_view.dart';
@@ -28,6 +31,9 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
   MediaDeviceInfo? input;
   bool isInside = false;
   late OpenViduClient _openvidu;
+
+  MemoryImage? _image;
+  ByteBuffer? _bf;
 
   LocalParticipant? localParticipant;
 
@@ -157,6 +163,23 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
     nav.pop();
   }
 
+  Future<void> _captureImage() async {
+    MediaStreamTrack? track = localParticipant?.stream?.getVideoTracks().first;
+
+    _bf = await track?.captureFrame();
+    _image = MemoryImage(_bf!.asUint8List());
+
+    setState(() {});
+  }
+
+  Future<bool> _faceRecognition() async {
+    var multipartFile = MultipartFile.fromBytes(_bf!.asUint8List().cast<int>(),
+        filename: 'image');
+    ResponseFaceRecognitionModel responseFaceRecognitionModel =
+        await FaceRecognitionRepository().faceRecognition(multipartFile);
+    return responseFaceRecognitionModel.data.result;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -175,7 +198,8 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
                       child: Column(
                         children: [
                           Container(
-                            height: 580,
+                            // height: 580,
+                            height: 160,
                             width: 386,
                             child: Wrap(
                               direction: Axis.horizontal,
@@ -209,6 +233,13 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
                               ],
                             ),
                           ),
+                          _image == null
+                              ? Container()
+                              : Container(
+                                  height: 170,
+                                  width: 460,
+                                  child: Image(image: _image!),
+                                ),
                           const SizedBox(
                             height: 20,
                           ),
@@ -225,13 +256,24 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
                                 icons: Icon(Icons.call_end),
                                 backGroundColor: CALLOFF_COLOR,
                                 onPressed: () async {
-                                  _openvidu.sendMessage(OvMessage.fromJson(<String, dynamic>{"data": "true", "type": "pressed"}));
-                                  setState(() {
-                                    localPressed = true;
-                                  });
-                                  if (!remotePressed.containsValue(false)) {
-                                    _onDisconnect();
+                                  await _captureImage();
+                                  bool faceRecognitionResult =
+                                      await _faceRecognition();
+
+                                  if (faceRecognitionResult) {
+                                    _openvidu.sendMessage(
+                                        OvMessage.fromJson(<String, dynamic>{
+                                      "data": "true",
+                                      "type": "success"
+                                    }));
+                                    setState(() {
+                                      localPressed = true;
+                                    });
                                   }
+
+                                  // if (!remotePressed.containsValue(false)) {
+                                  //   _onDisconnect();
+                                  // }
                                 },
                               ),
                               // Row(children: [
