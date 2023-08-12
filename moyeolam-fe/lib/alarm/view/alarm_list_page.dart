@@ -144,6 +144,8 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                             color: MAIN_COLOR,
                           ),
                         ),
+                        ),
+                    ),
                       SizedBox(height: 30),
                       GestureDetector(
                         onTap: () {
