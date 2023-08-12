@@ -34,7 +34,7 @@ class _AuthViewState extends State<AuthView> {
     //(데이터가 없을때는 null을 반환을 합니다.)
     // userInfo = await storage.read(key: 'userInfo');
     var storeData = await _userInformation.getUserInfo();
-    userInfo = storeData["nickname"];
+    userInfo = storeData?.nickname;
     print("$userInfo 123");
     //user의 정보가 있다면 바로 로그아웃 페이지로 넝어가게 합니다.
     if (userInfo != null) {
