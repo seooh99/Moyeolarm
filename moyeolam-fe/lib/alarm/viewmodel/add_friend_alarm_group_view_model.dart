@@ -3,13 +3,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:youngjun/alarm/repository/add_friend_alarm_group_repository.dart';
-import 'package:youngjun/friends/model/friends_search_model.dart';
+import 'package:youngjun/friends/model/friends_list_model.dart';
 import 'package:youngjun/friends/repository/friends_repository.dart';
 
-final addFriendAlarmProvider = ChangeNotifierProvider<AddFriendAlarmGroupViewModel>((ref) => AddFriendAlarmGroupViewModel() );
+AddFriendAlarmGroupViewModel _addFriendAlarmGroupViewModel = AddFriendAlarmGroupViewModel();
+final addFriendAlarmProvider = ChangeNotifierProvider<AddFriendAlarmGroupViewModel>((ref) => _addFriendAlarmGroupViewModel );
 
-final searchFriendProvider = FutureProvider<FriendsSearchModel>((ref) async {
-  return await AddFriendAlarmGroupViewModel().searchFriend();
+final searchFriendProvider = FutureProvider<List<Friend>?>((ref) async {
+  return await _addFriendAlarmGroupViewModel.searchFriend();
 } );
 
 class AddFriendAlarmGroupViewModel extends ChangeNotifier{
@@ -20,6 +21,10 @@ class AddFriendAlarmGroupViewModel extends ChangeNotifier{
   final List<int?> checkId = [];
   final FriendsRepository _friendsRepository = FriendsRepository(Dio());
   String friendNickname = '';
+
+  clearMember(){
+    members.clear();
+  }
 
   setMember(int newMemberId, String newMemberNickname){
     if(!checkId.contains(newMemberId)){
@@ -49,13 +54,13 @@ class AddFriendAlarmGroupViewModel extends ChangeNotifier{
     return await _addFriendAlarmGroupRepository.inviteFriend(alarmGroupId, memberIds);
   }
 
-  searchFriend() async {
-    print("$friendNickname frined");
+  Future<List<Friend>?> searchFriend() async {
+    print("$friendNickname friend");
     var response =  await _friendsRepository.searchFriends(friendNickname);
-    if(response.data == "200"){
-      return response;
+    if(response.code == "200"){
+      return response.data.friends;
     }
-    return;
+    return null;
   }
 }
 

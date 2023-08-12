@@ -28,7 +28,7 @@ class AuthViewModel {
       var kakaoLogin = await kakaoViewModel.login();
       // print("$kakaoLogin 카카오로그인 auth 뷰모델");
 
-      final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+      // final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
       WidgetsFlutterBinding.ensureInitialized();
 
       var fcmToken = await FirebaseMessaging.instance.getToken().then((token) {
@@ -47,7 +47,7 @@ class AuthViewModel {
           fcmToken,
           deviceIndentifier
         );
-        // print("${rawResponse.data} 심기불편");
+        print("${rawResponse.data} 심기불편");
 
         var response = rawResponse.data;
         // await storage.write(key: "userInfo", value: jsonEncode(response));

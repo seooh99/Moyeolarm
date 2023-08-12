@@ -8,9 +8,8 @@ import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/layout/title_bar.dart';
 import 'package:youngjun/common/secure_storage/secure_storage.dart';
 import 'package:youngjun/common/textfield_bar.dart';
-import 'package:youngjun/friends/model/friends_list_model.dart' as list_friends;
-import 'package:youngjun/friends/model/friends_search_model.dart';
 import 'package:youngjun/friends/provider/friends_list_provider.dart';
+import 'package:youngjun/friends/model/friends_list_model.dart';
 
 class AddFriendAlarmGroupView extends ConsumerStatefulWidget{
   final List<MemberModel?> invitedMember;
@@ -32,6 +31,8 @@ class AddFriendAlarmGroupView extends ConsumerStatefulWidget{
 class _AddFriendAlarmGroupViewState extends ConsumerState{
   late final AddFriendAlarmGroupViewModel _addFriendAlarmGroupViewModel;
 
+  final TextEditingController _searchFriend = TextEditingController();
+
   final List<MemberModel?> invitedMember;
   final int alarmGroupId;
 
@@ -39,12 +40,17 @@ class _AddFriendAlarmGroupViewState extends ConsumerState{
     required this.invitedMember,
     required this.alarmGroupId,
   });
-
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _searchFriend.dispose();
+    super.dispose();
+  }
   @override
   void initState() {
     // TODO: implement initState
     if(invitedMember.isNotEmpty) {
-
+      ref.read(addFriendAlarmProvider).clearMember();
       for (int index = 1; index < invitedMember.length; index++) {
           ref.read(addFriendAlarmProvider).setMember(
             invitedMember[index]!.memberId, invitedMember[index]!.nickname);
@@ -58,8 +64,8 @@ class _AddFriendAlarmGroupViewState extends ConsumerState{
     var addFriend = ref.watch(addFriendAlarmProvider);
     List<MemberModel?> members = addFriend.members;
 
-    AsyncValue<FriendsSearchModel> searchedFriends = ref.watch(searchFriendProvider);
-    AsyncValue<List<list_friends.Friend>?> friends = ref.watch(friendsListProvider);
+    AsyncValue<List<Friend>?> searchedFriends = ref.watch(searchFriendProvider);
+    AsyncValue<List<Friend>?> friends = ref.watch(friendsListProvider);
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
       appBar: TitleBar(
@@ -83,16 +89,23 @@ class _AddFriendAlarmGroupViewState extends ConsumerState{
       body: Column(
         children: [
           Container(
-
             height: 100,
             width: double.infinity,
             // child: Text("텍스트 필드창"),
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: TextFieldbox(
-                  setContents: AddFriendAlarmGroupViewModel().setFriendNickname,
-                  suffixIcon: Icon(Icons.search),
-
+                controller: _searchFriend,
+                // setContents: AddFriendAlarmGroupViewModel().setFriendNickname,
+                setContents: (String value){
+                  _searchFriend.text = value;
+                  addFriend.setFriendNickname(_searchFriend.text);
+                },
+                onChange: () {
+                  ref.invalidate(searchFriendProvider);
+                },
+                suffixIcon: Icon(Icons.search),
+                suffixIconColor: FONT_COLOR,
               ),
             ),
           ),
@@ -107,15 +120,15 @@ class _AddFriendAlarmGroupViewState extends ConsumerState{
                 children: [
                   for (var member in members)
                     Container(
+                      padding: const EdgeInsets.only(left: 4, right: 4),
                       child: ActionChip(
                         backgroundColor: MAIN_COLOR,
-                          avatar: Icon(Icons.remove),
+                          avatar: const Icon(Icons.remove),
                           label: Text("${member?.nickname}"),
                           onPressed: () {
                             ref.read(addFriendAlarmProvider).deleteMember(member!);
                           },
                     ),
-                      padding: EdgeInsets.only(left: 4, right: 4),
                     )
                 ],
               ),
@@ -126,26 +139,27 @@ class _AddFriendAlarmGroupViewState extends ConsumerState{
             width: double.infinity,
 
             // child: Text("친구 목록"),
-            child: friends.when(
-                      data: (data){
-                        // if(data.data == "200") {
-                        //   var friends = data.data.friends;
-                return SingleChildScrollView(
-                  child: Column(
-                    children: [
+            child: ( searchedFriends??friends).when(
+              data: (data){
+
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: [
                       // for (var friend in friends)
-                      for (var friend in data!)
-                        ListTile(
-                          onTap: () {
-                            print("${friend.memberId}");
-                            ref
-                                .read(addFriendAlarmProvider)
-                                .setMember(friend.memberId, friend.nickname);
-                          },
-                          title: Text(friend!.nickname),
-                          contentPadding: EdgeInsets.only(top: 12),
-                          leading: Icon(Icons.add, color: FONT_COLOR),
-                          titleTextStyle: TextStyle(
+                      // for(int index=0;i
+                      // if (data)
+                        for (Friend friend in data!)
+                          ListTile(
+                            onTap: () {
+                              print("${friend.memberId} invite view");
+                              ref
+                                  .read(addFriendAlarmProvider)
+                                  .setMember(friend.memberId, friend.nickname);
+                            },
+                            title: Text(friend!.nickname),
+                            contentPadding: EdgeInsets.only(top: 12),
+                            leading: Icon(Icons.add, color: FONT_COLOR),
+                            titleTextStyle: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20),
                           // selected: true,
                           // selectedTileColor: ,
@@ -167,9 +181,10 @@ class _AddFriendAlarmGroupViewState extends ConsumerState{
                   //        },
                   //    )
                 );
-              // }
+
             },
                       error: (error, stackTrace){
+                        print("Error: $error");
                         return const SpinKitFadingCube(
                         // FadingCube 모양 사용
                         color: Colors.blue, // 색상 설정

@@ -15,6 +15,7 @@ import 'package:youngjun/common/layout/title_bar.dart';
 import 'package:youngjun/alarm/component/alarm_guest_list.dart';
 import 'package:youngjun/alarm/model/alarm_detail_model.dart';
 import 'package:youngjun/alarm/view/alarm_add_page.dart';
+import 'package:youngjun/main/view/main_page.dart';
 
 
 class AlarmDetailScreen extends ConsumerStatefulWidget {
@@ -43,9 +44,9 @@ class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
               title: data.title ?? '알람그룹',
               appBar: AppBar(),
               leading: BtnBack(onPressed: () {
-                // Navigator.of(context).push(
-                //     MaterialPageRoute(builder: (context) => MainPage()));
-                Navigator.of(context).pop();
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => MainPage()));
+                // Navigator.of(context).pop();
               }),
               actions: [
                 data.isHost ?
