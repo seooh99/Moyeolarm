@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:youngjun/common/secure_storage/secure_storage.dart';
 import 'package:youngjun/kakao/kakao_login.dart';
 import 'package:youngjun/kakao/main_view_model.dart';
 import 'package:youngjun/main/view/main_page.dart';
@@ -11,11 +12,12 @@ import 'package:youngjun/user/model/user_model.dart';
 import '../../firebase_options.dart';
 import '../repository/user_repository.dart';
 
-const storage = FlutterSecureStorage();
+
 
 class AuthViewModel {
   final UserRepository _userRepository = UserRepository();
   final kakaoViewModel = MainViewModel(KakaoLogin());
+  UserInformation _userInformation = UserInformation();
   dynamic userInfo;
 
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
@@ -48,14 +50,16 @@ class AuthViewModel {
         // print("${rawResponse.data} 심기불편");
 
         var response = rawResponse.data;
-        await storage.write(key: "userInfo", value: jsonEncode(response));
-        print(await storage.readAll());
+        // await storage.write(key: "userInfo", value: jsonEncode(response));
+        _userInformation.setUserInfo(response);
+        // print(await storage.readAll());
         if (response.nickname != null) {
           print(response.nickname);
           // print(await storage.read(key: "userInfo"));
           return "main";
         } else {
-          var userInfo = await storage.read(key: 'userInfo');
+          // var userInfo = await storage.read(key: 'userInfo');
+          var userInfo = await _userInformation.getUserInfo();
           print("$userInfo sigin");
           return 'signin';
         }
