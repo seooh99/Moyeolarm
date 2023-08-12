@@ -9,13 +9,14 @@ class TextFieldbox extends StatefulWidget {
   final TextEditingController? controller;
   final String? hint;
   final String? defualtText;
-
+  final Function? onChange;
 
 
 
 
   const TextFieldbox({
     super.key,
+    this.onChange,
     required this.setContents,
     this.colors,
     this.suffixIcon,
@@ -45,6 +46,9 @@ class _TextFieldboxState extends State<TextFieldbox> {
       textAlign: TextAlign.center,
       onChanged: (text) {
         widget.setContents(text);
+        if(!(widget.onChange != null)){
+          widget.onChange;
+        }
       },
       keyboardType: TextInputType.text,
       // obscureText: true,
