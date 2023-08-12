@@ -74,7 +74,7 @@ class AuthViewModel {
 
   logOut() async {
     try {
-      await storage.delete(key: 'userInfo');
+      await _userInformation.deletUserInfo();
       print("logOut in auth view model");
     } catch (e) {
       print("$e logOut error in auth view model");
@@ -83,13 +83,11 @@ class AuthViewModel {
 
   signOut() async {
     try {
-      var userInfo = await storage
-          .read(key: 'userInfo')
-          .then((value) => jsonDecode(value!));
-      var token = userInfo["accessToken"];
-      await _userRepository.signOut(token).then((value) {
+      var storageData = await _userInformation.getUserInfo();
+      await _userRepository.signOut(storageData["accessToken"]).then((value) {
         print("$value 회원탈퇴 auth view model");
       });
+      await _userInformation.deletUserInfo();
     } catch (e) {
       print("$e signOut error in authViewmodel");
     }

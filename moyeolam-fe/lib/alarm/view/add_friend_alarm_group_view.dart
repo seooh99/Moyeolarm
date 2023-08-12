@@ -6,13 +6,14 @@ import 'package:youngjun/common/button/btn_back.dart';
 import 'package:youngjun/common/button/btn_save_update.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/layout/title_bar.dart';
+import 'package:youngjun/common/secure_storage/secure_storage.dart';
 import 'package:youngjun/common/textfield_bar.dart';
 import 'package:youngjun/friends/model/friends_list_model.dart' as list_friends;
 import 'package:youngjun/friends/model/friends_search_model.dart';
 import 'package:youngjun/friends/provider/friends_list_provider.dart';
 
 class AddFriendAlarmGroupView extends ConsumerStatefulWidget{
-  final List<int?> invitedMember;
+  final List<MemberModel?> invitedMember;
   final int alarmGroupId;
   const AddFriendAlarmGroupView({
     super.key,
@@ -21,18 +22,35 @@ class AddFriendAlarmGroupView extends ConsumerStatefulWidget{
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _AddFriendAlarmGroupViewState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _AddFriendAlarmGroupViewState(
+    alarmGroupId: alarmGroupId,
+    invitedMember: invitedMember,
+  );
 
 }
 
 class _AddFriendAlarmGroupViewState extends ConsumerState{
-  final AddFriendAlarmGroupViewModel _AddFriendAlarmGroupViewModel = AddFriendAlarmGroupViewModel();
+  late final AddFriendAlarmGroupViewModel _addFriendAlarmGroupViewModel;
+
+  final List<MemberModel?> invitedMember;
+  final int alarmGroupId;
+
+  _AddFriendAlarmGroupViewState({
+    required this.invitedMember,
+    required this.alarmGroupId,
+  });
+
   @override
   void initState() {
     // TODO: implement initState
-    // for (int memberId in ) {
-    //   ref.read(addFriendAlarmProvider).setMemberIds(memberId);
-    // }
+    if(invitedMember.isNotEmpty) {
+
+      for (int index = 1; index < invitedMember.length; index++) {
+          ref.read(addFriendAlarmProvider).setMember(
+            invitedMember[index]!.memberId, invitedMember[index]!.nickname);
+      }
+    }
+    _addFriendAlarmGroupViewModel = AddFriendAlarmGroupViewModel();
     super.initState();
   }
   @override
@@ -55,7 +73,7 @@ class _AddFriendAlarmGroupViewState extends ConsumerState{
         actions: [
           BtnSaveUpdate(
               onPressed: () async {
-                await _AddFriendAlarmGroupViewModel.inviteFriend(1, addFriend.checkId);
+                await _addFriendAlarmGroupViewModel.inviteFriend(alarmGroupId, addFriend.checkId);
                 Navigator.of(context).pop();
               }, 
               text: "초대",
