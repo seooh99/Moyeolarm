@@ -17,12 +17,10 @@ class MainAlarmList extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MainAlarmListState();
-
-
 }
 
 class _MainAlarmListState extends ConsumerState<MainAlarmList> {
-  AlarmListViewModel _alarmListViewModel = AlarmListViewModel();
+  final AlarmListViewModel _alarmListViewModel = AlarmListViewModel();
   @override
   // void initState() {
   //   // TODO: implement initState
@@ -31,9 +29,9 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
   // }
   @override
   Widget build(BuildContext context) {
-
+    var alarmDetailModel = ref.watch(alarmDetailProvider);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.refresh(alarmListProvider);
+      ref.invalidate(alarmListProvider);
     });
 
     AsyncValue<AlarmListModel> alarmgroups = ref.watch(alarmListProvider);
@@ -47,6 +45,12 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                   MaterialPageRoute(
                       builder: (context) =>  ArletListView()
                   )
+              ).then(
+               (value) {
+                 setState(() {
+                  ref.invalidate(alarmListProvider);
+                 });
+               },
               );
             },
             icon: Icon(Icons.notifications),
@@ -55,105 +59,85 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
       backgroundColor: BACKGROUND_COLOR,
       body: RefreshIndicator(
         onRefresh: ()async{
-          ref.refresh(alarmListProvider);
+          ref.invalidate(alarmListProvider);
         },
         child: Padding(
           padding: EdgeInsets.only(bottom: 68),
-          child: alarmgroups.when(data: (data) {
-            if (data != null && data.alarmGroups != null) {
-              var alarmGroups = data.alarmGroups;
-              return MaterialApp(
-                home: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      for (var alarmGroup in alarmGroups)
-                        GestureDetector(
-                          onLongPress: ()async{
-                            print("${alarmGroup.alarmGroupId}");
-                            showDialog(
-                                context: context,
-                                builder: (context) => ConfirmDialog(
-                                    cancelOnPressed: (){
-                                      Navigator.pop(context);
-                                    },
-                                    okOnPressed:  () async {
-                                      await _alarmListViewModel.deleteAlarmGroup(alarmGroup.alarmGroupId);
-                                      ref.refresh(alarmListProvider);
-                                      Navigator.pop(context);
-                                    },
-                                    title: "삭제요청",
-                                    content: "삭제?",
-                                    okTitle: "삭제",
-                                    cancelTitle: "취소",
-                                ),
-                                // builder: (context) => ConfirmDialog(
-                                //   title: alarmGroup.isHost?"알람 그룹 삭제":"알람 그룹 나가기",
-                                //   content: alarmGroup.isHost?
-                                //   "알람 그룹을 삭제하시겠습니까?":
-                                //   "알람 그룹을 나가시겠습니까?",
-                                //   okTitle: "삭제",
-                                //   cancelTitle: "취소",
-                                //   okOnPressed: () async {
-                                //     await _alarmListViewModel.deleteAlarmGroup(alarmGroup.alarmGroupId);
-                                //     ref.refresh(alarmListProvider);
-                                //     Navigator.pop(context);
-                                //   },
-                                //   cancelOnPressed: (){
-                                //     Navigator.pop(context);
-                                //   },
-                                // ),
+          child: alarmgroups.when(
+              data: (data) {
+                var alarmGroups = data.alarmGroups;
+                return MaterialApp(
+                  home: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        for (var alarmGroup in alarmGroups)
+                          GestureDetector(
+                            onLongPress: ()async{
+                              print("${alarmGroup.alarmGroupId}");
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => ConfirmDialog(
+                                      cancelOnPressed: (){
+                                        Navigator.pop(context);
+                                      },
+                                      okOnPressed:  () async {
+                                        await _alarmListViewModel.deleteAlarmGroup(alarmGroup.alarmGroupId);
+                                        ref.invalidate(alarmListProvider);
+                                        Navigator.pop(context);
+                                      },
+                                      title: "삭제 요청",
+                                      content: "삭제?",
+                                      okTitle: "삭제",
+                                      cancelTitle: "취소",
+                                  ),
+                                  // builder: (context) => ConfirmDialog(
+                                  //   title: alarmGroup.isHost?"알람 그룹 삭제":"알람 그룹 나가기",
+                                  //   content: alarmGroup.isHost?
+                                  //   "알람 그룹을 삭제하시겠습니까?":
+                                  //   "알람 그룹을 나가시겠습니까?",
+                                  //   okTitle: "삭제",
+                                  //   cancelTitle: "취소",
+                                  //   okOnPressed: () async {
+                                  //     await _alarmListViewModel.deleteAlarmGroup(alarmGroup.alarmGroupId);
+                                  //     ref.refresh(alarmListProvider);
+                                  //     Navigator.pop(context);
+                                  //   },
+                                  //   cancelOnPressed: (){
+                                  //     Navigator.pop(context);
+                                  //   },
+                                  // ),
+                              );
+                            },
+                            onTap: () async{
+                              // Navigator.of(context).pushNamed("/alarm_group_detail ", arguments: alarmGroup.alarmGroupId);
+                              await alarmDetailModel.setAlarmGroupId(alarmGroup.alarmGroupId);
+                              Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => AlarmDetailScreen()),
+
                             );
                           },
-                          onTap: () async{
-                            // Navigator.of(context).pushNamed("/alarm_group_detail ", arguments: alarmGroup.alarmGroupId);
-                            var response = await AlarmListDetailViewModel().getAlarmListDetail(alarmGroup.alarmGroupId);
-                            Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => AlarmDetailScreen(alarmGroup: response,)),
-
-                          );
-                        },
-                        child: AlarmList(
-                          alarmGroupId: alarmGroup.alarmGroupId!,
-                          hour: alarmGroup.hour!,
-                          minute: alarmGroup.minute!,
-                          toggle: alarmGroup.toggle!,
-                          title: alarmGroup.title!,
-                          weekday: alarmGroup.dayOfWeek!,
-                          toggleChanged: (bool value) async {
-                            await _alarmListViewModel.updateAlarmToggle(alarmGroup.alarmGroupId);
-                            ref.refresh(alarmListProvider);
-                          },
-                        ),
-                      ),
-                    SizedBox(height: 30),
-                    GestureDetector(
-                      onTap: () {
-                        print("눌림");
-                        // Navigator.pushNamed(context, "/add_alarm_group");
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> AlarmAddScreen()))
-                        .then((value) {setState(() {
-                            ref.refresh(alarmListProvider);
-                        });});
-                      },
-                      child: Card(
-                        margin: EdgeInsets.only(left: 10, right: 10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: const BorderSide(
-                            style: BorderStyle.solid,
-                            color: MAIN_COLOR,
+                          child: AlarmList(
+                            alarmGroupId: alarmGroup.alarmGroupId,
+                            hour: alarmGroup.hour,
+                            minute: alarmGroup.minute,
+                            toggle: alarmGroup.toggle,
+                            title: alarmGroup.title,
+                            weekday: alarmGroup.dayOfWeek,
+                            toggleChanged: (bool value) async {
+                              await _alarmListViewModel.updateAlarmToggle(alarmGroup.alarmGroupId);
+                              ref.invalidate(alarmListProvider);
+                            },
                           ),
                         ),
-                        ),
-                    ),
                       SizedBox(height: 30),
                       GestureDetector(
                         onTap: () {
                           print("눌림");
                           // Navigator.pushNamed(context, "/add_alarm_group");
                           Navigator.push(context, MaterialPageRoute(builder: (context)=> AlarmAddScreen()))
-                          .then((value) {setState(() {
-                              ref.refresh(alarmListProvider);
+                          .then((value) {
+                            setState(() {
+                              ref.invalidate(alarmListProvider);
                           });});
                         },
                         child: Card(
@@ -165,30 +149,47 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                               color: MAIN_COLOR,
                             ),
                           ),
-                          color: BACKGROUND_COLOR,
-                          child: const Center(
-                            heightFactor: 2,
-                            child: Text(
-                              "+",
-                              style: TextStyle(
+                          ),
+                      ),
+                        SizedBox(height: 30),
+                        GestureDetector(
+                          onTap: () {
+                            print("눌림");
+                            // Navigator.pushNamed(context, "/add_alarm_group");
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=> AlarmAddScreen()))
+                            .then((value) {setState(() {
+                                ref.invalidate(alarmListProvider);
+                            });});
+                          },
+                          child: Card(
+                            margin: EdgeInsets.only(left: 10, right: 10),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: const BorderSide(
+                                style: BorderStyle.solid,
                                 color: MAIN_COLOR,
-                                fontSize: 40,
-                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            color: BACKGROUND_COLOR,
+                            child: const Center(
+                              heightFactor: 2,
+                              child: Text(
+                                "+",
+                                style: TextStyle(
+                                  color: MAIN_COLOR,
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            } else {
-              return Center(
-                child: Text("값이 없습니다."),
-              );
-            }
-          }, error: (error, stackTrace) {
+                );
+              },
+          error: (error, stackTrace) {
             return SpinKitFadingCube(
               // FadingCube 모양 사용
               color: Colors.blue, // 색상 설정
