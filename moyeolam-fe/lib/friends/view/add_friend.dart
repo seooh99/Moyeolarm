@@ -19,7 +19,7 @@ class AddFriends extends ConsumerStatefulWidget {
 class _AddFriendsState extends ConsumerState<AddFriends> {
   final TextEditingController _searchController = TextEditingController();
 
-  List<Friend>? _searchResults; // 검색 결과를 저장할 변수
+  List<Friend>? _searchResults;
 
   Future<void> _performSearch() async {
     final dio = Dio(BaseOptions(baseUrl: BASE_URL));
@@ -33,7 +33,7 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
 
     if (keyword.isEmpty) {
       setState(() {
-        _searchResults = null; // 검색 키워드가 없으면 결과를 초기화합니다.
+        _searchResults = null;
       });
     } else {
       final searchResult = await friendRepository.searchFriends(keyword);
@@ -56,14 +56,14 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
     super.dispose();
   }
 
-  Future<void> _sendFriendRequest(String memberId) async {
+  Future<void> _sendFriendRequest(int memberId) async {
     final dio = Dio(BaseOptions(baseUrl: BASE_URL));
-    final friendRepository = FriendsRepository(dio, baseUrl: BASE_URL);
+    final friendRepository = FriendsRepository(dio);
 
     try {
       await friendRepository.friendRequestPost(memberId);
       print('Friend request sent successfully');
-      // 요청을 보내고 나서 원하는 동작을 수행할 수 있습니다.
+
     } catch (e) {
       print('Error sending friend request: $e');
     }
@@ -98,7 +98,7 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
             child: TextFieldbox(
               controller: _searchController,
               setContents: (String value) {
-                // 검색어 입력이 발생할 때마다 검색어를 _searchController에 저장
+
                 _searchController.text = value;
               },
               suffixIcon: IconButton(
@@ -173,7 +173,7 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
                 backgroundColor: MAIN_COLOR,
               ),
               onPressed: () {
-                _sendFriendRequest(friend.memberId.toString());
+                _sendFriendRequest(friend.memberId);
               },
               child: Text(
                 '요청',
