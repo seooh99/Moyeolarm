@@ -20,8 +20,8 @@ class _MainPageState extends State<MainPage> {
     MainAlarmList(),
     // Text("친구설정 페이지"),
     FriendListScreen(),
-    // Settings(),
-    Text("세팅페이지"),
+    Settings(),
+    // Text("세팅페이지"),
   ];
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
@@ -31,43 +31,48 @@ class _MainPageState extends State<MainPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: BACKGROUND_COLOR,
-        appBar: TitleBar(
-            appBar: AppBar(),
-            title: "모여람",
-        ),
-        body: _widgetOption.elementAt(_selectedIndex),
-        bottomSheet: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          iconSize: 35.0,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.alarm,
-              ),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.group,
-              ),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.settings,
-                ),
-                label: ''),
-          ],
-          currentIndex: _selectedIndex,
-          unselectedItemColor: BEFORE_SELECT_ICON_COLOR,
-          selectedItemColor: Colors.white,
-          onTap: _onItemTapped,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
+    return WillPopScope(
+      onWillPop: (){
+        return Future(() => false);
+      },
+      child: MaterialApp(
+        home: Scaffold(
           backgroundColor: BACKGROUND_COLOR,
+          // appBar: TitleBar(
+          //     appBar: AppBar(),
+          //     title: "모여람",
+          // ),
+          body: _widgetOption.elementAt(_selectedIndex),
+          bottomSheet: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            iconSize: 35.0,
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.alarm,
+                ),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.group,
+                ),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.settings,
+                  ),
+                  label: ''),
+            ],
+            currentIndex: _selectedIndex,
+            unselectedItemColor: BEFORE_SELECT_ICON_COLOR,
+            selectedItemColor: Colors.white,
+            onTap: _onItemTapped,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            backgroundColor: BACKGROUND_COLOR,
+          ),
         ),
       ),
     );

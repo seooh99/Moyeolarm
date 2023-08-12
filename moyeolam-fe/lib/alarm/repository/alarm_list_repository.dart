@@ -5,6 +5,7 @@ import 'package:youngjun/common/const/address_config.dart';
 import '../model/add_alarm_group_model.dart';
 import '../model/alarm_detail_model.dart';
 import '../model/alarm_list_model.dart';
+import '../model/alarm_toggle_model.dart';
 
 class AlarmListRepository {
   final AlarmListDataSource _alarmListDataSource = AlarmListDataSource(
@@ -24,5 +25,10 @@ class AlarmListRepository {
   Future<AddAlarmGroupResponseModel> deleteAlarmGroup(int alarmGroupId){
     print("delete $alarmGroupId");
     return _alarmListDataSource.deleteAlarmGroup(alarmGroupId);
+  }
+
+  Future<AlarmToggleResponseModel> updateToggle(int alarmGroupId){
+    print("update Toggle $alarmGroupId");
+    return _alarmListDataSource.updateToggle(alarmGroupId);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:youngjun/alarm/view/add_friend_alarm_group_view.dart';
 import 'package:youngjun/alarm/viewmodel/add_alarm_group_view_model.dart';
 import 'package:youngjun/alarm/viewmodel/alarm_detail_view_model.dart';
 import 'package:youngjun/common/button/btn_back.dart';
@@ -242,9 +243,36 @@ backgroundColor: BACKGROUND_COLOR,
                           AlarmGuestList(
                             nickname: widget.alarmGroup.members[index].nickname,
                             profileImage: Image.network("${widget.alarmGroup.members[index].profileUrl}")??Image.asset("assets/images/moyeolam"),
+                          ),
+                        if(widget.alarmGroup.members.length <6)
+                          GestureDetector(
+                            onTap: (){
+                              List<int?> members = [];
+                              for(int index=0;index<widget.alarmGroup.members.length;index++){
+                                members.add(widget.alarmGroup.members[index].memberId);
+                              }
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AddFriendAlarmGroupView(
+                                alarmGroupId: widget.alarmGroup.alarmGroupId,
+                                invitedMember: members,
+                              )));
+                            },
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                side: BorderSide(
+                                  width: 3,
+                                  color: MAIN_COLOR,
+                                  style: BorderStyle.solid
+                                ),
+                              ),
+                              color: BACKGROUND_COLOR,
+                              child: Center(
+                                child: Icon(Icons.add,
+                                color: MAIN_COLOR,
+                                size: 20,),
+                              ),
+                            ),
                           )
-                        ,
-
 
 
                       ],
