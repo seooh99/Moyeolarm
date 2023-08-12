@@ -15,7 +15,7 @@ abstract class FriendsRepository {
   _FriendsRepository;
 
   @POST('/friends/{memberId}/request')
-  Future<void> friendRequestPost(@Path() String memberId,);
+  Future<void> friendRequestPost(@Path() int memberId);
 
   @GET('/friends/search')
   Future<FriendsListModel> searchFriends(@Query('keyword') String keyword);

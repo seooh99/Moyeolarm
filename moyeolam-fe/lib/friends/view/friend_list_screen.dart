@@ -366,7 +366,7 @@ Widget _buildSearchResults() {
           // );
           ListTile(
             leading: CircleAvatar(
-              backgroundImage: NetworkImage(friend.profileImageUrl ?? ''),
+              //backgroundImage: NetworkImage(friend.profileImageUrl ?? ''),
             ),
             title: Text(
               friend.nickname ?? '',
