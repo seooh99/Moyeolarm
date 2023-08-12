@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 
 import '../../common/const/address_config.dart';
+import '../model/friends_list_model.dart';
 import '../model/friends_search_model.dart';
 
 part 'friends_repository.g.dart';
@@ -14,11 +15,10 @@ abstract class FriendsRepository {
   _FriendsRepository;
 
   @POST('/friends/{memberId}/request')
-  Future<Friend> friendRequestPost(@Path() Friend memberId,
+  Future<void> friendRequestPost(@Path() String memberId,);
 
-      );
   @GET('/friends/search')
-  Future<FriendsSearchModel> searchFriends(@Query('keyword') String keyword);
+  Future<FriendsListModel> searchFriends(@Query('keyword') String keyword);
 
   @DELETE('/friends/{myFriendId}')
   Future<void> deleteFriend(@Path() int myFriendId);

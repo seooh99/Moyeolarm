@@ -1,13 +1,15 @@
 import 'package:dio/dio.dart';
 
-class FriendAcceptStrategy {
-  final Dio _dio = Dio(); // 미리 생성된 Dio 인스턴스 사용
+import '../../../common/const/address_config.dart';
 
-  void execute(String memberId, String friendRequestId, bool isAccepted) async {
+class FriendAcceptStrategy {
+  final Dio _dio = Dio(BaseOptions(baseUrl: BASE_URL)); // 미리 생성된 Dio 인스턴스 사용
+
+  void execute(bool isAccepted, int friendRequestId) async {
     try {
       // 초기 GET 요청 수행
       // memberId 값을 이용하여 친구 수락에 따른 API 요청 처리
-      Response response = await _dio.get('/friends/$memberId/request');
+      Response response = await _dio.get('/alerts');
 
       if (response.statusCode == 200) {
         // API 요청 성공 처리
@@ -15,9 +17,9 @@ class FriendAcceptStrategy {
         print('Response Data: ${response.data}');
 
         if (isAccepted) {
-          await ApproveFriend(friendRequestId);
+          await ApproveFriend(true, friendRequestId);
         } else {
-          await ApproveFriend(friendRequestId);
+          await ApproveFriend(false, friendRequestId);
         }
 
       } else {
@@ -30,7 +32,7 @@ class FriendAcceptStrategy {
     }
   }
 
-  Future<void> ApproveFriend(String friendRequestId) async {
+  Future<void> ApproveFriend(bool isAccepted, int friendRequestId) async {
     try {
       // 알람 그룹 수락을 위한 API 요청 수행
       Response response = await _dio.post('/friends/$friendRequestId/approve');
@@ -48,7 +50,7 @@ class FriendAcceptStrategy {
     }
   }
 
-  Future<void> DeclineFriend(String friendRequestId) async {
+  Future<void> DeclineFriend(bool isAccepted, int friendRequestId) async {
     try {
       // 알람 그룹 거절을 위한 API 요청 수행
       Response response = await _dio.post('/friends/$friendRequestId/reject');

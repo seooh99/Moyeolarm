@@ -18,7 +18,7 @@ class AlarmListRepository {
   }
 
   Future<AlarmDetailResponseModel> getAlarmListDetail(int alarmGroupId) {
-    print("alarmGroupId: ${alarmGroupId}");
+    // print("alarmGroupId: ${alarmGroupId}");
     return _alarmListDataSource.getAlarmDetail(alarmGroupId);
   }
 

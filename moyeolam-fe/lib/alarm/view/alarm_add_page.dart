@@ -1,34 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+
 import 'package:youngjun/alarm/viewmodel/add_alarm_group_view_model.dart';
 import 'package:youngjun/alarm/viewmodel/alarm_detail_view_model.dart';
-import 'package:youngjun/alarm/viewmodel/alarm_list_view_model.dart';
+
+import 'package:youngjun/alarm/component/alarm_middle_select.dart';
+import 'package:youngjun/alarm/model/alarm_detail_model.dart';
+import 'package:youngjun/alarm/view/alarm_detail_page.dart';
+
+
+
 import 'package:youngjun/common/button/btn_back.dart';
 import 'package:youngjun/common/clock.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/layout/title_bar.dart';
-import 'package:youngjun/main/view/main_page.dart';
-
-import '../../common/button/btn_save_update.dart';
-import '../component/alarm_middle_select.dart';
-import '../../common/textfield_bar.dart';
-import '../model/alarm_detail_model.dart';
-import 'alarm_detail_page.dart';
-import 'alarm_list_page.dart';
+import 'package:youngjun/common/textfield_bar.dart';
 
 
-
-
-class AlarmAddScreen extends StatefulWidget {
+class AlarmAddScreen extends ConsumerStatefulWidget {
   const AlarmAddScreen({super.key, this.detailAlarmGroup, });
   final AlarmGroup? detailAlarmGroup;
   @override
-  State<AlarmAddScreen> createState() => _AlarmAddScreenState();
+  ConsumerState<AlarmAddScreen> createState() => _AlarmAddScreenState();
 }
 
-class _AlarmAddScreenState extends State<AlarmAddScreen> {
+class _AlarmAddScreenState extends ConsumerState<AlarmAddScreen> {
   late final AddAlarmGroupViewModel _addAlarmGroupViewModel;
-  final AlarmListDetailViewModel _alarmListDetailViewModel = AlarmListDetailViewModel();
+  // final AlarmListDetailViewModel _alarmListDetailViewModel = AlarmListDetailViewModel();
   @override
   void initState() {
     // TODO: implement initState
@@ -41,8 +40,8 @@ class _AlarmAddScreenState extends State<AlarmAddScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    var _alarmDetail = ref.watch(alarmDetailProvider);
+    return Scaffold(
         backgroundColor: BACKGROUND_COLOR,
         appBar: TitleBar(
           appBar: AppBar(),
@@ -53,22 +52,27 @@ class _AlarmAddScreenState extends State<AlarmAddScreen> {
                 print(widget.detailAlarmGroup?.alarmGroupId);
                 if(widget.detailAlarmGroup != null){
                   await _addAlarmGroupViewModel.updateAlarmGroup(widget.detailAlarmGroup!.alarmGroupId);
-                  var response = await _alarmListDetailViewModel.getAlarmListDetail(widget.detailAlarmGroup!.alarmGroupId);
-                  if (response != null) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            AlarmDetailScreen(alarmGroup: response)));
-                  }else{
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            AlarmDetailScreen(alarmGroup: widget.detailAlarmGroup!,)));
-                  }
+                  // var response = await _alarmListDetailViewModel.getAlarmListDetail(widget.detailAlarmGroup!.alarmGroupId);
+                  await _alarmDetail.setAlarmGroupId(widget.detailAlarmGroup!.alarmGroupId);
+                  // if (response != null) {
+                  //   Navigator.of(context).push(MaterialPageRoute(
+                  //       builder: (context) =>
+                  //           AlarmDetailScreen()));
+                  // }else{
+                  //   Navigator.of(context).push(MaterialPageRoute(
+                  //       builder: (context) =>
+                  //           const AlarmDetailScreen()
+                  //     )
+                  //   );
+                  Navigator.of(context).pop();
+                  // }
                 }else {
                   var newGroupId = await _addAlarmGroupViewModel.addAlarmGroup();
-                  var response = await _alarmListDetailViewModel.getAlarmListDetail(newGroupId);
+                  // var response = await _alarmListDetailViewModel.getAlarmListDetail(newGroupId);
+                  await _alarmDetail.setAlarmGroupId(newGroupId);
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) =>
-                          AlarmDetailScreen(alarmGroup: response,)));
+                          AlarmDetailScreen()));
                 }
 
               },
@@ -137,8 +141,8 @@ class _AlarmAddScreenState extends State<AlarmAddScreen> {
           ],
         ),
 
-      ),
-    );
+      );
+
   }
 }
 
