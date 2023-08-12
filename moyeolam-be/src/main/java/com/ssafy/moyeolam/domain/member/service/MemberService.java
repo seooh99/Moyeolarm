@@ -1,5 +1,8 @@
 package com.ssafy.moyeolam.domain.member.service;
 
+import com.ssafy.moyeolam.domain.friend.domain.FriendRequest;
+import com.ssafy.moyeolam.domain.friend.repository.FriendRepository;
+import com.ssafy.moyeolam.domain.friend.repository.FriendRequestRepository;
 import com.ssafy.moyeolam.domain.member.domain.Member;
 import com.ssafy.moyeolam.domain.member.domain.ProfileImage;
 import com.ssafy.moyeolam.domain.member.dto.*;
@@ -23,6 +26,7 @@ import java.util.Map;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final ProfileImageRepository profileImageRepository;
+    private final FriendRepository friendRepository;
     private final S3Service s3Service;
 
 
@@ -89,11 +93,16 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public SearchMembereResponseDto searchMember(String keyword) {
+    public SearchMembereResponseDto searchMember(Long loginMemberId, String keyword) {
         Member searchMember = memberRepository.findByNickname(keyword)
                 .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER_BY_NICKNAME));
 
-        return SearchMembereResponseDto.from(searchMember);
+        if (loginMemberId.equals(searchMember.getId())) {
+            throw new MemberException(MemberErrorInfo.SEARCH_MEMBER_MYSELF);
+        }
+        Boolean isFriend = friendRepository.existsByMemberIdAndMyFriendId(loginMemberId, searchMember.getId());
+
+        return SearchMembereResponseDto.from(searchMember, isFriend);
     }
 
     @Transactional

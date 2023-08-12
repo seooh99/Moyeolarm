@@ -5,6 +5,8 @@ import 'package:youngjun/common/button/btn_toggle.dart';
 import 'package:youngjun/common/const/address_config.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import '../../common/layout/main_nav.dart';
+
 class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key: key);
 
@@ -27,7 +29,7 @@ class _SettingsContent extends StatefulWidget {
 }
 
 class _SettingsContentState extends State<_SettingsContent> {
-  bool _notificationStatus = false; // Default
+  bool _notificationStatus = true; // 일
 
   @override
   void initState() {
@@ -40,18 +42,21 @@ class _SettingsContentState extends State<_SettingsContent> {
       final dio = Dio();
       dio.options.baseUrl = BASE_URL;
 
-      final response =
-      await dio.get('$BASE_URL/getAPI!!!!!');
+      final response = await dio.patch(
+          '/member/settings/notification-toggle');
+
       if (response.statusCode == 200) {
+        print('fetch 성공');
+        final responseData = response.data;
+        final notificationStatus = responseData['data'];
         setState(() {
-          _notificationStatus = response.data['notificationStatus'];
+          _notificationStatus = notificationStatus;
         });
       } else {
-        throw Exception('fetch notification 실패');
+        throw Exception('fetch 노테이션 실패');
       }
     } catch (error) {
-      print('에러입니다: $error');
-      throw Exception('Failed to fetch notification status');
+      print('에러입니다 여기에러인가: $error');
     }
   }
 
@@ -61,21 +66,14 @@ class _SettingsContentState extends State<_SettingsContent> {
       dio.options.baseUrl = BASE_URL;
 
 
-      await dio.post('postAPI!!', data: {'status': status});
+      var response = await dio.patch(
+          '/member/settings/notification-toggle',
+          data: {'status': status});
 
       setState(() {
         _notificationStatus = status;
       });
-
-      // Fetch and refresh notification status again
-      fetchNotificationStatus();
-
-      RemoteMessage tempMessage = RemoteMessage(
-        notification: RemoteNotification(
-          title: 'Temp',
-          body: 'FCM notification',
-        ),
-      );
+    print('${response?.data}update 성공');
 
 
     } catch (e) {

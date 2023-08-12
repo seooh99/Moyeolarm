@@ -110,19 +110,38 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                             Navigator.push(context,
                               MaterialPageRoute(builder: (context) => AlarmDetailScreen(alarmGroup: response,)),
 
-                            );
+                          );
+                        },
+                        child: AlarmList(
+                          alarmGroupId: alarmGroup.alarmGroupId!,
+                          hour: alarmGroup.hour!,
+                          minute: alarmGroup.minute!,
+                          toggle: alarmGroup.toggle!,
+                          title: alarmGroup.title!,
+                          weekday: alarmGroup.dayOfWeek!,
+                          toggleChanged: (bool value) async {
+                            await _alarmListViewModel.updateAlarmToggle(alarmGroup.alarmGroupId);
+                            ref.refresh(alarmListProvider);
                           },
-                          child: AlarmList(
-                            alarmGroupId: alarmGroup.alarmGroupId!,
-                            hour: alarmGroup.hour!,
-                            minute: alarmGroup.minute!,
-                            toggle: alarmGroup.toggle!,
-                            title: alarmGroup.title!,
-                            weekday: alarmGroup.dayOfWeek!,
-                            toggleChanged: (bool value) async {
-                              await _alarmListViewModel.updateAlarmToggle(alarmGroup.alarmGroupId);
-                              ref.refresh(alarmListProvider);
-                            },
+                        ),
+                      ),
+                    SizedBox(height: 30),
+                    GestureDetector(
+                      onTap: () {
+                        print("눌림");
+                        // Navigator.pushNamed(context, "/add_alarm_group");
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> AlarmAddScreen()))
+                        .then((value) {setState(() {
+                            ref.refresh(alarmListProvider);
+                        });});
+                      },
+                      child: Card(
+                        margin: EdgeInsets.only(left: 10, right: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: const BorderSide(
+                            style: BorderStyle.solid,
+                            color: MAIN_COLOR,
                           ),
                         ),
                       SizedBox(height: 30),
