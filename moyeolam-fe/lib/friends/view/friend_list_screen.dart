@@ -6,6 +6,7 @@ import 'package:youngjun/common/layout/title_bar.dart';
 import 'package:youngjun/common/secure_storage/secure_storage.dart';
 import 'package:youngjun/friends/repository/friends_repository.dart';
 import '../../common/textfield_bar.dart';
+import '../../user/model/user_model.dart';
 import '../model/friends_list_model.dart';
 import '../provider/friends_delete_provider.dart';
 import '../provider/friends_list_provider.dart';
@@ -151,7 +152,7 @@ Widget build(BuildContext context) {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    FutureBuilder(
+                    FutureBuilder<UserModel?>(
                       future: _userInformation.getUserInfo(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
@@ -162,11 +163,11 @@ Widget build(BuildContext context) {
                             backgroundColor: Colors.white,
                           );
                         } else if (snapshot.hasData) {
-                          var userInfo =
-                          snapshot.data as Map<String, dynamic>;
-                          var profileImageUrl = userInfo['profileImageUrl'];
+                          UserModel? userInfo =
+                              snapshot.data;
+                          var profileImageUrl = userInfo?.profileImageUrl;
                           return CircleAvatar(
-                            backgroundImage: NetworkImage(profileImageUrl),
+                            backgroundImage: NetworkImage(profileImageUrl ?? ''),
                           );
                         } else {
                           return CircleAvatar(
@@ -190,20 +191,19 @@ Widget build(BuildContext context) {
                               SizedBox(
                                 width: 30,
                               ),
-                              FutureBuilder(
+                              FutureBuilder<UserModel?>(
                                 future: _userInformation.getUserInfo(),
-                                builder: (context,
-                                    AsyncSnapshot<dynamic> snapshot) {
+                                builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
                                     return CircularProgressIndicator();
                                   } else if (snapshot.hasError) {
                                     return Text('오류 발생: ${snapshot.error}');
                                   } else if (snapshot.hasData) {
-                                    var userInfo =
-                                    snapshot.data as Map<String, dynamic>;
+                                    UserModel? userInfo =
+                                    snapshot.data;
                                     return Text(
-                                      '${userInfo["nickname"]}',
+                                      '${userInfo?.nickname ?? '닉네임 없음'}',
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         color: Colors.white,
