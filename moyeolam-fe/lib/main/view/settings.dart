@@ -7,6 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import '../../common/confirm.dart';
 
 import '../../fcm/view/arlet_list_view.dart';
+import '../../user/view/auth.dart';
 import '../../user/viewmodel/auth_view_model.dart';
 import '../service/setting_service.dart';
 
@@ -138,11 +139,11 @@ class Settings extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Setting page',
       home: Scaffold(
-        backgroundColor: LIST_BLACK_COLOR,
-        body: _SettingsContent(),
-      ),
-    );
-  }
+          backgroundColor: LIST_BLACK_COLOR,
+          body: _SettingsContent(),
+          ),
+       );
+     }
 }
 
 class _SettingsContent extends StatefulWidget {
@@ -246,7 +247,8 @@ class _SettingsContentState extends State<_SettingsContent> {
                     () {
                   // 예
                   AuthViewModel().logOut();
-
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder:(context) => AuthView(), ));
                 },
                     () {
                   // 아니오
@@ -271,6 +273,8 @@ class _SettingsContentState extends State<_SettingsContent> {
                 '아니오',
                     () {
                   AuthViewModel().signOut();
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder:(context) => AuthView(), ));
                 },
                     () {
 
