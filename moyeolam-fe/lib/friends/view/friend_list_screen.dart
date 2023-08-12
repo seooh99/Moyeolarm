@@ -1,228 +1,390 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart';
-
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/layout/title_bar.dart';
-import 'package:youngjun/friends/provider/friends_search_provider.dart';
+import 'package:youngjun/common/secure_storage/secure_storage.dart';
 import 'package:youngjun/friends/repository/friends_repository.dart';
-
-import '../../common/layout/main_nav.dart';
 import '../../common/textfield_bar.dart';
-import '../component/friends_list.dart';
 import '../model/friends_list_model.dart';
-
 import '../provider/friends_delete_provider.dart';
 import '../provider/friends_list_provider.dart';
 import 'add_friend.dart';
 
-class FriendListScreen extends ConsumerWidget {
+class FriendListScreen extends ConsumerStatefulWidget {
+  @override
+  ConsumerState<FriendListScreen> createState() => _FriendListScreenState();
+}
+
+class _FriendListScreenState extends ConsumerState<FriendListScreen> {
   List<FriendsListModel> friendsList = <FriendsListModel>[];
+
   final ScrollController controller = ScrollController();
+
   final FriendsDeleteNotifier _friendsDeleteNotifier = FriendsDeleteNotifier();
+
+  final TextEditingController _searchController_list = TextEditingController();
 
   void moveScroll() {
     controller.animateTo(controller.position.maxScrollExtent,
         duration: Duration(milliseconds: 700), curve: Curves.ease);
   }
 
+  UserInformation _userInformation = UserInformation();
+
+  List<Friend>? _searchResults;
+
+  Future<void> _friendsListSearch() async {
+    final dio = Dio();
+    final friendRepository = FriendsRepository(dio);
+
+    final keyword = _searchController_list.text ?? '';
+
+    print(keyword);
+
+
+    if (keyword.isEmpty) {
+      setState(() {
+        _searchResults = null;
+        print('키워드 비어있음');
+      });
+    } else {
+      final searchResult = await friendRepository.searchFriends(keyword);
+      print(keyword);
+      final filteredFriends = searchResult.data.friends
+          .where((friend) =>
+          friend.nickname.toLowerCase().contains(keyword.toLowerCase()))
+          .toList();
+      print(keyword);
+
+      _updateSearchResults(filteredFriends.cast<Friend>());
+
+      //setState(() {
+      //  _searchResults =
+      //      filteredFriends.isEmpty ? null : List.from(filteredFriends);
+      //  print('키워드 저장');
+      //  print(_searchResults);
+    //},
+    //);
+  }
+}
+
+  void _updateSearchResults(List<Friend> results) {
+    setState(() {
+      _searchResults = results.isNotEmpty ? results : null;
+      print('키워드 저장');
+      print(_searchResults.toString());
+      print(_searchResults);
+      print(_searchResults?.toList());
+    });
+  }
+
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<List<Friend>?> friends = ref.watch(friendsListProvider);
+void dispose() {
+  _searchController_list.dispose();
+  super.dispose();
+}
 
+@override
+Widget build(BuildContext context) {
+  AsyncValue<List<Friend>?> friends = ref.watch(friendsListProvider);
 
-
-    return Scaffold(
-      appBar: TitleBar(
-        appBar: AppBar(),
-        title: '모여람',
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const AddFriends(),
+  return Scaffold(
+    appBar: TitleBar(
+      appBar: AppBar(),
+      title: '모여람',
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const AddFriends(),
+              ),
+            );
+          },
+          icon: Icon(
+            Icons.person_add,
+            color: Colors.white,
+          ),
+        )
+      ],
+    ),
+    backgroundColor: BACKGROUND_COLOR,
+    body: Column(
+      children: [
+        Column(
+          children: [
+            TextFieldbox(
+              controller: _searchController_list,
+              setContents: (String value) {
+                // 검색어 입력이 발생할 때마다 검색어를 _searchController에 저장
+                _searchController_list.text = value;
+              },
+              suffixIcon: IconButton(
+                onPressed: () async {
+                  await _friendsListSearch();
+                  print('IconButton Clicked');
+                },
+                icon: Icon(
+                  Icons.search_outlined,
                 ),
-              );
-            },
-            icon: Icon(
-              Icons.person_add,
-              color: Colors.white,
+              ),
+              suffixIconColor: Colors.white,
             ),
-          )
-        ],
-      ),
-      backgroundColor: BACKGROUND_COLOR,
-      body: Column(
-        children: [
-          Column(
-            children: [
-              TextFieldbox(
-                setContents: (String) {},
-                suffixIcon: Icon(Icons.search),
-                suffixIconColor: Colors.white,
-                colors: null,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                width: 320,
-                height: 160,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0),
-                    side: BorderSide(
-                      width: 3,
-                      color: SUB_COLOR,
-                    ),
+            SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              width: 320,
+              height: 160,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0),
+                  side: BorderSide(
+                    width: 3,
+                    color: SUB_COLOR,
                   ),
-                  color: BACKGROUND_COLOR,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.deepOrange,
-                      ),
-                      SizedBox(
-                        width: 16,
-                      ),
-                      SizedBox(
-                        height: 90,
-                        width: 120,
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  '닉네임',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 24,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Icon(
-                                  Icons.drive_file_rename_outline,
-                                  size: 24,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
-                            Divider(
-                              thickness: 1,
-                              color: Colors.white,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              '활성 알람 : 2개',
-                              style: TextStyle(
+                ),
+                color: BACKGROUND_COLOR,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    FutureBuilder(
+                      future: _userInformation.getUserInfo(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return CircleAvatar(
+                            backgroundColor: Colors.white,
+                          );
+                        } else if (snapshot.hasData) {
+                          var userInfo =
+                          snapshot.data as Map<String, dynamic>;
+                          var profileImageUrl = userInfo['profileImageUrl'];
+                          return CircleAvatar(
+                            backgroundImage: NetworkImage(profileImageUrl),
+                          );
+                        } else {
+                          return CircleAvatar(
+                            backgroundColor: Colors.white,
+                          );
+                        }
+                      },
+                    ),
+                    SizedBox(
+                      width: 16,
+                    ),
+                    SizedBox(
+                      height: 80,
+                      width: 180,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 30,
+                              ),
+                              FutureBuilder(
+                                future: _userInformation.getUserInfo(),
+                                builder: (context,
+                                    AsyncSnapshot<dynamic> snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return Text('오류 발생: ${snapshot.error}');
+                                  } else if (snapshot.hasData) {
+                                    var userInfo =
+                                    snapshot.data as Map<String, dynamic>;
+                                    return Text(
+                                      '${userInfo["nickname"]}',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                      ),
+                                    );
+                                  } else {
+                                    return Text(
+                                      '닉네임 없음',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Icon(
+                                Icons.drive_file_rename_outline,
+                                size: 24,
                                 color: Colors.white,
                               ),
+                            ],
+                          ),
+                          Divider(
+                            thickness: 1,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            '활성 알람 : 2개',
+                            style: TextStyle(
+                              color: Colors.white,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        _buildSearchResults(),
+        SizedBox(
+          height: 10,
+        )
+      ],
+    ),
+  );
+}
+
+Future<void> _showDeleteConfirmationDialog(BuildContext context,
+    Friend friend) async {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('친구 삭제'),
+        content: Text('${friend.nickname} 친구를 삭제하시겠습니까?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('취소'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await _friendsDeleteNotifier.removeFriend(friend);
+              Navigator.pop(context);
+              ref.refresh(friendsListProvider);
+            },
+            child: Text('삭제'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Widget _buildSearchResults() {
+  AsyncValue<List<Friend>?> friends = ref.watch(friendsListProvider);
+  if (_searchResults == null || _searchResults!.isEmpty) {
+    print(_searchResults);
+    return Expanded(
+      child: Column(
+        children: [
+          friends.when(
+            data: (data) {
+              if (data != null) {
+                return Expanded(
+                  child: CustomScrollView(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    slivers: [
+                      SliverList.builder(
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          Friend friend = data[index];
+                          return ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: Colors.lightBlue,
+                              ),
+                              title: Text(
+                                friend.nickname,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              trailing: IconButton(
+                                onPressed: () {
+                                  _showDeleteConfirmationDialog(
+                                      context, friend);
+                                },
+                                icon: Icon(Icons.close),
+                              ));
+                        },
                       ),
                     ],
                   ),
-                ),
-              ),
-            ],
+                );
+              }
+              ;
+              return Text('데이터없음');
+            },
+            error: (e, stackTrace) {
+              return Text('에러');
+            },
+            loading: () {
+              return Text('로딩중');
+            },
           ),
-          SizedBox(
-            height: 20,
-          ),
-          Expanded(
-            child: Column(
-              children: [
-                friends.when(
-                  data: (data) {
-                    if (data != null) {
-                      return Expanded(
-                        child: CustomScrollView(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          slivers: [
-                            SliverList.builder(
-                              itemCount: data.length,
-                              itemBuilder: (context, index) {
-                                Friend friend = data[index];
-                                return ListTile(
-                                    leading: CircleAvatar(
-                                      backgroundColor: Colors.lightBlue,
-                                    ),
-                                    title: Text(
-                                      friend.nickname,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    trailing: IconButton(
-                                      onPressed: () {
-                                        _showDeleteConfirmationDialog(
-                                            context, friend);
-                                      },
-                                      icon: Icon(Icons.close),
-                                    ));
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                    ;
-                    return Text('데이터없음');
-                  },
-                  error: (e, stackTrace) {
-                    return Text('에러');
-                  },
-                  loading: () {
-                    return Text('로딩중');
-                  },
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          )
         ],
       ),
     );
   }
-
-  Future<void> _showDeleteConfirmationDialog(
-      BuildContext context, Friend friend) async {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('친구 삭제'),
-          content: Text('${friend.nickname} 친구를 삭제하시겠습니까?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('취소'),
+  print(_searchResults);
+  return Expanded(
+    child: ListView.builder(
+      itemCount: _searchResults!.length,
+      itemBuilder: (context, index) {
+        final friend = _searchResults![index];
+        return
+          //   ListTile(
+          //   title: Text(friend.nickname ?? ''),
+          //   subtitle: Text(friend.memberId?.toString() ?? ''),
+          //   leading: CircleAvatar(
+          //     backgroundImage: NetworkImage(friend.profileImageUrl ?? ''),
+          //   ),
+          //
+          // );
+          ListTile(
+            leading: CircleAvatar(
+              backgroundImage: NetworkImage(friend.profileImageUrl ?? ''),
             ),
-            TextButton(
-              onPressed: () async {
-                await _friendsDeleteNotifier.removeFriend(friend);
-                Navigator.pop(context);
+            title: Text(
+              friend.nickname ?? '',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            trailing: IconButton(
+              onPressed: () {
+                _showDeleteConfirmationDialog(context, friend);
               },
-              child: Text('삭제'),
+              icon: Icon(Icons.close),
             ),
-          ],
-        );
+          );
       },
-    );
-  }
-}
+    ),
+  );
+}}
 
 // CustomScrollView(
 // scrollDirection: Axis.vertical,

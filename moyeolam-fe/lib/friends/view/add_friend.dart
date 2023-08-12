@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:youngjun/common/const/address_config.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/textfield_bar.dart';
 
 import '../component/friends_search_list.dart';
-import '../model/friends_search_model.dart';
+import '../model/friends_list_model.dart';
 import '../repository/friends_repository.dart';
 
 class AddFriends extends ConsumerStatefulWidget {
@@ -21,23 +22,33 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
   List<Friend>? _searchResults; // 검색 결과를 저장할 변수
 
   Future<void> _performSearch() async {
-    final dio = Dio();
+    final dio = Dio(BaseOptions(baseUrl: BASE_URL));
     final friendRepository = FriendsRepository(dio);
 
     final keyword = _searchController.text ?? '';
-    final searchResult = await friendRepository.searchFriends(keyword);
 
-    final filteredFriends = searchResult.data.friends
-        .where((friend) =>
-            friend.nickname.toLowerCase().contains(keyword.toLowerCase()))
-        .toList();
+    print('작동작동');
 
-    print('왱 ㅏㄴ됨');
-    setState(() {
-      _searchResults = filteredFriends.isEmpty ? null : filteredFriends;
-      print('@@@@@@@@@@@@@@@');
-    });
+    print(keyword);
+
+    if (keyword.isEmpty) {
+      setState(() {
+        _searchResults = null; // 검색 키워드가 없으면 결과를 초기화합니다.
+      });
+    } else {
+      final searchResult = await friendRepository.searchFriends(keyword);
+
+      final filteredFriends = searchResult.data.friends
+          .where((friend) =>
+          friend.nickname.toLowerCase().contains(keyword.toLowerCase()))
+          .toList();
+
+      setState(() {
+        _searchResults = filteredFriends.isEmpty ? null : filteredFriends;
+      });
+    }
   }
+
 
   @override
   void dispose() {
@@ -46,11 +57,11 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
   }
 
   Future<void> _sendFriendRequest(String memberId) async {
-    final dio = Dio();
-    final friendRepository = FriendsRepository(dio);
+    final dio = Dio(BaseOptions(baseUrl: BASE_URL));
+    final friendRepository = FriendsRepository(dio, baseUrl: BASE_URL);
 
     try {
-      await friendRepository.friendRequestPost(memberId as Friend);
+      await friendRepository.friendRequestPost(memberId);
       print('Friend request sent successfully');
       // 요청을 보내고 나서 원하는 동작을 수행할 수 있습니다.
     } catch (e) {
@@ -60,7 +71,7 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
 
   @override
   Widget build(BuildContext context) {
-    Dio dio = Dio();
+    Dio dio = Dio(BaseOptions(baseUrl: BASE_URL));
     final friendRequest = FriendsRepository(dio);
 
     return Scaffold(
@@ -86,16 +97,19 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: TextFieldbox(
               controller: _searchController,
-              setContents: (String) {},
+              setContents: (String value) {
+                // 검색어 입력이 발생할 때마다 검색어를 _searchController에 저장
+                _searchController.text = value;
+              },
               suffixIcon: IconButton(
-                  onPressed: () async {
-                    await _performSearch();
-                    print('IconButton Clicked');
-                    _performSearch();
-                  },
-                  icon: Icon(
-                    Icons.search_outlined,
-                  )),
+                onPressed: () async {
+                  await _performSearch();
+                  print('IconButton Clicked');
+                },
+                icon: Icon(
+                  Icons.search_outlined,
+                ),
+              ),
               suffixIconColor: Colors.white,
             ),
           ),
@@ -121,10 +135,10 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
     if (_searchResults!.isEmpty) {
       return Center(
         child: Text(
-          'No results found',
+          '검색 결과가 없습니다',
           style: TextStyle(
-            color: Colors.red,
-            fontSize: 16,
+            color: Colors.white,
+            fontSize: 20,
           ),
         ),
       );
