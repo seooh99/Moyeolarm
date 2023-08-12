@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/secure_storage/secure_storage.dart';
+import 'package:youngjun/user/model/user_model.dart';
 import 'package:youngjun/user/repository/user_repository.dart';
+import 'package:youngjun/user/view/set_nickname.dart';
 import 'package:youngjun/user/viewmodel/auth_view_model.dart';
 
 import '../../main/view/main_page.dart';
@@ -31,12 +33,16 @@ class _AuthViewState extends State<AuthView> {
     //read 함수를 통하여 key값에 맞는 정보를 불러오게 됩니다. 이때 불러오는 결과의 타입은 String 타입임을 기억해야 합니다.
     //(데이터가 없을때는 null을 반환을 합니다.)
     // userInfo = await storage.read(key: 'userInfo');
-    userInfo = await _userInformation.getUserInfo();
+    var storeData = await _userInformation.getUserInfo();
+    userInfo = storeData["nickname"];
+    print("$userInfo 123");
     //user의 정보가 있다면 바로 로그아웃 페이지로 넝어가게 합니다.
     if (userInfo != null) {
-      Navigator.pushNamed(
-          context,
-          "/home");
+      // Navigator.pushNamed(
+      //     context,
+      //     "/home");
+      Navigator.of(context).push(MaterialPageRoute(
+          builder:(context) => MainPage(), ));
     }
   }
 
@@ -98,15 +104,28 @@ class _AuthViewState extends State<AuthView> {
                 ),
                 onTap: () async {
                   if (userInfo != null) {
-                    Navigator.pushNamed(context, "/home");
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder:
+                          (context) => MainPage(),
+                      )
+                    );
                   } else {
                     var isSigned = await auth.login();
                     print("$isSigned 나는 뷰");
                     if (isSigned == "main") {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder:
+                              (context) => MainPage(),
+                          )
+                      );
                       // Navigator.pushNamed(context, "/home");
-                      Navigator.pushNamed(context, "/home");
                     } else if (isSigned == "signin") {
-                      Navigator.pushNamed(context, "/set_nickname");
+                      // Navigator.pushNamed(context, "/set_nickname");
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder:
+                              (context) => SetNickname(),
+                          )
+                      );
                     }
                   }
                   // var storage = const FlutterSecureStorage();
