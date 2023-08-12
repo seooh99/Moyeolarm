@@ -1,10 +1,11 @@
-import 'package:youngjun/fcm/api/fcm_api.dart';
+import 'package:youngjun/main/view/settings.dart';
 
 
 import 'package:firebase_core/firebase_core.dart';
 // import 'firebase_options.dart';
 // import 'package:provider/provider.dart';
 // import 'package:youngjun/fcm/provider/fcm_provider.dart';
+
 
 class FcmViewModel {
   final FirebaseApi _fcmProvider;
