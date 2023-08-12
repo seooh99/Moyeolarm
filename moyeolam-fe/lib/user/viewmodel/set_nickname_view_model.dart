@@ -1,12 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:youngjun/common/secure_storage/secure_storage.dart';
+import 'package:youngjun/user/model/user_model.dart';
 import 'package:youngjun/user/repository/user_repository.dart';
 
-FlutterSecureStorage storage = FlutterSecureStorage();
+// FlutterSecureStorage storage = FlutterSecureStorage();
 // final nicknameProvider = StateNotifierProvider((ref) => NicknameViewModel(''));
 
 class NicknameViewModel {
+  UserInformation _userInformation = UserInformation();
   late String nName;
   UserNicknameRepository _nicknameRepository = UserNicknameRepository();
 
@@ -16,29 +19,20 @@ class NicknameViewModel {
 
   apiNickname() async {
     try {
-      var userInfo = await storage
-          .read(key: 'userInfo')
-          .then((value) => jsonDecode(value!));
+      UserModel? userInfo = await _userInformation.getUserInfo();
       print("$userInfo 토큰 닉넴뷰모델");
-      var response= await _nicknameRepository
-          .updateNickname(
-        nName,
-        userInfo["accessToken"],
-      )
-          .then((value) {
-            print("${value.code} 나는 코드");
-            return value.code;
-        // if (value.code == "200") {
-        //   print("${value.code} nickname view model");
-        //   userInfo["nickname"] = nName;
-        //   await storage.write(key: "userInfo", value: jsonEncode(userInfo));
-        //   print("write storage in setnickname view model");
-        //   return 'accept';
-        // } else if (value.code == "603") {
-        //   return 'false';
-        // }
-      });
-      return response;
+      if (userInfo != null) {
+        var response = await _nicknameRepository
+            .updateNickname(
+          nName,
+          userInfo!.accessToken,
+        )
+            .then((value) {
+          print("${value.code} 나는 코드");
+          return value.code;
+        });
+        return response;
+      }
     } catch (e) {
       print("$e setNickNameError");
     }
