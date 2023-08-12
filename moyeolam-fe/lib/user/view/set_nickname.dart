@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:youngjun/common/const/colors.dart';
+import 'package:youngjun/common/secure_storage/secure_storage.dart';
 import 'package:youngjun/common/textfield_bar.dart';
 import 'package:youngjun/main/view/main_page.dart';
+import 'package:youngjun/user/model/user_model.dart';
 import 'package:youngjun/user/viewmodel/set_nickname_view_model.dart';
 
 class SetNickname extends StatefulWidget {
@@ -14,7 +16,8 @@ class SetNickname extends StatefulWidget {
 
 class _SetNicknameState extends State<SetNickname> {
   NicknameViewModel nicknameViewModel = NicknameViewModel();
-  String? overlaped;
+  final UserInformation _userInformation = UserInformation();
+  String? isOverlaped;
   @override
 
   @override
@@ -33,8 +36,8 @@ class _SetNicknameState extends State<SetNickname> {
             TextFieldbox(
               setContents: nicknameViewModel.setNickname,
             ),
-            Text(overlaped??'',
-            style:TextStyle(
+            Text(isOverlaped??'',
+            style:const TextStyle(
               fontSize: 16,
               color: FONT_COLOR,
 
@@ -54,15 +57,18 @@ class _SetNicknameState extends State<SetNickname> {
                   var code = await nicknameViewModel.apiNickname();
                   print("$code 닉네임 뷰 코드");
                   if (code == "603"){
-                    
-
                     setState(() {
-                    overlaped = "이미 사용된 닉네임 입니다.";
-
+                      isOverlaped = "이미 사용된 닉네임 입니다.";
                     });
-                    print("$overlaped 오버랩");
-                  }else if(code == "200"){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>MainPage()));
+                    print("$isOverlaped 오버랩");
+                  }else if(code == "200") {
+                    UserModel? userInfo = await _userInformation.getUserInfo();
+                    if(userInfo != null) {
+                      userInfo!.nickname = nicknameViewModel.nName;
+                      await _userInformation.setUserInfo(userInfo);
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => MainPage()));
+                    }
                   }
                   //     .then((value) {
                   //         print("$value 닉네임 모델");

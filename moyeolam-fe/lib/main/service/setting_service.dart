@@ -10,6 +10,10 @@ part 'setting_service.g.dart';
 abstract class SettingService {
   factory SettingService(Dio dio, {String baseUrl}) = _SettingService;
 
+  @GET('/member/settings')
+  Future<FetchSettingModel?> getSettings();
+
+
   @PATCH('/member/settings/notification-toggle')
-  Future<SettingModel?> getPosts();
+  Future<ChangeSettingModel?> patchSettings(@Query('data') bool data);
 }
