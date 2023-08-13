@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AlarmState extends ChangeNotifier {
-  int? get callbackAlarmId => _callbackAlarmId;
-  int? _callbackAlarmId;
+final alarmStateProvider = StateNotifierProvider<AlarmState, int?>((ref) {
+  return AlarmState();
+});
 
-  bool get isFired => _callbackAlarmId != null;
+class AlarmState extends StateNotifier<int?>{
+  AlarmState() : super(null);
+
+  int? get callbackAlarmId => state;
+
+  bool get isFired => state != null;
 
   void fire(int alarmId) {
-    _callbackAlarmId = alarmId;
-    notifyListeners();
+    state = alarmId;
     debugPrint('Alarm has fired #$alarmId');
   }
 
   void dismiss() {
-    _callbackAlarmId = null;
-    notifyListeners();
+    state = null;
   }
 }
+
