@@ -1,38 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:youngjun/background_alarm/model/alarm.dart';
 import 'package:youngjun/background_alarm/provider/alarm_list_provider.dart';
+import 'package:youngjun/background_alarm/provider/alarm_state.dart';
+import 'package:youngjun/background_alarm/service/alarm_polling_worker.dart';
 import 'package:youngjun/background_alarm/service/alarm_scheduler.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
-  void _createAlarm(
-    BuildContext context,
-    AlarmListProvider alarmListProvider,
-  ) async {
-    final time = await showTimePicker(
-      context: context,
-      initialTime: const TimeOfDay(hour: 8, minute: 30),
-    );
+  void _createAlarm(BuildContext context, AlarmListNotifier alarmListNotifier) async {
+    final time = await showTimePicker(context: context, initialTime: const TimeOfDay(hour: 8, minute: 30));
     if (time == null) return;
 
     final alarm = Alarm(
-      id: alarmListProvider.getAvailableAlarmId(),
+      id: alarmListNotifier.getAvailableAlarmId(),
       hour: time.hour,
       minute: time.minute,
       enabled: true,
     );
 
-    alarmListProvider.add(alarm);
+    alarmListNotifier.add(alarm);
     await AlarmScheduler.scheduleRepeatable(alarm);
   }
 
-  void _switchAlarm(
-    AlarmListProvider alarmListProvider,
-    Alarm alarm,
-    bool enabled,
-  ) async {
+  void _switchAlarm(AlarmListNotifier alarmListProvider,
+      Alarm alarm,
+      bool enabled,
+      ) async {
     final newAlarm = alarm.copyWith(enabled: enabled);
     alarmListProvider.replace(
       alarm,
@@ -45,11 +40,10 @@ class HomeScreen extends StatelessWidget {
     }
   }
 
-  void _handleCardTap(
-    AlarmListProvider alarmList,
-    Alarm alarm,
-    BuildContext context,
-  ) async {
+  void _handleCardTap(AlarmListNotifier alarmList,
+      Alarm alarm,
+      BuildContext context,
+      ) async {
     final time = await showTimePicker(
       context: context,
       initialTime: alarm.timeOfDay,
@@ -64,42 +58,50 @@ class HomeScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Consumer(builder: (context, ref, child){
+      List<Alarm> alarms = ref.watch(alarmListProvider);
+      AlarmListNotifier alarmListNotifier = ref.watch(alarmListProvider.notifier);
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Flutter Alarm App')),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _createAlarm(context, context.read<AlarmListProvider>());
-        },
-        child: const Icon(Icons.add),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            Expanded(
-              child: Consumer<AlarmListProvider>(
-                builder: (context, alarmList, child) => ListView.builder(
-                  itemCount: alarmList.length,
-                  itemBuilder: (context, index) {
-                    final alarm = alarmList[index];
-                    return _AlarmCard(
-                      alarm: alarm,
-                      onTapSwitch: (enabled) {
-                        _switchAlarm(alarmList, alarm, enabled);
-                      },
-                      onTapCard: () {
-                        _handleCardTap(alarmList, alarm, context);
-                      },
-                    );
-                  },
+      int? callbackAlarmId = ref.watch(alarmStateProvider);
+      AlarmState alarmState = ref.watch(alarmStateProvider.notifier);
+      AlarmPollingWorker().createPollingWorker(alarmState);
+
+      return Scaffold(
+        appBar: AppBar(title: const Text('Flutter Alarm App')),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _createAlarm(context, alarmListNotifier);
+          },
+          child: const Icon(Icons.add),
+        ),
+        body: Center(
+          child: Column(
+            children: [
+              Expanded(
+                child: Consumer(
+                  builder: (context, ref, child) => ListView.builder(
+                    itemCount: alarmListNotifier.length,
+                    itemBuilder: (context, index) {
+                      final alarm = alarmListNotifier[index];
+                      return _AlarmCard(
+                        alarm: alarm,
+                        onTapSwitch: (enabled) {
+                          _switchAlarm(alarmListNotifier, alarm, enabled);
+                        },
+                        onTapCard: () {
+                          _handleCardTap(alarmListNotifier, alarm, context);
+                        },
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
