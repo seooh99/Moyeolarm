@@ -35,7 +35,6 @@ class _AlarmObserverState extends ConsumerState<AlarmObserver>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print("옵저버 didChangeAppLifecycleState");
     switch (state) {
       case AppLifecycleState.resumed:
         final _ = ref.watch(alarmStateProvider);
@@ -57,8 +56,6 @@ class _AlarmObserverState extends ConsumerState<AlarmObserver>
 
       List<Alarm> alarms = ref.watch(alarmSettingProvider);
       AlarmListNotifier alarmListNotifier = ref.watch(alarmSettingProvider.notifier);
-      print("옵저버 시작");
-      print(state.isFired);
       if (state.isFired) {
         final callbackId = state.callbackAlarmId!;
 

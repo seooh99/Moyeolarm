@@ -59,7 +59,7 @@ extension TimeExtension on TimeOfDay {
     for (int days = 0; days < 7; ++days) {
       final candidate = thisDateTime.add(Duration(days: days));
 
-      if ((candidate.weekday % 7) == weekday) {
+      if (((candidate.weekday - 1) % 7) == weekday) {
         if (candidate.isBefore(now)) {
           return candidate.add(const Duration(days: 7));
         }
