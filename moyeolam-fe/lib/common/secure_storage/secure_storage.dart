@@ -6,14 +6,16 @@ import 'package:youngjun/user/model/user_model.dart';
 FlutterSecureStorage storage = FlutterSecureStorage();
 
 class UserInformation {
-  getUserInfo() async {
+  Future<UserModel?> getUserInfo() async {
     var stringUserInfo = await storage.read(key: 'userInfo');
     if(stringUserInfo !=null){
       var result = jsonDecode(stringUserInfo);
       print("${result["nickname"]}");
-      return result;
+      
+      return UserModel.fromJson(result);
     }else{
-      print("Erorr: userInfo is $stringUserInfo");
+      print("Check: userInfo is $stringUserInfo");
+      throw Exception("User info not found");
     }
   }
 

@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:youngjun/common/secure_storage/secure_storage.dart';
 import 'package:youngjun/kakao/kakao_login.dart';
 import 'package:youngjun/kakao/main_view_model.dart';
@@ -28,7 +29,7 @@ class AuthViewModel {
       var kakaoLogin = await kakaoViewModel.login();
       // print("$kakaoLogin 카카오로그인 auth 뷰모델");
 
-      final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+      // final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
       WidgetsFlutterBinding.ensureInitialized();
 
       var fcmToken = await FirebaseMessaging.instance.getToken().then((token) {
@@ -47,7 +48,7 @@ class AuthViewModel {
           fcmToken,
           deviceIndentifier
         );
-        // print("${rawResponse.data} 심기불편");
+        print("${rawResponse.data} 심기불편");
 
         var response = rawResponse.data;
         // await storage.write(key: "userInfo", value: jsonEncode(response));
@@ -83,11 +84,13 @@ class AuthViewModel {
 
   signOut() async {
     try {
-      var storageData = await _userInformation.getUserInfo();
-      await _userRepository.signOut(storageData["accessToken"]).then((value) {
-        print("$value 회원탈퇴 auth view model");
-      });
-      await _userInformation.deletUserInfo();
+      UserModel? storageData = await _userInformation.getUserInfo();
+      if(storageData != null) {
+        await _userRepository.signOut(storageData.accessToken).then((value) {
+          print("$value 회원탈퇴 auth view model");
+        });
+        await _userInformation.deletUserInfo();
+      }
     } catch (e) {
       print("$e signOut error in authViewmodel");
     }
