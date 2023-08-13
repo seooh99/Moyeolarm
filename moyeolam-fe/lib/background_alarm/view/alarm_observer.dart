@@ -19,7 +19,8 @@ class AlarmObserver extends ConsumerStatefulWidget {
   ConsumerState<AlarmObserver> createState() => _AlarmObserverState();
 }
 
-class _AlarmObserverState extends ConsumerState<AlarmObserver> with WidgetsBindingObserver {
+class _AlarmObserverState extends ConsumerState<AlarmObserver>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -34,6 +35,7 @@ class _AlarmObserverState extends ConsumerState<AlarmObserver> with WidgetsBindi
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("옵저버 didChangeAppLifecycleState");
     switch (state) {
       case AppLifecycleState.resumed:
         final _ = ref.watch(alarmStateProvider);
@@ -53,13 +55,15 @@ class _AlarmObserverState extends ConsumerState<AlarmObserver> with WidgetsBindi
       final _ = ref.watch(alarmStateProvider);
       final state = ref.watch(alarmStateProvider.notifier);
 
-      List<Alarm> alarms = ref.watch(alarmListProvider);
-      AlarmListNotifier alarmListNotifier = ref.watch(alarmListProvider.notifier);
-
+      List<Alarm> alarms = ref.watch(alarmSettingProvider);
+      AlarmListNotifier alarmListNotifier = ref.watch(alarmSettingProvider.notifier);
+      print("옵저버 시작");
+      print(state.isFired);
       if (state.isFired) {
         final callbackId = state.callbackAlarmId!;
 
         Alarm? alarm = alarmListNotifier.getAlarmBy(callbackId);
+        print(alarm);
         if (alarm != null) {
           testPage = TestPage();
           // alarmScreen = AlarmScreen(alarm: alarm);

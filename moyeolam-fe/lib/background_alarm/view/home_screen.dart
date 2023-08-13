@@ -14,26 +14,25 @@ class HomeScreen extends ConsumerWidget {
     if (time == null) return;
 
     final alarm = Alarm(
-      id: alarmListNotifier.getAvailableAlarmId(),
+      alarmGroupId: 1,
+      callbackId: alarmListNotifier.getAvailableAlarmId(),
+      weekday: [],
       hour: time.hour,
       minute: time.minute,
-      enabled: true,
+      toggle: true,
     );
 
     alarmListNotifier.add(alarm);
     await AlarmScheduler.scheduleRepeatable(alarm);
   }
 
-  void _switchAlarm(AlarmListNotifier alarmListProvider,
-      Alarm alarm,
-      bool enabled,
-      ) async {
-    final newAlarm = alarm.copyWith(enabled: enabled);
+  void _switchAlarm(AlarmListNotifier alarmListProvider, Alarm alarm, bool toggle) async {
+    final newAlarm = alarm.copyWith(toggle: toggle);
     alarmListProvider.replace(
       alarm,
       newAlarm,
     );
-    if (enabled) {
+    if (toggle) {
       await AlarmScheduler.scheduleRepeatable(newAlarm);
     } else {
       await AlarmScheduler.cancelRepeatable(newAlarm);
@@ -53,15 +52,15 @@ class HomeScreen extends ConsumerWidget {
     final newAlarm = alarm.copyWith(hour: time.hour, minute: time.minute);
 
     alarmList.replace(alarm, newAlarm);
-    if (alarm.enabled) await AlarmScheduler.cancelRepeatable(alarm);
-    if (newAlarm.enabled) await AlarmScheduler.scheduleRepeatable(newAlarm);
+    if (alarm.toggle) await AlarmScheduler.cancelRepeatable(alarm);
+    if (newAlarm.toggle) await AlarmScheduler.scheduleRepeatable(newAlarm);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Consumer(builder: (context, ref, child){
-      List<Alarm> alarms = ref.watch(alarmListProvider);
-      AlarmListNotifier alarmListNotifier = ref.watch(alarmListProvider.notifier);
+      List<Alarm> alarms = ref.watch(alarmSettingProvider);
+      AlarmListNotifier alarmListNotifier = ref.watch(alarmSettingProvider.notifier);
 
       int? callbackAlarmId = ref.watch(alarmStateProvider);
       AlarmState alarmState = ref.watch(alarmStateProvider.notifier);
@@ -135,13 +134,13 @@ class _AlarmCard extends StatelessWidget {
                   alarm.timeOfDay.format(context),
                   style: theme.textTheme.headline6!.copyWith(
                     color: theme.colorScheme.onSurface.withOpacity(
-                      alarm.enabled ? 1.0 : 0.4,
+                      alarm.toggle ? 1.0 : 0.4,
                     ),
                   ),
                 ),
               ),
               Switch(
-                value: alarm.enabled,
+                value: alarm.toggle,
                 onChanged: onTapSwitch,
               ),
             ],
