@@ -32,9 +32,9 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
   Widget build(BuildContext context) {
     var alarmDetailModel = ref.watch(alarmDetailProvider);
 
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   ref.invalidate(alarmListProvider);
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.invalidate(alarmListProvider);
+    });
 
     AsyncValue<AlarmListModel> alarmgroups = ref.watch(alarmListProvider);
     AlarmListNotifier alarmListNotifier =
@@ -110,22 +110,22 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                               okTitle: "삭제",
                               cancelTitle: "취소",
                             ),
-                            // builder: (context) => ConfirmDialog(
-                            //   title: alarmGroup.isHost?"알람 그룹 삭제":"알람 그룹 나가기",
-                            //   content: alarmGroup.isHost?
-                            //   "알람 그룹을 삭제하시겠습니까?":
-                            //   "알람 그룹을 나가시겠습니까?",
-                            //   okTitle: "삭제",
-                            //   cancelTitle: "취소",
-                            //   okOnPressed: () async {
-                            //     await _alarmListViewModel.deleteAlarmGroup(alarmGroup.alarmGroupId);
-                            //     ref.refresh(alarmListProvider);
-                            //     Navigator.pop(context);
-                            //   },
-                            //   cancelOnPressed: (){
-                            //     Navigator.pop(context);
-                            //   },
-                            // ),
+                          //   builder: (context) => ConfirmDialog(
+                          //     title: alarmGroup.isHost?"알람 그룹 삭제":"알람 그룹 나가기",
+                          //     content: alarmGroup.isHost?
+                          //     "알람 그룹을 삭제하시겠습니까?":
+                          //     "알람 그룹을 나가시겠습니까?",
+                          //     okTitle: "삭제",
+                          //     cancelTitle: "취소",
+                          //     okOnPressed: () async {
+                          //       await _alarmListViewModel.deleteAlarmGroup(alarmGroup.alarmGroupId);
+                          //       ref.refresh(alarmListProvider);
+                          //       Navigator.pop(context);
+                          //     },
+                          //     cancelOnPressed: (){
+                          //       Navigator.pop(context);
+                          //     },
+                          //   ),
                           );
                         },
                         onTap: () async {
