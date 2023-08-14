@@ -3,6 +3,7 @@ package com.ssafy.moyeolam.domain.alarmgroup.dto;
 import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmDay;
 import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroup;
 import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroupMember;
+import com.ssafy.moyeolam.domain.member.domain.Member;
 import com.ssafy.moyeolam.domain.meta.domain.DayOfWeek;
 import com.ssafy.moyeolam.domain.meta.domain.MetaData;
 import com.ssafy.moyeolam.domain.meta.domain.MetaDataType;
@@ -25,8 +26,9 @@ public class AlarmGroupsElement {
     private List<Boolean> dayOfWeek;
     private Boolean isLock;
     private Boolean toggle;
+    private Boolean isHost;
 
-    public static AlarmGroupsElement of(AlarmGroupMember alarmGroupMember) {
+    public static AlarmGroupsElement of(AlarmGroupMember alarmGroupMember, Long loginMemberId) {
         AlarmGroup alarmGroup = alarmGroupMember.getAlarmGroup();
 
         return AlarmGroupsElement.builder()
@@ -37,6 +39,7 @@ public class AlarmGroupsElement {
                 .dayOfWeek(dayOfWeekToBoolean(alarmGroup.getAlarmDays()))
                 .isLock(alarmGroup.getLock())
                 .toggle(alarmGroupMember.getAlarmToggle())
+                .isHost(alarmGroup.getHostMember().getId().equals(loginMemberId))
                 .build();
     }
 
