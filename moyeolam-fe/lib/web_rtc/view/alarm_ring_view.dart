@@ -13,14 +13,16 @@ import '../../common/const/openvidu_confiig.dart';
 import '../model/connection.dart';
 
 class AlarmRingView extends StatefulWidget {
-  const AlarmRingView({super.key});
+  final int alarmGroupId;
+
+  const AlarmRingView({super.key, required this.alarmGroupId});
 
   @override
   State<AlarmRingView> createState() => _AlarmRingViewState();
 }
 
 class _AlarmRingViewState extends State<AlarmRingView> {
-  TimeService _timeService = TimeService();
+  final TimeService _timeService = TimeService();
 
   final Dio _dio = Dio();
 
@@ -78,6 +80,7 @@ class _AlarmRingViewState extends State<AlarmRingView> {
               builder: (_) => WebRtcRoomView(
                     room: connection,
                     userName: _textUserNameController.text,
+                    alarmGroupId: widget.alarmGroupId,
                   )),
         );
       }
@@ -95,7 +98,11 @@ class _AlarmRingViewState extends State<AlarmRingView> {
     _dio.options.headers["authorization"] =
         'Basic ${base64Encode(utf8.encode('OPENVIDUAPP:$OPENVIDU_SECRET'))}';
 
-    _textSessionController.text = 'Session${Random().nextInt(1000)}';
+    // _textSessionController.text = 'Session${Random().nextInt(1000)}';
+    _textSessionController.text = widget.alarmGroupId.toString();
+    /**
+     * TODO: 사용자 닉네임으로 변경
+     */
     _textUserNameController.text = 'Participant${Random().nextInt(1000)}';
   }
 
@@ -174,9 +181,7 @@ class _AlarmRingViewState extends State<AlarmRingView> {
           //   height: 120,
           // ),
           BtnCalling(
-            icons: Icon(Icons.call),
-            onPressed: () => _connect(context)
-          ),
+              icons: Icon(Icons.call), onPressed: () => _connect(context)),
           const SizedBox(
             width: 200,
             height: 120,
