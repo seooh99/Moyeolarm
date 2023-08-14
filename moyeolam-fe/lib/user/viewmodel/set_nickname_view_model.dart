@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:youngjun/common/secure_storage/secure_storage.dart';
+import 'package:youngjun/main.dart';
 import 'package:youngjun/user/model/user_model.dart';
 import 'package:youngjun/user/repository/user_repository.dart';
 
@@ -9,7 +10,7 @@ import 'package:youngjun/user/repository/user_repository.dart';
 // final nicknameProvider = StateNotifierProvider((ref) => NicknameViewModel(''));
 
 class NicknameViewModel {
-  UserInformation _userInformation = UserInformation();
+  UserInformation _userInformation = UserInformation(storage);
   late String nName;
   UserNicknameRepository _nicknameRepository = UserNicknameRepository();
 
