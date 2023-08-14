@@ -5,6 +5,7 @@ import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/layout/title_bar.dart';
 import 'package:youngjun/common/secure_storage/secure_storage.dart';
 import 'package:youngjun/friends/repository/friends_repository.dart';
+import 'package:youngjun/main.dart';
 import '../../common/textfield_bar.dart';
 import '../../user/model/user_model.dart';
 import '../model/friends_list_model.dart';
@@ -30,7 +31,7 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
   final TextEditingController _searchController_list = TextEditingController();
 
   // 유저 정보
-  UserInformation _userInformation = UserInformation();
+  UserInformation _userInformation = UserInformation(storage);
 
   // 검색 결과 저장할 곳
   List<Friend>? _searchResults;
