@@ -10,7 +10,7 @@ import 'package:youngjun/background_alarm/service/alarm_polling_worker.dart';
 import 'package:youngjun/background_alarm/service/alarm_scheduler.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/layout/title_bar.dart';
-import 'package:youngjun/fcm/view/arlet_list_view.dart';
+import 'package:youngjun/fcm/view/alert_list_view.dart';
 import '../../common/confirm.dart';
 import '../component/alarm_list.dart';
 import '../model/alarm_list_model.dart';
