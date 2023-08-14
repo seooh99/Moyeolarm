@@ -112,7 +112,7 @@ public class AlarmGroupService {
         Member loginMember = memberRepository.findByIdWithFcmTokens(loginMemberId)
                 .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
-        AlarmGroup alarmGroup = alarmGroupRepository.findByIdWithHostMember(alarmGroupId)
+        AlarmGroup alarmGroup = alarmGroupRepository.findByIdWithHostMemberAndAlarmGroupMembersWithMember(alarmGroupId)
                 .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP));
 
         if (!alarmGroupMemberRepository.existsByMemberIdAndAlarmGroupId(loginMember.getId(), alarmGroupId)) {
@@ -121,9 +121,37 @@ public class AlarmGroupService {
 
         Member hostMember = alarmGroup.getHostMember();
         if (hostMember.getId().equals(loginMember.getId())) {
-            alarmGroupMemberRepository.deleteAllInBatch(alarmGroup.getAlarmGroupMembers());
+            List<AlarmGroupMember> alarmGroupMembers = alarmGroup.getAlarmGroupMembers();
+
+            // 알람그룹 로그
+            for (AlarmGroupMember alarmGroupMember : alarmGroupMembers) {
+                Member member = alarmGroupMember.getMember();
+                if (member.getId().equals(loginMember.getId())) {
+                    continue;
+                }
+
+                AlertLog alertLog = AlertLog.builder()
+                        .fromMember(loginMember)
+                        .toMember(member)
+                        .alarmGroup(alarmGroup)
+                        .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_ABOLISHED.getName()))
+                        .build();
+                alertLogRepository.save(alertLog);
+            }
+
+            // 푸시알림 전송
+            for (AlarmGroupMember alarmGroupMember : alarmGroupMembers) {
+                Member member = alarmGroupMember.getMember();
+                if (member.getId().equals(loginMember.getId())) {
+                    continue;
+                }
+                String body = hostMember.getNickname() + " 님의 알람그룹 " + alarmGroup.getTitle() + "이 해체 되었습니다.";
+                notificationService.sendAllNotification(member, body, AlertType.ALARM_GROUP_QUIT);
+            }
+
+            alarmGroupMemberRepository.deleteAllInBatch(alarmGroupMembers);
             alarmDayRepository.deleteAllInBatch(alarmGroup.getAlarmDays());
-            alarmGroupRepository.delete(alarmGroup);
+//            alarmGroupRepository.delete(alarmGroup);
             return alarmGroup.getId();
         }
         alarmGroupMemberRepository.deleteByMemberIdAndAlarmGroupId(loginMember.getId(), alarmGroupId);
@@ -185,7 +213,7 @@ public class AlarmGroupService {
         }
 
         // 푸시알림 전송
-        String body = alarmGroup.getTitle() + "의 알람그룹이 수정되었습니다.";
+        String body = alarmGroup.getHostMember().getNickname() + "님의" + alarmGroup.getTitle() + "의 알람그룹이 수정되었습니다.";
         for (AlarmGroupMember alarmGroupMember : alarmGroupMembers) {
             Member member = alarmGroupMember.getMember();
             if (!member.getId().equals(loginMember.getId())) {

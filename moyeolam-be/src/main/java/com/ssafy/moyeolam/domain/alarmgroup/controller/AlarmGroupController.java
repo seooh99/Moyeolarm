@@ -53,7 +53,7 @@ public class AlarmGroupController {
     @DeleteMapping("/{alarmGroupId}")
     public EnvelopeResponse<Long> quitAlarmGroup(@PathVariable Long alarmGroupId) {
         AuthenticatedMember loginMember = AuthenticatedMember.builder()
-                .memberId(2L)
+                .memberId(1L)
                 .build();
 
         return EnvelopeResponse.<Long>builder()
