@@ -1,5 +1,5 @@
-import 'package:youngjun/fcm/api/strategies/friend_accept_strategy.dart';
-import 'package:youngjun/fcm/api/strategies/group_accept_strategy.dart';
+import 'package:youngjun/fcm/service/friend_accept_strategy.dart';
+import 'package:youngjun/fcm/service/group_accept_strategy.dart';
 
 class ArletModalApi {
   void handleApiRequest(String alertType,
