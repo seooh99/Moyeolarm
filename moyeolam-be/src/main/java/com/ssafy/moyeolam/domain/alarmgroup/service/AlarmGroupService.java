@@ -445,4 +445,18 @@ public class AlarmGroupService {
 
         return alarmGroupMember.getAlarmToggle();
     }
+
+    @Transactional(readOnly = true)
+    public Boolean findAlarmToggle(Long alarmGroupId, Long loginMemberId){
+        Member loginMember = memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
+
+        AlarmGroup alarmGroup = alarmGroupRepository.findById(alarmGroupId)
+                .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP));
+
+        AlarmGroupMember alarmGroupMember = alarmGroupMemberRepository.findByAlarmGroupIdAndMemberId(alarmGroup.getId(), loginMember.getId())
+                .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP_MEMBER));
+
+        return alarmGroupMember.getAlarmToggle();
+    }
 }

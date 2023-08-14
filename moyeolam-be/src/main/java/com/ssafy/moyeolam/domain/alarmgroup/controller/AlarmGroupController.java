@@ -148,4 +148,15 @@ public class AlarmGroupController {
                 .build();
     }
 
+    @GetMapping("/{alarmGroupId}/toggle")
+    public EnvelopeResponse<Boolean> findAlarmToggle(@PathVariable Long alarmGroupId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if (principalDetails == null) {
+            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+        }
+
+        return EnvelopeResponse.<Boolean>builder()
+                .data(alarmGroupService.findAlarmToggle(alarmGroupId, principalDetails.getMember().getId()))
+                .build();
+    }
+
 }
