@@ -166,12 +166,29 @@ public class AlarmGroupService {
 
         updateAlarmDays(requestDto.getDayOfWeek(), alarmGroup);
 
-        // 푸시알림 전송
-        String body = alarmGroup.getTitle() + "의 알람그룹이 수정되었습니다.";
+
         List<AlarmGroupMember> alarmGroupMembers = alarmGroup.getAlarmGroupMembers();
+        // 알람그룹 로그
         for (AlarmGroupMember alarmGroupMember : alarmGroupMembers) {
             Member member = alarmGroupMember.getMember();
-            if (!member.getId().equals(loginMember.getId())){
+            if (member.getId().equals(loginMember.getId())) {
+                continue;
+            }
+
+            AlertLog alertLog = AlertLog.builder()
+                    .fromMember(loginMember)
+                    .toMember(member)
+                    .alarmGroup(alarmGroup)
+                    .alertType(metaDataService.getMetaData(MetaDataType.ALERT_TYPE.name(), AlertType.ALARM_GROUP_UPDATE.getName()))
+                    .build();
+            alertLogRepository.save(alertLog);
+        }
+
+        // 푸시알림 전송
+        String body = alarmGroup.getTitle() + "의 알람그룹이 수정되었습니다.";
+        for (AlarmGroupMember alarmGroupMember : alarmGroupMembers) {
+            Member member = alarmGroupMember.getMember();
+            if (!member.getId().equals(loginMember.getId())) {
                 notificationService.sendAllNotification(member, body, AlertType.ALARM_GROUP_UPDATE);
             }
         }
