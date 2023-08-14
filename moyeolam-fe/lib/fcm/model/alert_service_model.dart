@@ -2,7 +2,7 @@ import 'dart:ffi';
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'arlet_service_model.g.dart';
+part 'alert_service_model.g.dart';
 
 @JsonSerializable()
 class ApiArletModel {

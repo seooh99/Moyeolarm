@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:youngjun/common/const/colors.dart';
-import 'package:youngjun/fcm/api/strategies/group_accept_strategy.dart';
 
-import '../api/arlet_modal_api.dart';
-import '../api/strategies/group_accept_strategy.dart';
+import '../api/alert_modal_api.dart';
+
 
 class APIDialog extends StatelessWidget {
   const APIDialog({
