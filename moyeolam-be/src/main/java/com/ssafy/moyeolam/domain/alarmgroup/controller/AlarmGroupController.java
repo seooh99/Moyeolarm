@@ -2,10 +2,14 @@ package com.ssafy.moyeolam.domain.alarmgroup.controller;
 
 import com.ssafy.moyeolam.domain.alarmgroup.dto.*;
 import com.ssafy.moyeolam.domain.alarmgroup.service.AlarmGroupService;
+import com.ssafy.moyeolam.domain.auth.dto.PrincipalDetails;
 import com.ssafy.moyeolam.domain.member.dto.AuthenticatedMember;
+import com.ssafy.moyeolam.domain.member.exception.MemberErrorInfo;
+import com.ssafy.moyeolam.domain.member.exception.MemberException;
 import com.ssafy.moyeolam.global.common.response.EnvelopeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,124 +22,129 @@ public class AlarmGroupController {
     private final AlarmGroupService alarmGroupService;
 
     @PostMapping
-    public EnvelopeResponse<Long> saveAlarmGroup(@RequestBody SaveAlarmGroupRequestDto requestDto) {
-        AuthenticatedMember loginMember = AuthenticatedMember.builder()
-                .memberId(1L)
-                .build();
-
+    public EnvelopeResponse<Long> saveAlarmGroup(@RequestBody SaveAlarmGroupRequestDto requestDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if (principalDetails == null) {
+            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+        }
         return EnvelopeResponse.<Long>builder()
-                .data(alarmGroupService.saveAlarmGroup(requestDto, loginMember.getMemberId()))
+                .data(alarmGroupService.saveAlarmGroup(requestDto, principalDetails.getMember().getId()))
                 .build();
     }
 
     @GetMapping
-    public EnvelopeResponse<FindAlarmGroupsResponseDto> findAlarmGroups() {
-        AuthenticatedMember loginMember = AuthenticatedMember.builder()
-                .memberId(1L)
-                .build();
+    public EnvelopeResponse<FindAlarmGroupsResponseDto> findAlarmGroups(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if (principalDetails == null) {
+            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+        }
 
         return EnvelopeResponse.<FindAlarmGroupsResponseDto>builder()
-                .data(alarmGroupService.findAlarmGroups(loginMember.getMemberId()))
+                .data(alarmGroupService.findAlarmGroups(principalDetails.getMember().getId()))
                 .build();
     }
 
     @GetMapping("/{alarmGroupId}")
-    public EnvelopeResponse<FindAlarmGroupResponseDto> findAlarmGroup(@PathVariable Long alarmGroupId) {
-        AuthenticatedMember loginMember = AuthenticatedMember.builder()
-                .memberId(1L)
-                .build();
+    public EnvelopeResponse<FindAlarmGroupResponseDto> findAlarmGroup(@PathVariable Long alarmGroupId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if (principalDetails == null) {
+            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+        }
 
         return EnvelopeResponse.<FindAlarmGroupResponseDto>builder()
-                .data(alarmGroupService.findAlarmGroup(alarmGroupId, loginMember.getMemberId()))
+                .data(alarmGroupService.findAlarmGroup(alarmGroupId, principalDetails.getMember().getId()))
                 .build();
     }
 
     @DeleteMapping("/{alarmGroupId}")
-    public EnvelopeResponse<Long> quitAlarmGroup(@PathVariable Long alarmGroupId) {
-        AuthenticatedMember loginMember = AuthenticatedMember.builder()
-                .memberId(1L)
-                .build();
+    public EnvelopeResponse<Long> quitAlarmGroup(@PathVariable Long alarmGroupId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if (principalDetails == null) {
+            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+        }
 
         return EnvelopeResponse.<Long>builder()
-                .data(alarmGroupService.quitAlarmGroup(alarmGroupId, loginMember.getMemberId()))
+                .data(alarmGroupService.quitAlarmGroup(alarmGroupId, principalDetails.getMember().getId()))
                 .build();
     }
 
     @PatchMapping("/{alarmGroupId}")
-    public EnvelopeResponse<Long> updateAlarmGroup(@PathVariable Long alarmGroupId, @RequestBody UpdateAlarmGroupRequestDto requestDto) {
-        AuthenticatedMember loginMember = AuthenticatedMember.builder()
-                .memberId(1L)
-                .build();
+    public EnvelopeResponse<Long> updateAlarmGroup(@PathVariable Long alarmGroupId, @RequestBody UpdateAlarmGroupRequestDto requestDto,
+                                                   @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if (principalDetails == null) {
+            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+        }
 
         return EnvelopeResponse.<Long>builder()
-                .data(alarmGroupService.updateAlarmGroup(alarmGroupId, loginMember.getMemberId(), requestDto))
+                .data(alarmGroupService.updateAlarmGroup(alarmGroupId, principalDetails.getMember().getId(), requestDto))
                 .build();
     }
 
 
     @PostMapping("/{alarmGroupId}/request")
-    public EnvelopeResponse<List<Long>> requestAlarmGroup(@PathVariable Long alarmGroupId, @RequestBody RequestAlarmGroupRequestDto requestDto) {
-        AuthenticatedMember loginMember = AuthenticatedMember.builder()
-                .memberId(1L)
-                .build();
+    public EnvelopeResponse<List<Long>> requestAlarmGroup(@PathVariable Long alarmGroupId, @RequestBody RequestAlarmGroupRequestDto requestDto,
+                                                          @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if (principalDetails == null) {
+            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+        }
 
         return EnvelopeResponse.<List<Long>>builder()
-                .data(alarmGroupService.requestAlarmGroup(loginMember.getMemberId(), alarmGroupId, requestDto.getMemberIds()))
+                .data(alarmGroupService.requestAlarmGroup(principalDetails.getMember().getId(), alarmGroupId, requestDto.getMemberIds()))
                 .build();
     }
 
     @PostMapping("/{alarmGroupId}/approve")
-    public EnvelopeResponse<Long> approveAlarmGroup(@PathVariable Long alarmGroupId, @RequestBody ApproveAlarmGroupRequestDto requestDto) {
-        AuthenticatedMember loginMember = AuthenticatedMember.builder()
-                .memberId(2L)
-                .build();
+    public EnvelopeResponse<Long> approveAlarmGroup(@PathVariable Long alarmGroupId, @RequestBody ApproveAlarmGroupRequestDto requestDto,
+                                                    @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if (principalDetails == null) {
+            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+        }
 
         return EnvelopeResponse.<Long>builder()
-                .data(alarmGroupService.approveAlarmGroup(alarmGroupId, loginMember.getMemberId(), requestDto.getFromMemberId(), requestDto.getToMemberId()))
+                .data(alarmGroupService.approveAlarmGroup(alarmGroupId, principalDetails.getMember().getId(), requestDto.getFromMemberId(), requestDto.getToMemberId()))
                 .build();
     }
 
     @PostMapping("/{alarmGroupId}/reject")
-    public EnvelopeResponse<Long> rejectAlarmGroup(@PathVariable Long alarmGroupId, @RequestBody RejectAlarmGroupRequestDto requestDto) {
-        AuthenticatedMember loginMember = AuthenticatedMember.builder()
-                .memberId(2L)
-                .build();
+    public EnvelopeResponse<Long> rejectAlarmGroup(@PathVariable Long alarmGroupId, @RequestBody RejectAlarmGroupRequestDto requestDto,
+                                                   @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if (principalDetails == null) {
+            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+        }
+
 
         return EnvelopeResponse.<Long>builder()
-                .data(alarmGroupService.rejectAlarmGroup(alarmGroupId, loginMember.getMemberId(), requestDto.getFromMemberId(), requestDto.getToMemberId()))
+                .data(alarmGroupService.rejectAlarmGroup(alarmGroupId, principalDetails.getMember().getId(), requestDto.getFromMemberId(), requestDto.getToMemberId()))
                 .build();
     }
 
     @PostMapping("/{alarmGroupId}/ban")
-    public EnvelopeResponse<Long> banAlarmGroupMember(@PathVariable Long alarmGroupId, @RequestBody BanAlarmGroupMemberRequestDto banAlarmGroupMemberRequestDto) {
-        AuthenticatedMember loginMember = AuthenticatedMember.builder()
-                .memberId(1L)
-                .build();
+    public EnvelopeResponse<Long> banAlarmGroupMember(@PathVariable Long alarmGroupId, @RequestBody BanAlarmGroupMemberRequestDto banAlarmGroupMemberRequestDto,
+                                                      @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if (principalDetails == null) {
+            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+        }
 
         return EnvelopeResponse.<Long>builder()
-                .data(alarmGroupService.banAlarmGroupMember(alarmGroupId, loginMember.getMemberId(), banAlarmGroupMemberRequestDto.getMemberId()))
+                .data(alarmGroupService.banAlarmGroupMember(alarmGroupId, principalDetails.getMember().getId(), banAlarmGroupMemberRequestDto.getMemberId()))
                 .build();
     }
 
     @PostMapping("/{alarmGroupId}/lock")
-    public EnvelopeResponse<Boolean> lockAlarmGroup(@PathVariable Long alarmGroupId) {
-        AuthenticatedMember loginMember = AuthenticatedMember.builder()
-                .memberId(1L)
-                .build();
+    public EnvelopeResponse<Boolean> lockAlarmGroup(@PathVariable Long alarmGroupId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if (principalDetails == null) {
+            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+        }
 
         return EnvelopeResponse.<Boolean>builder()
-                .data(alarmGroupService.lockAlarmGroup(alarmGroupId, loginMember.getMemberId()))
+                .data(alarmGroupService.lockAlarmGroup(alarmGroupId, principalDetails.getMember().getId()))
                 .build();
     }
 
     @PostMapping("/{alarmGroupId}/toggle")
-    public EnvelopeResponse<Boolean> toggleAlarm(@PathVariable Long alarmGroupId) {
-        AuthenticatedMember loginMember = AuthenticatedMember.builder()
-                .memberId(1L)
-                .build();
+    public EnvelopeResponse<Boolean> toggleAlarm(@PathVariable Long alarmGroupId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if (principalDetails == null) {
+            throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
+        }
 
         return EnvelopeResponse.<Boolean>builder()
-                .data(alarmGroupService.toggleAlarm(alarmGroupId, loginMember.getMemberId()))
+                .data(alarmGroupService.toggleAlarm(alarmGroupId, principalDetails.getMember().getId()))
                 .build();
     }
 
