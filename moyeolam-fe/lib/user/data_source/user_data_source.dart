@@ -12,9 +12,6 @@ abstract class UserDataSource {
   factory UserDataSource(Dio dio, {String baseUrl}) = _UserDataSource;
 
   @POST('/login')
-  @Headers(<String, dynamic>{
-    "Content-Type": "application/json",
-  })
   Future<ResponseUserModel> isSigned(
     @Body() IsSigned params,
   );

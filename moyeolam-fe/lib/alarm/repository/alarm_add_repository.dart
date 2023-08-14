@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:youngjun/alarm/data_source/add_alarm_group_data_source.dart';
 import 'package:youngjun/common/const/address_config.dart';
+import 'package:youngjun/common/secure_storage/secure_storage.dart';
+import 'package:youngjun/main.dart';
+import 'package:youngjun/user/model/user_model.dart';
 
 import '../model/add_alarm_group_model.dart';
 
@@ -9,8 +12,8 @@ class AddAlarmGroupRepository {
     Dio(),
     baseUrl: BASE_URL,
   );
-
-  Future<AddAlarmGroupResponseModel> addAlarmGroup(String title, String time, List<String?> dayOfWeek, String alarmSound, String alarmMission){
+  UserInformation _userInformation = UserInformation(storage);
+  Future<AddAlarmGroupResponseModel> addAlarmGroup(String title, String time, List<String?> dayOfWeek, String alarmSound, String alarmMission) async{
     AddAlarmGroupRequestModel params = AddAlarmGroupRequestModel(
         title: title,
         time: time,
@@ -23,10 +26,13 @@ class AddAlarmGroupRepository {
     print("dayOfWeek: ${params.dayOfWeek}");
     print("alarmSound: ${params.alarmSound}");
     print("alarmMission: ${params.alarmMission}");
-    return _addAlarmDataSource.addAlarmGroup(params);
+    UserModel? userInfo = await _userInformation.getUserInfo();
+    print("${userInfo?.accessToken} userInfo");
+    String token = "Bearer ${userInfo!.accessToken}";
+    return _addAlarmDataSource.addAlarmGroup(token, params);
   }
 
-  Future<AddAlarmGroupResponseModel> updateAlarmGroup(int alarmGroupId, String title, String time, List<String?> dayOfWeek, String alarmSound, String alarmMission){
+  Future<AddAlarmGroupResponseModel> updateAlarmGroup(int alarmGroupId, String title, String time, List<String?> dayOfWeek, String alarmSound, String alarmMission) async{
     AddAlarmGroupRequestModel params = AddAlarmGroupRequestModel(
       title: title,
       time: time,
@@ -34,12 +40,15 @@ class AddAlarmGroupRepository {
       alarmSound: alarmSound,
       alarmMission: alarmMission,
     );
-    print("title: ${params.title}");
-    print("time: ${params.time}");
-    print("dayOfWeek: ${params.dayOfWeek}");
-    print("alarmSound: ${params.alarmSound}");
-    print("alarmMission: ${params.alarmMission}");
-    return _addAlarmDataSource.updateAlarmGroup(alarmGroupId, params);
+    // print("title: ${params.title}");
+    // print("time: ${params.time}");
+    // print("dayOfWeek: ${params.dayOfWeek}");
+    // print("alarmSound: ${params.alarmSound}");
+    // print("alarmMission: ${params.alarmMission}");
+    UserModel? userInfo = await _userInformation.getUserInfo();
+    print("${userInfo?.accessToken} userInfo");
+    String token = "Bearer ${userInfo!.accessToken}";
+    return _addAlarmDataSource.updateAlarmGroup(token, alarmGroupId, params);
   }
 
 }
