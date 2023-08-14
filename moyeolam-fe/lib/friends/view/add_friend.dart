@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:youngjun/common/const/address_config.dart';
 import 'package:youngjun/common/const/colors.dart';
+import 'package:youngjun/common/secure_storage/secure_storage.dart';
 import 'package:youngjun/common/textfield_bar.dart';
+import 'package:youngjun/main.dart';
+import 'package:youngjun/user/model/user_model.dart';
 
 import '../component/friends_search_list.dart';
 import '../model/friends_list_model.dart';
@@ -17,6 +20,7 @@ class AddFriends extends ConsumerStatefulWidget {
 }
 
 class _AddFriendsState extends ConsumerState<AddFriends> {
+  UserInformation _userInformation = UserInformation(storage);
   final TextEditingController _searchController = TextEditingController();
   List<Friend>? _searchResults;
 
@@ -40,8 +44,9 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
 
     final dio = Dio(BaseOptions(baseUrl: BASE_URL));
     final friendRepository = FriendsRepository(dio);
-
-    final searchResult = await friendRepository.searchFriends(keyword);
+    UserModel? userInfo = await _userInformation.getUserInfo();
+    String token = "Bearer ${userInfo!.accessToken}";
+    final searchResult = await friendRepository.searchFriends(token, keyword);
     final filteredFriends = searchResult.data.friends.where(
             (friend) => friend.nickname.toLowerCase().contains(keyword.toLowerCase())
     ).toList();
@@ -55,9 +60,10 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
   Future<void> _sendFriendRequest(int memberId) async {
     final dio = Dio(BaseOptions(baseUrl: BASE_URL));
     final friendRepository = FriendsRepository(dio);
-
+    UserModel? userInfo = await _userInformation.getUserInfo();
+    String token = "Bearer ${userInfo!.accessToken}";
     try {
-      await friendRepository.friendRequestPost(memberId);
+      await friendRepository.friendRequestPost(token ,memberId);
       print('Friend request sent successfully');
     } catch (e) {
       print('Error sending friend request: $e');

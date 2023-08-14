@@ -20,7 +20,6 @@ class FriendListScreen extends ConsumerStatefulWidget {
 
 class _FriendListScreenState extends ConsumerState<FriendListScreen> {
   List<FriendsListModel> friendsList = <FriendsListModel>[];
-
   // 스크롤 컨트롤러
   final ScrollController controller = ScrollController();
 
@@ -49,7 +48,7 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
     final friendRepository = FriendsRepository(dio);
 
     final keyword = _searchController_list.text ?? '';
-
+    UserModel? userInfo = await _userInformation.getUserInfo();
     print(keyword);
 
     if (keyword.isEmpty) {
@@ -58,7 +57,8 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
         print('키워드 비어있음');
       });
     } else {
-      final searchResult = await friendRepository.searchFriends(keyword);
+      String token = "Bearer ${userInfo!.accessToken}";
+      final searchResult = await friendRepository.searchFriends(token, keyword);
       print(keyword);
       final filteredFriends = searchResult.data.friends
           .where((friend) =>
@@ -171,8 +171,9 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
                             UserModel? userInfo = snapshot.data;
                             var profileImageUrl = userInfo?.profileImageUrl;
                             return CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage(profileImageUrl ?? ''),
+                              backgroundColor: Colors.deepOrangeAccent,
+                              // backgroundImage:
+                              //     NetworkImage(profileImageUrl ?? ''),
                             );
                           } else {
                             return CircleAvatar(

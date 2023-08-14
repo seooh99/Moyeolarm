@@ -3,8 +3,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:youngjun/alarm/repository/add_friend_alarm_group_repository.dart';
+import 'package:youngjun/common/secure_storage/secure_storage.dart';
 import 'package:youngjun/friends/model/friends_list_model.dart';
 import 'package:youngjun/friends/repository/friends_repository.dart';
+import 'package:youngjun/main.dart';
+import 'package:youngjun/user/model/user_model.dart';
 
 AddFriendAlarmGroupViewModel _addFriendAlarmGroupViewModel = AddFriendAlarmGroupViewModel();
 final addFriendAlarmProvider = ChangeNotifierProvider<AddFriendAlarmGroupViewModel>((ref) => _addFriendAlarmGroupViewModel );
@@ -20,6 +23,7 @@ class AddFriendAlarmGroupViewModel extends ChangeNotifier{
   final AddFriendAlarmGroupRepository _addFriendAlarmGroupRepository = AddFriendAlarmGroupRepository();
   final List<int?> checkId = [];
   final FriendsRepository _friendsRepository = FriendsRepository(Dio());
+  UserInformation _userInformation = UserInformation(storage);
   String friendNickname = '';
 
   clearMember(){
@@ -51,12 +55,16 @@ class AddFriendAlarmGroupViewModel extends ChangeNotifier{
   }
 
   inviteFriend(int alarmGroupId, List<int?> memberIds) async {
-    return await _addFriendAlarmGroupRepository.inviteFriend(alarmGroupId, memberIds);
+    UserModel? userInfo = await _userInformation.getUserInfo();
+    String token = "Bearer ${userInfo!.accessToken}";
+    return await _addFriendAlarmGroupRepository.inviteFriend(token, alarmGroupId, memberIds);
   }
 
   Future<List<Friend>?> searchFriend() async {
     print("$friendNickname friend");
-    var response =  await _friendsRepository.searchFriends(friendNickname);
+    UserModel? userInfo = await _userInformation.getUserInfo();
+    String token = "Bearer ${userInfo!.accessToken}";
+    var response =  await _friendsRepository.searchFriends(token, friendNickname);
     if(response.code == "200"){
       return response.data.friends;
     }

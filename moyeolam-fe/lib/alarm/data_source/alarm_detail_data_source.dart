@@ -13,20 +13,25 @@ abstract class AlarmListDataSource {
   factory AlarmListDataSource(Dio dio, {String baseUrl}) = _AlarmListDataSource;
 
   @GET('/alarmgroups')
-  Future<AlarmListResponseModel> getAlarmList();
+  Future<AlarmListResponseModel> getAlarmList(
+      @Header('Authorization') String token,
+      );
 
   @GET('/alarmgroups/{alarmGroupId}')
   Future<AlarmDetailResponseModel> getAlarmDetail(
+      @Header('Authorization') String token,
       @Path("alarmGroupId") int alarmGroupId,
       );
 
   @DELETE("/alarmgroups/{alarmGroupId}")
   Future<AddAlarmGroupResponseModel> deleteAlarmGroup(
+      @Header('Authorization') String token,
       @Path("alarmGroupId") int alarmGroupId,
       );
 
   @POST("/alarmgroups/{alarmGroupId}/toggle")
   Future<AlarmToggleResponseModel> updateToggle(
+      @Header('Authorization') String token,
       @Path("alarmGroupId") int alarmGroupId,
     );
 

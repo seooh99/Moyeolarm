@@ -27,19 +27,14 @@ class MainAlarmList extends ConsumerStatefulWidget {
 class _MainAlarmListState extends ConsumerState<MainAlarmList> {
   final AlarmListViewModel _alarmListViewModel = AlarmListViewModel();
 
-  @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   // ref.refresh(alarmListProvider);
-  //   super.initState();
-  // }
+
   @override
   Widget build(BuildContext context) {
     var alarmDetailModel = ref.watch(alarmDetailProvider);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.invalidate(alarmListProvider);
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   ref.invalidate(alarmListProvider);
+    // });
 
     AsyncValue<AlarmListModel> alarmgroups = ref.watch(alarmListProvider);
     AlarmListNotifier alarmListNotifier =
@@ -74,8 +69,10 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
         },
         child: Padding(
           padding: EdgeInsets.only(bottom: 68),
-          child: alarmgroups.when(data: (data) {
+          child: alarmgroups.when(
+              data: (data) {
             var alarmGroups = data.alarmGroups;
+
             return MaterialApp(
               home: SingleChildScrollView(
                 child: Column(
@@ -239,6 +236,7 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
               ),
             );
           }, error: (error, stackTrace) {
+            print("Error: $error alarmList");
             return SpinKitFadingCube(
               // FadingCube 모양 사용
               color: Colors.blue, // 색상 설정

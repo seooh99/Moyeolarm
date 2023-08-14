@@ -15,13 +15,22 @@ abstract class FriendsRepository {
   _FriendsRepository;
 
   @POST('/friends/{memberId}/request')
-  Future<void> friendRequestPost(@Path() int memberId);
+  Future<void> friendRequestPost(
+      @Header('Authorization') String token,
+      @Path() int memberId,
+      );
 
   @GET('/friends/search')
-  Future<FriendsListModel> searchFriends(@Query('keyword') String keyword);
+  Future<FriendsListModel> searchFriends(
+      @Header('Authorization') String token,
+      @Query('keyword') String keyword,
+      );
 
   @DELETE('/friends/{myFriendId}')
-  Future<void> deleteFriend(@Path() int myFriendId);
+  Future<void> deleteFriend(
+      @Header('Authorization') String token,
+      @Path() int myFriendId,
+      );
 
 }
 
