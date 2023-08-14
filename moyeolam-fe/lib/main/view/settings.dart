@@ -6,7 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../../common/confirm.dart';
 
-import '../../fcm/view/arlet_list_view.dart';
+import '../../fcm/view/alert_list_view.dart';
 import '../../user/view/auth.dart';
 import '../../user/viewmodel/auth_view_model.dart';
 import '../service/setting_service.dart';
