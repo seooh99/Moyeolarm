@@ -12,11 +12,13 @@ abstract class AddAlarmDataSource {
   // 전체 조회
   @POST("/alarmgroups")
   Future<AddAlarmGroupResponseModel> addAlarmGroup(
+      @Header('Authorization') String token,
       @Body() AddAlarmGroupRequestModel alarmGroup,
       );
   // 알람 수정
   @PATCH("/alarmgroups/{alarmGroupId}")
   Future<AddAlarmGroupResponseModel> updateAlarmGroup(
+    @Header('Authorization') String token,
     @Path("alarmGroupId") int alarmGroupId,
     @Body() AddAlarmGroupRequestModel alarmGroup,
   );

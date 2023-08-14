@@ -2,6 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:youngjun/alarm/model/add_alarm_group_model.dart';
 import 'package:youngjun/alarm/repository/alarm_add_repository.dart';
+import 'package:youngjun/common/secure_storage/secure_storage.dart';
+import 'package:youngjun/main.dart';
+import 'package:youngjun/user/model/user_model.dart';
 
 
 List<String> week = ["월", "화", "수", "목", "금", "토", "일"];
@@ -34,10 +37,10 @@ class AddAlarmGroupViewModel{
     print(title);
   }
   void defaultDayOfWeek(List<bool> defaultWeek){
-    if(defaultWeek != null) {
+
       dayOfWeek = [...defaultWeek];
       print("default setting $dayOfWeek");
-    }
+
   }
 
   void setDayOfWeek(int index){
@@ -72,11 +75,18 @@ class AddAlarmGroupViewModel{
       //   dayOfWeek[index]?weekDay.add(week[index]);
       // }
       print("$weekDay check weekDay");
-      var response = await _addAlarmGroupRepository.updateAlarmGroup(
-          alarmGroupId, title, time, weekDay, alarmSound, alarmMission);
-      if (response != null && response.code == "200") {
-        return response.data;
-      }
+
+        var response = await _addAlarmGroupRepository.updateAlarmGroup(
+            alarmGroupId,
+            title,
+            time,
+            weekDay,
+            alarmSound,
+            alarmMission);
+        if (response.code == "200") {
+          return response.data;
+        }
+
       return ;
     }catch(error){
       print("Update alarm group viewModel Error: $error");
@@ -98,11 +108,17 @@ class AddAlarmGroupViewModel{
       //   dayOfWeek[index]?weekDay.add(week[index]);
       // }
       print("$weekDay check weekDay");
-      var response = await _addAlarmGroupRepository.addAlarmGroup(
-          title, time, weekDay, alarmSound, alarmMission);
-      if (response != null && response.code == "200") {
-        return response.data;
-      }
+
+        var response = await _addAlarmGroupRepository.addAlarmGroup(
+            title,
+            time,
+            weekDay,
+            alarmSound,
+            alarmMission);
+        if (response != null && response.code == "200") {
+          return response.data;
+        }
+
       return ;
     }catch(error){
       print("AddAlarmError: $error");

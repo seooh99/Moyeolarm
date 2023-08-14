@@ -12,6 +12,7 @@ abstract class AddFriendAlarmGroupDataSource {
   
   @POST('/alarmgroups/{alarmGroupId}/request')
   Future<AddFriendAlarmGroupResponseModel> addFriendAlarmGroup(
+      @Header('Authorization') String token,
       @Path("alarmGroupId") int alarmGroupId,
       @Body() AddFriendAlarmGroupRequestModel memberIds,
       );

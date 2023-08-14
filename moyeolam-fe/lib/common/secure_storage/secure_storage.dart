@@ -13,7 +13,7 @@ class UserInformation {
     var stringUserInfo = await storage.read(key: 'userInfo');
     if(stringUserInfo !=null){
       var result = jsonDecode(stringUserInfo);
-      print("${result["nickname"]}");
+      print("${result["nickname"]} secure storage");
       
       return UserModel.fromJson(result);
     }else{
