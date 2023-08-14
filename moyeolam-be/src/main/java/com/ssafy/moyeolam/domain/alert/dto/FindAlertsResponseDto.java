@@ -31,7 +31,7 @@ public class FindAlertsResponseDto {
     }
 
     private static List<AlertElement> getAlertLogs(List<AlertLog> alertLogs) {
-        // 친구 수락, 알람그룹 수락, 알람그룹 탈퇴, 알람그룹 강퇴 로그
+        // 친구 수락, 알람그룹 수락, 탈퇴, 강퇴, 수정, 해체 로그
         List<AlertElement> alertElements = new ArrayList<>();
         for (AlertLog alertLog : alertLogs) {
             if (alertLog.getAlertType().getName().equals(AlertType.FRIEND_APPROVE.getName())) {
@@ -46,10 +46,12 @@ public class FindAlertsResponseDto {
                 );
             } else if (alertLog.getAlertType().getName().equals(AlertType.ALARM_GROUP_APPROVE.getName()) ||
                     alertLog.getAlertType().getName().equals(AlertType.ALARM_GROUP_QUIT.getName()) ||
-                    alertLog.getAlertType().getName().equals(AlertType.ALARM_GROUP_BAN.getName())) {
+                    alertLog.getAlertType().getName().equals(AlertType.ALARM_GROUP_BAN.getName()) ||
+                    alertLog.getAlertType().getName().equals(AlertType.ALARM_GROUP_UPDATE.getName()) ||
+                    alertLog.getAlertType().getName().equals(AlertType.ALARM_GROUP_ABOLISHED.getName())) {
 
                 alertElements.add(AlertElement.builder()
-                        .alarmGroupId(null)
+                        .alarmGroupId(alertLog.getAlarmGroup().getId())
                         .friendRequestId(null)
                         .fromMemberId(alertLog.getFromMember().getId())
                         .fromNickname(alertLog.getFromMember().getNickname())
