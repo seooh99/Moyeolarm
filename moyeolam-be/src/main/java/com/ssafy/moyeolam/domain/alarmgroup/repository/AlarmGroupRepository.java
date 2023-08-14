@@ -19,4 +19,11 @@ public interface AlarmGroupRepository extends JpaRepository<AlarmGroup, Long> {
             "join fetch a.hostMember " +
             "where a.id = :id ")
     Optional<AlarmGroup> findByIdWithHostMember(@Param("id") Long id);
+
+    @Query("select a from alarm_group a " +
+            "join fetch a.alarmGroupMembers am " +
+            "join fetch am.member " +
+            "join fetch a.hostMember " +
+            "where a.id = :id ")
+    Optional<AlarmGroup> findByIdWithHostMemberAndAlarmGroupMembersWithMember(@Param("id") Long id);
 }
