@@ -89,7 +89,7 @@ public class AlarmGroupService {
                 .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
         List<AlarmGroupMember> alarmGroupMembers = alarmGroupMemberRepository.findAllWithAlarmGroupAndMemberByMemberId(loginMember.getId());
-        return FindAlarmGroupsResponseDto.of(alarmGroupMembers);
+        return FindAlarmGroupsResponseDto.of(alarmGroupMembers, loginMember);
     }
 
     @Transactional(readOnly = true)

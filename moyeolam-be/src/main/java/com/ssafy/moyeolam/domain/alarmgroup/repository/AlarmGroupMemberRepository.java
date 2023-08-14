@@ -18,6 +18,7 @@ public interface AlarmGroupMemberRepository extends JpaRepository<AlarmGroupMemb
     @Query("select a from alarm_group_member a " +
             "join fetch a.alarmGroup g " +
             "join fetch a.member m " +
+            "join fetch g.hostMember " +
             "where m.id = :memberId " +
             "order by g.time")
     List<AlarmGroupMember> findAllWithAlarmGroupAndMemberByMemberId(@Param("memberId") Long memberId);

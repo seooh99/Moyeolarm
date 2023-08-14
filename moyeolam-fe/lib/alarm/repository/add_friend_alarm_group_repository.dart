@@ -9,11 +9,11 @@ class AddFriendAlarmGroupRepository {
     baseUrl: BASE_URL,
   );
 
-  Future<AddFriendAlarmGroupResponseModel> inviteFriend(int alarmGroupId, List<int?> memberIds){
+  Future<AddFriendAlarmGroupResponseModel> inviteFriend(String token, int alarmGroupId, List<int?> memberIds){
     var params = AddFriendAlarmGroupRequestModel(memberIds: memberIds);
     print("Check Params Invite Friend : ${params.memberIds}");
     print("Check alarmGroupId : ${alarmGroupId}");
-    return _addFriendAlarmGroupDataSource.addFriendAlarmGroup(alarmGroupId, params);
+    return _addFriendAlarmGroupDataSource.addFriendAlarmGroup(token, alarmGroupId, params);
   }
 
 }
