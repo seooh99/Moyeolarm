@@ -153,7 +153,7 @@ public class AlarmGroupService {
         Member loginMember = memberRepository.findById(loginMemberId)
                 .orElseThrow(() -> new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER));
 
-        AlarmGroup alarmGroup = alarmGroupRepository.findByIdWithHostMember(alarmGroupId)
+        AlarmGroup alarmGroup = alarmGroupRepository.findByIdWithHostMemberAndAlarmGroupMembersWithMember(alarmGroupId)
                 .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP));
 
         if (!alarmGroup.getHostMember().getId().equals(loginMember.getId())) {
@@ -165,6 +165,16 @@ public class AlarmGroupService {
         alarmGroup.setAlarmMission(metaDataService.getMetaData(MetaDataType.ALARM_MISSION.name(), requestDto.getAlarmMission()));
 
         updateAlarmDays(requestDto.getDayOfWeek(), alarmGroup);
+
+        // 푸시알림 전송
+        String body = alarmGroup.getTitle() + "의 알람그룹이 수정되었습니다.";
+        List<AlarmGroupMember> alarmGroupMembers = alarmGroup.getAlarmGroupMembers();
+        for (AlarmGroupMember alarmGroupMember : alarmGroupMembers) {
+            Member member = alarmGroupMember.getMember();
+            if (!member.getId().equals(loginMember.getId())){
+                notificationService.sendAllNotification(member, body, AlertType.ALARM_GROUP_UPDATE);
+            }
+        }
 
         return alarmGroup.getId();
     }
