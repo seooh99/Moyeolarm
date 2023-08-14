@@ -39,13 +39,15 @@ final friendsListRepositoryProvider = Provider((ref){
 
 });
 
-@RestApi(baseUrl: 'http://i9a502.p.ssafy.io:8080')
+@RestApi(baseUrl: BASE_URL)
 abstract class FriendsListRepository{
 
   factory FriendsListRepository(Dio dio, {String baseUrl}) = _FriendsListRepository;
 
   @GET('/friends')
-  Future<FriendsListModel> getFriendsList();
+  Future<FriendsListModel> getFriendsList(
+    @Header('Authorization') String token,
+  );
 
 
 

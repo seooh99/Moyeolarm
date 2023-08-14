@@ -184,7 +184,7 @@ class _AddFriendAlarmGroupViewState extends ConsumerState{
 
             },
                       error: (error, stackTrace){
-                        print("Error: $error");
+                        print("Error: $error 123");
                         return const SpinKitFadingCube(
                         // FadingCube 모양 사용
                         color: Colors.blue, // 색상 설정
