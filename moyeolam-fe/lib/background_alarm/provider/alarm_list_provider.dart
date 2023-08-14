@@ -8,7 +8,7 @@ final alarmFileProvider = FutureProvider<List<Alarm>>((ref) async {
   return alarms;
 });
 
-final alarmListProvider = StateNotifierProvider<AlarmListNotifier, List<Alarm>>((ref) {
+final alarmSettingProvider = StateNotifierProvider<AlarmListNotifier, List<Alarm>>((ref) {
   List<Alarm> alarms = [];
 
   ref.watch(alarmFileProvider).when(data: (data){
@@ -61,7 +61,7 @@ class AlarmListNotifier extends StateNotifier<List<Alarm>> {
   int getAvailableAlarmId() {
     int id = 14;
     for (final alarm in state) {
-      if (alarm.id != id) {
+      if (alarm.callbackId != id) {
         break;
       }
       id = id + 7;
@@ -73,7 +73,7 @@ class AlarmListNotifier extends StateNotifier<List<Alarm>> {
     for (Alarm alarm in state) {
       final id = (callbackId / 7).floor() * 7;
 
-      if (id == alarm.id) {
+      if (id == alarm.callbackId) {
         return alarm;
       }
     }
