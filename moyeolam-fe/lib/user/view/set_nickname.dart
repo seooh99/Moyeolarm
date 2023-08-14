@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:youngjun/background_alarm/view/alarm_observer.dart';
+import 'package:youngjun/background_alarm/view/home_screen.dart';
+import 'package:youngjun/background_alarm/view/permission_request_screen.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/secure_storage/secure_storage.dart';
 import 'package:youngjun/common/textfield_bar.dart';
@@ -67,8 +70,9 @@ class _SetNicknameState extends State<SetNickname> {
                     if(userInfo != null) {
                       userInfo!.nickname = nicknameViewModel.nName;
                       await _userInformation.setUserInfo(userInfo);
+                      // Navigator.of(context).pushNamed("/alarm");
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => MainPage()));
+                          MaterialPageRoute(builder: (context) => PermissionRequestScreen(child: AlarmObserver(child: MainPage()))));
                     }
                   }
                   //     .then((value) {
