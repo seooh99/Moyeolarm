@@ -29,6 +29,7 @@ class AlarmDetailScreen extends ConsumerStatefulWidget {
 
 class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
 
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((duration) {
@@ -62,7 +63,7 @@ class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
                     )
                         .then((value) =>
                         setState(() {
-                          ref.invalidate(alarmDetailProvider);
+                          ref.invalidate(alarmDetailFutureProvider);
                         }
                         )
                     );
@@ -76,7 +77,7 @@ class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
             ),
             body: RefreshIndicator(
               onRefresh: () async {
-                ref.invalidate(alarmDetailProvider);
+                ref.invalidate(alarmDetailFutureProvider);
               },
               child: Column(
                   children: [

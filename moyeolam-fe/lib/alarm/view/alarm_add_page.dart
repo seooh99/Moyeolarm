@@ -45,6 +45,7 @@ class _AlarmAddScreenState extends ConsumerState<AlarmAddScreen> {
     super.initState();
   }
 
+
   @override
   Widget build(BuildContext context) {
     var _alarmDetail = ref.watch(alarmDetailProvider);
@@ -199,6 +200,11 @@ class _AlarmAddScreenState extends ConsumerState<AlarmAddScreen> {
         ],
       ),
     );
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }
 
