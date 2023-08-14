@@ -4,9 +4,12 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:openvidu_client/openvidu_client.dart';
+import 'package:youngjun/alarm/model/alarm_detail_model.dart';
+import 'package:youngjun/alarm/repository/alarm_list_repository.dart';
 import 'package:youngjun/common/button/btn_call.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/web_rtc/component/config_view.dart';
+import 'package:youngjun/web_rtc/model/alarm_group_member.dart';
 import 'package:youngjun/web_rtc/model/connection.dart';
 import 'package:youngjun/web_rtc/model/face_recognition_model.dart';
 import 'package:youngjun/web_rtc/repository/face_recognition_repository.dart';
@@ -17,20 +20,28 @@ import '../component/media_stream_view.dart';
 class WebRtcRoomView extends StatefulWidget {
   final Connection room;
   final String userName;
+  final int alarmGroupId;
 
-  const WebRtcRoomView({super.key, required this.room, required this.userName});
+  const WebRtcRoomView(
+      {super.key,
+      required this.room,
+      required this.userName,
+      required this.alarmGroupId});
 
   @override
   State<WebRtcRoomView> createState() => _WebRtcRoomViewState();
 }
 
 class _WebRtcRoomViewState extends State<WebRtcRoomView> {
+  /// map of SID to RemoteParticipant
   Map<String, RemoteParticipant> remoteParticipants = {};
-  bool localPressed = false;
-  Map<String, bool> remotePressed = {};
-  MediaDeviceInfo? input;
+
+  MemberState localState = MemberState.offline;
   bool isInside = false;
   late OpenViduClient _openvidu;
+
+  /// map of nickname to AlarmGroupMember
+  Map<String, AlarmGroupMember> alarmGroupMembers = {};
 
   MemoryImage? _image;
   ByteBuffer? _bf;
@@ -41,6 +52,7 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
   void initState() {
     super.initState();
     initOpenVidu();
+    initAlarmDetail();
     _listenSessionEvents();
   }
 
@@ -49,6 +61,20 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
     localParticipant =
         await _openvidu.startLocalPreview(context, StreamMode.frontCamera);
     localParticipant?.publishAudio(false);
+    localState = MemberState.online;
+    setState(() {});
+  }
+
+  Future<void> initAlarmDetail() async {
+    final AlarmListRepository alarmListRepository = AlarmListRepository();
+    AlarmDetailResponseModel alarmDetailResponseModel =
+        await alarmListRepository.getAlarmListDetail(widget.alarmGroupId);
+    alarmDetailResponseModel.data.alarmGroup.members
+        .where((member) => member.nickname != widget.userName && !member.toggle)
+        .forEach((member) {
+      alarmGroupMembers[member.nickname] = AlarmGroupMember(
+          memberId: member.memberId, nickname: member.nickname);
+    });
     setState(() {});
   }
 
@@ -64,41 +90,48 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
 
     _openvidu.on(OpenViduEvent.addStream, (params) {
       remoteParticipants = {..._openvidu.participants};
-      remotePressed =
-          _openvidu.participants.keys.fold(<String, bool>{}, (res, id) {
-        res[id] = false;
-        return res;
+
+      remoteParticipants.forEach((SID, remote) {
+        String nickname = remote.metadata?['clientData'];
+
+        if (alarmGroupMembers[nickname]?.memberState == MemberState.offline) {
+          alarmGroupMembers[nickname]?.memberState = MemberState.online;
+          alarmGroupMembers[nickname]?.SID = SID;
+        }
       });
+
       setState(() {});
     });
 
     _openvidu.on(OpenViduEvent.removeStream, (params) {
       remoteParticipants = {..._openvidu.participants};
-      remotePressed =
-          _openvidu.participants.keys.fold(<String, bool>{}, (res, id) {
-        res[id] = false;
+
+      print("participants removed");
+
+      Set<String> onlineNicknames =
+          remoteParticipants.values.fold({}, (res, remote) {
+        String nickname = remote.metadata?['clientData'];
+        res.add(nickname);
         return res;
       });
+
+      for (String nickname in alarmGroupMembers.keys) {
+        if (!onlineNicknames.contains(nickname)) {
+          alarmGroupMembers[nickname]?.memberState = MemberState.offline;
+          alarmGroupMembers[nickname]?.SID = null;
+        }
+      }
+
       setState(() {});
     });
 
     _openvidu.on(OpenViduEvent.publishVideo, (params) {
       remoteParticipants = {..._openvidu.participants};
-      remotePressed =
-          _openvidu.participants.keys.fold(<String, bool>{}, (res, id) {
-        res[id] = false;
-        return res;
-      });
       setState(() {});
     });
 
     _openvidu.on(OpenViduEvent.publishAudio, (params) {
       remoteParticipants = {..._openvidu.participants};
-      remotePressed =
-          _openvidu.participants.keys.fold(<String, bool>{}, (res, id) {
-        res[id] = false;
-        return res;
-      });
       setState(() {});
     });
 
@@ -109,23 +142,30 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
 
     _openvidu.on(OpenViduEvent.reciveMessage, (params) {
       String? from = params["from"];
+      String? type = params["type"];
+      String? data = params["data"];
+      String nickname = remoteParticipants[from]?.metadata?['clientData'];
 
-      if (remoteParticipants.containsKey(from)) {
-        remotePressed.update(from!, (value) => true);
-        setState(() {});
-        if (localPressed && !remotePressed.containsValue(false)) {
-          _onDisconnect();
-        }
+      if (data == 'true') {
+        alarmGroupMembers[nickname]?.memberState = MemberState.recognized;
+      } else if (data == 'false') {
+        alarmGroupMembers[nickname]?.memberState = MemberState.online;
+      }
+      setState(() {});
+
+      int invalidMemberCnt = alarmGroupMembers.values
+          .where((member) => member.memberState != MemberState.recognized)
+          .length;
+
+      print('invalidMemberCnt: $invalidMemberCnt');
+
+      if (localState == MemberState.recognized && invalidMemberCnt == 0) {
+        _onDisconnect();
       }
     });
 
     _openvidu.on(OpenViduEvent.userUnpublished, (params) {
       remoteParticipants = {..._openvidu.participants};
-      remotePressed =
-          _openvidu.participants.keys.fold(<String, bool>{}, (res, id) {
-        res[id] = false;
-        return res;
-      });
       setState(() {});
     });
 
@@ -198,8 +238,7 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
                       child: Column(
                         children: [
                           Container(
-                            // height: 580,
-                            height: 160,
+                            height: 580,
                             width: 386,
                             child: Wrap(
                               direction: Axis.horizontal,
@@ -215,31 +254,47 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
                                     child: MediaStreamView(
                                       borderRadius: BorderRadius.circular(15),
                                       participant: localParticipant!,
+                                      userName: widget.userName,
+                                      memberState: localState,
                                     ),
                                   ),
                                 ),
-                                ...remoteParticipants.values
-                                    .map((remote) => Container(
+                                ...alarmGroupMembers.values
+                                    .map((member) => Container(
                                         margin: EdgeInsets.all(10),
                                         child: SizedBox(
-                                          width: 170,
-                                          height: 170,
-                                          child: MediaStreamView(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            participant: remote,
-                                          ),
-                                        ))),
+                                            width: 170,
+                                            height: 170,
+                                            child: MediaStreamView(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              participant: remoteParticipants[
+                                                  member.SID],
+                                              userName: member.nickname,
+                                              memberState: member.memberState,
+                                            )))),
+                                // ...remoteParticipants.values
+                                //     .map((remote) => Container(
+                                //     margin: EdgeInsets.all(10),
+                                //     child: SizedBox(
+                                //       width: 170,
+                                //       height: 170,
+                                //       child: MediaStreamView(
+                                //         borderRadius:
+                                //         BorderRadius.circular(15),
+                                //         participant: remote,
+                                //       ),
+                                //     ))),
                               ],
                             ),
                           ),
-                          _image == null
-                              ? Container()
-                              : Container(
-                                  height: 170,
-                                  width: 460,
-                                  child: Image(image: _image!),
-                                ),
+                          // _image == null
+                          //     ? Container()
+                          //     : Container(
+                          //         height: 170,
+                          //         width: 460,
+                          //         child: Image(image: _image!),
+                          //       ),
                           const SizedBox(
                             height: 20,
                           ),
@@ -264,16 +319,35 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
                                     _openvidu.sendMessage(
                                         OvMessage.fromJson(<String, dynamic>{
                                       "data": "true",
-                                      "type": "success"
+                                      "type": "recognized"
                                     }));
                                     setState(() {
-                                      localPressed = true;
+                                      localState = MemberState.recognized;
+                                    });
+
+                                    int invalidMemberCnt = alarmGroupMembers
+                                        .values
+                                        .where((member) =>
+                                            member.memberState !=
+                                            MemberState.recognized)
+                                        .length;
+
+                                    print(
+                                        'invalidMemberCnt: $invalidMemberCnt');
+
+                                    if (invalidMemberCnt == 0) {
+                                      _onDisconnect();
+                                    }
+                                  } else {
+                                    _openvidu.sendMessage(
+                                        OvMessage.fromJson(<String, dynamic>{
+                                      "data": "false",
+                                      "type": "recognized"
+                                    }));
+                                    setState(() {
+                                      localState = MemberState.online;
                                     });
                                   }
-
-                                  // if (!remotePressed.containsValue(false)) {
-                                  //   _onDisconnect();
-                                  // }
                                 },
                               ),
                               // Row(children: [
