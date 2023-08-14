@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/secure_storage/secure_storage.dart';
+import 'package:youngjun/main.dart';
 import 'package:youngjun/user/model/user_model.dart';
 import 'package:youngjun/user/repository/user_repository.dart';
 import 'package:youngjun/user/view/set_nickname.dart';
@@ -22,7 +23,7 @@ class _AuthViewState extends State<AuthView> {
   @override
   void initState() {
     // TODO: implement initState
-    _userInformation = UserInformation();
+    _userInformation = UserInformation(storage);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _asyncMethod();
     });

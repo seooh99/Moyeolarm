@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/secure_storage/secure_storage.dart';
 import 'package:youngjun/common/textfield_bar.dart';
+import 'package:youngjun/main.dart';
 import 'package:youngjun/main/view/main_page.dart';
 import 'package:youngjun/user/model/user_model.dart';
 import 'package:youngjun/user/viewmodel/set_nickname_view_model.dart';
@@ -16,7 +17,7 @@ class SetNickname extends StatefulWidget {
 
 class _SetNicknameState extends State<SetNickname> {
   NicknameViewModel nicknameViewModel = NicknameViewModel();
-  final UserInformation _userInformation = UserInformation();
+  final UserInformation _userInformation = UserInformation(storage);
   String? isOverlaped;
   @override
 

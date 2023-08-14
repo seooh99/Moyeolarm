@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:youngjun/user/model/user_model.dart';
 
-FlutterSecureStorage storage = FlutterSecureStorage();
+
 
 class UserInformation {
+  UserInformation(this.storage);
+  FlutterSecureStorage storage;
+
   Future<UserModel?> getUserInfo() async {
     var stringUserInfo = await storage.read(key: 'userInfo');
     if(stringUserInfo !=null){
@@ -15,7 +18,6 @@ class UserInformation {
       return UserModel.fromJson(result);
     }else{
       print("Check: userInfo is $stringUserInfo");
-      throw Exception("User info not found");
     }
   }
 
