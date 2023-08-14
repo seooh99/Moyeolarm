@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:youngjun/common/secure_storage/secure_storage.dart';
 
 import 'package:youngjun/fcm/model/alert_service_model.dart';
+import 'package:youngjun/main.dart';
 import 'package:youngjun/user/model/user_model.dart';
 
 import '../data_source/fcm_api_data_source.dart';
@@ -25,7 +26,7 @@ class AlertService with ChangeNotifier {
   Future<ApiArletModel> fetchData() async {
     try {
       final apiService = FcmApiService(Dio());
-      UserInformation userInformation = UserInformation();
+      UserInformation userInformation = UserInformation(storage);
       UserModel? userInfo = await userInformation.getUserInfo();
       String token = "Bearer ${userInfo!.accessToken}";
       final response = await apiService.getPosts(token);
