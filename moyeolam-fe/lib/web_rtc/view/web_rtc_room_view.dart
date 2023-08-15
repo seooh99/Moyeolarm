@@ -117,7 +117,7 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
     AlarmDetailResponseModel alarmDetailResponseModel =
         await alarmListRepository.getAlarmListDetail(widget.alarmGroupId);
     alarmDetailResponseModel.data.alarmGroup.members
-        .where((member) => member.nickname != widget.userName && member.isToggle)
+        .where((member) => member.nickname != widget.userName && member.toggle)
         .forEach((member) {
       alarmGroupMembers[member.nickname] = AlarmGroupMember(
           memberId: member.memberId, nickname: member.nickname);

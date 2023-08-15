@@ -36,6 +36,7 @@ class _MainPageState extends State<MainPage> {
         return Future(() => false);
       },
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
           backgroundColor: BACKGROUND_COLOR,
           // appBar: TitleBar(
