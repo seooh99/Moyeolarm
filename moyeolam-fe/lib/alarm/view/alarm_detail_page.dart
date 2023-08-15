@@ -275,6 +275,7 @@ class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
                           for(int index = 0; index <
                               data.members.length; index++)
                             AlarmGuestList(
+                              color: data.members[index].isToggle? MAIN_COLOR:CKECK_GRAY_COLOR,
                               nickname: data.members[index].nickname,
                               profileImage: Image.network(
                                   "${data.members[index].profileUrl}") ??
