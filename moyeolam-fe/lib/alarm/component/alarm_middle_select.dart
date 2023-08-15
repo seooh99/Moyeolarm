@@ -50,35 +50,40 @@ class _AlarmMiddleSelectState extends State<AlarmMiddleSelect> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: 60,
-                  ),
-                  Text(
-                    '알림음',
-                    style: TextStyle(
-                      color: FONT_COLOR,
-                      fontSize: 18,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 152,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        widget.alarmSound??widget.addAlarmGroupViewModel.alarmSound,
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(left:40),
+                      child: Text(
+                        '알림음',
                         style: TextStyle(
                           color: FONT_COLOR,
                           fontSize: 18,
                         ),
                       ),
-                      SizedBox(width: 12,),
-                      Icon(
-                          Icons.arrow_right_sharp,
-                          color: FONT_COLOR,
+                    ),
+                  ),
+                  // SizedBox(
+                  //   width: 120,
+                  // ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 12),
+                    child: Row(
+                      children: [
+                        Text(
+                          widget.alarmSound??widget.addAlarmGroupViewModel.alarmSound,
+                          style: TextStyle(
+                            color: FONT_COLOR,
+                            fontSize: 18,
+                          ),
                         ),
+                        SizedBox(width: 12,),
+                        Icon(
+                            Icons.arrow_right_sharp,
+                            color: FONT_COLOR,
+                          ),
 
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -94,51 +99,56 @@ class _AlarmMiddleSelectState extends State<AlarmMiddleSelect> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(
-                    width: 60,
-                  ),
-                  const Text(
-                    '인증방식',
-                    style: TextStyle(
-                      color: FONT_COLOR,
-                      fontSize: 18,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 136,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        widget.alarmMission??widget.addAlarmGroupViewModel.alarmMission,
-                        style: const TextStyle(
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 40),
+                      child: const Text(
+                        '인증방식',
+                        style: TextStyle(
                           color: FONT_COLOR,
                           fontSize: 18,
                         ),
                       ),
-                      const SizedBox(
-                        width: 12,
-                      ),
-                      const Icon(
-                          Icons.arrow_right_sharp,
-                          color: FONT_COLOR,
+                    ),
+                  ),
+                  // const SizedBox(
+                  //   width: 136,
+                  // ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          widget.alarmMission??widget.addAlarmGroupViewModel.alarmMission,
+                          style: const TextStyle(
+                            color: FONT_COLOR,
+                            fontSize: 18,
+                          ),
                         ),
-                    ],
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        const Icon(
+                            Icons.arrow_right_sharp,
+                            color: FONT_COLOR,
+                          ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 18,),
 
-                const SizedBox(
-                  width: 60,
-                ),
-                const Text(
-                  '반복 요일',
-                  style: TextStyle(
-                    color: FONT_COLOR,
-                    fontSize: 18,
+
+                Center(
+                  child: const Text(
+                    '반복 요일',
+                    style: TextStyle(
+                      color: FONT_COLOR,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
                 const SizedBox(

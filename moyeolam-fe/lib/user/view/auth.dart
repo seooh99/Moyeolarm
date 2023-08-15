@@ -54,6 +54,7 @@ class _AuthViewState extends State<AuthView> {
   Widget build(BuildContext context) {
     AuthViewModel auth = AuthViewModel();
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
