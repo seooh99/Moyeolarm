@@ -50,7 +50,7 @@ class AlarmList extends StatelessWidget {
                           child: Text(
                             title,
                             style: TextStyle(
-                              fontSize: 16.0,
+                              fontSize: 20.0,
                               fontWeight: FontWeight.w500
                             ),
                           ),
@@ -63,6 +63,9 @@ class AlarmList extends StatelessWidget {
                             }
                           },
                         ),
+                        SizedBox(
+                          width: 12,
+                        )
                       ],
                     ),
                     Row(
@@ -70,21 +73,20 @@ class AlarmList extends StatelessWidget {
                         SizedBox(
                         width: 20,
                       ),
-                        Text(
-                          hour.toString().length == 1 && minute.toString().length == 2?
-                          '0$hour : $minute':
-                          hour.toString().length == 2 && minute.toString().length == 1?
-                          '$hour : 0$minute':
-                          hour.toString().length == 1 && minute.toString().length == 1?
-                          '0$hour : 0$minute':
-                          '$hour : $minute',
-                          style: TextStyle(
-                            fontSize: 40.0,
-                            fontWeight: FontWeight.w600
+                        Expanded(
+                          child: Text(
+                            hour.toString().length == 1 && minute.toString().length == 2?
+                            '0$hour : $minute':
+                            hour.toString().length == 2 && minute.toString().length == 1?
+                            '$hour : 0$minute':
+                            hour.toString().length == 1 && minute.toString().length == 1?
+                            '0$hour : 0$minute':
+                            '$hour : $minute',
+                            style: TextStyle(
+                              fontSize: 40.0,
+                              fontWeight: FontWeight.w600
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 92,
                         ),
                         Row(
                           children: [
@@ -102,6 +104,9 @@ class AlarmList extends StatelessWidget {
                                 ),
                               )
                           ],
+                        ),
+                        SizedBox(
+                          width: 12,
                         )
                       ],
                     ),
