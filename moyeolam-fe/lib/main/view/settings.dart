@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/button/btn_toggle.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../../common/confirm.dart';
 
-import '../../fcm/view/alert_list_view.dart';
+
 import '../../user/view/auth.dart';
 import '../../user/viewmodel/auth_view_model.dart';
 import '../service/setting_service.dart';
@@ -24,12 +25,12 @@ void handleMessage(RemoteMessage? message, bool notificationStatus) {
     return;
   }
 
-  if (message != null && message.notification != null) {
-    Navigator.of(navigatorKey.currentContext!).pushNamed(
-      ArletListView.route,
-      arguments: message,
-    );
-  }
+  // if (message != null && message.notification != null) {
+  //   Navigator.of(navigatorKey.currentContext!).pushNamed(
+  //     ArletListView.route,
+  //     arguments: message,
+  //   );
+  // }
 }
 
 Future<void> initLocalNotifications() async {
@@ -111,10 +112,31 @@ class FirebaseApi with ChangeNotifier {
     final fcmToken = await _firebaseMessaging.getToken();
     print('Token:  $fcmToken');
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessage.listen((event) {
 
-      latestMessage = message; // 메시지 저장
+      if(event.notification!.title!.contains('test')){
+        Navigator.of(GlobalVariable.navState.currentContext!)
+            .push(MaterialPageRoute(
+            builder: (context) => ListView()));
+
+        return;
+      }
+
       notifyListeners(); // 변경 알림
+
+
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+
+
+      if(message.data['screen'] == 'MainPage') {
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
+          Navigator.of(GlobalVariable.navState.currentContext!)
+              .push(MaterialPageRoute(
+              builder: (context) => ListView()));
+        });
+        return;
+      }
     });
 
     notifyListeners();
@@ -139,11 +161,11 @@ class Settings extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Setting page',
       home: Scaffold(
-          backgroundColor: LIST_BLACK_COLOR,
-          body: _SettingsContent(),
-          ),
-       );
-     }
+        backgroundColor: LIST_BLACK_COLOR,
+        body: _SettingsContent(),
+      ),
+    );
+  }
 }
 
 class _SettingsContent extends StatefulWidget {
@@ -252,7 +274,7 @@ class _SettingsContentState extends State<_SettingsContent> {
                 },
                     () {
                   // 아니오
-                    },
+                },
               );
             },
             child: Column(
@@ -355,4 +377,3 @@ void showpopup(
     },
   );
 }
-
