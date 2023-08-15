@@ -4,12 +4,14 @@ import '../../common/const/colors.dart';
 
 class AlarmGuestList extends StatefulWidget {
   const AlarmGuestList({
+    required this.color,
     required this.nickname,
     required this.profileImage,
     super.key});
 
   final Image profileImage;
   final String nickname;
+  final Color color;
   // final bool
 
   @override
@@ -26,7 +28,7 @@ class _AlarmGuestListState extends State<AlarmGuestList> {
                 borderRadius: BorderRadius.circular(16.0),
                 side: BorderSide(
                   width: 3,
-                  color: MAIN_COLOR,
+                  color: widget.color,
                 ),
               ),
               color: BACKGROUND_COLOR,
@@ -44,7 +46,7 @@ class _AlarmGuestListState extends State<AlarmGuestList> {
                   Text(
                     widget.nickname,
                     style: TextStyle(
-                        color: Colors.white,
+                        color: FONT_COLOR,
                     ),
                   )
                 ],

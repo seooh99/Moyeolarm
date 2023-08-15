@@ -43,8 +43,12 @@ class _AuthViewState extends State<AuthView> {
       // Navigator.pushNamed(
       //     context,
       //     "/alarm");
-      Navigator.of(context).push(MaterialPageRoute(
-          builder:(context) => PermissionRequestScreen(child: AlarmObserver(child: MainPage())), ));
+      // Navigator.of(context).push(MaterialPageRoute(
+      //     builder:(context) => PermissionRequestScreen(
+      //         child: AlarmObserver(
+      //             child: MainPage()
+      //         )), ));
+      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MainPage()));
     }
   }
 
@@ -106,33 +110,34 @@ class _AuthViewState extends State<AuthView> {
                 ),
                 onTap: () async {
                   if (userInfo != null) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder:
-                          (context) => MainPage(),
-                      )
-                    );
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(builder:
+                    //       (context) => MainPage(),
+                    //   )
+                    // );
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MainPage()));
                   } else {
                     var isSigned = await auth.login();
                     print("$isSigned 나는 뷰");
                     if (isSigned == "main") {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder:
+                              (context) => MainPage(),
+                          )
+                      );
                       // Navigator.of(context).push(
                       //     MaterialPageRoute(builder:
-                      //         (context) => MainPage(),
+                      //         (context) => PermissionRequestScreen(child: AlarmObserver(child: MainPage())),
                       //     )
                       // );
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder:
-                              (context) => PermissionRequestScreen(child: AlarmObserver(child: MainPage())),
-                          )
-                      );
                       // Navigator.pushNamed(context, "/home");
                     } else if (isSigned == "signin") {
-                      // Navigator.pushNamed(context, "/set_nickname");
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder:
-                              (context) => SetNickname(),
-                          )
-                      );
+                      Navigator.pushNamed(context, "/set_nickname");
+                      // Navigator.of(context).push(
+                      //     MaterialPageRoute(builder:
+                      //         (context) => SetNickname(),
+                      //     )
+                      // );
                     }
                   }
                   // var storage = const FlutterSecureStorage();
