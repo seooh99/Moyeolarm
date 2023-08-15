@@ -12,12 +12,12 @@ import 'package:youngjun/alarm/repository/alarm_list_repository.dart';
 //   }
 // );
 AlarmListDetailViewModel _alarmListDetailViewModel = AlarmListDetailViewModel();
-final alarmDetailProvider = ChangeNotifierProvider((ref)  {
+final alarmDetailProvider = ChangeNotifierProvider.autoDispose((ref)  {
     return _alarmListDetailViewModel;
   }
 );
 
-final alarmDetailFutureProvider = FutureProvider((ref) async {
+final alarmDetailFutureProvider = FutureProvider.autoDispose((ref) async {
   return await _alarmListDetailViewModel.getAlarmListDetail();
 });
 

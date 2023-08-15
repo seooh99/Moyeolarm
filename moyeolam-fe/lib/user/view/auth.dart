@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:youngjun/background_alarm/view/alarm_observer.dart';
+import 'package:youngjun/background_alarm/view/home_screen.dart';
+import 'package:youngjun/background_alarm/view/permission_request_screen.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/secure_storage/secure_storage.dart';
 import 'package:youngjun/main.dart';
@@ -39,9 +42,10 @@ class _AuthViewState extends State<AuthView> {
     if (userInfo != null) {
       // Navigator.pushNamed(
       //     context,
-      //     "/home");
-      Navigator.of(context).push(MaterialPageRoute(
-          builder:(context) => MainPage(), ));
+      //     "/alarm");
+      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AlarmObserver(child:  MainPage())));
+      // Navigator.of(context).push(MaterialPageRoute(
+      //     builder:(context) => PermissionRequestScreen(child: AlarmObserver(child: MainPage())), ));
     }
   }
 
@@ -103,28 +107,35 @@ class _AuthViewState extends State<AuthView> {
                 ),
                 onTap: () async {
                   if (userInfo != null) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder:
-                          (context) => MainPage(),
-                      )
-                    );
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(builder:
+                    //       (context) => MainPage(),
+                    //   )
+                    // );
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MainPage()));
                   } else {
                     var isSigned = await auth.login();
                     print("$isSigned 나는 뷰");
                     if (isSigned == "main") {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder:
-                              (context) => MainPage(),
-                          )
-                      );
+                      // Navigator.of(context).push(
+                      //     MaterialPageRoute(builder:
+                      //         (context) => MainPage(),
+                      //     )
+                      // );
+                      // Navigator.of(context).push(
+                      //     MaterialPageRoute(builder:
+                      //         (context) => PermissionRequestScreen(child: AlarmObserver(child: MainPage())),
+                      //     )
+                      // );
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AlarmObserver(child:  MainPage())));
                       // Navigator.pushNamed(context, "/home");
                     } else if (isSigned == "signin") {
-                      // Navigator.pushNamed(context, "/set_nickname");
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder:
-                              (context) => SetNickname(),
-                          )
-                      );
+                      Navigator.pushNamed(context, "/set_nickname");
+                      // Navigator.of(context).push(
+                      //     MaterialPageRoute(builder:
+                      //         (context) => SetNickname(),
+                      //     )
+                      // );
                     }
                   }
                   // var storage = const FlutterSecureStorage();

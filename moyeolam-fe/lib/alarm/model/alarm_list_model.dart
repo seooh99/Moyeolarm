@@ -66,6 +66,7 @@ class AlarmGroups {
   final int minute;
   final List<bool> dayOfWeek;
   final bool isLock;
+  final bool isHost;
   final bool toggle;
 
   AlarmGroups({
@@ -75,6 +76,7 @@ class AlarmGroups {
     required this.minute,
     required this.dayOfWeek,
     required this.isLock,
+    required this.isHost,
     required this.toggle,
   });
 
