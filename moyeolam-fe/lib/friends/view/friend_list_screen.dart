@@ -122,6 +122,7 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
           Column(
             children: [
               TextFieldbox(
+                defualtText: '내 친구 검색',
                 controller: _searchController_list,
                 setContents: (String value) {
                   // 검색어 입력이 발생할 때마다 검색어를 _searchController에 저장

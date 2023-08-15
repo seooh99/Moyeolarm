@@ -29,6 +29,7 @@ class AlarmDetailScreen extends ConsumerStatefulWidget {
 
 class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
 
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((duration) {
@@ -62,7 +63,7 @@ class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
                     )
                         .then((value) =>
                         setState(() {
-                          ref.invalidate(alarmDetailProvider);
+                          ref.invalidate(alarmDetailFutureProvider);
                         }
                         )
                     );
@@ -76,7 +77,7 @@ class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
             ),
             body: RefreshIndicator(
               onRefresh: () async {
-                ref.invalidate(alarmDetailProvider);
+                ref.invalidate(alarmDetailFutureProvider);
               },
               child: Column(
                   children: [
@@ -274,6 +275,7 @@ class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
                           for(int index = 0; index <
                               data.members.length; index++)
                             AlarmGuestList(
+                              color: data.members[index].isToggle? MAIN_COLOR:CKECK_GRAY_COLOR,
                               nickname: data.members[index].nickname,
                               profileImage: Image.network(
                                   "${data.members[index].profileUrl}") ??

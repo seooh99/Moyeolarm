@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:youngjun/common/button/btn_call.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/web_rtc/view/real_time_view.dart';
@@ -10,6 +11,9 @@ import 'package:youngjun/web_rtc/view/web_rtc_room_view.dart';
 import 'package:youngjun/web_rtc/viewmodel/alarm_ring_view_model.dart';
 
 import '../../common/const/openvidu_confiig.dart';
+import '../../common/secure_storage/secure_storage.dart';
+import '../../main.dart';
+import '../../user/model/user_model.dart';
 import '../model/connection.dart';
 
 class AlarmRingView extends StatefulWidget {
@@ -24,10 +28,23 @@ class AlarmRingView extends StatefulWidget {
 class _AlarmRingViewState extends State<AlarmRingView> {
   final TimeService _timeService = TimeService();
 
+  // 유저 정보
+  UserInformation _userInformation = UserInformation(storage);
+
   final Dio _dio = Dio();
 
   final TextEditingController _textSessionController = TextEditingController();
   final TextEditingController _textUserNameController = TextEditingController();
+
+  AudioPlayer player = AudioPlayer();
+
+  Future audioPlayer() async {
+    await player.setVolume(0.9);
+    await player.setSpeed(1);
+    await player.setAsset('assets/audio/alarm_sound.mp3');
+    await player.setLoopMode(LoopMode.all);
+    player.play();
+  }
 
   Future<bool> _createSession() async {
     try {
@@ -99,11 +116,23 @@ class _AlarmRingViewState extends State<AlarmRingView> {
         'Basic ${base64Encode(utf8.encode('OPENVIDUAPP:$OPENVIDU_SECRET'))}';
 
     // _textSessionController.text = 'Session${Random().nextInt(1000)}';
+    // _textUserNameController.text = 'Participant${Random().nextInt(1000)}';
+
     _textSessionController.text = widget.alarmGroupId.toString();
-    /**
-     * TODO: 사용자 닉네임으로 변경
-     */
-    _textUserNameController.text = 'Participant${Random().nextInt(1000)}';
+
+    audioPlayer();
+    _getUserInfo();
+  }
+
+  _getUserInfo() async {
+    UserModel? userInfo = await _userInformation.getUserInfo();
+    _textUserNameController.text = userInfo?.nickname ?? 'Participant${Random().nextInt(1000)}';
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    player.stop();
   }
 
   @override

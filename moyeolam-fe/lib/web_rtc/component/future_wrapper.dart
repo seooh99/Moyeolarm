@@ -20,7 +20,8 @@ class FutureWrapper extends StatelessWidget {
         if (snapshot.connectionState != ConnectionState.done) {
           return Container(
             color: Colors.white,
-            child: const LoadingWidget(),
+            // child: const LoadingWidget(),
+            child: Container(),
           );
         } else {
           return builder(context);

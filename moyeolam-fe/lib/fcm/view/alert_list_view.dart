@@ -1,22 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../common/layout/title_bar.dart';
-
-import 'package:dio/dio.dart';
-
-
 import '../model/alert_service_model.dart';
-import '../data_source/fcm_api_data_source.dart';
 import 'package:youngjun/common/const/colors.dart';
-
-
-import '../provider/alert_privider.dart';
 import '../service/alert_main_sevice.dart';
-import 'alert_modal_view.dart'; // import this
-
-
-
+import 'alert_modal_view.dart';
 
 class ListApp extends StatelessWidget {
   const ListApp({Key? key}) : super(key: key);
@@ -32,11 +20,10 @@ class ListApp extends StatelessWidget {
 
 class ArletListView extends ConsumerWidget {
   const ArletListView({Key? key}) : super(key: key);
-  static const route = '/alerts'; // Define the route here
+  static const route = '/alerts';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // AlertService 인스턴스를 가져옴
     final alertService = ref.read(alertServiceProvider);
     final asyncAlertData = alertService.fetchData();
 
@@ -54,32 +41,23 @@ class ArletListView extends ConsumerWidget {
           future: asyncAlertData,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              print("Data is Loading");
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              print("Error occurred: ${snapshot.error}");
-              return Text('Error: ${snapshot.error}');
-            } else if (snapshot.hasData && snapshot.data!.data?.alerts != null) {
-              print("Data received");
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (snapshot.hasData && snapshot.data!.data?.alerts != null && snapshot.data!.data!.alerts!.isNotEmpty) {
               final List<ApiArletItem> alertItems = snapshot.data!.data!.alerts!;
 
               return ListView.builder(
                 itemCount: alertItems.length,
                 itemBuilder: (context, index) {
-                  final ApiArletItem alertItem = alertItems[index];
-                  final String? fromNickname = alertItem.fromNickname;
-                  final String? alertType = alertItem.alertType;
+                  final alertItem = alertItems[index];
+                  final fromNickname = alertItem.fromNickname;
+                  final alertType = alertItem.alertType;
 
                   return GestureDetector(
                     onTap: () {
-                      if (fromNickname == null ||
-                          alertType == null ||
-                          alertItem.fromMemberId == null) {
-                        return;
-                      }
-                      if (alertType == '친구 요청' ||
-                          alertType == '알람그룹 요청') {
-                        debugPrint(alertType);
+                      if (fromNickname == null || alertType == null || alertItem.fromMemberId == null) return;
+                      if (alertType == '친구 요청' || alertType == '알람그룹 요청') {
                         showPopup(
                           context,
                           fromNickname,
@@ -95,10 +73,7 @@ class ArletListView extends ConsumerWidget {
                       color: Colors.black,
                       child: Row(
                         children: [
-                          SizedBox(
-                            width: 20,
-                            height: 80,
-                          ),
+                          SizedBox(width: 20, height: 80),
                           Padding(
                             padding: EdgeInsets.all(10),
                             child: Column(
@@ -113,68 +88,50 @@ class ArletListView extends ConsumerWidget {
                                     color: FONT_COLOR,
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
+                                const SizedBox(height: 10),
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
                   );
                 },
               );
+            } else if (snapshot.hasData && (snapshot.data!.data?.alerts?.isEmpty ?? true)) {
+              return Center(child: Text('알림없음', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: FONT_COLOR)));
             } else {
-              return Center(
-                child: Text(
-                  '알림없음',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: FONT_COLOR,
-                  ),
-                ),
-              );
+              return Center(child: Text('Unexpected state', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: FONT_COLOR)));
             }
           },
         ),
       ),
     );
   }
+
+  void showPopup(
+      BuildContext context,
+      String fromNickname,
+      String title,
+      String alertType,
+      int? alarmGroupId,
+      int? friendRequestId,
+      int fromMemberId,
+      ) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return APIDialog(
+          fromNickname: fromNickname,
+          titleList: title,
+          alertTypeList: alertType,
+          alarmGroupId: alarmGroupId,
+          friendRequestId: friendRequestId,
+          fromMemberId: fromMemberId,
+          acceptOnPressed: () {},
+          declineOnPressed: () {},
+        );
+      },
+    );
+  }
 }
-
-void showPopup(
-    BuildContext context,
-    String fromNickname,
-    String title,
-    String alertType,
-    int? alarmGroupId,
-    int? friendRequestId,
-    int fromMemberId,
-    ) {
-  showDialog(
-    context: context,
-    builder: (context) {
-      return APIDialog(
-        fromNickname: fromNickname,
-        titleList: title,
-        alertTypeList: alertType,
-        alarmGroupId: alarmGroupId, // 그대로 int 값 전달
-        friendRequestId: friendRequestId, // 그대로 int 값 전달
-        fromMemberId: fromMemberId,
-        acceptOnPressed: () {
-        },
-        declineOnPressed: () {
-
-        },
-
-      );
-    },
-  );
-}
-
-
-
-
-

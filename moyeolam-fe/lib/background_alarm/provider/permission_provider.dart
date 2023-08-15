@@ -13,9 +13,9 @@ final permissionProvider = ChangeNotifierProvider((ref){
   return instancPermissionProvider;
 });
 
-final permissionFutureProvider = FutureProvider((ref) {
-   return instancPermissionProvider.isGrantedAll();
-});
+// final permissionFutureProvider = FutureProvider((ref) {
+//    return instancPermissionProvider.isGrantedAll();
+// });
 
 class PermissionProvider extends ChangeNotifier {
   PermissionProvider(this.storage);
@@ -32,8 +32,10 @@ class PermissionProvider extends ChangeNotifier {
   Future<void> isGrantedAll() async {
     var data = await storage.read(key: systemAlertWindowGranted);
     if (data != null){
+      print("data");
       isGranted = (data == "true")?true:false;
     }else{
+      print("data null");
       isGranted = false;
     }
     notifyListeners();

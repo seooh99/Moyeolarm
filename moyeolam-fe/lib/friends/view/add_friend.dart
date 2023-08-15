@@ -6,10 +6,10 @@ import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/secure_storage/secure_storage.dart';
 import 'package:youngjun/common/textfield_bar.dart';
 import 'package:youngjun/main.dart';
+import 'package:youngjun/member/model/member_model.dart';
+import 'package:youngjun/member/repository/member_repository.dart';
 import 'package:youngjun/user/model/user_model.dart';
 
-import '../component/friends_search_list.dart';
-import '../model/friends_list_model.dart';
 import '../repository/friends_repository.dart';
 
 class AddFriends extends ConsumerStatefulWidget {
@@ -22,7 +22,7 @@ class AddFriends extends ConsumerStatefulWidget {
 class _AddFriendsState extends ConsumerState<AddFriends> {
   UserInformation _userInformation = UserInformation(storage);
   final TextEditingController _searchController = TextEditingController();
-  List<Friend>? _searchResults;
+  List<Member>? _searchResults = [];
 
   // 검색바 컨트롤러
   @override
@@ -37,22 +37,22 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
 
     if (keyword.isEmpty) {
       setState(() {
-        _searchResults = null;
+        _searchResults = [];
       });
       return;
     }
 
     final dio = Dio(BaseOptions(baseUrl: BASE_URL));
-    final friendRepository = FriendsRepository(dio);
+    final memberRepository = MemberRepository(dio);
     UserModel? userInfo = await _userInformation.getUserInfo();
     String token = "Bearer ${userInfo!.accessToken}";
-    final searchResult = await friendRepository.searchFriends(token, keyword);
-    final filteredFriends = searchResult.data.friends.where(
-            (friend) => friend.nickname.toLowerCase().contains(keyword.toLowerCase())
+    final searchResult = await memberRepository.searchMember(token, keyword);
+    final filteredMembers = [searchResult.data.member].where(
+            (members) => members.nickname.toLowerCase().contains(keyword.toLowerCase())
     ).toList();
 
     setState(() {
-      _searchResults = filteredFriends.isEmpty ? null : filteredFriends;
+      _searchResults = filteredMembers.isEmpty ? null : filteredMembers;
     });
   }
 
@@ -152,6 +152,7 @@ class _AddFriendsState extends ConsumerState<AddFriends> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: TextFieldbox(
+              defualtText: '사용자 검색',
               controller: _searchController,
               setContents: (String value) {
                 _searchController.text = value;
