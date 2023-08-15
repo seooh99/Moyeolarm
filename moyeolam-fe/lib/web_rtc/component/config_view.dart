@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:openvidu_client/openvidu_client.dart';
 import 'package:youngjun/common/const/colors.dart';
 
@@ -32,6 +33,16 @@ class _ConfigViewState extends State<ConfigView> {
 
   StreamSubscription? _subscription;
 
+  AudioPlayer player = AudioPlayer();
+
+  Future audioPlayer() async {
+    await player.setVolume(0.9);
+    await player.setSpeed(1);
+    await player.setAsset('assets/audio/alarm_sound.mp3');
+    await player.setLoopMode(LoopMode.all);
+    player.play();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -40,6 +51,7 @@ class _ConfigViewState extends State<ConfigView> {
       _loadDevices(devices);
     });
     Hardware.instance.enumerateDevices().then(_loadDevices);
+    audioPlayer();
   }
 
   void _loadDevices(List<MediaDevice> devices) async {
@@ -73,8 +85,9 @@ class _ConfigViewState extends State<ConfigView> {
 
   @override
   void dispose() {
-    _subscription?.cancel();
     super.dispose();
+    _subscription?.cancel();
+    player.stop();
   }
 
   Widget _controlsWidget() {

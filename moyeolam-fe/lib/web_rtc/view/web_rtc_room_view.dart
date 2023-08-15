@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -36,17 +37,19 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
   /// map of SID to RemoteParticipant
   Map<String, RemoteParticipant> remoteParticipants = {};
 
+  /// map of nickname to AlarmGroupMember
+  Map<String, AlarmGroupMember> alarmGroupMembers = {};
+
   MemberState localState = MemberState.offline;
   bool isInside = false;
   late OpenViduClient _openvidu;
-
-  /// map of nickname to AlarmGroupMember
-  Map<String, AlarmGroupMember> alarmGroupMembers = {};
+  LocalParticipant? localParticipant;
 
   MemoryImage? _image;
   ByteBuffer? _bf;
 
-  LocalParticipant? localParticipant;
+  late Timer _timer;
+  bool isAllRecognized = false;
 
   @override
   void initState() {
@@ -54,13 +57,57 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
     initOpenVidu();
     initAlarmDetail();
     _listenSessionEvents();
+    _start();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void _start() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+      await _captureImage();
+      bool faceRecognitionResult = await _faceRecognition();
+
+      if (faceRecognitionResult) {
+        if (localState == MemberState.online) {
+          _openvidu.sendMessage(OvMessage.fromJson(
+              <String, dynamic>{"data": "true", "type": "recognized"}));
+
+          setState(() {
+            localState = MemberState.recognized;
+          });
+
+          int invalidMemberCnt = alarmGroupMembers.values
+              .where((member) => member.memberState != MemberState.recognized)
+              .length;
+
+          if (invalidMemberCnt == 0) {
+            print("invalidMemberCnt: $invalidMemberCnt");
+            setState(() {
+              isAllRecognized = true;
+            });
+          }
+        }
+      } else {
+        if (localState == MemberState.recognized) {
+          _openvidu.sendMessage(OvMessage.fromJson(
+              <String, dynamic>{"data": "false", "type": "recognized"}));
+
+          setState(() {
+            localState = MemberState.online;
+          });
+        }
+      }
+    });
   }
 
   Future<void> initOpenVidu() async {
     _openvidu = OpenViduClient("$OPENVIDU_URL/openvidu");
     localParticipant =
         await _openvidu.startLocalPreview(context, StreamMode.frontCamera);
-    localParticipant?.publishAudio(false);
     localState = MemberState.online;
     setState(() {});
   }
@@ -70,7 +117,7 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
     AlarmDetailResponseModel alarmDetailResponseModel =
         await alarmListRepository.getAlarmListDetail(widget.alarmGroupId);
     alarmDetailResponseModel.data.alarmGroup.members
-        .where((member) => member.nickname != widget.userName && !member.toggle)
+        .where((member) => member.nickname != widget.userName && member.toggle)
         .forEach((member) {
       alarmGroupMembers[member.nickname] = AlarmGroupMember(
           memberId: member.memberId, nickname: member.nickname);
@@ -160,7 +207,7 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
       print('invalidMemberCnt: $invalidMemberCnt');
 
       if (localState == MemberState.recognized && invalidMemberCnt == 0) {
-        _onDisconnect();
+        isAllRecognized = true;
       }
     });
 
@@ -214,7 +261,7 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
 
   Future<bool> _faceRecognition() async {
     var multipartFile = MultipartFile.fromBytes(_bf!.asUint8List().cast<int>(),
-        filename: 'image');
+        filename: '${widget.userName}_image');
     ResponseFaceRecognitionModel responseFaceRecognitionModel =
         await FaceRecognitionRepository().faceRecognition(multipartFile);
     return responseFaceRecognitionModel.data.result;
@@ -249,8 +296,8 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
                                 Container(
                                   margin: EdgeInsets.all(10),
                                   child: SizedBox(
-                                    width: 170,
-                                    height: 170,
+                                    width: 155,
+                                    height: 155,
                                     child: MediaStreamView(
                                       borderRadius: BorderRadius.circular(15),
                                       participant: localParticipant!,
@@ -263,8 +310,8 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
                                     .map((member) => Container(
                                         margin: EdgeInsets.all(10),
                                         child: SizedBox(
-                                            width: 170,
-                                            height: 170,
+                                            width: 155,
+                                            height: 155,
                                             child: MediaStreamView(
                                               borderRadius:
                                                   BorderRadius.circular(15),
@@ -305,51 +352,58 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
                               ),
                               ElevatedButton(
                                 onPressed: _onDisconnect,
-                                child: Text("비상탈출"),
+                                child: const Text("비상탈출"),
                               ),
-                              BtnCalling(
-                                icons: Icon(Icons.call_end),
-                                backGroundColor: CALLOFF_COLOR,
-                                onPressed: () async {
-                                  await _captureImage();
-                                  bool faceRecognitionResult =
-                                      await _faceRecognition();
-
-                                  if (faceRecognitionResult) {
-                                    _openvidu.sendMessage(
-                                        OvMessage.fromJson(<String, dynamic>{
-                                      "data": "true",
-                                      "type": "recognized"
-                                    }));
-                                    setState(() {
-                                      localState = MemberState.recognized;
-                                    });
-
-                                    int invalidMemberCnt = alarmGroupMembers
-                                        .values
-                                        .where((member) =>
-                                            member.memberState !=
-                                            MemberState.recognized)
-                                        .length;
-
-                                    print(
-                                        'invalidMemberCnt: $invalidMemberCnt');
-
-                                    if (invalidMemberCnt == 0) {
-                                      _onDisconnect();
-                                    }
-                                  } else {
-                                    _openvidu.sendMessage(
-                                        OvMessage.fromJson(<String, dynamic>{
-                                      "data": "false",
-                                      "type": "recognized"
-                                    }));
-                                    setState(() {
-                                      localState = MemberState.online;
-                                    });
-                                  }
-                                },
-                              ),
+                              isAllRecognized
+                                  ? BtnCalling(
+                                      icons: const Icon(Icons.call_end),
+                                      backGroundColor: CALLOFF_COLOR,
+                                      onPressed: () async {
+                                        _onDisconnect();
+                                        // await _captureImage();
+                                        // bool faceRecognitionResult =
+                                        //     await _faceRecognition();
+                                        //
+                                        // if (faceRecognitionResult) {
+                                        //   _openvidu.sendMessage(
+                                        //       OvMessage.fromJson(<String, dynamic>{
+                                        //     "data": "true",
+                                        //     "type": "recognized"
+                                        //   }));
+                                        //   setState(() {
+                                        //     localState = MemberState.recognized;
+                                        //   });
+                                        //
+                                        //   int invalidMemberCnt = alarmGroupMembers
+                                        //       .values
+                                        //       .where((member) =>
+                                        //           member.memberState !=
+                                        //           MemberState.recognized)
+                                        //       .length;
+                                        //
+                                        //   print(
+                                        //       'invalidMemberCnt: $invalidMemberCnt');
+                                        //
+                                        //   if (invalidMemberCnt == 0) {
+                                        //     _onDisconnect();
+                                        //   }
+                                        // } else {
+                                        //   _openvidu.sendMessage(
+                                        //       OvMessage.fromJson(<String, dynamic>{
+                                        //     "data": "false",
+                                        //     "type": "recognized"
+                                        //   }));
+                                        //   setState(() {
+                                        //     localState = MemberState.online;
+                                        //   });
+                                        // }
+                                      },
+                                    )
+                                  : const BtnCalling(
+                                      icons: Icon(Icons.call_end),
+                                      backGroundColor: Colors.grey,
+                                      onPressed: null,
+                                    ),
                               // Row(children: [
                               //   BtnMedia(
                               //     icons: Icon(Icons.mic, color: FONT_COLOR),

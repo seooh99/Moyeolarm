@@ -43,8 +43,9 @@ class _AuthViewState extends State<AuthView> {
       // Navigator.pushNamed(
       //     context,
       //     "/alarm");
-      Navigator.of(context).push(MaterialPageRoute(
-          builder:(context) => PermissionRequestScreen(child: AlarmObserver(child: MainPage())), ));
+      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AlarmObserver(child:  MainPage())));
+      // Navigator.of(context).push(MaterialPageRoute(
+      //     builder:(context) => PermissionRequestScreen(child: AlarmObserver(child: MainPage())), ));
     }
   }
 
@@ -120,11 +121,12 @@ class _AuthViewState extends State<AuthView> {
                       //         (context) => MainPage(),
                       //     )
                       // );
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder:
-                              (context) => PermissionRequestScreen(child: AlarmObserver(child: MainPage())),
-                          )
-                      );
+                      // Navigator.of(context).push(
+                      //     MaterialPageRoute(builder:
+                      //         (context) => PermissionRequestScreen(child: AlarmObserver(child: MainPage())),
+                      //     )
+                      // );
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AlarmObserver(child:  MainPage())));
                       // Navigator.pushNamed(context, "/home");
                     } else if (isSigned == "signin") {
                       // Navigator.pushNamed(context, "/set_nickname");
