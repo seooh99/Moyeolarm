@@ -52,12 +52,14 @@ class UserModel {
   String? profileImageUrl;
   String accessToken;
   String refreshToken;
+  int userId;
 
   UserModel(
     this.nickname,
     this.accessToken,
     this.refreshToken,
     this.profileImageUrl,
+      this.userId,
   );
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
