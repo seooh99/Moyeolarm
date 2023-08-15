@@ -113,14 +113,14 @@ class AlarmMember {
   final String nickname;
   final String? profileUrl;
   final bool isHost;
-  final bool toggle;
+  final bool isToggle;
 
   AlarmMember({
     required this.memberId,
     required this.nickname,
     required this.profileUrl,
     required this.isHost,
-    required this.toggle,
+    required this.isToggle,
   });
 
   factory AlarmMember.fromJson(Map<String, dynamic> json) =>
