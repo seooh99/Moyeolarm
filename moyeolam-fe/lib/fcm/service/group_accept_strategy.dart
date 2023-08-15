@@ -14,7 +14,7 @@ class GroupAcceptStrategy {
     try {
       UserModel? userModel = await _userInformation.getUserInfo();
       if (userModel != null) {
-        return userModel.userId;  // Assuming the UserModel has an 'id' field that represents the user's ID.
+        return userModel.memberId;  // Assuming the UserModel has an 'id' field that represents the user's ID.
       }
     } catch (e) {
       print("$e error in getting user ID");
