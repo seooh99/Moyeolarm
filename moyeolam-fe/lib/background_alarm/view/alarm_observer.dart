@@ -4,6 +4,7 @@ import 'package:youngjun/background_alarm/model/alarm.dart';
 import 'package:youngjun/background_alarm/provider/alarm_state.dart';
 import 'package:youngjun/background_alarm/service/alarm_polling_worker.dart';
 import 'package:youngjun/background_alarm/view/test_page.dart';
+import 'package:youngjun/web_rtc/view/alarm_ring_view.dart';
 
 import '../provider/alarm_list_provider.dart';
 
@@ -50,7 +51,7 @@ class _AlarmObserverState extends ConsumerState<AlarmObserver>
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
       Widget? alarmScreen;
-      Widget? testPage;
+      Widget? alarmRingView;
       final _ = ref.watch(alarmStateProvider);
       final state = ref.watch(alarmStateProvider.notifier);
 
@@ -62,14 +63,16 @@ class _AlarmObserverState extends ConsumerState<AlarmObserver>
         Alarm? alarm = alarmListNotifier.getAlarmBy(callbackId);
         print(alarm);
         if (alarm != null) {
-          testPage = TestPage();
+          // testPage = TestPage();
+          print("alarmGroupId: ${alarm.alarmGroupId}");
+          alarmRingView = AlarmRingView(alarmGroupId: alarm.alarmGroupId);
           // alarmScreen = AlarmScreen(alarm: alarm);
         }
       }
       return IndexedStack(
-        index: testPage != null ? 0 : 1,
+        index: alarmRingView != null ? 0 : 1,
         children: [
-          testPage ?? Container(),
+          alarmRingView ?? Container(),
           widget.child,
         ],
       );
