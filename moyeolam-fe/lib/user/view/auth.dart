@@ -62,16 +62,16 @@ class _AuthViewState extends State<AuthView> {
             //   width: 200,
             //   height: 120,
             // ),
-            TextButton(
-                onPressed: () {
-                  auth.signOut();
-                },
-                child: Text("SignOut")),
-            TextButton(
-                onPressed: () {
-                  auth.logOut();
-                },
-                child: Text("Logout")),
+            // TextButton(
+            //     onPressed: () {
+            //       auth.signOut();
+            //     },
+            //     child: Text("SignOut")),
+            // TextButton(
+            //     onPressed: () {
+            //       auth.logOut();
+            //     },
+            //     child: Text("Logout")),
             // Container(
             //   child: FittedBox(
             //     child: Image.asset('assets/images/moyeolam_logo.png'),
@@ -130,12 +130,12 @@ class _AuthViewState extends State<AuthView> {
                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AlarmObserver(child:  MainPage())));
                       // Navigator.pushNamed(context, "/home");
                     } else if (isSigned == "signin") {
-                      Navigator.pushNamed(context, "/set_nickname");
-                      // Navigator.of(context).push(
-                      //     MaterialPageRoute(builder:
-                      //         (context) => SetNickname(),
-                      //     )
-                      // );
+                      // Navigator.pushNamed(context, "/set_nickname");
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder:
+                              (context) => SetNickname(),
+                          )
+                      );
                     }
                   }
                   // var storage = const FlutterSecureStorage();

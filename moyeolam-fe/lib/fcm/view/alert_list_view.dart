@@ -1,10 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../common/layout/title_bar.dart';
+import '../../common/secure_storage/secure_storage.dart';
 import '../model/alert_service_model.dart';
 import 'package:youngjun/common/const/colors.dart';
 import '../service/alert_main_sevice.dart';
 import 'alert_modal_view.dart';
+
+// Dependency 주입을 위해 FlutterSecureStorage의 인스턴스가 필요합니다.
+// 이를 Provider를 통해 제공받을 수 있습니다.
+final secureStorageProvider = Provider<FlutterSecureStorage>((ref) {
+  return FlutterSecureStorage();
+});
+
+final userInformationProvider = Provider<UserInformation>((ref) {
+  final storage = ref.read(secureStorageProvider);
+  return UserInformation(storage);
+});
+
+
 
 class ListApp extends StatelessWidget {
   const ListApp({Key? key}) : super(key: key);
@@ -26,6 +41,7 @@ class ArletListView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final alertService = ref.read(alertServiceProvider);
     final asyncAlertData = alertService.fetchData();
+    final UserInformation _userInformation = ref.read(userInformationProvider);
 
     return Scaffold(
       appBar: TitleBar(
@@ -66,6 +82,7 @@ class ArletListView extends ConsumerWidget {
                           alertItem.alarmGroupId,
                           alertItem.friendRequestId,
                           alertItem.fromMemberId,
+                          _userInformation,
                         );
                       }
                     },
@@ -117,6 +134,7 @@ class ArletListView extends ConsumerWidget {
       int? alarmGroupId,
       int? friendRequestId,
       int fromMemberId,
+      UserInformation userInformation,
       ) {
     showDialog(
       context: context,
@@ -130,6 +148,7 @@ class ArletListView extends ConsumerWidget {
           fromMemberId: fromMemberId,
           acceptOnPressed: () {},
           declineOnPressed: () {},
+          userInformation: userInformation,
         );
       },
     );

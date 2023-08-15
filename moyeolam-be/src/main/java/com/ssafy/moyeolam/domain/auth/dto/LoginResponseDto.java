@@ -1,16 +1,9 @@
 package com.ssafy.moyeolam.domain.auth.dto;
 
-import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroupMember;
-import com.ssafy.moyeolam.domain.alarmgroup.dto.AlarmGroupsElement;
-import com.ssafy.moyeolam.domain.friend.domain.Friend;
-import com.ssafy.moyeolam.domain.friend.dto.FriendElement;
 import com.ssafy.moyeolam.domain.member.domain.Member;
 import com.ssafy.moyeolam.domain.member.domain.ProfileImage;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Builder

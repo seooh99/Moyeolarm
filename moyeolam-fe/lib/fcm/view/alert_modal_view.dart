@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:youngjun/common/const/colors.dart';
 
+import '../../common/secure_storage/secure_storage.dart';
 import '../api/alert_modal_api.dart';
 
 
 class APIDialog extends StatelessWidget {
+  final UserInformation _userInformation;
   const APIDialog({
     Key? key,
     required this.acceptOnPressed,
@@ -16,7 +18,9 @@ class APIDialog extends StatelessWidget {
     this.alarmGroupId,
     this.friendRequestId,
     required this.fromMemberId,
-  }) : super(key: key);
+    required UserInformation userInformation,  // 생성자에 UserInformation 인자를 추가
+  })  : _userInformation = userInformation,  // 초기화
+        super(key: key);
 
   final VoidCallback acceptOnPressed;
   final VoidCallback declineOnPressed;
@@ -70,12 +74,12 @@ class APIDialog extends StatelessWidget {
           TextButton(
             onPressed: () {
               if (alertTypeList == '친구 요청' ) {
-                ArletModalApi().handleApiRequest('친구 요청',
+                ArletModalApi(_userInformation).handleApiRequest('친구 요청',
                     friendRequestId: friendRequestId,
                     isAccepted: false,
                     fromMemberId: fromMemberId);
               } else if (fromMemberId != null) {
-                ArletModalApi().handleApiRequest('알람그룹 요청',
+                ArletModalApi(_userInformation).handleApiRequest('알람그룹 요청',
                     alarmGroupId: alarmGroupId,
                     isAccepted: false,
                     fromMemberId: fromMemberId);
@@ -101,12 +105,12 @@ class APIDialog extends StatelessWidget {
           TextButton(
             onPressed: () {
               if (alertTypeList == '친구 요청') {
-                ArletModalApi().handleApiRequest('친구 요청',
+                ArletModalApi(_userInformation).handleApiRequest('친구 요청',
                     friendRequestId: friendRequestId,
                     isAccepted: true,
                     fromMemberId: fromMemberId);
               } else if (fromMemberId != null) {
-                ArletModalApi().handleApiRequest('알람그룹 요청',
+                ArletModalApi(_userInformation).handleApiRequest('알람그룹 요청',
                     alarmGroupId: alarmGroupId,
                     isAccepted: true,
                     fromMemberId: fromMemberId);
