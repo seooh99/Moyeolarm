@@ -45,7 +45,6 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
   late OpenViduClient _openvidu;
   LocalParticipant? localParticipant;
 
-  MemoryImage? _image;
   ByteBuffer? _bf;
 
   late Timer _timer;
@@ -132,7 +131,7 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
 
     _openvidu.on(OpenViduEvent.userPublished, (params) {
       _openvidu.subscribeRemoteStream(params["id"],
-          video: params["videoActive"], audio: params["audioActive"]);
+          video: params["videoActive"], audio: params["audioActive"], speakerphone: true);
     });
 
     _openvidu.on(OpenViduEvent.addStream, (params) {
@@ -252,10 +251,7 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
 
   Future<void> _captureImage() async {
     MediaStreamTrack? track = localParticipant?.stream?.getVideoTracks().first;
-
     _bf = await track?.captureFrame();
-    _image = MemoryImage(_bf!.asUint8List());
-
     setState(() {});
   }
 
@@ -335,13 +331,6 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
                               ],
                             ),
                           ),
-                          // _image == null
-                          //     ? Container()
-                          //     : Container(
-                          //         height: 170,
-                          //         width: 460,
-                          //         child: Image(image: _image!),
-                          //       ),
                           const SizedBox(
                             height: 20,
                           ),
@@ -399,10 +388,10 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
                                         // }
                                       },
                                     )
-                                  : const BtnCalling(
-                                      icons: Icon(Icons.call_end),
-                                      backGroundColor: Colors.grey,
-                                      onPressed: null,
+                                  : BtnCalling(
+                                      icons: const Icon(Icons.call_end),
+                                      backGroundColor: CKECK_GRAY_COLOR,
+                                      onPressed: () {},
                                     ),
                               // Row(children: [
                               //   BtnMedia(
