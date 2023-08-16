@@ -11,7 +11,6 @@ pipeline {
 
         stage('Setting Files Clone'){
             steps {
-                sh 'rm /var/jenkins_home/workspace/moyeolam-private-key/*'
                 dir('/var/jenkins_home/workspace/moyeolam-private-key'){
                     git url: "https://github.com/jjuny0310/moyeolam-private-key.git",
                         branch: 'main',
