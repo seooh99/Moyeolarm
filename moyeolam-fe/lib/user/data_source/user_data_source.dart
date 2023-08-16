@@ -1,9 +1,9 @@
-import 'dart:convert';
-import '../model/nickname_model.dart';
+import 'package:youngjun/user/model/user_search_model.dart';
+
+import 'package:youngjun/user/model/nickname_model.dart';
 import 'package:dio/dio.dart' hide Headers;
 import 'package:retrofit/retrofit.dart';
-import '../model/nickname_model.dart';
-import '../model/user_model.dart';
+import 'package:youngjun/user/model/user_model.dart';
 
 part 'user_data_source.g.dart';
 
@@ -25,5 +25,11 @@ abstract class UserDataSource {
   @DELETE("/member")
   Future<NicknameResponse> signOut(
     @Header('Authorization') String token,
+  );
+
+  @GET("/member")
+  Future<UserSearchResponseModel> searchMember(
+      @Header('Authorization') String token,
+      @Query('keyword') String keyword,
   );
 }

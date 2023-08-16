@@ -1,70 +1,98 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:youngjun/common/confirm.dart';
 import 'package:youngjun/common/const/colors.dart';
+import 'package:youngjun/friends/model/friends_list_model.dart';
+import 'package:youngjun/friends/view_model/friend_add_view_model.dart';
+import 'package:youngjun/friends/view_model/friend_list_view_model.dart';
+import 'package:youngjun/friends/view_model/friend_search_view_model.dart';
 
-import '../model/friends_list_model.dart';
-import '../provider/friends_list_provider.dart';
+List<Color> colorList = [Colors.lightBlue, Colors.red];
 
 class FriendsList extends ConsumerStatefulWidget {
-  const FriendsList(
-      {super.key});
-
-
+  const FriendsList({
+    super.key,
+    required this.friends,
+    required this.isFriend,
+  });
+  final bool isFriend;
+  final List<FriendModel?> friends;
   @override
   ConsumerState<FriendsList> createState() => _FriendsListState();
 }
 
 class _FriendsListState extends ConsumerState<FriendsList> {
-
-  final ScrollController controller = ScrollController();
+  final FriendListViewModel _friendListViewModel = FriendListViewModel();
+  final FriendAddViewModel _friendAddViewModel = FriendAddViewModel();
+  bool requested = false;
 
   @override
   Widget build(BuildContext context) {
-    AsyncValue<List<Friend>?> friends = ref.watch(friendsListProvider);
+    return ListView.builder(
+        itemCount: widget.friends.length,
+        itemBuilder: (context, index) {
+          FriendModel? friend = widget.friends[index];
+          print("friend: ${friend!.nickname}");
+          return ListTile(
+            title: Text("${friend!.nickname}",
+            style: TextStyle(
+              fontSize: 20,
+              color: FONT_COLOR,
+              fontWeight: FontWeight.w200,
+            )),
 
-    return Column(
-      children: [
-        friends.when(
-            data: (data){
-              if(data != null){
-                return CustomScrollView(
-                  scrollDirection: Axis.vertical,
-                  controller: controller,
-                  slivers: [
-                    SliverList(delegate: SliverChildBuilderDelegate((context, index){
-                      return ListView.builder(
-                        itemCount: data.length,
-                        padding: EdgeInsets.all(8),
-                        itemBuilder: (context, index){
-                          Friend friend = data[index];
-                          return ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.lightBlue,
-                            ),
-                            title: Text(
-                              friend.nickname,
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                            trailing: Icon(Icons.close),
-                          );
-                        },
-                      );
-                    }))
-                  ],
-                );
-              }
-              return Scaffold();
+            leading: const CircleAvatar(
+              // backgroundColor: colorList[index % 3],
+              backgroundColor: Colors.blue,
+            ),
+          trailing: widget.isFriend?
+          IconButton(
+            onPressed: () async{
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return ConfirmDialog(
+                    title: "친구 삭제",
+                    content: "${friend.nickname}님 을/를 친구 목록에서 삭제하시겠습니까?",
+                    okTitle: "삭제",
+                    okOnPressed: () async {
+                      _friendListViewModel.deleteFriend(friend.memberId);
+                      ref.invalidate(friendListProvider);
+                      Navigator.of(context).pop();
+                    },
+                    cancelTitle: "취소",
+                    cancelOnPressed: (){
+                      Navigator.of(context).pop();
+                    },
+                  );
+                },
+              );
             },
-            error: (e,stackTrace){
-              return Scaffold();
+            icon: const Icon(
+              Icons.close,
+              color: FONT_COLOR,
+            ),
+          ): requested?
+              Icon(Icons.person_add_alt_1,
+              color: CKECK_GRAY_COLOR,):
+
+          IconButton(
+            onPressed: () async{
+              bool isOk = await _friendAddViewModel.makeFriend(friend.memberId);
+              setState(() {
+                requested = isOk;
+              });
+              // Timer(Duration., () { })
             },
-            loading: (){
-              return Scaffold();
-            }
-        ),
-      ]
+            icon: const Icon(
+              Icons.person_add_alt_1,
+              color: FONT_COLOR,
+            ),
+          ),
+          );
+        }
     );
   }
 }

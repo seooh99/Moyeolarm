@@ -9,14 +9,14 @@ class TextFieldbox extends StatefulWidget {
   final TextEditingController? controller;
   final String? hint;
   final String? defualtText;
-  final Function? onChange;
+  final Function(String)? onSubmit;
 
 
 
 
   const TextFieldbox({
     super.key,
-    this.onChange,
+    this.onSubmit,
     required this.setContents,
     this.colors,
     this.suffixIcon,
@@ -40,16 +40,18 @@ class _TextFieldboxState extends State<TextFieldbox> {
 
     super.initState();
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return TextField(
+      textInputAction: TextInputAction.go,
       textAlign: TextAlign.center,
-      onChanged: (text) {
-        widget.setContents(text);
-        if(!(widget.onChange != null)){
-          widget.onChange;
-        }
-      },
+      onSubmitted: widget.onSubmit,
       keyboardType: TextInputType.text,
       // obscureText: true,
       cursorColor: MAIN_COLOR,
