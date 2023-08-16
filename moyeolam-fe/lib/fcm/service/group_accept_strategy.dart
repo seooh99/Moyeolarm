@@ -1,16 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:youngjun/common/const/address_config.dart';
+import 'package:youngjun/main.dart';
 
 import '../../common/secure_storage/secure_storage.dart';
 import '../../user/model/user_model.dart';
 import '../data_source/fcm_api_data_source.dart';
+import '../model/alert_group_service_model.dart';
 import '../model/alert_service_model.dart';
 
 class GroupAcceptStrategy {
   final FcmApiService _apiService;
-  final UserInformation _userInformation;
+  final UserInformation _userInformation = UserInformation(storage);
 
-  GroupAcceptStrategy(this._apiService, this._userInformation);
+  GroupAcceptStrategy(this._apiService);
 
   Future<void> execute(bool isAccepted, int alarmGroupId, [int? fromMemberId]) async {
     try {
@@ -44,22 +46,25 @@ class GroupAcceptStrategy {
         "fromMemberId": fromMemberId,
         "toMemberId": memberId,
       };
-      ApiArletModel? response;
+      ApiGroupPostModel? response;
 
+      print("111");
       if (isAccepted) {
         response = await _apiService.postGroupAccept(token, alarmGroupId, data);
       } else {
         response = await _apiService.postGroupDecline(token, alarmGroupId, data);
       }
-
+      print("222");
       if (response != null) {
+      print("333");
         print('${isAccepted ? "수락" : "거절"} API 요청 성공');
-        print('응답 데이터: ${response}');
+        print('그룹 요청 성공했어 응답 데이터: ${response}');
       } else {
-        print('${isAccepted ? "수락" : "거절"} API 요청 실패');
+      print("444");
+        print('그룹알람 ${isAccepted ? "수락" : "거절"} API 요청 실패');
       }
     } catch (e) {
-      print('${isAccepted ? "수락" : "거절"} API 요청 예외 발생: $e');
+      print('그룹 ${isAccepted ? "수락" : "거절"} API 요청 예외 발생: $e');
     }
   }
 }
