@@ -12,49 +12,19 @@ part 'friends_add_model.g.dart';
 // String alarmListModelToJson(AlarmListModel data) => json.encode(data.toJson());
 
 @JsonSerializable()
-class FriendsAddModel {
+class FriendsAddResponseModel {
   final String code;
   final String message;
-  final Data data;
+  final int? data;
 
-  FriendsAddModel({
+  FriendsAddResponseModel({
     required this.code,
     required this.message,
     required this.data,
   });
 
-  // AlarmListModel copyWith({
-  //   String? code,
-  //   String? message,
-  //   Data? data,
-  // }) =>
-  //     AlarmListModel(
-  //       code: code ?? this.code,
-  //       message: message ?? this.message,
-  //       data: data ?? this.data,
-  //     );
+  factory FriendsAddResponseModel.fromJson(Map<String, dynamic> json) => _$FriendsAddResponseModelFromJson(json);
 
-  factory FriendsAddModel.fromJson(Map<String, dynamic> json) => _$FriendsAddModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$FriendsAddModelToJson(this);
+  Map<String, dynamic> toJson() => _$FriendsAddResponseModelToJson(this);
 }
 
-@JsonSerializable()
-class Data {
-  final Data memberId;
-
-  Data({
-    required this.memberId,
-  });
-
-  // Data copyWith({
-  //   List<AlarmGroups>? alarmGroups,
-  // }) =>
-  //     Data(
-  //       alarmGroups: alarmGroups ?? this.alarmGroups,
-  //     );
-
-  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
-
-  Map<String, dynamic> toJson() => _$DataToJson(this);
-}
