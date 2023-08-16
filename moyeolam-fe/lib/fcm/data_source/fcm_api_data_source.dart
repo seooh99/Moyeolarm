@@ -3,7 +3,9 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 
 import '../../common/const/address_config.dart';
-import 'package:youngjun/fcm/model/alert_service_model.dart'; // ApiArletModel 클래스를 정의한 파일을 import
+import 'package:youngjun/fcm/model/alert_service_model.dart';
+
+import '../model/alert_group_service_model.dart'; // ApiArletModel 클래스를 정의한 파일을 import
 
 part 'fcm_api_data_source.g.dart'; // api_service.g.dart 파일을 포함
 
@@ -25,13 +27,13 @@ abstract class FcmApiService {
       @Path("friendRequestId") int friendRequestId);
 
   @POST('/alarmgroups/{alarmGroupId}/approve')
-  Future<ApiArletModel?> postGroupAccept(
+  Future<ApiGroupPostModel?> postGroupAccept(
       @Header("Authorization") String token,
       @Path("alarmGroupId") int alarmGroupId,
       @Body() Map<String, dynamic> data);
 
   @POST('/alarmgroups/{alarmGroupId}/reject')
-  Future<ApiArletModel?> postGroupDecline(
+  Future<ApiGroupPostModel?> postGroupDecline(
       @Header("Authorization") String token,
       @Path("alarmGroupId") int alarmGroupId,
       @Body() Map<String, dynamic> data);
