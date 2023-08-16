@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:youngjun/friends/model/friends_list_model.dart';
 
 part 'friends_search_model.g.dart';
 
@@ -13,48 +14,19 @@ part 'friends_search_model.g.dart';
 // String friendsSearchModelToJson(FriendsSearchModel data) => json.encode(data.toJson());
 
 @JsonSerializable()
-class FriendsSearchModel {
+class FriendsSearchResponseModel {
   String code;
   String message;
-  Data data;
+  ListFriendModel data;
 
-  FriendsSearchModel({
+  FriendsSearchResponseModel({
     required this.code,
     required this.message,
     required this.data,
   });
 
-  factory FriendsSearchModel.fromJson(Map<String, dynamic> json) => _$FriendsSearchModelFromJson(json);
+  factory FriendsSearchResponseModel.fromJson(Map<String, dynamic> json) => _$FriendsSearchResponseModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$FriendsSearchModelToJson(this);
+  Map<String, dynamic> toJson() => _$FriendsSearchResponseModelToJson(this);
 }
 
-@JsonSerializable()
-class Data {
-  List<Friend> friends;
-
-  Data({
-    required this.friends,
-  });
-
-  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
-
-  Map<String, dynamic> toJson() => _$DataToJson(this);
-}
-
-@JsonSerializable()
-class Friend {
-  int memberId;
-  String nickname;
-  String? profileImageUrl;
-
-  Friend({
-    required this.memberId,
-    required this.nickname,
-    required this.profileImageUrl,
-  });
-
-  factory Friend.fromJson(Map<String, dynamic> json) => _$FriendFromJson(json);
-
-  Map<String, dynamic> toJson() => _$FriendToJson(this);
-}

@@ -270,21 +270,21 @@ class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
                                 if(data.members.length < 6)
                                   GestureDetector(
                                     onTap: () {
-                                      List<MemberModel?> members = [];
+                                      List<AddMemberModel?> members = [];
 
                                       for (int index = 0; index <
                                           data.members.length; index++) {
-                                        MemberModel member = MemberModel(
+                                        AddMemberModel member = AddMemberModel(
                                             nickname: data.members[index].nickname,
                                             memberId: data.members[index].memberId);
                                         members.add(member);
                                       }
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(builder: (context) =>
-                                              AddFriendAlarmGroupView(
-                                                alarmGroupId: data.alarmGroupId,
-                                                invitedMember: members,
-                                              )));
+                                      // Navigator.of(context).push(
+                                      //     MaterialPageRoute(builder: (context) =>
+                                      //         AddFriendAlarmGroupView(
+                                      //           alarmGroupId: data.alarmGroupId,
+                                      //           invitedMember: members,
+                                      //         )));
                                     },
                                     child: Card(
                                       shape: RoundedRectangleBorder(
