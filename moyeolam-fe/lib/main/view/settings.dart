@@ -114,13 +114,17 @@ class FirebaseApi with ChangeNotifier {
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
     FirebaseMessaging.onMessage.listen((event) {
 
-      if(event.notification!.title!.contains('test')){
-        Navigator.of(GlobalVariable.navState.currentContext!)
-            .push(MaterialPageRoute(
-            builder: (context) => ListView()));
+      if (GlobalVariable.navState.currentContext != null) {
+        if(event.notification!.title!.contains('알람') || event.notification!.title!.contains('친구')){
+          Navigator.of(GlobalVariable.navState.currentContext!)
+              .push(MaterialPageRoute(
+              builder: (context) => ListView()));
 
-        return;
+          return;
+        }
       }
+
+
 
       notifyListeners(); // 변경 알림
 
@@ -128,15 +132,17 @@ class FirebaseApi with ChangeNotifier {
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
 
-
-      if(message.data['screen'] == 'MainPage') {
-        SchedulerBinding.instance!.addPostFrameCallback((_) {
-          Navigator.of(GlobalVariable.navState.currentContext!)
-              .push(MaterialPageRoute(
-              builder: (context) => ListView()));
-        });
-        return;
+      if (GlobalVariable.navState.currentContext != null) {
+        if(message.data['screen'] == 'MainPage') {
+          SchedulerBinding.instance!.addPostFrameCallback((_) {
+            Navigator.of(GlobalVariable.navState.currentContext!)
+                .push(MaterialPageRoute(
+                builder: (context) => ListView()));
+          });
+          return;
+        }
       }
+
     });
 
     notifyListeners();
