@@ -204,7 +204,6 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 30),
                     GestureDetector(
                       onTap: () {
                         print("눌림");

@@ -11,18 +11,18 @@ import 'package:youngjun/user/model/user_model.dart';
 
 AddFriendAlarmGroupViewModel _addFriendAlarmGroupViewModel = AddFriendAlarmGroupViewModel();
 final addFriendAlarmProvider = ChangeNotifierProvider<AddFriendAlarmGroupViewModel>((ref) => _addFriendAlarmGroupViewModel );
-
-final searchFriendProvider = FutureProvider<List<Friend>?>((ref) async {
-  return await _addFriendAlarmGroupViewModel.searchFriend();
-} );
+//
+// final searchFriendProvider = FutureProvider<List<Friend>?>((ref) async {
+//   return await _addFriendAlarmGroupViewModel.searchFriend();
+// } );
 
 class AddFriendAlarmGroupViewModel extends ChangeNotifier{
   // final List<int?> memberIds = [];
   // final List<String?> member = [];
-  final List<MemberModel?> members = [];
+  final List<AddMemberModel?> members = [];
   final AddFriendAlarmGroupRepository _addFriendAlarmGroupRepository = AddFriendAlarmGroupRepository();
   final List<int?> checkId = [];
-  final FriendsRepository _friendsRepository = FriendsRepository(Dio());
+  // final FriendsRepository _friendsRepository = FriendsRepository(Dio());
   UserInformation _userInformation = UserInformation(storage);
   String friendNickname = '';
 
@@ -32,7 +32,7 @@ class AddFriendAlarmGroupViewModel extends ChangeNotifier{
 
   setMember(int newMemberId, String newMemberNickname){
     if(!checkId.contains(newMemberId)){
-      MemberModel newMember = MemberModel(
+      AddMemberModel newMember = AddMemberModel(
           nickname: newMemberNickname,
           memberId: newMemberId,
       );
@@ -46,7 +46,7 @@ class AddFriendAlarmGroupViewModel extends ChangeNotifier{
     friendNickname = Nickname;
   }
 
-  deleteMember(MemberModel member){
+  deleteMember(AddMemberModel member){
     if(checkId.contains(member.memberId)){
       checkId.remove(member.memberId);
       members.remove(member);
@@ -60,23 +60,23 @@ class AddFriendAlarmGroupViewModel extends ChangeNotifier{
     return await _addFriendAlarmGroupRepository.inviteFriend(token, alarmGroupId, memberIds);
   }
 
-  Future<List<Friend>?> searchFriend() async {
-    print("$friendNickname friend");
-    UserModel? userInfo = await _userInformation.getUserInfo();
-    String token = "Bearer ${userInfo!.accessToken}";
-    var response =  await _friendsRepository.searchFriends(token, friendNickname);
-    if(response.code == "200"){
-      return response.data.friends;
-    }
-    return null;
-  }
+  // Future<List<Friend>?> searchFriend() async {
+  //   print("$friendNickname friend");
+  //   UserModel? userInfo = await _userInformation.getUserInfo();
+  //   String token = "Bearer ${userInfo!.accessToken}";
+  //   var response =  await _friendsRepository.searchFriends(token, friendNickname);
+  //   if(response.code == "200"){
+  //     return response.data.friends;
+  //   }
+  //   return null;
+  // }
 }
 
-class MemberModel {
+class AddMemberModel {
   final String nickname;
   final int memberId;
 
-  MemberModel({
+  AddMemberModel({
     required this.nickname,
     required this.memberId,
 });

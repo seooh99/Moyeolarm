@@ -13,48 +13,48 @@ part 'friends_list_model.g.dart';
 // String firendsListModelToJson(FriendsListModel data) => json.encode(data.toJson());
 
 @JsonSerializable()
-class FriendsListModel {
+class FriendsListResponseModel {
   String code;
   String message;
-  Data data;
+  ListFriendModel data;
 
-  FriendsListModel({
+  FriendsListResponseModel({
     required this.code,
     required this.message,
     required this.data,
   });
 
-  factory FriendsListModel.fromJson(Map<String, dynamic> json) => _$FriendsListModelFromJson(json);
+  factory FriendsListResponseModel.fromJson(Map<String, dynamic> json) => _$FriendsListResponseModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$FriendsListModelToJson(this);
+  Map<String, dynamic> toJson() => _$FriendsListResponseModelToJson(this);
 }
 
 @JsonSerializable()
-class Data {
-  List<Friend> friends;
+class ListFriendModel {
+  List<FriendModel?> friends;
 
-  Data({
+  ListFriendModel({
     required this.friends,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
+  factory ListFriendModel.fromJson(Map<String, dynamic> json) => _$ListFriendModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$DataToJson(this);
+  Map<String, dynamic> toJson() => _$ListFriendModelToJson(this);
 }
 
 @JsonSerializable()
-class Friend {
+class FriendModel {
   int memberId;
   String nickname;
-  dynamic profileImageUrl;
+  String? profileImageUrl;
 
-  Friend({
+  FriendModel({
     required this.memberId,
     required this.nickname,
     this.profileImageUrl,
   });
 
-  factory Friend.fromJson(Map<String, dynamic> json) => _$FriendFromJson(json);
+  factory FriendModel.fromJson(Map<String, dynamic> json) => _$FriendModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$FriendToJson(this);
+  Map<String, dynamic> toJson() => _$FriendModelToJson(this);
 }

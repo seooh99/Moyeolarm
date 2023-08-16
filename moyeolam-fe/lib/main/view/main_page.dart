@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:youngjun/common/layout/main_nav.dart';
 import 'package:youngjun/common/layout/title_bar.dart';
+import 'package:youngjun/friends/view/friend_view.dart';
 import 'package:youngjun/main/view/settings.dart';
 import '../../alarm/view/alarm_list_page.dart';
 import '../../common/const/colors.dart';
-import '../../friends/view/friend_list_screen.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -19,7 +19,7 @@ class _MainPageState extends State<MainPage> {
     // Text("메인"),
     MainAlarmList(),
     // Text("친구설정 페이지"),
-    FriendListScreen(),
+    FriendView(),
     Settings(),
     // Text("세팅페이지"),
   ];
