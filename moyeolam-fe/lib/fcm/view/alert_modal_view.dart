@@ -6,12 +6,10 @@ import 'package:youngjun/common/const/colors.dart';
 import '../../common/secure_storage/secure_storage.dart';
 import '../api/alert_modal_api.dart';
 import '../data_source/fcm_api_data_source.dart';
-import '../provider/alert_provider.dart';
 import '../service/alert_main_sevice.dart';
 
 
 class APIDialog extends StatelessWidget {
-  final UserInformation _userInformation;
   const APIDialog({
     Key? key,
     required this.acceptOnPressed,
@@ -21,11 +19,9 @@ class APIDialog extends StatelessWidget {
     required this.alertTypeList,
     this.alarmGroupId,
     this.friendRequestId,
-    required this.fromMemberId,
-    required UserInformation userInformation,  // 생성자에 UserInformation 인자를 추가
+    required this.fromMemberId, // 생성자에 UserInformation 인자를 추가
     required this.onDialogHandled, // Add this line
-  })  : _userInformation = userInformation,  // 초기화
-        super(key: key);
+  })  : super(key: key);
 
   final VoidCallback acceptOnPressed;
   final VoidCallback declineOnPressed;
@@ -82,7 +78,7 @@ class APIDialog extends StatelessWidget {
               // FcmApiService 인스턴스 생성 (이 부분은 실제 구현에 따라 다를 수 있습니다.)
               final dio = Dio();
               final apiService = FcmApiService(dio);
-              final apiHandler = ArletModalApi(_userInformation, apiService);
+              final apiHandler = ArletModalApi(apiService);
 
               if (alertTypeList == '친구 요청') {
                 apiHandler.handleApiRequest('친구 요청',
@@ -118,7 +114,7 @@ class APIDialog extends StatelessWidget {
             onPressed: () {
               final dio = Dio();
               final apiService = FcmApiService(dio);
-              final apiHandler = ArletModalApi(_userInformation, apiService);
+              final apiHandler = ArletModalApi(apiService);
 
               if (alertTypeList == '친구 요청') {
                 apiHandler.handleApiRequest('친구 요청',

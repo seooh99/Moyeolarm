@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:youngjun/common/layout/title_bar.dart';
+import 'package:youngjun/fcm/service/alert_main_sevice.dart';
 import '../../common/secure_storage/secure_storage.dart';
 import '../model/alert_service_model.dart';
 import 'package:youngjun/common/const/colors.dart';
-import '../provider/alert_provider.dart';
 import 'alert_modal_view.dart';
 
 
@@ -18,7 +19,7 @@ class _ListAppState extends ConsumerState<ListApp> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.refresh(alertModelProvider);
+      ref.invalidate(alertServiceProvider);
     });
 
     return MaterialApp(
@@ -34,36 +35,61 @@ class ArletListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final UserInformation _userInformation = ref.read(userInformationProvider);
-    final apiAlertModelAsyncValue = ref.watch(alertModelProvider);
+    final apiAlertModelAsyncValue = ref.watch(alertServiceProvider);
 
     return Scaffold(
-      body: apiAlertModelAsyncValue.when(
-        loading: () => Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text("데이터 로딩 실패: $err")),
-        data: (apiAlertModel) {
-          return _buildAlertList(apiAlertModel, _userInformation, ref);
-        },
+      appBar: TitleBar(
+        appBar: AppBar(),
+        title: "모여람",
+        actions: [
+          IconButton(
+            onPressed: () {
+              // Navigator.of(context)
+              //     .push(
+              //     MaterialPageRoute(builder: (context) => ArletListView()))
+              //     .then(
+              //       (value) {
+              //     setState(() {
+              //       ref.invalidate(alarmListProvider);
+              //     });
+              //   },
+              // );
+            },
+            icon: Icon(Icons.notifications),
+          )
+        ],
       ),
+      backgroundColor: BACKGROUND_COLOR,
+      body: Padding(
+        padding: EdgeInsets.only(bottom: 68),
+        child: apiAlertModelAsyncValue.when(
+          loading: () => Center(child: CircularProgressIndicator()),
+          error: (err, stack) => Center(child: Text("데이터 로딩 실패: $err")),
+          data: (apiAlertModel) {
+            return _buildAlertList(apiAlertModel, ref);
+          },
+        ),
+      ),
+
     );
   }
 
 
-  Widget _buildAlertList(ApiArletModel apiAlertModel, UserInformation userInformation, WidgetRef ref) {
+  Widget _buildAlertList(ApiArletModel apiAlertModel, WidgetRef ref) {
     if (apiAlertModel.data?.alerts != null && apiAlertModel.data!.alerts!.isNotEmpty) {
-      final List<ApiArletItem> alertItems = apiAlertModel.data!.alerts!;
+      final List<ApiArletItem?> alertItems = apiAlertModel.data!.alerts!;
       return ListView.builder(
         itemCount: alertItems.length,
-        itemBuilder: (context, index) => _buildAlertItem(context, alertItems[index], userInformation, ref),
+        itemBuilder: (context, index) => _buildAlertItem(context, alertItems[index], ref),
       );
     } else {
       return Center(child: Text('알림없음', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: FONT_COLOR)));
     }
   }
 
-  Widget _buildAlertItem(BuildContext context, ApiArletItem alertItem, UserInformation userInformation, WidgetRef ref) {
-    final fromNickname = alertItem.fromNickname;
-    final alertType = alertItem.alertType;
+  Widget _buildAlertItem(BuildContext context, ApiArletItem? alertItem, WidgetRef ref) {
+    final fromNickname = alertItem!.fromNickname;
+    final alertType = alertItem!.alertType;
 
     return GestureDetector(
       onTap: () {
@@ -77,8 +103,7 @@ class ArletListView extends ConsumerWidget {
             alertItem.alarmGroupId,
             alertItem.friendRequestId,
             alertItem.fromMemberId,
-            userInformation,
-            ref,
+            ref
           );
         }
       },
@@ -119,7 +144,6 @@ class ArletListView extends ConsumerWidget {
       int? alarmGroupId,
       int? friendRequestId,
       int fromMemberId,
-      UserInformation userInformation,
       WidgetRef ref) {
     showDialog(
       context: context,
@@ -133,8 +157,7 @@ class ArletListView extends ConsumerWidget {
           fromMemberId: fromMemberId,
           acceptOnPressed: () {},
           declineOnPressed: () {},
-          userInformation: userInformation,
-          onDialogHandled: () => ref.refresh(alertModelProvider),
+          onDialogHandled: () => ref.invalidate(alertServiceProvider),
         );
       },
     );

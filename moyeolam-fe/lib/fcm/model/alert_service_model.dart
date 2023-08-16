@@ -33,7 +33,7 @@ class ApiArletModel {
 
 @JsonSerializable()
 class ApiArletData {
-  List<ApiArletItem>? alerts;
+  List<ApiArletItem?>? alerts;
 
   ApiArletData({
     this.alerts,
