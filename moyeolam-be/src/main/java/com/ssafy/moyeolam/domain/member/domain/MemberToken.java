@@ -1,6 +1,5 @@
 package com.ssafy.moyeolam.domain.member.domain;
 
-import com.ssafy.moyeolam.domain.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberToken extends BaseTimeEntity {
+public class MemberToken {
     @Id
     @Column(name = "member_id")
     private Long id;
@@ -37,5 +36,7 @@ public class MemberToken extends BaseTimeEntity {
         this.refreshToken = refreshToken;
     }
 
-    public void setAccessToken(String accessToken){ this.acessToken = accessToken;}
+    public void setAccessToken(String accessToken) {
+        this.acessToken = accessToken;
+    }
 }
