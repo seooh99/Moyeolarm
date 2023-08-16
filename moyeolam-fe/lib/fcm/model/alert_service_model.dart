@@ -4,11 +4,12 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'alert_service_model.g.dart';
 
+
 @JsonSerializable()
 class ApiArletModel {
-  String? code; // 에러 코드
-  String? message; // 에러 메시지
-  ApiArletData? data; // 실제 데이터
+  String? code;
+  String? message;
+  ApiArletData? data;
 
   ApiArletModel({
     this.code,
@@ -23,7 +24,13 @@ class ApiArletModel {
       data: ApiArletData.fromJson(json['data']),
     );
   }
+
+  @override
+  String toString() {
+    return 'ApiArletModel(code: $code, message: $message, data: $data)';
+  }
 }
+
 @JsonSerializable()
 class ApiArletData {
   List<ApiArletItem>? alerts;
@@ -36,6 +43,11 @@ class ApiArletData {
     return ApiArletData(
       alerts: (json['alerts'] as List<dynamic>?)?.map((e) => ApiArletItem.fromJson(e as Map<String, dynamic>)).toList(),
     );
+  }
+
+  @override
+  String toString() {
+    return 'ApiArletData(alerts: $alerts)';
   }
 }
 
@@ -68,10 +80,15 @@ class ApiArletItem {
       time: json['time'] as String?,
       alertType: json['alertType'] as String?,
       createAt: json['createAt'] as String?,
-      alarmGroupId: json['alarmGroupId'] as int?, // Change to int
-      friendRequestId: json['friendRequestId'] as int?, // Change to int
+      alarmGroupId: json['alarmGroupId'] as int?,
+      friendRequestId: json['friendRequestId'] as int?,
       fromMemberId: json['fromMemberId'] as int,
     );
+  }
+
+  @override
+  String toString() {
+    return 'ApiArletItem(fromNickname: $fromNickname, title: $title, time: $time, alertType: $alertType, createAt: $createAt, alarmGroupId: $alarmGroupId, friendRequestId: $friendRequestId, fromMemberId: $fromMemberId)';
   }
 }
 

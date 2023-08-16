@@ -149,55 +149,57 @@ class _AlarmAddScreenState extends ConsumerState<AlarmAddScreen> {
           Navigator.of(context).pop();
         }),
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 24,
-          ),
-          Center(
-            child: Container(
-              width: 320,
-              child: TextFieldbox(
-                setContents: (String) {
-                  _addAlarmGroupViewModel.setTitle(String);
-                },
-                colors: Colors.black,
-                defualtText: widget.detailAlarmGroup?.title ?? "제목",
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 24,
+            ),
+            Center(
+              child: Container(
+                width: 320,
+                child: TextFieldbox(
+                  setContents: (String) {
+                    _addAlarmGroupViewModel.setTitle(String);
+                  },
+                  colors: Colors.black,
+                  defualtText: widget.detailAlarmGroup?.title ?? "제목",
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Divider(
-            indent: 20,
-            endIndent: 20,
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Clock(
-            timeSet: widget.detailAlarmGroup != null
-                ? DateTime(
-                    DateTime.now().year,
-                    DateTime.now().month,
-                    DateTime.now().day,
-                    widget.detailAlarmGroup!.hour,
-                    widget.detailAlarmGroup!.minute,
-                  )
-                : DateTime.now(),
-            onTimeChanged: _addAlarmGroupViewModel.setTime,
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          AlarmMiddleSelect(
-            dayOfWeek: widget.detailAlarmGroup?.dayOfWeek,
-            alarmSound: widget.detailAlarmGroup?.alarmSound,
-            alarmMission: widget.detailAlarmGroup?.alarmMission,
-            addAlarmGroupViewModel: _addAlarmGroupViewModel,
-          ),
-        ],
+            SizedBox(
+              height: 20,
+            ),
+            Divider(
+              indent: 20,
+              endIndent: 20,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Clock(
+              timeSet: widget.detailAlarmGroup != null
+                  ? DateTime(
+                      DateTime.now().year,
+                      DateTime.now().month,
+                      DateTime.now().day,
+                      widget.detailAlarmGroup!.hour,
+                      widget.detailAlarmGroup!.minute,
+                    )
+                  : DateTime.now(),
+              onTimeChanged: _addAlarmGroupViewModel.setTime,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            AlarmMiddleSelect(
+              dayOfWeek: widget.detailAlarmGroup?.dayOfWeek,
+              alarmSound: widget.detailAlarmGroup?.alarmSound,
+              alarmMission: widget.detailAlarmGroup?.alarmMission,
+              addAlarmGroupViewModel: _addAlarmGroupViewModel,
+            ),
+          ],
+        ),
       ),
     );
   }

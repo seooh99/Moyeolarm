@@ -21,7 +21,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/profileImage")
-    public EnvelopeResponse<UploadProfileImageResponseDto> uploadProfileImage(@AuthenticationPrincipal PrincipalDetails principal, @RequestBody UploadProfileImageRequestDto uploadProfileImageRequestDto) throws IOException {
+    public EnvelopeResponse<UploadProfileImageResponseDto> uploadProfileImage(@AuthenticationPrincipal PrincipalDetails principal, UploadProfileImageRequestDto uploadProfileImageRequestDto) throws IOException {
         if (principal == null) {
             throw new MemberException(MemberErrorInfo.NOT_FOUND_MEMBER);
         }

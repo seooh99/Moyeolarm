@@ -7,6 +7,7 @@ import 'package:youngjun/alarm/view/add_friend_alarm_group_view.dart';
 import 'package:youngjun/alarm/viewmodel/add_alarm_group_view_model.dart';
 import 'package:youngjun/alarm/viewmodel/add_friend_alarm_group_view_model.dart';
 import 'package:youngjun/alarm/viewmodel/alarm_detail_view_model.dart';
+import 'package:youngjun/alarm/viewmodel/alarm_list_view_model.dart';
 import 'package:youngjun/common/button/btn_back.dart';
 
 import 'package:youngjun/common/button/btn_save_update.dart';
@@ -47,12 +48,14 @@ class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
               leading: BtnBack(onPressed: () {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => MainPage()));
+                ref.invalidate(alarmListProvider);
                 // Navigator.of(context).pop();
               }),
               actions: [
-                data.isHost ?
+                if (data.isHost)
                 BtnSaveUpdate(
                   onPressed: () {
+                    ref.invalidate(alarmListProvider);
                     Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (context) =>
@@ -67,26 +70,25 @@ class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
                         }
                         )
                     );
+
                   },
                   text: "수정",
-                ) : BtnSaveUpdate(
-                  onPressed: () {},
-                  text: "나가기",
-                ),
+                )
               ],
             ),
-            body: RefreshIndicator(
-              onRefresh: () async {
-                ref.invalidate(alarmDetailFutureProvider);
-              },
-              child: Column(
-                  children: [
-                    SizedBox(height: 24),
-                    // Clock(timeSet: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, data.hour, data.minute)),
+            body: SingleChildScrollView(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  ref.invalidate(alarmDetailFutureProvider);
+                },
+                child: Column(
+                    children: [
+                      // SizedBox(height: 24),
+                      // Clock(timeSet: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, data.hour, data.minute)),
 
-                    Flexible(
-                      child: Container(
+                      Container(
                         height: 144,
+                        padding: EdgeInsets.only(top: 24, bottom: 20),
                         alignment: Alignment.center,
                         child: Text(
                             (data.hour % 12)
@@ -119,242 +121,197 @@ class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
 
                             )),
                       ),
-                    ),
 
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Flexible(
-                      child: Container(
+                      // SizedBox(
+                      //   height: 20,
+                      // ),
+                      Container(
                         child: Column(
                           children: [
-                            Flexible(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    width: 60,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // SizedBox(
+                                //   width: 60,
+                                // ),
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 40, ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.all(12.0),
+                                        child: Text(
+                                          '알림음',
+                                          style: TextStyle(
+                                            color: FONT_COLOR,
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.all(12.0),
+                                        child: Text(
+                                          '인증방식',
+                                          style: TextStyle(
+                                            color: FONT_COLOR,
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.all(12.0),
+                                        child: Text(
+                                          '반복 요일',
+                                          style: TextStyle(
+                                            color: FONT_COLOR,
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    '알림음',
-                                    style: TextStyle(
-                                      color: FONT_COLOR,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 100,
-                                  ),
-                                  Flexible(
-                                    child: Container(
-                                      width: 180,
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Text(
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 40),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Text(
                                             data.alarmSound,
                                             style: TextStyle(
                                               color: FONT_COLOR,
                                               fontSize: 20,
                                             ),
                                           ),
-                                          SizedBox(width: 12,),
-                                          Icon(
-                                            Icons.arrow_right_sharp,
-                                            color: FONT_COLOR,
-                                          ),
-                                        ],
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 20,),
-                            Flexible(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Flexible(
-                                    child: SizedBox(
-                                      width: 60,
-                                    ),
-                                  ),
-                                  Text(
-                                    '인증방식',
-                                    style: TextStyle(
-                                      color: FONT_COLOR,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                  // Flexible(
-                                  //   child: SizedBox(
-                                  //     width: 100,
-                                  //   ),
-                                  // ),
-                                  Flexible(
-                                    child: Container(
-                                      width: 180,
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Text(
+                                      Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Text(
                                             data.alarmMission,
                                             style: TextStyle(
                                               color: FONT_COLOR,
                                               fontSize: 20,
                                             ),
                                           ),
-                                          SizedBox(
-                                            width: 12,
-                                          ),
-                                          Icon(
-                                            Icons.arrow_right_sharp,
-                                            color: FONT_COLOR,
-                                          ),
-                                        ],
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 20,),
-
-                            Row(mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Flexible(
-                                  child: SizedBox(
-                                    width: 60,
-                                  ),
-                                ),
-                                Text(
-                                  '반복 요일',
-                                  style: TextStyle(
-                                    color: FONT_COLOR,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                Flexible(
-                                  child: SizedBox(
-                                    width: 72,
-                                  ),
-                                ),
-                                Flexible(
-                                  child: Container(
-                                    width: 180,
+                                      Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Container(
+                                    // width: 180,
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        for (int index = 0; index < 7; index++)
-                                          if(data.dayOfWeek[index])
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 4, right: 4),
-                                              child: Text(
-                                                week[index],
-                                                style: TextStyle(
-                                                  color: FONT_COLOR,
-                                                  fontSize: 20,
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          for (int index = 0; index < 7; index++)
+                                            if(data.dayOfWeek[index])
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 4, right: 4),
+                                                child: Text(
+                                                  week[index],
+                                                  style: TextStyle(
+                                                    color: FONT_COLOR,
+                                                    fontSize: 20,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                      ],
+                                        ],
                                     ),
+                                  ),
+                                      ),
+                                    ],
                                   ),
                                 ),
 
                               ],
                             ),
-                            Flexible(child: SizedBox(height: 24,)),
+
                           ],
                         ),
                       ),
-                    ),
 
-                    Text(
-                      '참여목록',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: FONT_COLOR,
-                      ),
-                    ),
-                    Flexible(
-                      child: SizedBox(
-                        height: 24,
-                      ),
-                    ),
-                    Flexible(
-                      child: Container(
-                        // color: FONT_COLOR,
-                        // alignment: Alignment.center,
-                        width: 360,
-                        height: 360,
-                        child: GridView.count(
-                          physics: NeverScrollableScrollPhysics(),
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 10,
-                          childAspectRatio: (150 / 92),
-                          children: [
-                            for(int index = 0; index <
-                                data.members.length; index++)
-                              Flexible(
-                                child: AlarmGuestList(
-                                  color: data.members[index].toggle? MAIN_COLOR:CKECK_GRAY_COLOR,
-                                  nickname: data.members[index].nickname,
-                                  profileImage: Image.network(
-                                      "${data.members[index].profileUrl}") ??
-                                      Image.asset("assets/images/moyeolam"),
-                                ),
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 40, bottom: 40),
+                            child: const Text(
+                              '참여목록',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: FONT_COLOR,
                               ),
-                            if(data.members.length < 6)
-                              Flexible(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    List<MemberModel?> members = [];
+                            ),
+                          ),
+                          // SizedBox(
+                          //   height: 24,
+                          // ),
+                          Container(
+                            // color: FONT_COLOR,
+                            // alignment: Alignment.center,
+                            width: 360,
+                            height: 360,
+                            child: GridView.count(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
+                              childAspectRatio: (150 / 92),
+                              children: [
+                                for(int index = 0; index <
+                                    data.members.length; index++)
+                                  AlarmGuestList(
+                                    color: data.members[index].toggle? MAIN_COLOR:CKECK_GRAY_COLOR,
+                                    nickname: data.members[index].nickname,
+                                    profileImage: Image.network(
+                                        "${data.members[index].profileUrl}") ??
+                                        Image.asset("assets/images/moyeolam"),
+                                  ),
+                                if(data.members.length < 6)
+                                  GestureDetector(
+                                    onTap: () {
+                                      List<AddMemberModel?> members = [];
 
-                                    for (int index = 0; index <
-                                        data.members.length; index++) {
-                                      MemberModel member = MemberModel(
-                                          nickname: data.members[index].nickname,
-                                          memberId: data.members[index].memberId);
-                                      members.add(member);
-                                    }
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) =>
-                                            AddFriendAlarmGroupView(
-                                              alarmGroupId: data.alarmGroupId,
-                                              invitedMember: members,
-                                            )));
-                                  },
-                                  child: Flexible(
+                                      for (int index = 0; index <
+                                          data.members.length; index++) {
+                                        AddMemberModel member = AddMemberModel(
+                                            nickname: data.members[index].nickname,
+                                            memberId: data.members[index].memberId);
+                                        members.add(member);
+                                      }
+                                      // Navigator.of(context).push(
+                                      //     MaterialPageRoute(builder: (context) =>
+                                      //         AddFriendAlarmGroupView(
+                                      //           alarmGroupId: data.alarmGroupId,
+                                      //           invitedMember: members,
+                                      //         )));
+                                    },
                                     child: Card(
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(16),
-                                        side: BorderSide(
+                                        side: const BorderSide(
                                             width: 3,
                                             color: MAIN_COLOR,
                                             style: BorderStyle.solid
                                         ),
                                       ),
                                       color: BACKGROUND_COLOR,
-                                      child: Center(
+                                      child: const Center(
                                         child: Icon(Icons.add,
                                           color: MAIN_COLOR,
                                           size: 20,),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              )
+                                  )
 
 
-                          ],
-                        ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ]
+                    ]
+                ),
               ),
             ),
           );
@@ -389,3 +346,114 @@ class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
   }
 }
       
+// Text(
+//                                 '알림음',
+//                                 style: TextStyle(
+//                                   color: FONT_COLOR,
+//                                   fontSize: 18,
+//                                 ),
+//                               ),
+//                               // SizedBox(
+//                               //   width: 100,
+//                               // ),
+//                               Container(
+//                                 width: 180,
+//                                 child: Row(
+//                                   mainAxisAlignment: MainAxisAlignment.end,
+//                                   children: [
+//                                     Text(
+//                                       data.alarmSound,
+//                                       style: TextStyle(
+//                                         color: FONT_COLOR,
+//                                         fontSize: 20,
+//                                       ),
+//                                     ),
+//                                     SizedBox(width: 12,),
+//                                     Icon(
+//                                       Icons.arrow_right_sharp,
+//                                       color: FONT_COLOR,
+//                                     ),
+//                                   ],
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                           SizedBox(height: 20,),
+//                           Row(
+//                             crossAxisAlignment: CrossAxisAlignment.center,
+//                             children: [
+//                               SizedBox(
+//                                 width: 60,
+//                               ),
+//                               Text(
+//                                 '인증방식',
+//                                 style: TextStyle(
+//                                   color: FONT_COLOR,
+//                                   fontSize: 20,
+//                                 ),
+//                               ),
+//                               SizedBox(
+//                                 width: 100,
+//                               ),
+//                               Container(
+//                                 width: 180,
+//                                 child: Row(
+//                                   mainAxisAlignment: MainAxisAlignment.end,
+//                                   children: [
+//                                     Text(
+//                                       data.alarmMission,
+//                                       style: TextStyle(
+//                                         color: FONT_COLOR,
+//                                         fontSize: 20,
+//                                       ),
+//                                     ),
+//                                     SizedBox(
+//                                       width: 12,
+//                                     ),
+//                                     Icon(
+//                                       Icons.arrow_right_sharp,
+//                                       color: FONT_COLOR,
+//                                     ),
+//                                   ],
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                           SizedBox(height: 20,),
+//
+//                           Row(mainAxisAlignment: MainAxisAlignment.start,
+//                             children: [
+//                               SizedBox(
+//                                 width: 60,
+//                               ),
+//                               Text(
+//                                 '반복 요일',
+//                                 style: TextStyle(
+//                                   color: FONT_COLOR,
+//                                   fontSize: 20,
+//                                 ),
+//                               ),
+//                               SizedBox(
+//                                 width: 72,
+//                               ),
+//                               Container(
+//                                 width: 180,
+//                                 child: Row(
+//                                   mainAxisAlignment: MainAxisAlignment.end,
+//                                   children: [
+//                                     for (int index = 0; index < 7; index++)
+//                                       if(data.dayOfWeek[index])
+//                                         Padding(
+//                                           padding: const EdgeInsets.only(
+//                                               left: 4, right: 4),
+//                                           child: Text(
+//                                             week[index],
+//                                             style: TextStyle(
+//                                               color: FONT_COLOR,
+//                                               fontSize: 20,
+//                                             ),
+//                                           ),
+//                                         ),
+//                                   ],
+//                                 ),
+//                               ),
