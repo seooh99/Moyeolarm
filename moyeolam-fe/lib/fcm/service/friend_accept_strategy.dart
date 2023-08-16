@@ -1,71 +1,59 @@
 import 'package:dio/dio.dart';
-
 import '../../../common/const/address_config.dart';
+import 'package:youngjun/fcm/data_source/fcm_api_data_source.dart';
+import '../../common/secure_storage/secure_storage.dart';
+import '../../user/model/user_model.dart';
+import '../model/alert_service_model.dart';
 
 class FriendAcceptStrategy {
-  final Dio _dio = Dio(BaseOptions(baseUrl: BASE_URL)); // 미리 생성된 Dio 인스턴스 사용
+  final FcmApiService _apiService;
+  final UserInformation _userInformation;
+
+  FriendAcceptStrategy(this._apiService, this._userInformation);
 
   void execute(bool isAccepted, int friendRequestId) async {
     try {
-      // 초기 GET 요청 수행
-      // memberId 값을 이용하여 친구 수락에 따른 API 요청 처리
-      Response response = await _dio.get('/alerts');
+      // UserInformation을 사용하여 accessToken 가져오기
+      UserModel? userInfo = await _userInformation.getUserInfo();
+      if (userInfo == null) {
+        print("User info not found.");
+        return;
+      }
+      String token = "Bearer ${userInfo.accessToken}";
 
-      if (response.statusCode == 200) {
-        // API 요청 성공 처리
-        print('친구 수락 API 요청 성공');
-        print('Response Data: ${response.data}');
+      // ApiArletModel에서 데이터 가져오기 (토큰 포함하여)
+      ApiArletModel? alertResponse = await _apiService.getPosts(token);
 
-        if (isAccepted) {
-          await ApproveFriend(true, friendRequestId);
-        } else {
-          await ApproveFriend(false, friendRequestId);
-        }
+      if (alertResponse != null) {
+        print('API 데이터 가져오기 성공');
+        print('Response Data: ${alertResponse}');
 
+        await handleFriendRequest(isAccepted, friendRequestId, token);
       } else {
-        // API 요청 실패 처리
-        print('친구 수락 API 요청 실패');
+        print('API 데이터 가져오기 실패');
       }
     } catch (e) {
-      // 예외 처리
-      print('친구 수락 API 요청 예외: $e');
+      print('API 요청 예외: $e');
     }
   }
 
-  Future<void> ApproveFriend(bool isAccepted, int friendRequestId) async {
+  Future<void> handleFriendRequest(bool isAccepted, int friendRequestId, String token) async {
     try {
-      // 알람 그룹 수락을 위한 API 요청 수행
-      Response response = await _dio.post('/friends/$friendRequestId/approve');
-
-      if (response.statusCode == 200) {
-        print('수락 API 요청 성공');
-        print('응답 데이터: ${response.data}');
+      ApiArletModel? response;
+      if (isAccepted) {
+        response = await _apiService.postFriendAccept(token, friendRequestId);
       } else {
-        print('수락 API 요청 실패');
+        response = await _apiService.postFriendDecline(token, friendRequestId);
       }
-    } on DioError catch (e) {
-      print('DioError 발생!!: $e');
-    } catch (e) {
-      print('수락 API 요청 예외 발생~~~?: $e');
-    }
-  }
 
-  Future<void> DeclineFriend(bool isAccepted, int friendRequestId) async {
-    try {
-      // 알람 그룹 거절을 위한 API 요청 수행
-      Response response = await _dio.post('/friends/$friendRequestId/reject');
-
-      if (response.statusCode == 200) {
-        print('거절 API 요청 성공');
-        print('응답 데이터: ${response.data}');
+      if (response != null) {
+        print('${isAccepted ? "수락" : "거절"} API 요청 성공');
+        print('응답 데이터: ${response}');
       } else {
-        print('거절 API 요청 실패');
+        print('${isAccepted ? "수락" : "거절"} API 요청 실패');
       }
-    } on DioError catch (e) {
-      print('DioError 발생!!: $e');
     } catch (e) {
-      print('거절 API 요청 예외 발생: $e');
+      print('${isAccepted ? "수락" : "거절"} API 요청 예외 발생: $e');
     }
   }
 }
-

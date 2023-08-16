@@ -1,6 +1,5 @@
 package com.ssafy.moyeolam.domain.alarmgroup.domain;
 
-import com.ssafy.moyeolam.domain.BaseTimeEntity;
 import com.ssafy.moyeolam.domain.meta.converter.DayOfWeekConverter;
 import com.ssafy.moyeolam.domain.meta.domain.MetaData;
 import lombok.AllArgsConstructor;
@@ -15,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AlarmDay extends BaseTimeEntity {
+public class AlarmDay {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "alarm_day_id")

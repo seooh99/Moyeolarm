@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:youngjun/common/const/colors.dart';
 
-import 'loading_widget.dart';
-
-class FutureWrapper extends StatelessWidget {
+class FutureWrapper extends StatefulWidget {
   final Future future;
   final Widget Function(BuildContext context) builder;
 
@@ -13,18 +12,30 @@ class FutureWrapper extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<FutureWrapper> createState() => _FutureWrapperState();
+}
+
+class _FutureWrapperState extends State<FutureWrapper> {
+  late Future future;
+
+  @override
+  void initState() {
+    future = widget.future;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: future,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return Container(
-            color: Colors.white,
+            color: BACKGROUND_COLOR,
             // child: const LoadingWidget(),
-            child: Container(),
           );
         } else {
-          return builder(context);
+          return widget.builder(context);
         }
       },
     );
