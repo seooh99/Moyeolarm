@@ -2,12 +2,14 @@ import 'package:youngjun/fcm/service/friend_accept_strategy.dart';
 import 'package:youngjun/fcm/service/group_accept_strategy.dart';
 
 import '../../common/secure_storage/secure_storage.dart';
+import '../data_source/fcm_api_data_source.dart';
 
 class ArletModalApi {
   final UserInformation _userInformation;
+  final FcmApiService _fcmApiService;
 
-  // 생성자에서 UserInformation 초기화
-  ArletModalApi(this._userInformation);
+  // 생성자에서 UserInformation과 FcmApiService 초기화
+  ArletModalApi(this._userInformation, this._fcmApiService);
   void handleApiRequest(String alertType,
       {
         int? fromMemberId,
@@ -15,20 +17,18 @@ class ArletModalApi {
         int? friendRequestId,
         required bool isAccepted}) {
     if (alertType == '친구 요청') {
+      final strategy = FriendAcceptStrategy(_fcmApiService, _userInformation);
       if (isAccepted) {
-        FriendAcceptStrategy().ApproveFriend(true, friendRequestId!);
+        strategy.execute(true, friendRequestId!);
       } else {
-        FriendAcceptStrategy().DeclineFriend(false, friendRequestId!);
+        strategy.execute(false, friendRequestId!);
       }
     } else if (alertType == '알람그룹 요청') {
-      if (fromMemberId != null) {
-        if (isAccepted) {
-          GroupAcceptStrategy(_userInformation).execute(alarmGroupId!, true, fromMemberId);
-        } else {
-          GroupAcceptStrategy(_userInformation).execute(alarmGroupId!, false, fromMemberId);
-        }
+      final strategy = GroupAcceptStrategy(_fcmApiService, _userInformation);
+      if (isAccepted) {
+        strategy.execute(true, alarmGroupId!);
       } else {
-        print('fromUserId 가 널!!!');
+        strategy.execute(false, alarmGroupId!);
       }
     }
   }

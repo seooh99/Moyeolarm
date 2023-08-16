@@ -1,9 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:youngjun/common/const/colors.dart';
 
 import '../../common/secure_storage/secure_storage.dart';
 import '../api/alert_modal_api.dart';
+import '../data_source/fcm_api_data_source.dart';
+import '../provider/alert_provider.dart';
+import '../service/alert_main_sevice.dart';
 
 
 class APIDialog extends StatelessWidget {
@@ -19,6 +23,7 @@ class APIDialog extends StatelessWidget {
     this.friendRequestId,
     required this.fromMemberId,
     required UserInformation userInformation,  // 생성자에 UserInformation 인자를 추가
+    required this.onDialogHandled, // Add this line
   })  : _userInformation = userInformation,  // 초기화
         super(key: key);
 
@@ -30,6 +35,7 @@ class APIDialog extends StatelessWidget {
   final int? alarmGroupId;
   final int? friendRequestId;
   final int fromMemberId;
+  final VoidCallback? onDialogHandled; // Add this line
 
 
 
@@ -73,18 +79,24 @@ class APIDialog extends StatelessWidget {
         else
           TextButton(
             onPressed: () {
-              if (alertTypeList == '친구 요청' ) {
-                ArletModalApi(_userInformation).handleApiRequest('친구 요청',
+              // FcmApiService 인스턴스 생성 (이 부분은 실제 구현에 따라 다를 수 있습니다.)
+              final dio = Dio();
+              final apiService = FcmApiService(dio);
+              final apiHandler = ArletModalApi(_userInformation, apiService);
+
+              if (alertTypeList == '친구 요청') {
+                apiHandler.handleApiRequest('친구 요청',
                     friendRequestId: friendRequestId,
                     isAccepted: false,
                     fromMemberId: fromMemberId);
               } else if (fromMemberId != null) {
-                ArletModalApi(_userInformation).handleApiRequest('알람그룹 요청',
+                apiHandler.handleApiRequest('알람그룹 요청',
                     alarmGroupId: alarmGroupId,
                     isAccepted: false,
                     fromMemberId: fromMemberId);
               }
               Navigator.of(context).pop(); // Dialog 닫기
+              onDialogHandled?.call(); // Refresh the list in ArletListView
             },
 
             child: Text(
@@ -104,18 +116,23 @@ class APIDialog extends StatelessWidget {
         else
           TextButton(
             onPressed: () {
+              final dio = Dio();
+              final apiService = FcmApiService(dio);
+              final apiHandler = ArletModalApi(_userInformation, apiService);
+
               if (alertTypeList == '친구 요청') {
-                ArletModalApi(_userInformation).handleApiRequest('친구 요청',
+                apiHandler.handleApiRequest('친구 요청',
                     friendRequestId: friendRequestId,
                     isAccepted: true,
                     fromMemberId: fromMemberId);
               } else if (fromMemberId != null) {
-                ArletModalApi(_userInformation).handleApiRequest('알람그룹 요청',
+                apiHandler.handleApiRequest('알람그룹 요청',
                     alarmGroupId: alarmGroupId,
                     isAccepted: true,
                     fromMemberId: fromMemberId);
               }
               Navigator.of(context).pop(); // Dialog 닫기
+              onDialogHandled?.call(); // Refresh the list in ArletListView
             },
 
 
