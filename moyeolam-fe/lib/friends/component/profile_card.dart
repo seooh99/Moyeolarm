@@ -59,7 +59,7 @@ class ProfileCard extends StatelessWidget {
               Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 36, right: 32),
+                    padding: const EdgeInsets.only(left: 20, right: 20),
                     child: FutureBuilder(
                       future: future,
                       builder: (context, snapshot){

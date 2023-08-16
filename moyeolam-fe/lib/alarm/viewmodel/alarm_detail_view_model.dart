@@ -17,7 +17,7 @@ final alarmDetailProvider = ChangeNotifierProvider.autoDispose((ref)  {
   }
 );
 
-final alarmDetailFutureProvider = FutureProvider.autoDispose((ref) async {
+final alarmDetailFutureProvider = FutureProvider((ref) async {
   return await _alarmListDetailViewModel.getAlarmListDetail();
 });
 

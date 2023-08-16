@@ -8,7 +8,7 @@ import 'package:youngjun/user/repository/user_repository.dart';
 
 class NicknameViewModel {
   final UserInformation _userInformation = UserInformation(storage);
-  late String nName;
+  String nName = '';
   final UserNicknameRepository _nicknameRepository = UserNicknameRepository();
 
   void setNickname(String newNickname) {
@@ -19,6 +19,7 @@ class NicknameViewModel {
     try {
       UserModel? userInfo = await _userInformation.getUserInfo();
       // print("$userInfo 토큰 닉넴뷰모델");
+      print("$nName nickname");
       if (userInfo != null) {
         var response = await _nicknameRepository
             .updateNickname(

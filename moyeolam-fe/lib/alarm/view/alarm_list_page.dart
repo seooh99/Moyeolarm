@@ -30,7 +30,7 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
 
   @override
   Widget build(BuildContext context) {
-    var alarmDetailModel = ref.watch(alarmDetailProvider);
+    var alarmDetailModel = ref.watch(alarmDetailProvider.notifier);
 
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   ref.invalidate(alarmListProvider);
@@ -40,228 +40,223 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
     AlarmListNotifier alarmListNotifier =
         ref.watch(alarmSettingProvider.notifier);
 
-    return RefreshIndicator(
-      onRefresh: () async {
-        ref.invalidate(alarmListProvider);
-      },
-      child: Scaffold(
-        appBar: TitleBar(
-          appBar: AppBar(),
-          title: "모여람",
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .push(
-                        MaterialPageRoute(builder: (context) => ArletListView()))
-                    .then(
-                  (value) {
-                    setState(() {
-                      ref.invalidate(alarmListProvider);
-                    });
-                  },
-                );
-              },
-              icon: Icon(Icons.notifications),
-            )
-          ],
-        ),
-        backgroundColor: BACKGROUND_COLOR,
-        body: Padding(
-          padding: EdgeInsets.only(bottom: 68),
-          child: alarmgroups.when(
-              data: (data) {
-            var alarmGroups = data.alarmGroups;
+    return Scaffold(
+      appBar: TitleBar(
+        appBar: AppBar(),
+        title: "모여람",
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .push(
+                      MaterialPageRoute(builder: (context) => ArletListView()))
+                  .then(
+                (value) {
+                  setState(() {
+                    ref.invalidate(alarmListProvider);
+                  });
+                },
+              );
+            },
+            icon: Icon(Icons.notifications),
+          )
+        ],
+      ),
+      backgroundColor: BACKGROUND_COLOR,
+      body: Padding(
+        padding: EdgeInsets.only(bottom: 68),
+        child: alarmgroups.when(
+            data: (data) {
+          var alarmGroups = data.alarmGroups;
 
-            return MaterialApp(
-              // debugShowCheckedModeBanner: false,
-              home: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    for (var alarmGroup in alarmGroups)
-                      GestureDetector(
-                        onLongPress: () async {
-                          // print("${alarmGroup.alarmGroupId}");
-                          showDialog(
-                            context: context,
-                            // builder: (context) => ConfirmDialog(
-                            //   cancelOnPressed: () {
-                            //     Navigator.pop(context);
-                            //   },
-                            //   okOnPressed: () async {
-                            //     await _alarmListViewModel
-                            //         .deleteAlarmGroup(alarmGroup.alarmGroupId);
-                            //     ref.invalidate(alarmListProvider);
-                            //
-                            //     // 삭제 시 알람 예약 삭제
-                            //     Alarm alarm = Alarm(
-                            //         alarmGroupId: alarmGroup.alarmGroupId,
-                            //         callbackId: alarmGroup.alarmGroupId * 7,
-                            //         weekday: alarmGroup.dayOfWeek,
-                            //         hour: alarmGroup.hour,
-                            //         minute: alarmGroup.minute,
-                            //         toggle: alarmGroup.toggle);
-                            //     alarmListNotifier.remove(alarm);
-                            //     AlarmScheduler.cancelRepeatable(alarm);
-                            //
-                            //     Navigator.pop(context);
-                            //   },
-                            //   title: "삭제 요청",
-                            //   content: "삭제?",
-                            //   okTitle: "삭제",
-                            //   cancelTitle: "취소",
-                            // ),
-                            builder: (context) => ConfirmDialog(
-                              title: alarmGroup.isHost?"알람 그룹 삭제":"알람 그룹 나가기",
-                              content: alarmGroup.isHost?
-                              "알람 그룹을 삭제하시겠습니까?":
-                              "알람 그룹을 나가시겠습니까?",
-                              okTitle: "삭제",
-                              cancelTitle: "취소",
-                              okOnPressed: () async {
-                                await _alarmListViewModel.deleteAlarmGroup(alarmGroup.alarmGroupId);
-                                ref.refresh(alarmListProvider);
-                                // 삭제 시 알람 예약 삭제
-                                Alarm alarm = Alarm(
-                                    alarmGroupId: alarmGroup.alarmGroupId,
-                                    callbackId: alarmGroup.alarmGroupId * 7,
-                                    weekday: alarmGroup.dayOfWeek,
-                                    hour: alarmGroup.hour,
-                                    minute: alarmGroup.minute,
-                                    toggle: alarmGroup.toggle);
-                                alarmListNotifier.remove(alarm);
-                                AlarmScheduler.cancelRepeatable(alarm);
-                                Navigator.pop(context);
-                              },
-                              cancelOnPressed: (){
-                                Navigator.pop(context);
-                              },
-                            ),
-                          );
-                        },
-                        onTap: () async {
-                          // Navigator.of(context).pushNamed("/alarm_group_detail ", arguments: alarmGroup.alarmGroupId);
-                          await alarmDetailModel
-                              .setAlarmGroupId(alarmGroup.alarmGroupId);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AlarmDetailScreen()),
-                          );
-                        },
-                        child: AlarmList(
-                          alarmGroupId: alarmGroup.alarmGroupId,
-                          hour: alarmGroup.hour,
-                          minute: alarmGroup.minute,
-                          toggle: alarmGroup.toggle,
-                          title: alarmGroup.title,
-                          weekday: alarmGroup.dayOfWeek,
-                          toggleChanged: (bool value) async {
-                            await _alarmListViewModel
-                                .updateAlarmToggle(alarmGroup.alarmGroupId);
-                            ref.invalidate(alarmListProvider);
+          return MaterialApp(
+            // debugShowCheckedModeBanner: false,
+            home: SingleChildScrollView(
+              child: Column(
+                children: [
+                  for (var alarmGroup in alarmGroups)
+                    GestureDetector(
+                      onLongPress: () async {
+                        // print("${alarmGroup.alarmGroupId}");
+                        showDialog(
+                          context: context,
+                          // builder: (context) => ConfirmDialog(
+                          //   cancelOnPressed: () {
+                          //     Navigator.pop(context);
+                          //   },
+                          //   okOnPressed: () async {
+                          //     await _alarmListViewModel
+                          //         .deleteAlarmGroup(alarmGroup.alarmGroupId);
+                          //     ref.invalidate(alarmListProvider);
+                          //
+                          //     // 삭제 시 알람 예약 삭제
+                          //     Alarm alarm = Alarm(
+                          //         alarmGroupId: alarmGroup.alarmGroupId,
+                          //         callbackId: alarmGroup.alarmGroupId * 7,
+                          //         weekday: alarmGroup.dayOfWeek,
+                          //         hour: alarmGroup.hour,
+                          //         minute: alarmGroup.minute,
+                          //         toggle: alarmGroup.toggle);
+                          //     alarmListNotifier.remove(alarm);
+                          //     AlarmScheduler.cancelRepeatable(alarm);
+                          //
+                          //     Navigator.pop(context);
+                          //   },
+                          //   title: "삭제 요청",
+                          //   content: "삭제?",
+                          //   okTitle: "삭제",
+                          //   cancelTitle: "취소",
+                          // ),
+                          builder: (context) => ConfirmDialog(
+                            title: alarmGroup.isHost?"알람 그룹 삭제":"알람 그룹 나가기",
+                            content: alarmGroup.isHost?
+                            "알람 그룹을 삭제하시겠습니까?":
+                            "알람 그룹을 나가시겠습니까?",
+                            okTitle: "삭제",
+                            cancelTitle: "취소",
+                            okOnPressed: () async {
+                              await _alarmListViewModel.deleteAlarmGroup(alarmGroup.alarmGroupId);
+                              ref.refresh(alarmListProvider);
+                              // 삭제 시 알람 예약 삭제
+                              Alarm alarm = Alarm(
+                                  alarmGroupId: alarmGroup.alarmGroupId,
+                                  callbackId: alarmGroup.alarmGroupId * 7,
+                                  weekday: alarmGroup.dayOfWeek,
+                                  hour: alarmGroup.hour,
+                                  minute: alarmGroup.minute,
+                                  toggle: alarmGroup.toggle);
+                              alarmListNotifier.remove(alarm);
+                              AlarmScheduler.cancelRepeatable(alarm);
+                              Navigator.pop(context);
+                            },
+                            cancelOnPressed: (){
+                              Navigator.pop(context);
+                            },
+                          ),
+                        );
+                      },
+                      onTap: (){
+                        // Navigator.of(context).pushNamed("/alarm_group_detail ", arguments: alarmGroup.alarmGroupId);
+                        alarmDetailModel
+                            .setAlarmGroupId(alarmGroup.alarmGroupId);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AlarmDetailScreen()),
+                        );
+                      },
+                      child: AlarmList(
+                        alarmGroupId: alarmGroup.alarmGroupId,
+                        hour: alarmGroup.hour,
+                        minute: alarmGroup.minute,
+                        toggle: alarmGroup.toggle,
+                        title: alarmGroup.title,
+                        weekday: alarmGroup.dayOfWeek,
+                        toggleChanged: (bool value) async {
+                          await _alarmListViewModel
+                              .updateAlarmToggle(alarmGroup.alarmGroupId);
+                          ref.invalidate(alarmListProvider);
 
-                            // 토글 버튼 알람 예약
-                            Alarm alarm = Alarm(
-                                alarmGroupId: alarmGroup.alarmGroupId,
-                                callbackId: alarmGroup.alarmGroupId * 7,
-                                weekday: alarmGroup.dayOfWeek,
-                                hour: alarmGroup.hour,
-                                minute: alarmGroup.minute,
-                                toggle: alarmGroup.toggle);
-                            alarmListNotifier.add(alarm);
-                            if (value) {
-                              await AlarmScheduler.scheduleRepeatable(alarm);
-                            } else {
-                              await AlarmScheduler.cancelRepeatable(alarm);
-                            }
-                          },
+                          // 토글 버튼 알람 예약
+                          Alarm alarm = Alarm(
+                              alarmGroupId: alarmGroup.alarmGroupId,
+                              callbackId: alarmGroup.alarmGroupId * 7,
+                              weekday: alarmGroup.dayOfWeek,
+                              hour: alarmGroup.hour,
+                              minute: alarmGroup.minute,
+                              toggle: alarmGroup.toggle);
+                          alarmListNotifier.add(alarm);
+                          if (value) {
+                            await AlarmScheduler.scheduleRepeatable(alarm);
+                          } else {
+                            await AlarmScheduler.cancelRepeatable(alarm);
+                          }
+                        },
+                      ),
+                    ),
+                  SizedBox(height: 30),
+                  GestureDetector(
+                    onTap: () {
+                      print("눌림");
+                      // Navigator.pushNamed(context, "/add_alarm_group");
+                      Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AlarmAddScreen()))
+                          .then((value) {
+                        setState(() {
+                          ref.invalidate(alarmListProvider);
+                        });
+                      });
+                    },
+                    child: Card(
+                      margin: EdgeInsets.only(left: 10, right: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: const BorderSide(
+                          style: BorderStyle.solid,
+                          color: MAIN_COLOR,
                         ),
                       ),
-                    SizedBox(height: 30),
-                    GestureDetector(
-                      onTap: () {
-                        print("눌림");
-                        // Navigator.pushNamed(context, "/add_alarm_group");
-                        Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AlarmAddScreen()))
-                            .then((value) {
-                          setState(() {
-                            ref.invalidate(alarmListProvider);
-                          });
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      print("눌림");
+                      // Navigator.pushNamed(context, "/add_alarm_group");
+                      Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AlarmAddScreen()))
+                          .then((value) {
+                        setState(() {
+                          ref.invalidate(alarmListProvider);
                         });
-                      },
-                      child: Card(
-                        margin: EdgeInsets.only(left: 10, right: 10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: const BorderSide(
-                            style: BorderStyle.solid,
+                      });
+                    },
+                    child: Card(
+
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: const BorderSide(
+                          style: BorderStyle.solid,
+                          color: MAIN_COLOR,
+                        ),
+                      ),
+                      color: BACKGROUND_COLOR,
+                      child: const Center(
+                        heightFactor: 2,
+                        child: Text(
+                          "+",
+                          style: TextStyle(
                             color: MAIN_COLOR,
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        print("눌림");
-                        // Navigator.pushNamed(context, "/add_alarm_group");
-                        Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AlarmAddScreen()))
-                            .then((value) {
-                          setState(() {
-                            ref.invalidate(alarmListProvider);
-                          });
-                        });
-                      },
-                      child: Card(
-
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: const BorderSide(
-                            style: BorderStyle.solid,
-                            color: MAIN_COLOR,
-                          ),
-                        ),
-                        color: BACKGROUND_COLOR,
-                        child: const Center(
-                          heightFactor: 2,
-                          child: Text(
-                            "+",
-                            style: TextStyle(
-                              color: MAIN_COLOR,
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            );
-          }, error: (error, stackTrace) {
-            print("Error: $error alarmList");
-            return SpinKitFadingCube(
-              // FadingCube 모양 사용
-              color: Colors.blue, // 색상 설정
-              size: 50.0, // 크기 설정
-              duration: Duration(seconds: 2), //속도 설정
-            );
-          }, loading: () {
-            return SpinKitFadingCube(
-              // FadingCube 모양 사용
-              color: Colors.blue, // 색상 설정
-              size: 50.0, // 크기 설정
-              duration: Duration(seconds: 2), //속도 설정
-            );
-          }),
-        ),
+            ),
+          );
+        }, error: (error, stackTrace) {
+          print("Error: $error alarmList");
+          return SpinKitFadingCube(
+            // FadingCube 모양 사용
+            color: Colors.blue, // 색상 설정
+            size: 50.0, // 크기 설정
+            duration: Duration(seconds: 2), //속도 설정
+          );
+        }, loading: () {
+          return SpinKitFadingCube(
+            // FadingCube 모양 사용
+            color: Colors.blue, // 색상 설정
+            size: 50.0, // 크기 설정
+            duration: Duration(seconds: 2), //속도 설정
+          );
+        }),
       ),
     );
   }
