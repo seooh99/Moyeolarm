@@ -5,11 +5,10 @@ import '../../common/secure_storage/secure_storage.dart';
 import '../data_source/fcm_api_data_source.dart';
 
 class ArletModalApi {
-  final UserInformation _userInformation;
   final FcmApiService _fcmApiService;
 
   // 생성자에서 UserInformation과 FcmApiService 초기화
-  ArletModalApi(this._userInformation, this._fcmApiService);
+  ArletModalApi(this._fcmApiService);
   void handleApiRequest(String alertType,
       {
         int? fromMemberId,
@@ -17,14 +16,14 @@ class ArletModalApi {
         int? friendRequestId,
         required bool isAccepted}) {
     if (alertType == '친구 요청') {
-      final strategy = FriendAcceptStrategy(_fcmApiService, _userInformation);
+      final strategy = FriendAcceptStrategy(_fcmApiService);
       if (isAccepted) {
         strategy.execute(true, friendRequestId!);
       } else {
         strategy.execute(false, friendRequestId!);
       }
     } else if (alertType == '알람그룹 요청') {
-      final strategy = GroupAcceptStrategy(_fcmApiService, _userInformation);
+      final strategy = GroupAcceptStrategy(_fcmApiService);
       if (isAccepted) {
         strategy.execute(true, alarmGroupId!);
       } else {
