@@ -60,7 +60,7 @@ class ApiArletItem {
   String? createAt;
   int? alarmGroupId;
   int? friendRequestId;
-  int fromMemberId;
+  int? fromMemberId;
 
   ApiArletItem({
     this.fromNickname,
@@ -70,7 +70,7 @@ class ApiArletItem {
     this.createAt,
     this.alarmGroupId,
     this.friendRequestId,
-    required this.fromMemberId,
+    this.fromMemberId,
   });
 
   factory ApiArletItem.fromJson(Map<String, dynamic> json) {

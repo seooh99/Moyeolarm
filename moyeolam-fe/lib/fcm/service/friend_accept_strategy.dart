@@ -12,7 +12,7 @@ class FriendAcceptStrategy {
 
   FriendAcceptStrategy(this._apiService);
 
-  void execute(bool isAccepted, int friendRequestId) async {
+  Future<void> execute(bool isAccepted, int friendRequestId) async {
     try {
       // UserInformation을 사용하여 accessToken 가져오기
       UserModel? userInfo = await _userInformation.getUserInfo();
