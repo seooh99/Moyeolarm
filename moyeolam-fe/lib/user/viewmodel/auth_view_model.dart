@@ -49,20 +49,20 @@ class AuthViewModel {
           fcmToken,
           deviceIndentifier
         );
-        print("${rawResponse.data} 심기불편");
+        // print("${rawResponse.data} 심기불편");
 
         var response = rawResponse.data;
         // await storage.write(key: "userInfo", value: jsonEncode(response));
         _userInformation.setUserInfo(response);
         // print(await storage.readAll());
         if (response.nickname != null) {
-          print(response.nickname);
+          // print(response.nickname);
           // print(await storage.read(key: "userInfo"));
           return "main";
         } else {
           // var userInfo = await storage.read(key: 'userInfo');
           var userInfo = await _userInformation.getUserInfo();
-          print("$userInfo sigin");
+          // print("$userInfo sigin");
           return 'signin';
         }
       }else{
@@ -77,7 +77,7 @@ class AuthViewModel {
   logOut() async {
     try {
       await _userInformation.deletUserInfo();
-      print("logOut in auth view model");
+      // print("logOut in auth view model");
     } catch (e) {
       print("$e logOut error in auth view model");
     }

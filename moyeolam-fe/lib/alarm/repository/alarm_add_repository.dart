@@ -21,13 +21,13 @@ class AddAlarmGroupRepository {
         alarmSound: alarmSound,
         alarmMission: alarmMission,
     );
-    print("title: ${params.title}");
-    print("time: ${params.time}");
-    print("dayOfWeek: ${params.dayOfWeek}");
-    print("alarmSound: ${params.alarmSound}");
-    print("alarmMission: ${params.alarmMission}");
+    // print("title: ${params.title}");
+    // print("time: ${params.time}");
+    // print("dayOfWeek: ${params.dayOfWeek}");
+    // print("alarmSound: ${params.alarmSound}");
+    // print("alarmMission: ${params.alarmMission}");
     UserModel? userInfo = await _userInformation.getUserInfo();
-    print("${userInfo?.accessToken} userInfo");
+    // print("${userInfo?.accessToken} userInfo");
     String token = "Bearer ${userInfo!.accessToken}";
     return _addAlarmDataSource.addAlarmGroup(token, params);
   }

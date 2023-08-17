@@ -71,12 +71,12 @@ class _SetNicknameState extends State<SetNickname> {
                           });
                         }else {
                           var code = await nicknameViewModel.apiNickname();
-                          print("$code 닉네임 뷰 코드");
+                          // print("$code 닉네임 뷰 코드");
                           if (code == "603") {
                             setState(() {
                               isOverlaped = "이미 사용된 닉네임 입니다.";
                             });
-                            print("$isOverlaped 오버랩");
+                            // print("$isOverlaped 오버랩");
                           } else if (code == "200") {
                             UserModel? userInfo =
                                 await _userInformation.getUserInfo();
@@ -115,7 +115,7 @@ class _SetNicknameState extends State<SetNickname> {
                     child: Center(
                         child: BtnCalling(
                           onPressed: () async {
-                            print("닉네임 설정 뷰");
+                            // print("닉네임 설정 뷰");
                             try {
                               if (nicknameViewModel.nName == ''){
                                 setState(() {
@@ -123,12 +123,12 @@ class _SetNicknameState extends State<SetNickname> {
                                 });
                               }else {
                                 var code = await nicknameViewModel.apiNickname();
-                                print("$code 닉네임 뷰 코드");
+                                // print("$code 닉네임 뷰 코드");
                                 if (code == "603") {
                                   setState(() {
                                     isOverlaped = "이미 사용된 닉네임 입니다.";
                                   });
-                                  print("$isOverlaped 오버랩");
+                                  // print("$isOverlaped 오버랩");
                                 } else if (code == "200") {
                                   UserModel? userInfo =
                                   await _userInformation.getUserInfo();

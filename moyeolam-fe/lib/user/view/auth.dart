@@ -116,7 +116,7 @@ class _AuthViewState extends State<AuthView> {
                     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MainPage()));
                   } else {
                     var isSigned = await auth.login();
-                    print("$isSigned 나는 뷰");
+                    // print("$isSigned 나는 뷰");
                     if (isSigned == "main") {
                       // Navigator.of(context).push(
                       //     MaterialPageRoute(builder:
