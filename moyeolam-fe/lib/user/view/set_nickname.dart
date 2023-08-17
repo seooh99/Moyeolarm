@@ -5,6 +5,7 @@ import 'package:youngjun/background_alarm/view/home_screen.dart';
 import 'package:youngjun/background_alarm/view/permission_request_screen.dart';
 import 'package:youngjun/common/button/btn_call.dart';
 import 'package:youngjun/common/const/colors.dart';
+import 'package:youngjun/common/layout/title_bar.dart';
 import 'package:youngjun/common/secure_storage/secure_storage.dart';
 import 'package:youngjun/common/textfield_bar.dart';
 import 'package:youngjun/main.dart';
@@ -39,6 +40,7 @@ class _SetNicknameState extends State<SetNickname> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        appBar: TitleBar(appBar: AppBar(), title: "닉네임 설정"),
         body: SafeArea(
           child: GestureDetector(
             onTap: (){
@@ -144,6 +146,8 @@ class _SetNicknameState extends State<SetNickname> {
                                                 //     child: AlarmObserver(
                                                 //         child: MainPage()))));
                                   }
+                                }else{
+                                  print("null NIckname");
                                 }
                               }
                             } catch (e) {

@@ -281,7 +281,7 @@ class _SettingsContentState extends State<_SettingsContent> {
                 '아니오',
                     () async {
                   // 예
-                  await AuthViewModel().logOut();
+                  await AuthViewModel().signOut();
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder:(context) => AuthView(),
                   ));
