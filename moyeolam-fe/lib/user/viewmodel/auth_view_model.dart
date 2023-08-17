@@ -88,9 +88,9 @@ class AuthViewModel {
       UserModel? storageData = await _userInformation.getUserInfo();
       if(storageData != null) {
         await _userRepository.signOut(storageData.accessToken).then((value) {
+          _userInformation.deletUserInfo();
           print("$value 회원탈퇴 auth view model");
         });
-        await _userInformation.deletUserInfo();
       }
     } catch (e) {
       print("$e signOut error in authViewmodel");

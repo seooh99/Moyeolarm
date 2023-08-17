@@ -141,7 +141,7 @@ class _AlarmAddScreenState extends ConsumerState<AlarmAddScreen> {
                     toggle: true);
                 alarmListNotifier.add(alarm);
                 AlarmScheduler.scheduleRepeatable(alarm);
-
+                await ref.read(alarmDetailProvider).setAlarmGroupId(newGroupId);
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => AlarmDetailScreen(alarmGroupId: newGroupId,)));
               }
