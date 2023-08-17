@@ -279,11 +279,12 @@ class _SettingsContentState extends State<_SettingsContent> {
                 '지금 로그아웃 하시겠습니까?',
                 '예',
                 '아니오',
-                    () {
+                    () async {
                   // 예
-                  AuthViewModel().logOut();
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder:(context) => AuthView(), ));
+                  await AuthViewModel().logOut();
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder:(context) => AuthView(),
+                  ));
                 },
                     () {
                   // 아니오
@@ -306,13 +307,13 @@ class _SettingsContentState extends State<_SettingsContent> {
                 '지금 회원탈퇴 하시겠습니까?',
                 '예',
                 '아니오',
-                    () {
-                  AuthViewModel().signOut();
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder:(context) => AuthView(), ));
+                    () async {
+                  await AuthViewModel().logOut();
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => AuthView(),
+                  ));
                 },
                     () {
-
                   Navigator.pop(context);
                 },
               );
