@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:youngjun/common/const/colors.dart';
+import 'package:moyeolam/common/const/colors.dart';
 
 class TitleBar extends StatelessWidget implements PreferredSizeWidget {
   const TitleBar({
@@ -22,7 +22,7 @@ class TitleBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       backgroundColor: BACKGROUND_COLOR,
       title: Text(title, style:
-        TextStyle(color: Colors.white),),
+        TextStyle(color: FONT_COLOR),),
       actions: actions,
       leading: leading,
       // actions: [

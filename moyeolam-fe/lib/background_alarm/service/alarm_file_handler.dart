@@ -1,7 +1,7 @@
 
 
-import 'package:youngjun/background_alarm/model/alarm.dart';
-import 'package:youngjun/background_alarm/service/file_handler.dart';
+import 'package:moyeolam/background_alarm/model/alarm.dart';
+import 'package:moyeolam/background_alarm/service/file_handler.dart';
 
 class AlarmFileHandler extends FileHandler<List<Alarm>> {
   static final AlarmFileHandler _instance = AlarmFileHandler._();

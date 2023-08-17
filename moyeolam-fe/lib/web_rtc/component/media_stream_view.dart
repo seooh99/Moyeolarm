@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:openvidu_client/openvidu_client.dart';
-import 'package:youngjun/web_rtc/model/alarm_group_member.dart';
+import 'package:moyeolam/web_rtc/model/alarm_group_member.dart';
 
 import 'future_wrapper.dart';
 import 'no_video.dart';

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:youngjun/background_alarm/model/alarm.dart';
-import 'package:youngjun/background_alarm/provider/alarm_state.dart';
-import 'package:youngjun/background_alarm/service/alarm_polling_worker.dart';
-import 'package:youngjun/background_alarm/view/test_page.dart';
-import 'package:youngjun/web_rtc/view/alarm_ring_view.dart';
+import 'package:moyeolam/background_alarm/model/alarm.dart';
+import 'package:moyeolam/background_alarm/provider/alarm_state.dart';
+import 'package:moyeolam/background_alarm/service/alarm_polling_worker.dart';
+import 'package:moyeolam/background_alarm/view/test_page.dart';
+import 'package:moyeolam/web_rtc/view/alarm_ring_view.dart';
 
 import '../provider/alarm_list_provider.dart';
 
