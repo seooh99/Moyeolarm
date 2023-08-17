@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:moyeolam/main/view/main_page.dart';
 import 'package:openvidu_client/openvidu_client.dart';
 import 'package:moyeolam/alarm/model/alarm_detail_model.dart';
 import 'package:moyeolam/alarm/repository/alarm_list_repository.dart';
@@ -246,7 +247,7 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
   void _onDisconnect() async {
     final nav = Navigator.of(context);
     await _openvidu.disconnect();
-    nav.pop();
+    nav.push(MaterialPageRoute(builder: (_) => const MainPage()));
   }
 
   Future<void> _captureImage() async {
@@ -278,145 +279,150 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
                     )
                   : Padding(
                       padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 580,
-                            width: 386,
-                            child: Wrap(
-                              direction: Axis.horizontal,
-                              alignment: WrapAlignment.start,
-                              spacing: 5,
-                              runSpacing: 5,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.all(10),
-                                  child: SizedBox(
-                                    width: 155,
-                                    height: 155,
-                                    child: MediaStreamView(
-                                      borderRadius: BorderRadius.circular(15),
-                                      participant: localParticipant!,
-                                      userName: widget.userName,
-                                      memberState: localState,
+                      child: Center(
+                            child: Column(
+                          children: [
+                            Container(
+                              height: 580,
+                              width: 355,
+                              child: Wrap(
+                                direction: Axis.horizontal,
+                                alignment: WrapAlignment.start,
+                                spacing: 5,
+                                runSpacing: 5,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.all(10),
+                                    child: SizedBox(
+                                      width: 155,
+                                      height: 155,
+                                      child: MediaStreamView(
+                                        borderRadius: BorderRadius.circular(15),
+                                        participant: localParticipant!,
+                                        userName: widget.userName,
+                                        memberState: localState,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                ...alarmGroupMembers.values
-                                    .map((member) => Container(
-                                        margin: EdgeInsets.all(10),
-                                        child: SizedBox(
-                                            width: 155,
-                                            height: 155,
-                                            child: MediaStreamView(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              participant: remoteParticipants[
-                                                  member.SID],
-                                              userName: member.nickname,
-                                              memberState: member.memberState,
-                                            )))),
-                                // ...remoteParticipants.values
-                                //     .map((remote) => Container(
-                                //     margin: EdgeInsets.all(10),
-                                //     child: SizedBox(
-                                //       width: 170,
-                                //       height: 170,
-                                //       child: MediaStreamView(
-                                //         borderRadius:
-                                //         BorderRadius.circular(15),
-                                //         participant: remote,
-                                //       ),
-                                //     ))),
-                              ],
+                                  ...alarmGroupMembers.values
+                                      .map((member) => Container(
+                                          margin: EdgeInsets.all(10),
+                                          child: SizedBox(
+                                              width: 155,
+                                              height: 155,
+                                              child: MediaStreamView(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                participant: remoteParticipants[
+                                                    member.SID],
+                                                userName: member.nickname,
+                                                memberState: member.memberState,
+                                              )))),
+                                  // ...remoteParticipants.values
+                                  //     .map((remote) => Container(
+                                  //     margin: EdgeInsets.all(10),
+                                  //     child: SizedBox(
+                                  //       width: 170,
+                                  //       height: 170,
+                                  //       child: MediaStreamView(
+                                  //         borderRadius:
+                                  //         BorderRadius.circular(15),
+                                  //         participant: remote,
+                                  //       ),
+                                  //     ))),
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Column(
-                            children: [
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              ElevatedButton(
-                                onPressed: _onDisconnect,
-                                child: const Text("비상탈출"),
-                              ),
-                              isAllRecognized
-                                  ? BtnCalling(
-                                      icons: const Icon(Icons.call_end),
-                                      backGroundColor: CALLOFF_COLOR,
-                                      onPressed: () async {
-                                        _onDisconnect();
-                                        // await _captureImage();
-                                        // bool faceRecognitionResult =
-                                        //     await _faceRecognition();
-                                        //
-                                        // if (faceRecognitionResult) {
-                                        //   _openvidu.sendMessage(
-                                        //       OvMessage.fromJson(<String, dynamic>{
-                                        //     "data": "true",
-                                        //     "type": "recognized"
-                                        //   }));
-                                        //   setState(() {
-                                        //     localState = MemberState.recognized;
-                                        //   });
-                                        //
-                                        //   int invalidMemberCnt = alarmGroupMembers
-                                        //       .values
-                                        //       .where((member) =>
-                                        //           member.memberState !=
-                                        //           MemberState.recognized)
-                                        //       .length;
-                                        //
-                                        //   print(
-                                        //       'invalidMemberCnt: $invalidMemberCnt');
-                                        //
-                                        //   if (invalidMemberCnt == 0) {
-                                        //     _onDisconnect();
-                                        //   }
-                                        // } else {
-                                        //   _openvidu.sendMessage(
-                                        //       OvMessage.fromJson(<String, dynamic>{
-                                        //     "data": "false",
-                                        //     "type": "recognized"
-                                        //   }));
-                                        //   setState(() {
-                                        //     localState = MemberState.online;
-                                        //   });
-                                        // }
-                                      },
-                                    )
-                                  : BtnCalling(
-                                      icons: const Icon(Icons.call_end),
-                                      backGroundColor: CKECK_GRAY_COLOR,
-                                      onPressed: () {},
-                                    ),
-                              // Row(children: [
-                              //   BtnMedia(
-                              //     icons: Icon(Icons.mic, color: FONT_COLOR),
-                              //     // icons: Icon(Icons.mic_off),
-                              //     onPressed: () {},
-                              //   ),
-                              //   BtnCalling(
-                              //     icons: Icon(Icons.call_end),
-                              //     backGroundColor: CALLOFF_COLOR,
-                              //     onPressed: () {},
-                              //   ),
-                              //   BtnMedia(
-                              //     icons: const Icon(
-                              //       Icons.videocam,
-                              //       color: FONT_COLOR,
-                              //     ),
-                              //     // icons: Icon(Icons.videocam_off),
-                              //     onPressed: () {},
-                              //   ),
-                              // ]),
-                            ],
-                          )
-                        ],
-                      )),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Column(
+                              children: [
+                                const SizedBox(
+                                  height: 12,
+                                ),
+                                ElevatedButton(
+                                  onPressed: _onDisconnect,
+                                  child: const Text("비상탈출"),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: CALLOFF_COLOR,
+                                  ),
+                                ),
+                                isAllRecognized
+                                    ? BtnCalling(
+                                        icons: const Icon(Icons.call_end),
+                                        backGroundColor: CALLOFF_COLOR,
+                                        onPressed: () async {
+                                          _onDisconnect();
+                                          // await _captureImage();
+                                          // bool faceRecognitionResult =
+                                          //     await _faceRecognition();
+                                          //
+                                          // if (faceRecognitionResult) {
+                                          //   _openvidu.sendMessage(
+                                          //       OvMessage.fromJson(<String, dynamic>{
+                                          //     "data": "true",
+                                          //     "type": "recognized"
+                                          //   }));
+                                          //   setState(() {
+                                          //     localState = MemberState.recognized;
+                                          //   });
+                                          //
+                                          //   int invalidMemberCnt = alarmGroupMembers
+                                          //       .values
+                                          //       .where((member) =>
+                                          //           member.memberState !=
+                                          //           MemberState.recognized)
+                                          //       .length;
+                                          //
+                                          //   print(
+                                          //       'invalidMemberCnt: $invalidMemberCnt');
+                                          //
+                                          //   if (invalidMemberCnt == 0) {
+                                          //     _onDisconnect();
+                                          //   }
+                                          // } else {
+                                          //   _openvidu.sendMessage(
+                                          //       OvMessage.fromJson(<String, dynamic>{
+                                          //     "data": "false",
+                                          //     "type": "recognized"
+                                          //   }));
+                                          //   setState(() {
+                                          //     localState = MemberState.online;
+                                          //   });
+                                          // }
+                                        },
+                                      )
+                                    : BtnCalling(
+                                        icons: const Icon(Icons.call_end),
+                                        backGroundColor: CKECK_GRAY_COLOR,
+                                        onPressed: () {},
+                                      ),
+                                // Row(children: [
+                                //   BtnMedia(
+                                //     icons: Icon(Icons.mic, color: FONT_COLOR),
+                                //     // icons: Icon(Icons.mic_off),
+                                //     onPressed: () {},
+                                //   ),
+                                //   BtnCalling(
+                                //     icons: Icon(Icons.call_end),
+                                //     backGroundColor: CALLOFF_COLOR,
+                                //     onPressed: () {},
+                                //   ),
+                                //   BtnMedia(
+                                //     icons: const Icon(
+                                //       Icons.videocam,
+                                //       color: FONT_COLOR,
+                                //     ),
+                                //     // icons: Icon(Icons.videocam_off),
+                                //     onPressed: () {},
+                                //   ),
+                                // ]),
+                              ],
+                            )
+                          ],
+                        )),
+                      )
         ));
   }
 }
