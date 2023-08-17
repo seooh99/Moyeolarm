@@ -76,7 +76,7 @@ class APIDialog extends StatelessWidget {
           )
         else
           TextButton(
-            onPressed: () async {
+            onPressed: () {
               // FcmApiService 인스턴스 생성 (이 부분은 실제 구현에 따라 다를 수 있습니다.)
               final dio = Dio();
               final apiService = FcmApiService(dio);
@@ -84,11 +84,11 @@ class APIDialog extends StatelessWidget {
 
               if (alertTypeList == '친구 요청') {
                 final strategy = FriendAcceptStrategy(apiService);
-                await strategy.execute(
+                strategy.execute(
                     isAccepted, friendRequestId!);
               } else if (fromMemberId != null) {
                 final strategy = GroupAcceptStrategy(apiService);
-                await strategy.execute(
+                strategy.execute(
                     isAccepted, alarmGroupId!, fromMemberId);
               }
               Navigator.of(context).pop(); // Dialog 닫기
@@ -111,18 +111,18 @@ class APIDialog extends StatelessWidget {
           Container()
         else
           TextButton(
-            onPressed: () async {
+            onPressed: () {
               final dio = Dio();
               final apiService = FcmApiService(dio);
               bool isAccepted = true;  // or false based on your condition
 
               if (alertTypeList == '친구 요청') {
                 final strategy = FriendAcceptStrategy(apiService);
-                await strategy.execute(
+                strategy.execute(
                     isAccepted, friendRequestId!);
               } else if (fromMemberId != null) {
                 final strategy = GroupAcceptStrategy(apiService);
-                await strategy.execute(
+                strategy.execute(
                     isAccepted, alarmGroupId!, fromMemberId);
               }
               Navigator.of(context).pop(); // Dialog 닫기
