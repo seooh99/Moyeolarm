@@ -24,7 +24,7 @@ class UserRepository {
   }
   // 회원가입 여부 확인(초기 로그인)
   Future<ResponseUserModel> isSigned(String request, String fcmToken, String deviceIdentifier) {
-    print("$request repository");
+    // print("$request repository");
     IsSigned params = IsSigned(
       oauthIdentifier: request,
       fcmToken: fcmToken,
@@ -35,7 +35,7 @@ class UserRepository {
   }
   // 회원 탈퇴
   Future<NicknameResponse> signOut(String token) {
-    print("sign out user repository");
+    // print("sign out user repository");
     return _userDataSource.signOut('Bearer $token');
   }
 }

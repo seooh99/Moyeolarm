@@ -31,7 +31,7 @@ class AlarmListDetailViewModel extends ChangeNotifier{
 
   setAlarmGroupId(int newAlarmGroupId){
     alarmGroupId = newAlarmGroupId;
-    print("update alarmGroupId: $alarmGroupId");
+    // print("update alarmGroupId: $alarmGroupId");
     notifyListeners();
   }
 
@@ -43,5 +43,11 @@ class AlarmListDetailViewModel extends ChangeNotifier{
       return response.data.alarmGroup;
     }
     return null;
+  }
+  kickFriend(int alarmGroupId, int memberId) async {
+    var response = await _alarmListRepository.kickFriend(alarmGroupId, memberId);
+    if (response.code == "200"){
+      return response.data;
+    }
   }
 }

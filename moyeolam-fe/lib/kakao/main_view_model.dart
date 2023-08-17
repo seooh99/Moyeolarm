@@ -14,7 +14,7 @@ class MainViewModel {
     if(isLogined){
       // 유저정보 가져오기
       User user = await UserApi.instance.me();
-      print("$user 메인뷰모델 유저");
+      // print("$user 메인뷰모델 유저");
       return user;
     }
   }

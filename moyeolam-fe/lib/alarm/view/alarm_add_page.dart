@@ -73,7 +73,7 @@ class _AlarmAddScreenState extends ConsumerState<AlarmAddScreen> {
               int? preMinute = widget.detailAlarmGroup?.minute;
               List<bool>? preWeekday = widget.detailAlarmGroup?.dayOfWeek;
 
-              print(widget.detailAlarmGroup?.alarmGroupId);
+              // print(widget.detailAlarmGroup?.alarmGroupId);
               if (widget.detailAlarmGroup != null) {
                 await _addAlarmGroupViewModel
                     .updateAlarmGroup(widget.detailAlarmGroup!.alarmGroupId);

@@ -6,7 +6,6 @@ class KakaoLogin {
   Future<bool> login() async {
     try{
       bool isInstalled = await isKakaoTalkInstalled();
-      // print();
       if(isInstalled){
         try{
           await UserApi.instance.loginWithKakaoTalk();

@@ -41,7 +41,7 @@ class _AlarmMiddleSelectState extends State<AlarmMiddleSelect> {
             const SizedBox(height: 18,),
             GestureDetector(
               onTap: (){
-                print(widget.dayOfWeek);
+                // print(widget.dayOfWeek);
                 dialogList(context,"기본 알림음");
                 setState(() {
 
