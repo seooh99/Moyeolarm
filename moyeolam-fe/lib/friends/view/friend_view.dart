@@ -200,7 +200,8 @@ Widget SearchList(List<FriendModel?> friends) {
                     content: "${friend.nickname}님 을/를 친구 목록에서 삭제하시겠습니까?",
                     okTitle: "삭제",
                     okOnPressed: ()async{
-                      _friendListViewModel.deleteFriend(friend.memberId);
+                      await _friendListViewModel.deleteFriend(friend.memberId);
+                      ref.invalidate(friendSearchProvider);
                       Navigator.of(context).pop();
                     },
                     cancelTitle: "취소",

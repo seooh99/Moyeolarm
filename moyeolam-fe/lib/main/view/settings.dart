@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:moyeolam/common/const/address_config.dart';
 import 'package:moyeolam/common/const/colors.dart';
 import 'package:moyeolam/common/button/btn_toggle.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -190,14 +191,14 @@ class _SettingsContent extends StatefulWidget {
 
 class _SettingsContentState extends State<_SettingsContent> {
   bool _notificationStatus = true; // 일
-  late SettingService settingService;
+  SettingService settingService = SettingService(Dio(), baseUrl: BASE_URL);
+
 
 
   @override
   void initState() {
-    super.initState();
-    settingService = SettingService(dio);
     fetchSettingStatus();
+    super.initState();
   }
 
   final dio = Dio();

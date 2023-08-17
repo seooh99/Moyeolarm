@@ -6,7 +6,7 @@ import '../model/setting_model.dart';
 
 part 'setting_service.g.dart';
 
-@RestApi(baseUrl: BASE_URL)
+@RestApi()
 abstract class SettingService {
   factory SettingService(Dio dio, {String baseUrl}) = _SettingService;
 
