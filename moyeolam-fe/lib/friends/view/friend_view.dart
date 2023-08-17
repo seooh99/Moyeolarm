@@ -27,10 +27,15 @@ class _FriendViewConsumerSate extends ConsumerState<FriendView>{
   final UserInformation _userInformation = UserInformation(storage);
   TextEditingController _searchFriend = TextEditingController();
   final FriendListViewModel _friendListViewModel = FriendListViewModel();
+  final FocusNode textFocus = FocusNode();
+
+
+
   @override
   void dispose() {
     // TODO: implement dispose
     _searchFriend.dispose();
+    textFocus.dispose();
     super.dispose();
   }
 
@@ -59,87 +64,100 @@ class _FriendViewConsumerSate extends ConsumerState<FriendView>{
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.all(8),
-              height: 80,
-              // color: Colors.yellow,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 32, right: 32),
-                child: TextFieldbox(
-                  defualtText: "친구 검색",
-                  controller: _searchFriend,
-                  setContents: (String value){
-                    // useKeyword.setKeyword(value);
-                  },
-                  onSubmit: (String value){
-                    useKeyword.setKeyword(value);
-                    ref.invalidate(friendSearchProvider);
-                  },
-                  suffixIcon: Icon(Icons.search_outlined),
-                  suffixIconColor: FONT_COLOR,
+      body: RefreshIndicator(
+        onRefresh: ()async{
+          ref.invalidate(friendSearchProvider);
+        },
+        child: GestureDetector(
+          onTap: (){
+            textFocus.unfocus();
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.all(8),
+                  height: 80,
+                  // color: Colors.yellow,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 32, right: 32),
+                    child: TextFieldbox(
+                      textFocus: textFocus,
+                      defualtText: "친구 검색",
+                      controller: _searchFriend,
+                      setContents: (String value){
+                        // useKeyword.setKeyword(value);
+                      },
+                      onSubmit: (String value){
+                        useKeyword.setKeyword(value);
+                        ref.invalidate(friendSearchProvider);
+                        textFocus.unfocus();
+                      },
+                      suffixIcon: Icon(Icons.search_outlined),
+                      suffixIconColor: FONT_COLOR,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 4, bottom: 4, right: 8, left: 8),
-              // color: Colors.deepOrange,
-              height: 160,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 12.0, bottom: 12, left: 20, right: 20),
-                child: ProfileCard(
-                  future: _userInformation.getUserInfo(),
+                Container(
+                  margin: EdgeInsets.only(top: 4, bottom: 4, right: 8, left: 8),
+                  // color: Colors.deepOrange,
+                  height: 160,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 12.0, bottom: 12, left: 20, right: 20),
+                    child: ProfileCard(
+                      future: _userInformation.getUserInfo(),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Container(
-              height: 440,
-              // color: Colors.blue,
-              margin: EdgeInsets.all(8),
-              child: Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: foundFriend.when(
-                    data: (data){
-                      if(data != null) {
-                        // print("data123: ${data[0]!.nickname}");
-                        return data.isNotEmpty?
-                        SearchList(data):
-                        Center(
-                          child: const Text("친구를 추가해보세요!",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w100,
-                              fontSize: 20,
-                              color: FONT_COLOR,
-                            ),
-                          ),
-                        );
-                      }else{
-                        return const Text(
-                          "아직 비어 있어요",
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        );
-                      }
-                    },
-                    error: (error, stackTrace){
-                      return Text("Error: $error");
-                    },
-                    loading: (){
-                      return const SpinKitFadingCube(
-                        // FadingCube 모양 사용
-                        color: Colors.blue, // 색상 설정
-                        size: 50.0, // 크기 설정
-                        duration: Duration(seconds: 2), //속도 설정
-                      );
-                    },
-                ),
-              ),
+                Container(
+                  height: 440,
+                  // color: Colors.blue,
+                  margin: EdgeInsets.all(8),
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    child: foundFriend.when(
+                        data: (data){
+                          if(data != null) {
+                            // print("data123: ${data[0]!.nickname}");
+                            return data.isNotEmpty?
+                            SearchList(data):
+                            Center(
+                              child: const Text("친구를 추가해보세요!",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w100,
+                                  fontSize: 20,
+                                  color: FONT_COLOR,
+                                ),
+                              ),
+                            );
+                          }else{
+                            return const Text(
+                              "아직 비어 있어요",
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                            );
+                          }
+                        },
+                        error: (error, stackTrace){
+                          return Text("Error: $error");
+                        },
+                        loading: (){
+                          return const SpinKitFadingCube(
+                            // FadingCube 모양 사용
+                            color: Colors.blue, // 색상 설정
+                            size: 50.0, // 크기 설정
+                            duration: Duration(seconds: 2), //속도 설정
+                          );
+                        },
+                    ),
+                  ),
 
-            )
-          ],
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -147,6 +165,7 @@ class _FriendViewConsumerSate extends ConsumerState<FriendView>{
 
 Widget SearchList(List<FriendModel?> friends) {
   return ListView.builder(
+    physics: AlwaysScrollableScrollPhysics(),
       itemCount: friends.length,
       itemBuilder: (context, index) {
         FriendModel? friend = friends[index];

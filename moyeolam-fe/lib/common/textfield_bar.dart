@@ -6,10 +6,11 @@ class TextFieldbox extends StatefulWidget {
   final Color? colors;
   final Widget? suffixIcon;
   final Color? suffixIconColor;
-  final TextEditingController? controller;
+  final TextEditingController controller;
   final String? hint;
   final String? defualtText;
   final Function(String)? onSubmit;
+  final FocusNode textFocus;
 
 
 
@@ -21,9 +22,10 @@ class TextFieldbox extends StatefulWidget {
     this.colors,
     this.suffixIcon,
     this.suffixIconColor,
-    this.controller,
+    required this.controller,
     this.hint,
     this.defualtText,
+    required this.textFocus,
   });
 
   @override
@@ -42,17 +44,17 @@ class _TextFieldboxState extends State<TextFieldbox> {
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-  @override
   Widget build(BuildContext context) {
     return TextField(
+      maxLines: 1,
+      focusNode: widget.textFocus,
       textInputAction: TextInputAction.go,
       textAlign: TextAlign.center,
       onSubmitted: widget.onSubmit,
       keyboardType: TextInputType.text,
+      onEditingComplete: (){
+        widget.setContents(widget.controller.text);
+      },
       // obscureText: true,
       cursorColor: MAIN_COLOR,
       style: const TextStyle(

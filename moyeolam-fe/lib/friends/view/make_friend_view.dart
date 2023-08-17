@@ -17,10 +17,13 @@ class MakeFriendView extends ConsumerStatefulWidget {
 class _MakeFriendViewState extends ConsumerState<MakeFriendView> {
   final TextEditingController _searchFriend = TextEditingController();
   final FriendAddViewModel _friendAddViewModel = FriendAddViewModel();
+  final FocusNode textFocus = FocusNode();
+
   @override
   void dispose() {
     // TODO: implement dispose
     _searchFriend.dispose();
+    textFocus.dispose();
     super.dispose();
   }
   @override
@@ -38,115 +41,122 @@ class _MakeFriendViewState extends ConsumerState<MakeFriendView> {
           }
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              margin: EdgeInsets.all(8.0),
-              padding: EdgeInsets.all(8.0),
-              height: 80,
-              child: TextFieldbox(
-                hint: "검색할 친구를 입력하세요",
-                setContents: (String value){
-                  settingSearch.setKeyword(value);
-                  friendAddViewModel.searchMember();
-                },
-                controller: _searchFriend,
-                onSubmit: (String value ){
-                  settingSearch.setKeyword(value);
-                  // await friendAddViewModel.searchMember();
-                  ref.invalidate(memberSearchProvider);
-                },
-                suffixIcon: const Icon(Icons.search_outlined),
-                suffixIconColor: FONT_COLOR,
+      body: GestureDetector(
+        onTap: (){
+          textFocus.unfocus();
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(8.0),
+                height: 80,
+                child: TextFieldbox(
+                  textFocus: textFocus,
+                  hint: "검색할 친구를 입력하세요",
+                  setContents: (String value){
+                    settingSearch.setKeyword(value);
+                    friendAddViewModel.searchMember();
+                  },
+                  controller: _searchFriend,
+                  onSubmit: (String value ){
+                    settingSearch.setKeyword(value);
+                    // await friendAddViewModel.searchMember();
+                    ref.invalidate(memberSearchProvider);
+                    textFocus.unfocus();
+                  },
+                  suffixIcon: const Icon(Icons.search_outlined),
+                  suffixIconColor: FONT_COLOR,
+                ),
               ),
-            ),
-            foundMember.when(
-                  data: (data){
-                    // print("make friend view: data: ${data}");
-                    if(data != null) {
-                    return Container(
-                    margin: EdgeInsets.all(8.0),
-                    padding: EdgeInsets.all(8.0),
-                    height: 80,
-                    child: Container(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            CircleAvatar(
-                              radius: 20,
-                              backgroundColor: Colors.amber,
-                            ),
-                            Text("${data.nickname}",
-                            style: TextStyle(
-                              color: FONT_COLOR,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
+              foundMember.when(
+                    data: (data){
+                      // print("make friend view: data: ${data}");
+                      if(data != null) {
+                      return Container(
+                      margin: EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
+                      height: 80,
+                      child: Container(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundColor: Colors.amber,
                               ),
-                            ),
-                            IconButton(
-                                onPressed:
-                                    data.isFriend?(){
-                                      final snack1 =  SnackBar(
-                                        content: Text("이미 친구인 사용자 입니다.",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: FONT_COLOR
+                              Text("${data.nickname}",
+                              style: TextStyle(
+                                color: FONT_COLOR,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              IconButton(
+                                  onPressed:
+                                      data.isFriend?(){
+                                        final snack1 =  SnackBar(
+                                          content: Text("이미 친구인 사용자 입니다.",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: FONT_COLOR
+                                            ),
                                           ),
+                                          duration: Duration(seconds: 1),
+                                        );
+                                        ScaffoldMessenger.of(context).showSnackBar(snack1);
+                                  }:
+                                  () async {
+                                    var response = await _friendAddViewModel.makeFriend(data.memberId);
+                                    if (!response){
+                                      final snack2 =  SnackBar(
+                                       content: Text("이미 처리 중인 요청입니다.",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: FONT_COLOR
                                         ),
+                                       ),
                                         duration: Duration(seconds: 1),
                                       );
-                                      ScaffoldMessenger.of(context).showSnackBar(snack1);
-                                }:
-                                () async {
-                                  var response = await _friendAddViewModel.makeFriend(data.memberId);
-                                  if (!response){
-                                    final snack2 =  SnackBar(
-                                     content: Text("이미 처리 중인 요청입니다.",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: FONT_COLOR
-                                      ),
-                                     ),
-                                      duration: Duration(seconds: 1),
-                                    );
-                                    ScaffoldMessenger.of(context).showSnackBar(snack2);
-                                  }
-                                },
-                                icon: Icon(
-                                  Icons.person_add_alt_1,
-                                  color: FONT_COLOR,
-                                  size: 32,
-                                )
-                            )
+                                      ScaffoldMessenger.of(context).showSnackBar(snack2);
+                                    }
+                                  },
+                                  icon: Icon(
+                                    Icons.person_add_alt_1,
+                                    color: FONT_COLOR,
+                                    size: 32,
+                                  )
+                              )
 
-                          ],
-                        ),
-                    ),
-                    );
-                  }
-                    else{
-                      print("data!!");
+                            ],
+                          ),
+                      ),
+                      );
+                    }
+                      else{
+                        print("data!!");
 
-                      return Container(
-                          margin: EdgeInsets.all(8.0),
-                          padding: EdgeInsets.all(8.0),
-                          height: 680,
-                          child: Text(""),
-                          );
-                      }
-                },
-                  error: (error, stackTrace){
-                    return Text("Error: $error");
+                        return Container(
+                            margin: EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
+                            height: 680,
+                            child: Text(""),
+                            );
+                        }
                   },
-                  loading: (){
-                    return Text("loading");
-                  },
-              ),
+                    error: (error, stackTrace){
+                      return Text("Error: $error");
+                    },
+                    loading: (){
+                      return Text("loading");
+                    },
+                ),
 
-          ],
+            ],
+          ),
         ),
       ),
     );
