@@ -14,29 +14,28 @@ import 'package:youngjun/common/button/btn_save_update.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/layout/title_bar.dart';
 import 'package:youngjun/alarm/component/alarm_guest_list.dart';
-import 'package:youngjun/alarm/model/alarm_detail_model.dart';
 import 'package:youngjun/alarm/view/alarm_add_page.dart';
 import 'package:youngjun/main/view/main_page.dart';
 
 
 class AlarmDetailScreen extends ConsumerStatefulWidget {
   const AlarmDetailScreen({
+    required this.alarmGroupId,
     super.key,
   });
-
+  final int alarmGroupId;
   @override
   ConsumerState<AlarmDetailScreen> createState() => _AlarmDetailScreenState();
 }
 
 class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
 
-
   @override
   Widget build(BuildContext context) {
+    var alarmGroup = ref.watch(alarmDetailFutureProvider);
     WidgetsBinding.instance.addPostFrameCallback((duration) {
       ref.invalidate(alarmDetailFutureProvider);
     });
-    var alarmGroup = ref.watch(alarmDetailFutureProvider);
     return alarmGroup.when(
       data: (data) {
         if (data != null) {
@@ -63,14 +62,7 @@ class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
                                   detailAlarmGroup: data,
                                 )
                         )
-                    )
-                        .then((value) =>
-                        setState(() {
-                          ref.invalidate(alarmDetailFutureProvider);
-                        }
-                        )
                     );
-
                   },
                   text: "수정",
                 )
@@ -279,26 +271,26 @@ class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
                                             memberId: data.members[index].memberId);
                                         members.add(member);
                                       }
-                                      // Navigator.of(context).push(
-                                      //     MaterialPageRoute(builder: (context) =>
-                                      //         AddFriendAlarmGroupView(
-                                      //           alarmGroupId: data.alarmGroupId,
-                                      //           invitedMember: members,
-                                      //         )));
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (context) =>
+                                              AddFriendAlarmGroupView(
+                                                alarmGroupId: data.alarmGroupId,
+                                                invitedMember: members,
+                                              )));
                                     },
                                     child: Card(
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(16),
                                         side: const BorderSide(
                                             width: 3,
-                                            color: MAIN_COLOR,
+                                            color: SUB_COLOR,
                                             style: BorderStyle.solid
                                         ),
                                       ),
                                       color: BACKGROUND_COLOR,
                                       child: const Center(
                                         child: Icon(Icons.add,
-                                          color: MAIN_COLOR,
+                                          color: SUB_COLOR,
                                           size: 20,),
                                       ),
                                     ),
@@ -345,7 +337,11 @@ class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
     );
   }
 }
-      
+
+
+
+
+
 // Text(
 //                                 '알림음',
 //                                 style: TextStyle(

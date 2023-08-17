@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:youngjun/common/const/colors.dart';
 
 
 class BtnSaveUpdate extends StatelessWidget {
@@ -16,6 +17,7 @@ class BtnSaveUpdate extends StatelessWidget {
 
     return TextButton(
             style: TextButton.styleFrom(
+              padding: EdgeInsets.only(right: 8),
               textStyle: const TextStyle(
                   fontSize: 18,
               ),
@@ -24,7 +26,7 @@ class BtnSaveUpdate extends StatelessWidget {
             child: Text(text,
               style: const TextStyle(
                   fontSize: 18,
-                  color:Colors.purple,
+                  color:MAIN_COLOR,
                 ),
               ),
 
