@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:youngjun/main.dart';
 import '../../../common/const/address_config.dart';
 import 'package:youngjun/fcm/data_source/fcm_api_data_source.dart';
 import '../../common/secure_storage/secure_storage.dart';
@@ -7,11 +8,11 @@ import '../model/alert_service_model.dart';
 
 class FriendAcceptStrategy {
   final FcmApiService _apiService;
-  final UserInformation _userInformation;
+  final UserInformation _userInformation = UserInformation(storage);
 
-  FriendAcceptStrategy(this._apiService, this._userInformation);
+  FriendAcceptStrategy(this._apiService);
 
-  void execute(bool isAccepted, int friendRequestId) async {
+  Future<void> execute(bool isAccepted, int friendRequestId) async {
     try {
       // UserInformation을 사용하여 accessToken 가져오기
       UserModel? userInfo = await _userInformation.getUserInfo();
@@ -53,7 +54,7 @@ class FriendAcceptStrategy {
         print('${isAccepted ? "수락" : "거절"} API 요청 실패');
       }
     } catch (e) {
-      print('${isAccepted ? "수락" : "거절"} API 요청 예외 발생: $e');
+      print('친구${isAccepted ? "수락" : "거절"} API 요청 예외 발생: $e');
     }
   }
 }

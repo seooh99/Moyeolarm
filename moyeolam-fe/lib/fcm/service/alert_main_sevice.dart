@@ -10,14 +10,15 @@ import 'package:youngjun/user/model/user_model.dart';
 
 import '../data_source/fcm_api_data_source.dart';
 
-import 'package:flutter/cupertino.dart';
 
+final alertServiceProvider = FutureProvider((ref) async {
+  return await AlertService().fetchData();
+});
 
-class AlertService with ChangeNotifier {
-  final UserInformation userInformation; // Future를 제거
+class AlertService {
+  final UserInformation userInformation = UserInformation(storage); // Future를 제거
   ApiArletModel? alertData;
 
-  AlertService(this.userInformation);
 
   Future<ApiArletModel> fetchData() async {
     try {
@@ -36,17 +37,19 @@ class AlertService with ChangeNotifier {
         print('null값임!');
         alertData = null;
       }
-      notifyListeners();
+
       if (alertData == null) {
         throw Exception("API에서 데이터 가져오기 실패");
       }
       return alertData!;
     } on DioError catch (e) {
-      print('DioError 발생: $e');
+      print('DioError 발생:');
+      print('Message: ${e.message}');
+      if (e.response != null) {
+        print('Data: ${e.response!.data}');
+        print('Status Code: ${e.response!.statusCode}');
+      }
       throw Exception("API에서 데이터 가져오기 실패");
-    } catch (e) {
-      print('기타 에러 발생~~~: $e');
-      throw e;
     }
   }
 }

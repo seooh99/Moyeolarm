@@ -30,7 +30,7 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
 
   @override
   Widget build(BuildContext context) {
-    var alarmDetailModel = ref.watch(alarmDetailProvider);
+    // var alarmDetailModel = ref.watch(alarmDetailProvider.notifier);
 
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   ref.invalidate(alarmListProvider);
@@ -40,77 +40,44 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
     AlarmListNotifier alarmListNotifier =
         ref.watch(alarmSettingProvider.notifier);
 
-    return RefreshIndicator(
-      onRefresh: () async {
-        ref.invalidate(alarmListProvider);
-      },
-      child: Scaffold(
-        appBar: TitleBar(
-          appBar: AppBar(),
-          title: "모여람",
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .push(
-                        MaterialPageRoute(builder: (context) => ArletListView()))
-                    .then(
-                  (value) {
-                    setState(() {
-                      ref.invalidate(alarmListProvider);
-                    });
-                  },
-                );
-              },
-              icon: Icon(Icons.notifications),
-            )
-          ],
-        ),
-        backgroundColor: BACKGROUND_COLOR,
-        body: Padding(
-          padding: EdgeInsets.only(bottom: 68),
-          child: alarmgroups.when(
-              data: (data) {
-            var alarmGroups = data.alarmGroups;
+    return Scaffold(
+      appBar: TitleBar(
+        appBar: AppBar(),
+        title: "모여람",
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .push(
+                      MaterialPageRoute(builder: (context) => ArletListView()));
 
-            return MaterialApp(
-              // debugShowCheckedModeBanner: false,
-              home: SingleChildScrollView(
+            },
+            icon: Icon(Icons.notifications),
+          )
+        ],
+      ),
+      backgroundColor: BACKGROUND_COLOR,
+      body: Padding(
+        padding: EdgeInsets.only(bottom: 68),
+        child: alarmgroups.when(
+            data: (data) {
+          var alarmGroups = data.alarmGroups;
+
+          return MaterialApp(
+            // debugShowCheckedModeBanner: false,
+            home: RefreshIndicator(
+              onRefresh: ()async {
+                ref.invalidate(alarmListProvider);
+              },
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
                     for (var alarmGroup in alarmGroups)
                       GestureDetector(
                         onLongPress: () async {
-                          // print("${alarmGroup.alarmGroupId}");
                           showDialog(
                             context: context,
-                            // builder: (context) => ConfirmDialog(
-                            //   cancelOnPressed: () {
-                            //     Navigator.pop(context);
-                            //   },
-                            //   okOnPressed: () async {
-                            //     await _alarmListViewModel
-                            //         .deleteAlarmGroup(alarmGroup.alarmGroupId);
-                            //     ref.invalidate(alarmListProvider);
-                            //
-                            //     // 삭제 시 알람 예약 삭제
-                            //     Alarm alarm = Alarm(
-                            //         alarmGroupId: alarmGroup.alarmGroupId,
-                            //         callbackId: alarmGroup.alarmGroupId * 7,
-                            //         weekday: alarmGroup.dayOfWeek,
-                            //         hour: alarmGroup.hour,
-                            //         minute: alarmGroup.minute,
-                            //         toggle: alarmGroup.toggle);
-                            //     alarmListNotifier.remove(alarm);
-                            //     AlarmScheduler.cancelRepeatable(alarm);
-                            //
-                            //     Navigator.pop(context);
-                            //   },
-                            //   title: "삭제 요청",
-                            //   content: "삭제?",
-                            //   okTitle: "삭제",
-                            //   cancelTitle: "취소",
-                            // ),
                             builder: (context) => ConfirmDialog(
                               title: alarmGroup.isHost?"알람 그룹 삭제":"알람 그룹 나가기",
                               content: alarmGroup.isHost?
@@ -139,14 +106,14 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                             ),
                           );
                         },
-                        onTap: () async {
+                        onTap: (){
                           // Navigator.of(context).pushNamed("/alarm_group_detail ", arguments: alarmGroup.alarmGroupId);
-                          await alarmDetailModel
-                              .setAlarmGroupId(alarmGroup.alarmGroupId);
+                          ref.read(alarmDetailProvider).setAlarmGroupId(alarmGroup.alarmGroupId);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AlarmDetailScreen()),
+                                builder: (context) => AlarmDetailScreen(alarmGroupId: alarmGroup.alarmGroupId,)),
+
                           );
                         },
                         child: AlarmList(
@@ -244,24 +211,24 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                   ],
                 ),
               ),
-            );
-          }, error: (error, stackTrace) {
-            print("Error: $error alarmList");
-            return SpinKitFadingCube(
-              // FadingCube 모양 사용
-              color: Colors.blue, // 색상 설정
-              size: 50.0, // 크기 설정
-              duration: Duration(seconds: 2), //속도 설정
-            );
-          }, loading: () {
-            return SpinKitFadingCube(
-              // FadingCube 모양 사용
-              color: Colors.blue, // 색상 설정
-              size: 50.0, // 크기 설정
-              duration: Duration(seconds: 2), //속도 설정
-            );
-          }),
-        ),
+            ),
+          );
+        }, error: (error, stackTrace) {
+          print("Error: $error alarmList");
+          return SpinKitFadingCube(
+            // FadingCube 모양 사용
+            color: Colors.blue, // 색상 설정
+            size: 50.0, // 크기 설정
+            duration: Duration(seconds: 2), //속도 설정
+          );
+        }, loading: () {
+          return SpinKitFadingCube(
+            // FadingCube 모양 사용
+            color: Colors.blue, // 색상 설정
+            size: 50.0, // 크기 설정
+            duration: Duration(seconds: 2), //속도 설정
+          );
+        }),
       ),
     );
   }
