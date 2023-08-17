@@ -11,14 +11,14 @@ import 'package:youngjun/alarm/repository/alarm_list_repository.dart';
 //     // return await _alarmListRepository.getAlarmListDetail(AlarmListDetailViewModel().alarmGroupId);;
 //   }
 // );
-AlarmListDetailViewModel _alarmListDetailViewModel = AlarmListDetailViewModel();
-final alarmDetailProvider = ChangeNotifierProvider.autoDispose((ref)  {
-    return _alarmListDetailViewModel;
+AlarmListDetailViewModel alarmListDetailViewModel = AlarmListDetailViewModel();
+final alarmDetailProvider = ChangeNotifierProvider((ref)  {
+    return alarmListDetailViewModel;
   }
 );
 
-final alarmDetailFutureProvider = FutureProvider.autoDispose((ref) async {
-  return await _alarmListDetailViewModel.getAlarmListDetail();
+final alarmDetailFutureProvider = FutureProvider((ref) async {
+  return await alarmListDetailViewModel.getAlarmListDetail();
 });
 
 class AlarmListDetailViewModel extends ChangeNotifier{

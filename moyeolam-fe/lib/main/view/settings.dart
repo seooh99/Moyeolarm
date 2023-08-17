@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/scheduler.dart';
@@ -8,6 +9,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import '../../common/confirm.dart';
 
 
+import '../../fcm/view/alert_list_view.dart';
 import '../../user/view/auth.dart';
 import '../../user/viewmodel/auth_view_model.dart';
 import '../service/setting_service.dart';
@@ -20,17 +22,14 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:youngjun/main.dart';
 
 
+bool globalNotificationStatus = true;
+
+
 void handleMessage(RemoteMessage? message, bool notificationStatus) {
   if (!notificationStatus) {
     return;
   }
 
-  // if (message != null && message.notification != null) {
-  //   Navigator.of(navigatorKey.currentContext!).pushNamed(
-  //     ArletListView.route,
-  //     arguments: message,
-  //   );
-  // }
 }
 
 Future<void> initLocalNotifications() async {
@@ -60,37 +59,48 @@ Future<void> initLocalNotifications() async {
 }
 
 
+
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+
   print('Title: ${message.notification?.title}');
   print('Body: ${message.notification?.body}');
-  print(message.notification?.body);
-  initPushNotifications();
+  // print(message.data);
+
+
 
 }
 
 
 
 Future<void> initPushNotifications() async {
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  NotificationSettings settings = await messaging.requestPermission(
     alert: true,
+    announcement: false,
     badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
     sound: true,
   );
+
+  print('User한테 permission: ${settings.authorizationStatus}');
 
   _SettingsContentState settingsContentState = _SettingsContentState();
 
   bool notificationStatus = settingsContentState._notificationStatus;
 
   FirebaseMessaging.instance.getInitialMessage().then((message) {
-    handleMessage(message, notificationStatus); // 앱이 백그라운드에서 열렸을 때 처리하는 함수 호출
+    handleMessage(message, notificationStatus);
   });
 
   FirebaseMessaging.onMessageOpenedApp.listen((message) {
-    handleMessage(message, notificationStatus); // 앱이 백그라운드 상태에서 푸시 알림을 눌렀을 때 처리하는 함수 호출
+    handleMessage(message, notificationStatus);
 
   });
 
-  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   initLocalNotifications();
 
@@ -115,15 +125,12 @@ class FirebaseApi with ChangeNotifier {
     FirebaseMessaging.onMessage.listen((event) {
 
       if (GlobalVariable.navState.currentContext != null) {
-        if(event.notification!.title!.contains('알람') || event.notification!.title!.contains('친구')){
           Navigator.of(GlobalVariable.navState.currentContext!)
               .push(MaterialPageRoute(
-              builder: (context) => ListView()));
+              builder: (context) => ArletListView())); // 이거 로직은 좀 더 생각
 
           return;
         }
-      }
-
 
 
       notifyListeners(); // 변경 알림
@@ -137,7 +144,7 @@ class FirebaseApi with ChangeNotifier {
           SchedulerBinding.instance!.addPostFrameCallback((_) {
             Navigator.of(GlobalVariable.navState.currentContext!)
                 .push(MaterialPageRoute(
-                builder: (context) => ListView()));
+                builder: (context) => ArletListView()));
           });
           return;
         }
@@ -216,22 +223,22 @@ class _SettingsContentState extends State<_SettingsContent> {
 
   Future<void> updateSettingStatus(bool status) async {
     try {
-
       final settingupdate = await settingService.patchSettings(status);
       print('Setting Update Response: $settingupdate');
 
       if (settingupdate != null && settingupdate.data != null) {
         setState(() {
           _notificationStatus = status;
+          globalNotificationStatus = status;  // 전역 변수 동기화
         });
         print('Update 성공');
         print(settingupdate.data);
       }
     } catch (e) {
       print('업데이트 에러: $e');
-
     }
   }
+
 
 
   @override
@@ -272,11 +279,12 @@ class _SettingsContentState extends State<_SettingsContent> {
                 '지금 로그아웃 하시겠습니까?',
                 '예',
                 '아니오',
-                    () {
+                    () async {
                   // 예
-                  AuthViewModel().logOut();
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder:(context) => AuthView(), ));
+                  await AuthViewModel().logOut();
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder:(context) => AuthView(),
+                  ));
                 },
                     () {
                   // 아니오
@@ -299,13 +307,13 @@ class _SettingsContentState extends State<_SettingsContent> {
                 '지금 회원탈퇴 하시겠습니까?',
                 '예',
                 '아니오',
-                    () {
-                  AuthViewModel().signOut();
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder:(context) => AuthView(), ));
+                    () async {
+                  await AuthViewModel().logOut();
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => AuthView(),
+                  ));
                 },
                     () {
-
                   Navigator.pop(context);
                 },
               );
