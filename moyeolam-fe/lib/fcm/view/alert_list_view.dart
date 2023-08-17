@@ -63,7 +63,7 @@ class ArletListView extends ConsumerWidget {
 
   Widget _buildAlertList(ApiArletModel apiAlertModel, WidgetRef ref) {
     if (apiAlertModel.data?.alerts != null && apiAlertModel.data!.alerts!.isNotEmpty) {
-      final List<ApiArletItem?> alertItems = List.from(apiAlertModel.data!.alerts!.reversed);
+      final List<ApiArletItem?> alertItems = apiAlertModel.data!.alerts!;
       return ListView.builder(
         itemCount: alertItems.length,
         itemBuilder: (context, index) => _buildAlertItem(context, alertItems[index], ref),
@@ -94,29 +94,33 @@ class ArletListView extends ConsumerWidget {
         }
       },
       child: Card(
-        color: CARD_BLACK_COLOR,
-        child: Row(
-          children: [
-            SizedBox(width: 20, height: 80),
-            Padding(
-              padding: EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${fromNickname ?? "Unknown"} 님이 ${alertType ?? "알림"} 하셨습니다',
-                    style: TextStyle(
-                      overflow: TextOverflow.ellipsis,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: FONT_COLOR,
+        child: Container(
+          color: (alertType == '친구 요청' || alertType == '알람그룹 요청')
+              ? CARD_BLACK_COLOR
+              : BACKGROUND_COLOR,
+          child: Row(
+            children: [
+              SizedBox(width: 20, height: 80),
+              Padding(
+                padding: EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${fromNickname ?? "Unknown"} 님이 ${alertType ?? "알림"} 하셨습니다',
+                      style: TextStyle(
+                        overflow: TextOverflow.ellipsis,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: FONT_COLOR,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                ],
+                    const SizedBox(height: 10),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
