@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:268829750741:android:0142b27ce0c0be6019b95c",
         "android_client_info": {
-          "package_name": "com.example.youngjun"
+          "package_name": "com.example.moyeolam"
         }
       },
       "oauth_client": [
@@ -34,7 +34,7 @@
               "client_id": "268829750741-fhh08ba7557f4qfe44hddf796u1bqh6m.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.youngjun"
+                "bundle_id": "com.example.moyeolam"
               }
             }
           ]

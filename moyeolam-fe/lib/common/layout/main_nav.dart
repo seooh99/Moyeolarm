@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:youngjun/common/const/colors.dart';
+import 'package:moyeolam/common/const/colors.dart';
 
 class MainNav extends StatefulWidget {
   const MainNav({
@@ -50,7 +50,7 @@ class _MainNavState extends State<MainNav> {
       ],
       currentIndex: _selectedIndex,
       unselectedItemColor: BEFORE_SELECT_ICON_COLOR,
-      selectedItemColor: Colors.white,
+      selectedItemColor: FONT_COLOR,
       onTap: _onItemTapped,
       showSelectedLabels: false,
       showUnselectedLabels: false,

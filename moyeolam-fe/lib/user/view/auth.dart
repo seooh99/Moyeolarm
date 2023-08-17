@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:youngjun/background_alarm/view/alarm_observer.dart';
-import 'package:youngjun/background_alarm/view/home_screen.dart';
-import 'package:youngjun/background_alarm/view/permission_request_screen.dart';
-import 'package:youngjun/common/const/colors.dart';
-import 'package:youngjun/common/secure_storage/secure_storage.dart';
-import 'package:youngjun/main.dart';
-import 'package:youngjun/user/model/user_model.dart';
-import 'package:youngjun/user/repository/user_repository.dart';
-import 'package:youngjun/user/view/set_nickname.dart';
-import 'package:youngjun/user/viewmodel/auth_view_model.dart';
+import 'package:moyeolam/background_alarm/view/alarm_observer.dart';
+import 'package:moyeolam/background_alarm/view/home_screen.dart';
+import 'package:moyeolam/background_alarm/view/permission_request_screen.dart';
+import 'package:moyeolam/common/const/colors.dart';
+import 'package:moyeolam/common/secure_storage/secure_storage.dart';
+import 'package:moyeolam/main.dart';
+import 'package:moyeolam/user/model/user_model.dart';
+import 'package:moyeolam/user/repository/user_repository.dart';
+import 'package:moyeolam/user/view/set_nickname.dart';
+import 'package:moyeolam/user/viewmodel/auth_view_model.dart';
 
 import '../../main/view/main_page.dart';
 

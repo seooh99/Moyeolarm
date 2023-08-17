@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:youngjun/common/layout/main_nav.dart';
-import 'package:youngjun/common/layout/title_bar.dart';
-import 'package:youngjun/friends/view/friend_view.dart';
-import 'package:youngjun/main/view/settings.dart';
+import 'package:moyeolam/common/layout/main_nav.dart';
+import 'package:moyeolam/common/layout/title_bar.dart';
+import 'package:moyeolam/friends/view/friend_view.dart';
+import 'package:moyeolam/main/view/settings.dart';
 import '../../alarm/view/alarm_list_page.dart';
 import '../../common/const/colors.dart';
 
@@ -68,7 +68,7 @@ class _MainPageState extends State<MainPage> {
             ],
             currentIndex: _selectedIndex,
             unselectedItemColor: BEFORE_SELECT_ICON_COLOR,
-            selectedItemColor: Colors.white,
+            selectedItemColor: FONT_COLOR,
             onTap: _onItemTapped,
             showSelectedLabels: false,
             showUnselectedLabels: false,

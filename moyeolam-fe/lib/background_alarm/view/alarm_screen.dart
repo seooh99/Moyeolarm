@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
-import 'package:youngjun/background_alarm/model/alarm.dart';
-import 'package:youngjun/background_alarm/provider/alarm_state.dart';
-import 'package:youngjun/background_alarm/service/alarm_scheduler.dart';
+import 'package:moyeolam/background_alarm/model/alarm.dart';
+import 'package:moyeolam/background_alarm/provider/alarm_state.dart';
+import 'package:moyeolam/background_alarm/service/alarm_scheduler.dart';
 
 AudioPlayer player = AudioPlayer();
 

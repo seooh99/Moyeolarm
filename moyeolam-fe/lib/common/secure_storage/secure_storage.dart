@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:youngjun/user/model/user_model.dart';
+import 'package:moyeolam/user/model/user_model.dart';
 
 
 

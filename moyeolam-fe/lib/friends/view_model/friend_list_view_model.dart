@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:youngjun/fcm/service/alert_main_sevice.dart';
-import 'package:youngjun/friends/model/friends_list_model.dart';
-import 'package:youngjun/friends/repository/friends_repository.dart';
+import 'package:moyeolam/fcm/service/alert_main_sevice.dart';
+import 'package:moyeolam/friends/model/friends_list_model.dart';
+import 'package:moyeolam/friends/repository/friends_repository.dart';
 
 FriendRepository _friendRepository = FriendRepository();
 FriendListViewModel _friendsListResponseModel = FriendListViewModel();

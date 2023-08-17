@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:youngjun/common/secure_storage/secure_storage.dart';
-import 'package:youngjun/main.dart';
-import 'package:youngjun/user/model/user_model.dart';
-import 'package:youngjun/user/repository/user_repository.dart';
+import 'package:moyeolam/common/secure_storage/secure_storage.dart';
+import 'package:moyeolam/main.dart';
+import 'package:moyeolam/user/model/user_model.dart';
+import 'package:moyeolam/user/repository/user_repository.dart';
 
 
 class NicknameViewModel {

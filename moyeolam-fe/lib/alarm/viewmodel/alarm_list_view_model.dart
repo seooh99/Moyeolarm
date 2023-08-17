@@ -1,6 +1,6 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:youngjun/alarm/repository/alarm_list_repository.dart';
+import 'package:moyeolam/alarm/repository/alarm_list_repository.dart';
 
 import '../model/alarm_list_model.dart';
 

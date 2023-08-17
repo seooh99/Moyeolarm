@@ -1,7 +1,7 @@
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:youngjun/kakao/kakao_login.dart';
-import 'package:youngjun/kakao/login.dart';
-// import 'package:youngjun/user/model/user_model.dart';
+import 'package:moyeolam/kakao/kakao_login.dart';
+import 'package:moyeolam/kakao/login.dart';
+// import 'package:moyeolam/user/model/user_model.dart';
 
 class MainViewModel {
   final KakaoLogin _socialLogin;

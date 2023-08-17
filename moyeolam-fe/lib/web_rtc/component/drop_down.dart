@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:openvidu_client/openvidu_client.dart';
-import 'package:youngjun/common/const/colors.dart';
+import 'package:moyeolam/common/const/colors.dart';
 
 class OVDropDown extends StatelessWidget {
   final String label;

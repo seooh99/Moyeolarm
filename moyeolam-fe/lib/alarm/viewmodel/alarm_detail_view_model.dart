@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:youngjun/alarm/model/alarm_detail_model.dart';
-import 'package:youngjun/alarm/repository/alarm_list_repository.dart';
+import 'package:moyeolam/alarm/model/alarm_detail_model.dart';
+import 'package:moyeolam/alarm/repository/alarm_list_repository.dart';
 
 
 

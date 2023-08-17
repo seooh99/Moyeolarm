@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
-import 'package:youngjun/background_alarm/provider/permission_provider.dart';
-import 'package:youngjun/main.dart';
+import 'package:moyeolam/background_alarm/provider/permission_provider.dart';
+import 'package:moyeolam/main.dart';
 
 class PermissionRequestScreen extends ConsumerStatefulWidget {
   const PermissionRequestScreen({

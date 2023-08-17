@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:youngjun/common/layout/title_bar.dart';
-import 'package:youngjun/fcm/service/alert_main_sevice.dart';
+import 'package:moyeolam/common/button/btn_back.dart';
+import 'package:moyeolam/common/layout/title_bar.dart';
+import 'package:moyeolam/fcm/service/alert_main_sevice.dart';
 import '../../common/secure_storage/secure_storage.dart';
 import '../model/alert_service_model.dart';
-import 'package:youngjun/common/const/colors.dart';
+import 'package:moyeolam/common/const/colors.dart';
 import 'alert_modal_view.dart';
 
 
@@ -41,6 +42,11 @@ class ArletListView extends ConsumerWidget {
       appBar: TitleBar(
         appBar: AppBar(),
         title: "모여람",
+        leading: BtnBack(
+          onPressed: (){
+            Navigator.of(context).pop();
+          },
+        ),
         actions: [
 
         ],
@@ -99,11 +105,24 @@ class ArletListView extends ConsumerWidget {
         }
       },
       child: Card(
+        color: (alertType == '친구 요청' || alertType == '알람그룹 요청')
+            ? SUB_COLOR
+            : BACKGROUND_COLOR,
+        elevation: 12,
+        borderOnForeground: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(
+            color: (alertType == '친구 요청' || alertType == '알람그룹 요청')
+                ? SUB_COLOR
+                : BACKGROUND_COLOR,
+            width: 2,
+          )
+        ),
         child: Container(
-          color: (alertType == '친구 요청' || alertType == '알람그룹 요청')
-              ? CARD_BLACK_COLOR
-              : BACKGROUND_COLOR,
+          // color:
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(width: 20, height: 80),
               Padding(
@@ -117,10 +136,12 @@ class ArletListView extends ConsumerWidget {
                         overflow: TextOverflow.ellipsis,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: FONT_COLOR,
+                        color: (alertType == '친구 요청' || alertType == '알람그룹 요청')
+                            ? BACKGROUND_COLOR
+                            : FONT_COLOR,
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    // const SizedBox(height: 10),
                   ],
                 ),
               ),
