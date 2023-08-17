@@ -42,26 +42,12 @@ class ArletListView extends ConsumerWidget {
         appBar: AppBar(),
         title: "모여람",
         actions: [
-          IconButton(
-            onPressed: () {
-              // Navigator.of(context)
-              //     .push(
-              //     MaterialPageRoute(builder: (context) => ArletListView()))
-              //     .then(
-              //       (value) {
-              //     setState(() {
-              //       ref.invalidate(alarmListProvider);
-              //     });
-              //   },
-              // );
-            },
-            icon: Icon(Icons.notifications),
-          )
+
         ],
       ),
       backgroundColor: BACKGROUND_COLOR,
       body: Padding(
-        padding: EdgeInsets.only(bottom: 68),
+        padding: EdgeInsets.all(10),
         child: apiAlertModelAsyncValue.when(
           loading: () => Center(child: CircularProgressIndicator()),
           error: (err, stack) => Center(child: Text("데이터 로딩 실패: $err")),
@@ -77,7 +63,7 @@ class ArletListView extends ConsumerWidget {
 
   Widget _buildAlertList(ApiArletModel apiAlertModel, WidgetRef ref) {
     if (apiAlertModel.data?.alerts != null && apiAlertModel.data!.alerts!.isNotEmpty) {
-      final List<ApiArletItem?> alertItems = apiAlertModel.data!.alerts!;
+      final List<ApiArletItem?> alertItems = List.from(apiAlertModel.data!.alerts!.reversed);
       return ListView.builder(
         itemCount: alertItems.length,
         itemBuilder: (context, index) => _buildAlertItem(context, alertItems[index], ref),
@@ -102,18 +88,18 @@ class ArletListView extends ConsumerWidget {
             alertType,
             alertItem.alarmGroupId,
             alertItem.friendRequestId,
-            alertItem.fromMemberId,
+            alertItem.fromMemberId!,
             ref
           );
         }
       },
       child: Card(
-        color: Colors.black,
+        color: CARD_BLACK_COLOR,
         child: Row(
           children: [
             SizedBox(width: 20, height: 80),
             Padding(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

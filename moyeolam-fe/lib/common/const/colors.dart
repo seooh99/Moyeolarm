@@ -9,6 +9,7 @@ const BACK_FONT_COLOR = Color(0xFFEADDFF);
 
 const LIST_BLACK_COLOR = Color(0xFF141218);
 // const LIST_GRAY_COLOR = Color(0xFF333235);
+const CARD_BLACK_COLOR = Color(0xFF000000);
 
 const CALLOFF_COLOR = Color(0xFFFF4343);
 

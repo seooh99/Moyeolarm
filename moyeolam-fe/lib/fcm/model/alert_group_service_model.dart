@@ -5,12 +5,12 @@ import 'package:json_annotation/json_annotation.dart';
 class ApiGroupPostModel {
   String? code;
   String? message;
-  int? data;
+  int data;
 
   ApiGroupPostModel({
     this.code,
     this.message,
-    this.data,
+    required this.data,
   });
 
   factory ApiGroupPostModel.fromJson(Map<String, dynamic> json) {
