@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
-import 'package:youngjun/common/const/address_config.dart';
-import 'package:youngjun/common/secure_storage/secure_storage.dart';
-import 'package:youngjun/main.dart';
-import 'package:youngjun/user/model/nickname_model.dart';
-import 'package:youngjun/user/model/user_search_model.dart';
+import 'package:moyeolam/common/const/address_config.dart';
+import 'package:moyeolam/common/secure_storage/secure_storage.dart';
+import 'package:moyeolam/main.dart';
+import 'package:moyeolam/user/model/nickname_model.dart';
+import 'package:moyeolam/user/model/user_search_model.dart';
 import '../data_source/user_data_source.dart';
-import 'package:youngjun/user/model/user_model.dart';
+import 'package:moyeolam/user/model/user_model.dart';
 
 
 
@@ -24,7 +24,7 @@ class UserRepository {
   }
   // 회원가입 여부 확인(초기 로그인)
   Future<ResponseUserModel> isSigned(String request, String fcmToken, String deviceIdentifier) {
-    print("$request repository");
+    // print("$request repository");
     IsSigned params = IsSigned(
       oauthIdentifier: request,
       fcmToken: fcmToken,
@@ -35,7 +35,7 @@ class UserRepository {
   }
   // 회원 탈퇴
   Future<NicknameResponse> signOut(String token) {
-    print("sign out user repository");
+    // print("sign out user repository");
     return _userDataSource.signOut('Bearer $token');
   }
 }

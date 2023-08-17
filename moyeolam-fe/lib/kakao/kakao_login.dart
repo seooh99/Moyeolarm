@@ -1,12 +1,11 @@
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:youngjun/kakao/login.dart';
+import 'package:moyeolam/kakao/login.dart';
 
 class KakaoLogin {
   @override
   Future<bool> login() async {
     try{
       bool isInstalled = await isKakaoTalkInstalled();
-      // print();
       if(isInstalled){
         try{
           await UserApi.instance.loginWithKakaoTalk();

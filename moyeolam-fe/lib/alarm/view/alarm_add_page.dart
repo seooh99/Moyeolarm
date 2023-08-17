@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:youngjun/alarm/viewmodel/add_alarm_group_view_model.dart';
-import 'package:youngjun/alarm/viewmodel/alarm_detail_view_model.dart';
+import 'package:moyeolam/alarm/viewmodel/add_alarm_group_view_model.dart';
+import 'package:moyeolam/alarm/viewmodel/alarm_detail_view_model.dart';
 
-import 'package:youngjun/alarm/component/alarm_middle_select.dart';
-import 'package:youngjun/alarm/model/alarm_detail_model.dart';
-import 'package:youngjun/alarm/view/alarm_detail_page.dart';
-import 'package:youngjun/background_alarm/model/alarm.dart';
-import 'package:youngjun/background_alarm/provider/alarm_list_provider.dart';
-import 'package:youngjun/background_alarm/service/alarm_scheduler.dart';
+import 'package:moyeolam/alarm/component/alarm_middle_select.dart';
+import 'package:moyeolam/alarm/model/alarm_detail_model.dart';
+import 'package:moyeolam/alarm/view/alarm_detail_page.dart';
+import 'package:moyeolam/background_alarm/model/alarm.dart';
+import 'package:moyeolam/background_alarm/provider/alarm_list_provider.dart';
+import 'package:moyeolam/background_alarm/service/alarm_scheduler.dart';
 
-import 'package:youngjun/common/button/btn_back.dart';
-import 'package:youngjun/common/clock.dart';
-import 'package:youngjun/common/const/colors.dart';
-import 'package:youngjun/common/layout/title_bar.dart';
-import 'package:youngjun/common/textfield_bar.dart';
+import 'package:moyeolam/common/button/btn_back.dart';
+import 'package:moyeolam/common/clock.dart';
+import 'package:moyeolam/common/const/colors.dart';
+import 'package:moyeolam/common/layout/title_bar.dart';
+import 'package:moyeolam/common/textfield_bar.dart';
 
 class AlarmAddScreen extends ConsumerStatefulWidget {
   const AlarmAddScreen({
@@ -73,23 +73,12 @@ class _AlarmAddScreenState extends ConsumerState<AlarmAddScreen> {
               int? preMinute = widget.detailAlarmGroup?.minute;
               List<bool>? preWeekday = widget.detailAlarmGroup?.dayOfWeek;
 
-              print(widget.detailAlarmGroup?.alarmGroupId);
+              // print(widget.detailAlarmGroup?.alarmGroupId);
               if (widget.detailAlarmGroup != null) {
                 await _addAlarmGroupViewModel
                     .updateAlarmGroup(widget.detailAlarmGroup!.alarmGroupId);
-                // var response = await _alarmListDetailViewModel.getAlarmListDetail(widget.detailAlarmGroup!.alarmGroupId);
                 await _alarmDetail
                     .setAlarmGroupId(widget.detailAlarmGroup!.alarmGroupId);
-                // if (response != null) {
-                //   Navigator.of(context).push(MaterialPageRoute(
-                //       builder: (context) =>
-                //           AlarmDetailScreen()));
-                // }else{
-                //   Navigator.of(context).push(MaterialPageRoute(
-                //       builder: (context) =>
-                //           const AlarmDetailScreen()
-                //     )
-                //   );
 
                 // 알람 수정 시 알람 예약
                 Alarm oldAlarm = Alarm(
@@ -141,7 +130,7 @@ class _AlarmAddScreenState extends ConsumerState<AlarmAddScreen> {
                     toggle: true);
                 alarmListNotifier.add(alarm);
                 AlarmScheduler.scheduleRepeatable(alarm);
-
+                await ref.read(alarmDetailProvider).setAlarmGroupId(newGroupId);
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => AlarmDetailScreen(alarmGroupId: newGroupId,)));
               }
@@ -179,7 +168,7 @@ class _AlarmAddScreenState extends ConsumerState<AlarmAddScreen> {
                       _addAlarmGroupViewModel.setTitle(value);
                       textFocus.unfocus();
                     },
-                    setContents: _addAlarmGroupViewModel.setTitle,
+                    setContents: (String value ){_addAlarmGroupViewModel.setTitle(value);},
                     colors: Colors.black,
                     defualtText: widget.detailAlarmGroup?.title ?? "제목",
                   ),

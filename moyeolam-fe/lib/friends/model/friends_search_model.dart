@@ -5,7 +5,7 @@
 import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:youngjun/friends/model/friends_list_model.dart';
+import 'package:moyeolam/friends/model/friends_list_model.dart';
 
 part 'friends_search_model.g.dart';
 

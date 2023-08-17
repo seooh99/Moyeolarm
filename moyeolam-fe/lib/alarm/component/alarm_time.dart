@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moyeolam/common/const/colors.dart';
 
 class AlarmTime extends StatelessWidget {
   const AlarmTime({
@@ -18,7 +19,7 @@ class AlarmTime extends StatelessWidget {
       child: Container(
         child: Text('$ampm $hour : $minute',
         textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.white),),
+        style: TextStyle(color: FONT_COLOR),),
       ),
     );
   }

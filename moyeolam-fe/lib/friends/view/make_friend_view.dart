@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:youngjun/common/button/btn_back.dart';
-import 'package:youngjun/common/const/colors.dart';
-import 'package:youngjun/common/layout/title_bar.dart';
-import 'package:youngjun/common/textfield_bar.dart';
-import 'package:youngjun/friends/view_model/friend_add_view_model.dart';
-import 'package:youngjun/user/model/user_search_model.dart';
+import 'package:moyeolam/common/button/btn_back.dart';
+import 'package:moyeolam/common/const/colors.dart';
+import 'package:moyeolam/common/layout/title_bar.dart';
+import 'package:moyeolam/common/textfield_bar.dart';
+import 'package:moyeolam/friends/view_model/friend_add_view_model.dart';
+import 'package:moyeolam/user/model/user_search_model.dart';
 
 class MakeFriendView extends ConsumerStatefulWidget {
   const MakeFriendView({super.key});
@@ -67,7 +67,14 @@ class _MakeFriendViewState extends ConsumerState<MakeFriendView> {
                     ref.invalidate(memberSearchProvider);
                     textFocus.unfocus();
                   },
-                  suffixIcon: const Icon(Icons.search_outlined),
+                  suffixIcon: IconButton(
+                    onPressed: (){
+                      settingSearch.setKeyword(_searchFriend.text);
+                      ref.invalidate(memberSearchProvider);
+                      textFocus.unfocus();
+                    },
+                    icon: Icon(Icons.search_outlined),
+                  ),
                   suffixIconColor: FONT_COLOR,
                 ),
               ),

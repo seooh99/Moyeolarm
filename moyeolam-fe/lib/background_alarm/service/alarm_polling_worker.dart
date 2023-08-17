@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:youngjun/background_alarm/provider/alarm_state.dart';
-import 'package:youngjun/background_alarm/service/alarm_flag_manager.dart';
+import 'package:moyeolam/background_alarm/provider/alarm_state.dart';
+import 'package:moyeolam/background_alarm/service/alarm_flag_manager.dart';
 
 class AlarmPollingWorker {
   static final AlarmPollingWorker _instance = AlarmPollingWorker._();

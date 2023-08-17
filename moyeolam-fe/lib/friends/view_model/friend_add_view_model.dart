@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:youngjun/friends/repository/friends_repository.dart';
-import 'package:youngjun/user/model/user_search_model.dart';
-import 'package:youngjun/user/repository/user_repository.dart';
+import 'package:moyeolam/friends/repository/friends_repository.dart';
+import 'package:moyeolam/user/model/user_search_model.dart';
+import 'package:moyeolam/user/repository/user_repository.dart';
 
 FriendRepository _friendRepository = FriendRepository();
 UserRepository _userRepository = UserRepository();

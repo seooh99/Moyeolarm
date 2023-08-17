@@ -4,7 +4,7 @@ import 'package:permission_handler/permission_handler.dart';
 // import 'package:provider/provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:youngjun/main.dart';
+import 'package:moyeolam/main.dart';
 
 
 PermissionProvider instancPermissionProvider = PermissionProvider(storage);

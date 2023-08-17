@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:youngjun/alarm/view/alarm_add_page.dart';
-import 'package:youngjun/alarm/viewmodel/alarm_detail_view_model.dart';
-import 'package:youngjun/background_alarm/model/alarm.dart';
-import 'package:youngjun/background_alarm/provider/alarm_list_provider.dart';
-import 'package:youngjun/background_alarm/provider/alarm_state.dart';
-import 'package:youngjun/background_alarm/service/alarm_polling_worker.dart';
-import 'package:youngjun/background_alarm/service/alarm_scheduler.dart';
-import 'package:youngjun/common/const/colors.dart';
-import 'package:youngjun/common/layout/title_bar.dart';
-import 'package:youngjun/fcm/view/alert_list_view.dart';
-import '../../common/confirm.dart';
-import '../component/alarm_list.dart';
-import '../model/alarm_list_model.dart';
-import '../viewmodel/alarm_list_view_model.dart';
+import 'package:moyeolam/alarm/view/alarm_add_page.dart';
+import 'package:moyeolam/alarm/viewmodel/alarm_detail_view_model.dart';
+import 'package:moyeolam/background_alarm/model/alarm.dart';
+import 'package:moyeolam/background_alarm/provider/alarm_list_provider.dart';
+import 'package:moyeolam/background_alarm/service/alarm_scheduler.dart';
+import 'package:moyeolam/common/const/colors.dart';
+import 'package:moyeolam/common/layout/title_bar.dart';
+import 'package:moyeolam/fcm/view/alert_list_view.dart';
+import 'package:moyeolam/common/confirm.dart';
+import 'package:moyeolam/alarm/component/alarm_list.dart';
+import 'package:moyeolam/alarm/model/alarm_list_model.dart';
+import 'package:moyeolam/alarm/viewmodel/alarm_list_view_model.dart';
 import 'alarm_detail_page.dart';
 
 class MainAlarmList extends ConsumerStatefulWidget {
@@ -30,12 +28,9 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
 
   @override
   Widget build(BuildContext context) {
-    // var alarmDetailModel = ref.watch(alarmDetailProvider.notifier);
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   ref.invalidate(alarmListProvider);
-    // });
-
+    WidgetsBinding.instance.addPostFrameCallback((duration) {
+      ref.invalidate(alarmListProvider);
+    });
     AsyncValue<AlarmListModel> alarmgroups = ref.watch(alarmListProvider);
     AlarmListNotifier alarmListNotifier =
         ref.watch(alarmSettingProvider.notifier);
@@ -87,7 +82,7 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                               cancelTitle: "취소",
                               okOnPressed: () async {
                                 await _alarmListViewModel.deleteAlarmGroup(alarmGroup.alarmGroupId);
-                                ref.refresh(alarmListProvider);
+                                ref.invalidate(alarmListProvider);
                                 // 삭제 시 알람 예약 삭제
                                 Alarm alarm = Alarm(
                                     alarmGroupId: alarmGroup.alarmGroupId,
@@ -148,7 +143,7 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                     SizedBox(height: 30),
                     GestureDetector(
                       onTap: () {
-                        print("눌림");
+                        // print("눌림");
                         // Navigator.pushNamed(context, "/add_alarm_group");
                         Navigator.push(
                                 context,
@@ -173,7 +168,7 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        print("눌림");
+                        // print("눌림");
                         // Navigator.pushNamed(context, "/add_alarm_group");
                         Navigator.push(
                                 context,
@@ -191,7 +186,7 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                           borderRadius: BorderRadius.circular(10),
                           side: const BorderSide(
                             style: BorderStyle.solid,
-                            color: MAIN_COLOR,
+                            color: SUB_COLOR,
                           ),
                         ),
                         color: BACKGROUND_COLOR,
@@ -200,7 +195,7 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                           child: Text(
                             "+",
                             style: TextStyle(
-                              color: MAIN_COLOR,
+                              color: SUB_COLOR,
                               fontSize: 40,
                               fontWeight: FontWeight.bold,
                             ),

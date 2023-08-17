@@ -2,7 +2,7 @@ import 'dart:ffi';
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:youngjun/user/model/user_model.dart';
+import 'package:moyeolam/user/model/user_model.dart';
 part 'nickname_model.g.dart';
 
 @JsonSerializable()

@@ -2,14 +2,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:youngjun/common/const/colors.dart';
-import 'package:youngjun/common/button/btn_toggle.dart';
+import 'package:moyeolam/common/const/colors.dart';
+import 'package:moyeolam/common/button/btn_toggle.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../../common/confirm.dart';
 
 
+import '../../common/secure_storage/secure_storage.dart';
 import '../../fcm/view/alert_list_view.dart';
+import '../../user/model/user_model.dart';
 import '../../user/view/auth.dart';
 import '../../user/viewmodel/auth_view_model.dart';
 import '../service/setting_service.dart';
@@ -19,7 +21,7 @@ import 'dart:convert';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import 'package:youngjun/main.dart';
+import 'package:moyeolam/main.dart';
 
 
 bool globalNotificationStatus = true;
@@ -174,7 +176,7 @@ class Settings extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Setting page',
       home: Scaffold(
-        backgroundColor: LIST_BLACK_COLOR,
+        backgroundColor: BACKGROUND_COLOR,
         body: _SettingsContent(),
       ),
     );
@@ -199,11 +201,18 @@ class _SettingsContentState extends State<_SettingsContent> {
   }
 
   final dio = Dio();
+  final UserInformation _userInformation = UserInformation(storage);
 
 
   Future<void> fetchSettingStatus() async {
     try {
-      final settingfetch = await settingService.getSettings();
+      UserModel? userInfo = await _userInformation.getUserInfo();
+      if (userInfo == null) {
+        print("User info not found.");
+        return;
+      }
+      String token = "Bearer ${userInfo.accessToken}";
+      final settingfetch = await settingService.getSettings(token);
 
       if (settingfetch != null && settingfetch.data != null) {
         final notificationStatus = settingfetch.data?.isNotificationToggle;
@@ -223,7 +232,14 @@ class _SettingsContentState extends State<_SettingsContent> {
 
   Future<void> updateSettingStatus(bool status) async {
     try {
-      final settingupdate = await settingService.patchSettings(status);
+      UserModel? userInfo = await _userInformation.getUserInfo();
+      if (userInfo == null) {
+        print("User info not found.");
+        return;
+      }
+      String token = "Bearer ${userInfo.accessToken}";
+
+      final settingupdate = await settingService.patchSettings(token, status);
       print('Setting Update Response: $settingupdate');
 
       if (settingupdate != null && settingupdate.data != null) {
@@ -281,10 +297,11 @@ class _SettingsContentState extends State<_SettingsContent> {
                 '아니오',
                     () async {
                   // 예
-                  await AuthViewModel().logOut();
+                  await AuthViewModel().signOut();
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder:(context) => AuthView(),
-                  ));
+                    builder: (context) => AuthView(),
+                  )
+                  );
                 },
                     () {
                   // 아니오
@@ -308,7 +325,7 @@ class _SettingsContentState extends State<_SettingsContent> {
                 '예',
                 '아니오',
                     () async {
-                  await AuthViewModel().logOut();
+                  await AuthViewModel().signOut();
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => AuthView(),
                   ));
@@ -336,7 +353,7 @@ class _SettingsContentState extends State<_SettingsContent> {
     return Text(
       text,
       style: TextStyle(
-        color: Colors.white,
+        color: FONT_COLOR,
         letterSpacing: 2.0,
         fontSize: 24.0,
         fontWeight: FontWeight.normal,

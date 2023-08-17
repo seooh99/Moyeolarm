@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:youngjun/fcm/repository/alert_list_repository.dart';
+import 'package:moyeolam/fcm/repository/alert_list_repository.dart';
 
 // class AlertListViewModel {
 //   final _alertListRepository = AlertListRepository();
