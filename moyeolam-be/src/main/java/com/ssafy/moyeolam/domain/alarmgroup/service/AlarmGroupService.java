@@ -313,6 +313,11 @@ public class AlarmGroupService {
         AlarmGroup alarmGroup = alarmGroupRepository.findById(alarmGroupId)
                 .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP));
 
+
+        if (alarmGroupMemberRepository.existsByMemberIdAndAlarmGroupId(loginMember.getId(), alarmGroup.getId())) {
+            throw new AlarmGroupException(AlarmGroupErrorInfo.ALREADY_ALARM_GROUP_MEMBER);
+        }
+
         AlarmGroupRequest alarmGroupRequest = alarmGroupRequestRepository.findByAlarmGroupIdAndFromMemberIdAndToMemberId(alarmGroup.getId(), fromMember.getId(), toMember.getId())
                 .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP_REQUEST));
 
