@@ -2,6 +2,7 @@ package com.ssafy.moyeolam.domain.alarmgroup.repository;
 
 import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroupMember;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -25,7 +26,10 @@ public interface AlarmGroupMemberRepository extends JpaRepository<AlarmGroupMemb
 
     boolean existsByMemberIdAndAlarmGroupId(Long memberId, Long alarmGroupId);
 
-    void deleteByMemberIdAndAlarmGroupId(Long memberId, Long alarmGroupId);
+    @Modifying
+    @Query("delete alarm_group_member a " +
+            "where a.member.id = :memberId and a.alarmGroup.id = :alarmGroupId ")
+    void deleteByMemberIdAndAlarmGroupId(@Param("memberId") Long memberId, @Param("alarmGroupId") Long alarmGroupId);
 
     Optional<AlarmGroupMember> findByAlarmGroupIdAndMemberId(Long alarmGroupId, Long memberId);
 }

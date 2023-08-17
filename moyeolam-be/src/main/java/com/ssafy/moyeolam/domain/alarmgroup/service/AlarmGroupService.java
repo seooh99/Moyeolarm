@@ -151,10 +151,9 @@ public class AlarmGroupService {
 
             alarmGroupMemberRepository.deleteAllInBatch(alarmGroupMembers);
             alarmDayRepository.deleteAllInBatch(alarmGroup.getAlarmDays());
-//            alarmGroupRepository.delete(alarmGroup);
             return alarmGroup.getId();
         }
-        alarmGroupMemberRepository.deleteByMemberIdAndAlarmGroupId(loginMember.getId(), alarmGroupId);
+        alarmGroupMemberRepository.deleteByMemberIdAndAlarmGroupId(loginMember.getId(), alarmGroup.getId());
 
         AlarmGroupRequest alarmGroupRequest = alarmGroupRequestRepository.findByAlarmGroupIdAndFromMemberIdAndToMemberId(alarmGroup.getId(), hostMember.getId(), loginMember.getId())
                 .orElseThrow(() -> new AlarmGroupException(AlarmGroupErrorInfo.NOT_FOUND_ALARM_GROUP_REQUEST));
