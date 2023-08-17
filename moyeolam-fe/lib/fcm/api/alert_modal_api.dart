@@ -1,5 +1,5 @@
-import 'package:youngjun/fcm/service/friend_accept_strategy.dart';
-import 'package:youngjun/fcm/service/group_accept_strategy.dart';
+import 'package:moyeolam/fcm/service/friend_accept_strategy.dart';
+import 'package:moyeolam/fcm/service/group_accept_strategy.dart';
 
 import '../../common/secure_storage/secure_storage.dart';
 import '../data_source/fcm_api_data_source.dart';

@@ -1,9 +1,3 @@
-// To parse this JSON data, do
-//
-//     final alarmListModel = alarmListModelFromJson(jsonString);
-
-import 'dart:convert';
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'alarm_list_model.g.dart';

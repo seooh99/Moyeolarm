@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:youngjun/friends/model/friends_list_model.dart';
-import 'package:youngjun/friends/repository/friends_repository.dart';
+import 'package:moyeolam/friends/model/friends_list_model.dart';
+import 'package:moyeolam/friends/repository/friends_repository.dart';
 
 FriendSearchViewModel _friendSearchViewModel = FriendSearchViewModel();
 FriendRepository _friendRepository = FriendRepository();

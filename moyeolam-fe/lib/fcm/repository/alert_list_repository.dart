@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:youngjun/alarm/data_source/alarm_detail_data_source.dart';
-import 'package:youngjun/common/const/address_config.dart';
-import 'package:youngjun/common/secure_storage/secure_storage.dart';
-import 'package:youngjun/main.dart';
-import 'package:youngjun/user/model/user_model.dart';
+import 'package:moyeolam/alarm/data_source/alarm_detail_data_source.dart';
+import 'package:moyeolam/common/const/address_config.dart';
+import 'package:moyeolam/common/secure_storage/secure_storage.dart';
+import 'package:moyeolam/main.dart';
+import 'package:moyeolam/user/model/user_model.dart';
 
 import '../data_source/fcm_api_data_source.dart';
 import '../model/alert_service_model.dart';

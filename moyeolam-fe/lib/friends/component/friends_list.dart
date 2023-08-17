@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:youngjun/common/confirm.dart';
-import 'package:youngjun/common/const/colors.dart';
-import 'package:youngjun/friends/model/friends_list_model.dart';
-import 'package:youngjun/friends/view_model/friend_add_view_model.dart';
-import 'package:youngjun/friends/view_model/friend_list_view_model.dart';
-import 'package:youngjun/friends/view_model/friend_search_view_model.dart';
+import 'package:moyeolam/common/confirm.dart';
+import 'package:moyeolam/common/const/colors.dart';
+import 'package:moyeolam/friends/model/friends_list_model.dart';
+import 'package:moyeolam/friends/view_model/friend_add_view_model.dart';
+import 'package:moyeolam/friends/view_model/friend_list_view_model.dart';
+import 'package:moyeolam/friends/view_model/friend_search_view_model.dart';
 
 List<Color> colorList = [Colors.lightBlue, Colors.red];
 
@@ -34,7 +34,7 @@ class _FriendsListState extends ConsumerState<FriendsList> {
         itemCount: widget.friends.length,
         itemBuilder: (context, index) {
           FriendModel? friend = widget.friends[index];
-          print("friend: ${friend!.nickname}");
+          // print("friend: ${friend!.nickname}");
           return ListTile(
             title: Text("${friend!.nickname}",
             style: TextStyle(

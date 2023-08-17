@@ -1,7 +1,7 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:youngjun/background_alarm/model/alarm.dart';
-import 'package:youngjun/background_alarm/service/alarm_file_handler.dart';
+import 'package:moyeolam/background_alarm/model/alarm.dart';
+import 'package:moyeolam/background_alarm/service/alarm_file_handler.dart';
 
 final alarmFileProvider = FutureProvider<List<Alarm>>((ref) async {
   final List<Alarm> alarms = await AlarmFileHandler().read() ?? [];

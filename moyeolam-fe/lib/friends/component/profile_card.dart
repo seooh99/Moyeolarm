@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:youngjun/common/const/colors.dart';
-import 'package:youngjun/user/model/user_model.dart';
+import 'package:moyeolam/common/const/colors.dart';
+import 'package:moyeolam/user/model/user_model.dart';
 
 class ProfileCard extends StatelessWidget {
   final Future? future;
@@ -46,7 +46,10 @@ class ProfileCard extends StatelessWidget {
                 } else {
                   return CircleAvatar(
                     radius: 40,
-                    backgroundColor: FONT_COLOR,
+                    backgroundColor: SUB_COLOR,
+                    // backgroundColor: FONT_COLOR,
+                    // child: Image.asset("assets/images/defaultImage.png"),
+                    child: Icon(Icons.person,size: 60, ),
                   );
                 }
               },

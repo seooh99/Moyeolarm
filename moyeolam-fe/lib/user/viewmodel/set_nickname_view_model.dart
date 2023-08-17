@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:youngjun/common/secure_storage/secure_storage.dart';
-import 'package:youngjun/main.dart';
-import 'package:youngjun/user/model/user_model.dart';
-import 'package:youngjun/user/repository/user_repository.dart';
+import 'package:moyeolam/common/secure_storage/secure_storage.dart';
+import 'package:moyeolam/main.dart';
+import 'package:moyeolam/user/model/user_model.dart';
+import 'package:moyeolam/user/repository/user_repository.dart';
 
 
 class NicknameViewModel {
@@ -19,7 +19,7 @@ class NicknameViewModel {
     try {
       UserModel? userInfo = await _userInformation.getUserInfo();
       // print("$userInfo 토큰 닉넴뷰모델");
-      print("$nName nickname");
+      // print("$nName nickname");
       if (userInfo != null) {
         var response = await _nicknameRepository
             .updateNickname(

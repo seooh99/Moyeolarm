@@ -51,12 +51,15 @@ public class AlarmGroup extends BaseTimeEntity {
     private Member hostMember;
 
     @Builder.Default
-    @OneToMany(mappedBy = "alarmGroup")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "alarmGroup")
     private List<AlarmDay> alarmDays = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "alarmGroup")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "alarmGroup")
     private List<AlarmGroupMember> alarmGroupMembers = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "alarmGroup")
+    private List<AlarmGroupRequest> alarmGroupRequestList;
 
     public void updateAlarmGroup(String title, LocalTime time) {
         this.title = title;

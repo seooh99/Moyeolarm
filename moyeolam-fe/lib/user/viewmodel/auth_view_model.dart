@@ -5,12 +5,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:youngjun/common/secure_storage/secure_storage.dart';
-import 'package:youngjun/kakao/kakao_login.dart';
-import 'package:youngjun/kakao/main_view_model.dart';
-import 'package:youngjun/main.dart';
-import 'package:youngjun/main/view/main_page.dart';
-import 'package:youngjun/user/model/user_model.dart';
+import 'package:moyeolam/common/secure_storage/secure_storage.dart';
+import 'package:moyeolam/kakao/kakao_login.dart';
+import 'package:moyeolam/kakao/main_view_model.dart';
+import 'package:moyeolam/main.dart';
+import 'package:moyeolam/main/view/main_page.dart';
+import 'package:moyeolam/user/model/user_model.dart';
 import '../../firebase_options.dart';
 import '../repository/user_repository.dart';
 
@@ -49,20 +49,20 @@ class AuthViewModel {
           fcmToken,
           deviceIndentifier
         );
-        print("${rawResponse.data} 심기불편");
+        // print("${rawResponse.data} 심기불편");
 
         var response = rawResponse.data;
         // await storage.write(key: "userInfo", value: jsonEncode(response));
         _userInformation.setUserInfo(response);
         // print(await storage.readAll());
         if (response.nickname != null) {
-          print(response.nickname);
+          // print(response.nickname);
           // print(await storage.read(key: "userInfo"));
           return "main";
         } else {
           // var userInfo = await storage.read(key: 'userInfo');
           var userInfo = await _userInformation.getUserInfo();
-          print("$userInfo sigin");
+          // print("$userInfo sigin");
           return 'signin';
         }
       }else{
@@ -77,7 +77,7 @@ class AuthViewModel {
   logOut() async {
     try {
       await _userInformation.deletUserInfo();
-      print("logOut in auth view model");
+      // print("logOut in auth view model");
     } catch (e) {
       print("$e logOut error in auth view model");
     }
@@ -88,9 +88,9 @@ class AuthViewModel {
       UserModel? storageData = await _userInformation.getUserInfo();
       if(storageData != null) {
         await _userRepository.signOut(storageData.accessToken).then((value) {
+          _userInformation.deletUserInfo();
           print("$value 회원탈퇴 auth view model");
         });
-        await _userInformation.deletUserInfo();
       }
     } catch (e) {
       print("$e signOut error in authViewmodel");

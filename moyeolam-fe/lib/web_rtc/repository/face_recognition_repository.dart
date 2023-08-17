@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:youngjun/common/const/address_config.dart';
-import 'package:youngjun/web_rtc/data_source/face_recognition_data_source.dart';
+import 'package:moyeolam/common/const/address_config.dart';
+import 'package:moyeolam/web_rtc/data_source/face_recognition_data_source.dart';
 
 import '../model/face_recognition_model.dart';
 

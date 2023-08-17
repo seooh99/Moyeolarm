@@ -4,11 +4,11 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:youngjun/common/button/btn_call.dart';
-import 'package:youngjun/common/const/colors.dart';
-import 'package:youngjun/web_rtc/view/real_time_view.dart';
-import 'package:youngjun/web_rtc/view/web_rtc_room_view.dart';
-import 'package:youngjun/web_rtc/viewmodel/alarm_ring_view_model.dart';
+import 'package:moyeolam/common/button/btn_call.dart';
+import 'package:moyeolam/common/const/colors.dart';
+import 'package:moyeolam/web_rtc/view/real_time_view.dart';
+import 'package:moyeolam/web_rtc/view/web_rtc_room_view.dart';
+import 'package:moyeolam/web_rtc/viewmodel/alarm_ring_view_model.dart';
 
 import '../../common/const/openvidu_confiig.dart';
 import '../../common/secure_storage/secure_storage.dart';
