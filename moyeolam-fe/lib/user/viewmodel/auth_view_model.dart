@@ -5,12 +5,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:youngjun/common/secure_storage/secure_storage.dart';
-import 'package:youngjun/kakao/kakao_login.dart';
-import 'package:youngjun/kakao/main_view_model.dart';
-import 'package:youngjun/main.dart';
-import 'package:youngjun/main/view/main_page.dart';
-import 'package:youngjun/user/model/user_model.dart';
+import 'package:moyeolam/common/secure_storage/secure_storage.dart';
+import 'package:moyeolam/kakao/kakao_login.dart';
+import 'package:moyeolam/kakao/main_view_model.dart';
+import 'package:moyeolam/main.dart';
+import 'package:moyeolam/main/view/main_page.dart';
+import 'package:moyeolam/user/model/user_model.dart';
 import '../../firebase_options.dart';
 import '../repository/user_repository.dart';
 

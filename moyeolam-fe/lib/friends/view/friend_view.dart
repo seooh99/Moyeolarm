@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:youngjun/common/confirm.dart';
-import 'package:youngjun/common/const/colors.dart';
-import 'package:youngjun/common/layout/title_bar.dart';
-import 'package:youngjun/common/secure_storage/secure_storage.dart';
-import 'package:youngjun/common/textfield_bar.dart';
-import 'package:youngjun/friends/component/friends_list.dart';
-import 'package:youngjun/friends/component/profile_card.dart';
-import 'package:youngjun/friends/model/friends_list_model.dart';
-import 'package:youngjun/friends/view/make_friend_view.dart';
-import 'package:youngjun/friends/view_model/friend_list_view_model.dart';
-import 'package:youngjun/friends/view_model/friend_search_view_model.dart';
-import 'package:youngjun/main.dart';
+import 'package:moyeolam/common/confirm.dart';
+import 'package:moyeolam/common/const/colors.dart';
+import 'package:moyeolam/common/layout/title_bar.dart';
+import 'package:moyeolam/common/secure_storage/secure_storage.dart';
+import 'package:moyeolam/common/textfield_bar.dart';
+import 'package:moyeolam/friends/component/friends_list.dart';
+import 'package:moyeolam/friends/component/profile_card.dart';
+import 'package:moyeolam/friends/model/friends_list_model.dart';
+import 'package:moyeolam/friends/view/make_friend_view.dart';
+import 'package:moyeolam/friends/view_model/friend_list_view_model.dart';
+import 'package:moyeolam/friends/view_model/friend_search_view_model.dart';
+import 'package:moyeolam/main.dart';
 
 class FriendView extends ConsumerStatefulWidget{
   const FriendView({super.key});
@@ -94,7 +94,14 @@ class _FriendViewConsumerSate extends ConsumerState<FriendView>{
                         ref.invalidate(friendSearchProvider);
                         textFocus.unfocus();
                       },
-                      suffixIcon: Icon(Icons.search_outlined),
+                      suffixIcon: IconButton(
+                        onPressed: (){
+                          useKeyword.setKeyword(_searchFriend.text);
+                          ref.invalidate(friendSearchProvider);
+                          textFocus.unfocus();
+                        },
+                        icon: Icon(Icons.search_outlined),
+                      ),
                       suffixIconColor: FONT_COLOR,
                     ),
                   ),
@@ -180,7 +187,8 @@ Widget SearchList(List<FriendModel?> friends) {
 
           leading: const CircleAvatar(
             // backgroundColor: colorList[index % 3],
-            backgroundColor: Colors.blue,
+            backgroundColor: SUB_COLOR,
+            child: Icon(Icons.person,size: 30, ),
           ),
             trailing: IconButton(
             onPressed: () async{

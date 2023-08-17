@@ -3,20 +3,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 
-import 'package:youngjun/alarm/view/add_friend_alarm_group_view.dart';
-import 'package:youngjun/alarm/viewmodel/add_alarm_group_view_model.dart';
-import 'package:youngjun/alarm/viewmodel/add_friend_alarm_group_view_model.dart';
-import 'package:youngjun/alarm/viewmodel/alarm_detail_view_model.dart';
-import 'package:youngjun/alarm/viewmodel/alarm_list_view_model.dart';
-import 'package:youngjun/common/button/btn_back.dart';
+import 'package:moyeolam/alarm/view/add_friend_alarm_group_view.dart';
+import 'package:moyeolam/alarm/viewmodel/add_alarm_group_view_model.dart';
+import 'package:moyeolam/alarm/viewmodel/add_friend_alarm_group_view_model.dart';
+import 'package:moyeolam/alarm/viewmodel/alarm_detail_view_model.dart';
+import 'package:moyeolam/alarm/viewmodel/alarm_list_view_model.dart';
+import 'package:moyeolam/common/button/btn_back.dart';
 
-import 'package:youngjun/common/button/btn_save_update.dart';
-import 'package:youngjun/common/confirm.dart';
-import 'package:youngjun/common/const/colors.dart';
-import 'package:youngjun/common/layout/title_bar.dart';
-import 'package:youngjun/alarm/component/alarm_guest_list.dart';
-import 'package:youngjun/alarm/view/alarm_add_page.dart';
-import 'package:youngjun/main/view/main_page.dart';
+import 'package:moyeolam/common/button/btn_save_update.dart';
+import 'package:moyeolam/common/confirm.dart';
+import 'package:moyeolam/common/const/colors.dart';
+import 'package:moyeolam/common/layout/title_bar.dart';
+import 'package:moyeolam/alarm/component/alarm_guest_list.dart';
+import 'package:moyeolam/alarm/view/alarm_add_page.dart';
+import 'package:moyeolam/main/view/main_page.dart';
 
 
 class AlarmDetailScreen extends ConsumerStatefulWidget {

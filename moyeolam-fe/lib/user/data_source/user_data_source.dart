@@ -1,9 +1,9 @@
-import 'package:youngjun/user/model/user_search_model.dart';
+import 'package:moyeolam/user/model/user_search_model.dart';
 
-import 'package:youngjun/user/model/nickname_model.dart';
+import 'package:moyeolam/user/model/nickname_model.dart';
 import 'package:dio/dio.dart' hide Headers;
 import 'package:retrofit/retrofit.dart';
-import 'package:youngjun/user/model/user_model.dart';
+import 'package:moyeolam/user/model/user_model.dart';
 
 part 'user_data_source.g.dart';
 

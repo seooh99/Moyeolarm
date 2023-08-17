@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
-import 'package:youngjun/common/const/address_config.dart';
-import 'package:youngjun/common/secure_storage/secure_storage.dart';
-import 'package:youngjun/main.dart';
-import 'package:youngjun/user/model/nickname_model.dart';
-import 'package:youngjun/user/model/user_search_model.dart';
+import 'package:moyeolam/common/const/address_config.dart';
+import 'package:moyeolam/common/secure_storage/secure_storage.dart';
+import 'package:moyeolam/main.dart';
+import 'package:moyeolam/user/model/nickname_model.dart';
+import 'package:moyeolam/user/model/user_search_model.dart';
 import '../data_source/user_data_source.dart';
-import 'package:youngjun/user/model/user_model.dart';
+import 'package:moyeolam/user/model/user_model.dart';
 
 
 

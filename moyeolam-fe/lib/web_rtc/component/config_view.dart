@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:openvidu_client/openvidu_client.dart';
-import 'package:youngjun/common/const/colors.dart';
+import 'package:moyeolam/common/const/colors.dart';
 
 import '../../common/button/btn_call.dart';
 import 'drop_down.dart';

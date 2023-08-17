@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:youngjun/alarm/viewmodel/alarm_list_view_model.dart';
+import 'package:moyeolam/alarm/viewmodel/alarm_list_view_model.dart';
 
 import '../../common/button/btn_toggle.dart';
 import '../../common/const/colors.dart';
@@ -32,10 +32,16 @@ class AlarmList extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 30),
           child: Card(
-            // color: ,
+            // color: FONT_COLOR.withOpacity(.85),
+            // color: Colors.white10,
+            color: CARD_BACK_GROUND_COLOR,
+
               margin: const EdgeInsets.only(right: 10, left: 10),
               shape:
-                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(10),
+                  side: BorderSide(
+                    color: MAIN_COLOR,
+                  )),
               child: Padding(
                 // padding: const EdgeInsets.all(16.0),
                 padding: const EdgeInsets.only(bottom: 28.0, left: 16, right: 16, top: 12),
@@ -49,7 +55,9 @@ class AlarmList extends StatelessWidget {
                         Expanded(
                           child: Text(
                             title,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
+                              color: FONT_COLOR,
                               fontSize: 20.0,
                               fontWeight: FontWeight.w500
                             ),
@@ -83,6 +91,7 @@ class AlarmList extends StatelessWidget {
                             '0$hour : 0$minute':
                             '$hour : $minute',
                             style: TextStyle(
+                              color: FONT_COLOR,
                               fontSize: 40.0,
                               fontWeight: FontWeight.w600
                             ),

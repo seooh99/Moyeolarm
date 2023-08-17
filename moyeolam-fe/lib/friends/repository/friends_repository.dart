@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
-import 'package:youngjun/common/const/address_config.dart';
-import 'package:youngjun/common/secure_storage/secure_storage.dart';
-import 'package:youngjun/friends/data_source/friend_data_source.dart';
-import 'package:youngjun/friends/model/friend_delete_model.dart';
-import 'package:youngjun/friends/model/friends_add_model.dart';
-import 'package:youngjun/friends/model/friends_list_model.dart';
-import 'package:youngjun/friends/model/friends_search_model.dart';
-import 'package:youngjun/main.dart';
-import 'package:youngjun/user/model/user_model.dart';
+import 'package:moyeolam/common/const/address_config.dart';
+import 'package:moyeolam/common/secure_storage/secure_storage.dart';
+import 'package:moyeolam/friends/data_source/friend_data_source.dart';
+import 'package:moyeolam/friends/model/friend_delete_model.dart';
+import 'package:moyeolam/friends/model/friends_add_model.dart';
+import 'package:moyeolam/friends/model/friends_list_model.dart';
+import 'package:moyeolam/friends/model/friends_search_model.dart';
+import 'package:moyeolam/main.dart';
+import 'package:moyeolam/user/model/user_model.dart';
 
 
 

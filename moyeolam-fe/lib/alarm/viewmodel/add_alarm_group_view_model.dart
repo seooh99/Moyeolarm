@@ -1,13 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:youngjun/alarm/model/add_alarm_group_model.dart';
-import 'package:youngjun/alarm/repository/alarm_add_repository.dart';
-import 'package:youngjun/common/secure_storage/secure_storage.dart';
-import 'package:youngjun/main.dart';
-import 'package:youngjun/user/model/user_model.dart';
+import 'package:moyeolam/alarm/model/add_alarm_group_model.dart';
+import 'package:moyeolam/alarm/repository/alarm_add_repository.dart';
+import 'package:moyeolam/common/secure_storage/secure_storage.dart';
+import 'package:moyeolam/main.dart';
+import 'package:moyeolam/user/model/user_model.dart';
 
 
 List<String> week = ["월", "화", "수", "목", "금", "토", "일"];
+
 
 
 class AddAlarmGroupViewModel{
@@ -34,7 +35,7 @@ class AddAlarmGroupViewModel{
 
   void setTitle(String newTitle){
     title = newTitle;
-    print(title);
+    print("제목을 바꿔 $title");
   }
   void defaultDayOfWeek(List<bool> defaultWeek){
 

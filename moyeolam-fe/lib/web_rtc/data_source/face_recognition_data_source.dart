@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart' hide Headers;
-import 'package:youngjun/web_rtc/model/face_recognition_model.dart';
+import 'package:moyeolam/web_rtc/model/face_recognition_model.dart';
 
 class FaceRecognitionDataSource {
   FaceRecognitionDataSource(

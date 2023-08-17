@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:youngjun/alarm/viewmodel/add_alarm_group_view_model.dart';
-import 'package:youngjun/common/const/colors.dart';
+import 'package:moyeolam/alarm/viewmodel/add_alarm_group_view_model.dart';
+import 'package:moyeolam/common/const/colors.dart';
 
 class AlarmMiddleSelect extends StatefulWidget {
   static List<Widget> week = [

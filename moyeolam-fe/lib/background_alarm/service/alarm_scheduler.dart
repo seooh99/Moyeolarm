@@ -1,6 +1,6 @@
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:youngjun/background_alarm/model/alarm.dart';
+import 'package:moyeolam/background_alarm/model/alarm.dart';
 
 class AlarmScheduler {
   static Future<void> scheduleRepeatable(Alarm alarm) async {
