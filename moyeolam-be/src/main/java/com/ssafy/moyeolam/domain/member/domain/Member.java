@@ -1,6 +1,7 @@
 package com.ssafy.moyeolam.domain.member.domain;
 
 import com.ssafy.moyeolam.domain.BaseTimeEntity;
+import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroup;
 import com.ssafy.moyeolam.domain.friend.domain.Friend;
 import com.ssafy.moyeolam.domain.meta.converter.OauthTypeConverter;
 import com.ssafy.moyeolam.domain.meta.domain.MetaData;
@@ -48,6 +49,9 @@ public class Member extends BaseTimeEntity {
 
     @OneToOne(mappedBy = "member")
     private ProfileImage profileImage;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hostMember")
+    private List<AlarmGroup> alarmGroup;
 
     @Builder.Default
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")
