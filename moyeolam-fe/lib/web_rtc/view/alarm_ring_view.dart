@@ -165,50 +165,50 @@ class _AlarmRingViewState extends State<AlarmRingView> {
             ),
           ),
 
-          /* ===== test ===== */
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 10, 0, 13),
-            child: SizedBox(
-              width: 280,
-              child: TextField(
-                style: const TextStyle(color: Colors.white),
-                controller: _textSessionController,
-                decoration: const InputDecoration(
-                  suffixStyle: TextStyle(color: Colors.white),
-                  border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Colors.deepPurple,
-                  labelText: "Room name",
-                  labelStyle: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ),
-
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-            child: SizedBox(
-              width: 280,
-              child: TextField(
-                style: const TextStyle(color: Colors.white),
-                controller: _textUserNameController,
-                decoration: const InputDecoration(
-                  suffixStyle: TextStyle(color: Colors.white),
-                  border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Colors.deepPurple,
-                  labelText: "Username",
-                  labelStyle: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ),
-          /* ==== test ==== */
-
-          // const SizedBox(
-          //   width: 200,
-          //   height: 120,
+          // /* ===== test ===== */
+          // Container(
+          //   margin: EdgeInsets.fromLTRB(0, 10, 0, 13),
+          //   child: SizedBox(
+          //     width: 280,
+          //     child: TextField(
+          //       style: const TextStyle(color: Colors.white),
+          //       controller: _textSessionController,
+          //       decoration: const InputDecoration(
+          //         suffixStyle: TextStyle(color: Colors.white),
+          //         border: OutlineInputBorder(),
+          //         filled: true,
+          //         fillColor: Colors.deepPurple,
+          //         labelText: "Room name",
+          //         labelStyle: TextStyle(color: Colors.white),
+          //       ),
+          //     ),
+          //   ),
           // ),
+          //
+          // Container(
+          //   padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+          //   child: SizedBox(
+          //     width: 280,
+          //     child: TextField(
+          //       style: const TextStyle(color: Colors.white),
+          //       controller: _textUserNameController,
+          //       decoration: const InputDecoration(
+          //         suffixStyle: TextStyle(color: Colors.white),
+          //         border: OutlineInputBorder(),
+          //         filled: true,
+          //         fillColor: Colors.deepPurple,
+          //         labelText: "Username",
+          //         labelStyle: TextStyle(color: Colors.white),
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // /* ==== test ==== */
+
+          const SizedBox(
+            width: 200,
+            height: 120,
+          ),
           BtnCalling(
               icons: Icon(Icons.call), onPressed: () => _connect(context)),
           const SizedBox(
