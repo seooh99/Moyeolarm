@@ -20,4 +20,5 @@ public class AlertElement {
     private LocalTime time;
     private String alertType;
     private LocalDateTime createAt;
+    private LocalDateTime modifiedAt;
 }

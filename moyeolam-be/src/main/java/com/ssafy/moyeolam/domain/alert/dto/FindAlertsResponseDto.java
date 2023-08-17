@@ -25,7 +25,7 @@ public class FindAlertsResponseDto {
         alertElements.addAll(getAlarmGroupRequests(alarmGroupRequests));
         return FindAlertsResponseDto.builder()
                 .alerts(alertElements.stream()
-                        .sorted(Comparator.comparing(AlertElement::getCreateAt).reversed())
+                        .sorted(Comparator.comparing(AlertElement::getModifiedAt).reversed())
                         .collect(Collectors.toList()))
                 .build();
     }
@@ -42,6 +42,7 @@ public class FindAlertsResponseDto {
                         .fromNickname(alertLog.getFromMember().getNickname())
                         .alertType(alertLog.getAlertType().getName())
                         .createAt(alertLog.getCreatedAt())
+                        .modifiedAt(alertLog.getCreatedAt())
                         .build()
                 );
             } else if (alertLog.getAlertType().getName().equals(AlertType.ALARM_GROUP_APPROVE.getName()) ||
@@ -58,6 +59,7 @@ public class FindAlertsResponseDto {
                         .title(alertLog.getAlarmGroup().getTitle())
                         .alertType(alertLog.getAlertType().getName())
                         .createAt(alertLog.getCreatedAt())
+                        .modifiedAt(alertLog.getCreatedAt())
                         .build()
                 );
             }
@@ -77,6 +79,7 @@ public class FindAlertsResponseDto {
                         .fromNickname(friendRequest.getFromMember().getNickname())
                         .alertType(AlertType.FRIEND_REQUEST.getName())
                         .createAt(friendRequest.getCreatedAt())
+                        .modifiedAt(friendRequest.getCreatedAt())
                         .build());
             }
         }
@@ -96,6 +99,7 @@ public class FindAlertsResponseDto {
                         .alertType(AlertType.ALARM_GROUP_REQUEST.getName())
                         .time(alarmGroupRequest.getAlarmGroup().getTime())
                         .createAt(alarmGroupRequest.getCreatedAt())
+                        .modifiedAt(alarmGroupRequest.getCreatedAt())
                         .build());
             }
         }
