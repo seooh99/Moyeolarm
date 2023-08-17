@@ -106,6 +106,12 @@ class _MakeFriendViewState extends ConsumerState<MakeFriendView> {
                                   onPressed:
                                       data.isFriend?(){
                                         final snack1 =  SnackBar(
+                                          behavior: SnackBarBehavior.floating,
+                                          margin: EdgeInsets.only(
+                                            bottom: MediaQuery.of(context).size.height - 100,
+                                            left: 10,
+                                            right: 10,
+                                          ),
                                           content: Text("이미 친구인 사용자 입니다.",
                                             style: TextStyle(
                                                 fontSize: 20,
@@ -120,6 +126,12 @@ class _MakeFriendViewState extends ConsumerState<MakeFriendView> {
                                     var response = await _friendAddViewModel.makeFriend(data.memberId);
                                     if (!response){
                                       final snack2 =  SnackBar(
+                                        behavior: SnackBarBehavior.floating,
+                                        margin: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context).size.height - 100,
+                                          left: 10,
+                                          right: 10,
+                                        ),
                                        content: Text("이미 처리 중인 요청입니다.",
                                         style: TextStyle(
                                           fontSize: 20,
@@ -129,6 +141,23 @@ class _MakeFriendViewState extends ConsumerState<MakeFriendView> {
                                         duration: Duration(seconds: 1),
                                       );
                                       ScaffoldMessenger.of(context).showSnackBar(snack2);
+                                    }else{
+                                      final snack3 =  SnackBar(
+                                        behavior: SnackBarBehavior.floating,
+                                        margin: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context).size.height - 100,
+                                          left: 10,
+                                          right: 10,
+                                        ),
+                                        content: Text("친구요청을 보냈습니다.",
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: FONT_COLOR
+                                          ),
+                                        ),
+                                        duration: Duration(seconds: 1),
+                                      );
+                                      ScaffoldMessenger.of(context).showSnackBar(snack3);
                                     }
                                   },
                                   icon: Icon(
