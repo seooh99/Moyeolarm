@@ -11,6 +11,7 @@ import 'package:youngjun/alarm/viewmodel/alarm_list_view_model.dart';
 import 'package:youngjun/common/button/btn_back.dart';
 
 import 'package:youngjun/common/button/btn_save_update.dart';
+import 'package:youngjun/common/confirm.dart';
 import 'package:youngjun/common/const/colors.dart';
 import 'package:youngjun/common/layout/title_bar.dart';
 import 'package:youngjun/alarm/component/alarm_guest_list.dart';
@@ -29,7 +30,7 @@ class AlarmDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
-
+  final AlarmListDetailViewModel _alarmListDetailViewModel =AlarmListDetailViewModel();
   @override
   Widget build(BuildContext context) {
     var alarmGroup = ref.watch(alarmDetailFutureProvider);
@@ -252,12 +253,36 @@ class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
                               children: [
                                 for(int index = 0; index <
                                     data.members.length; index++)
-                                  AlarmGuestList(
-                                    color: data.members[index].toggle? MAIN_COLOR:CKECK_GRAY_COLOR,
-                                    nickname: data.members[index].nickname,
-                                    profileImage: Image.network(
-                                        "${data.members[index].profileUrl}") ??
-                                        Image.asset("assets/images/moyeolam"),
+                                  GestureDetector(
+                                    onLongPress: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => ConfirmDialog(
+                                            title: "${data.members[index].nickname}님을 추방하시겠습니까?",
+                                            content: "추방하면 다시 초대할 수 있습니다.",
+                                            okTitle: "추방",
+                                            okOnPressed: () {
+                                              _alarmListDetailViewModel.kickFriend(
+                                                  data.alarmGroupId,
+                                                  data.members[index].memberId,
+                                              );
+                                              Navigator.of(context).pop();
+                                              // ref.invalidate(provider);
+                                            },
+                                            cancelTitle: "취소",
+                                            cancelOnPressed: (){
+                                              Navigator.of(context).pop();
+                                            },
+                                        )
+                                      );
+                                    },
+                                    child: AlarmGuestList(
+                                      color: data.members[index].toggle? MAIN_COLOR:CKECK_GRAY_COLOR,
+                                      nickname: data.members[index].nickname,
+                                      profileImage: Image.network(
+                                          "${data.members[index].profileUrl}") ??
+                                          Image.asset("assets/images/moyeolam"),
+                                    ),
                                   ),
                                 if(data.members.length < 6)
                                   GestureDetector(

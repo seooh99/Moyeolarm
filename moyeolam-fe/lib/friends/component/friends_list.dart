@@ -34,7 +34,7 @@ class _FriendsListState extends ConsumerState<FriendsList> {
         itemCount: widget.friends.length,
         itemBuilder: (context, index) {
           FriendModel? friend = widget.friends[index];
-          print("friend: ${friend!.nickname}");
+          // print("friend: ${friend!.nickname}");
           return ListTile(
             title: Text("${friend!.nickname}",
             style: TextStyle(

@@ -87,7 +87,7 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                               cancelTitle: "취소",
                               okOnPressed: () async {
                                 await _alarmListViewModel.deleteAlarmGroup(alarmGroup.alarmGroupId);
-                                ref.refresh(alarmListProvider);
+                                ref.invalidate(alarmListProvider);
                                 // 삭제 시 알람 예약 삭제
                                 Alarm alarm = Alarm(
                                     alarmGroupId: alarmGroup.alarmGroupId,
@@ -148,7 +148,7 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                     SizedBox(height: 30),
                     GestureDetector(
                       onTap: () {
-                        print("눌림");
+                        // print("눌림");
                         // Navigator.pushNamed(context, "/add_alarm_group");
                         Navigator.push(
                                 context,
@@ -173,7 +173,7 @@ class _MainAlarmListState extends ConsumerState<MainAlarmList> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        print("눌림");
+                        // print("눌림");
                         // Navigator.pushNamed(context, "/add_alarm_group");
                         Navigator.push(
                                 context,
