@@ -11,9 +11,13 @@ abstract class SettingService {
   factory SettingService(Dio dio, {String baseUrl}) = _SettingService;
 
   @GET('/member/settings')
-  Future<FetchSettingModel?> getSettings();
+  Future<FetchSettingModel?> getSettings(
+      @Header("Authorization") String token,
+      );
 
 
   @PATCH('/member/settings/notification-toggle')
-  Future<ChangeSettingModel?> patchSettings(@Query('data') bool data);
+  Future<ChangeSettingModel?> patchSettings(
+      @Header("Authorization") String token,
+      @Query('data') bool data);
 }
