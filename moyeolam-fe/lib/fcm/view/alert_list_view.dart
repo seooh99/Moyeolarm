@@ -47,12 +47,17 @@ class ArletListView extends ConsumerWidget {
       ),
       backgroundColor: BACKGROUND_COLOR,
       body: Padding(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(12),
         child: apiAlertModelAsyncValue.when(
           loading: () => Center(child: CircularProgressIndicator()),
           error: (err, stack) => Center(child: Text("데이터 로딩 실패: $err")),
           data: (apiAlertModel) {
-            return _buildAlertList(apiAlertModel, ref);
+            return RefreshIndicator(
+              onRefresh: ()async{
+                ref.invalidate(alertServiceProvider);
+              },
+                child: _buildAlertList(apiAlertModel, ref)
+            );
           },
         ),
       ),
