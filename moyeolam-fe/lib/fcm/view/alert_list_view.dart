@@ -76,11 +76,23 @@ class ArletListView extends ConsumerWidget {
     if (apiAlertModel.data?.alerts != null && apiAlertModel.data!.alerts!.isNotEmpty) {
       final List<ApiArletItem?> alertItems = apiAlertModel.data!.alerts!;
       return ListView.builder(
+        physics: AlwaysScrollableScrollPhysics(),
         itemCount: alertItems.length,
         itemBuilder: (context, index) => _buildAlertItem(context, alertItems[index], ref),
       );
     } else {
-      return Center(child: Text('알림없음', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: FONT_COLOR)));
+      return const SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+          child: Center(
+              child: Text('알림없음',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight:FontWeight.bold,
+                      color: FONT_COLOR
+                  )
+              )
+          )
+      );
     }
   }
 

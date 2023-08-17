@@ -2,6 +2,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:moyeolam/common/const/address_config.dart';
 import 'package:moyeolam/common/secure_storage/secure_storage.dart';
 
 import 'package:moyeolam/fcm/model/alert_service_model.dart';
@@ -22,7 +23,7 @@ class AlertService {
 
   Future<ApiArletModel> fetchData() async {
     try {
-      final apiService = FcmApiService(Dio());
+      final apiService = FcmApiService(Dio(), baseUrl: BASE_URL);
       UserModel? userInfo = await userInformation.getUserInfo();
       String token = "Bearer ${userInfo!.accessToken}";
       final response = await apiService.getPosts(token);
