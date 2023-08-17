@@ -221,7 +221,7 @@ public class AlarmGroupService {
         }
 
         // 푸시알림 전송
-        String body = alarmGroup.getHostMember().getNickname() + "님의" + alarmGroup.getTitle() + "의 알람그룹이 수정되었습니다.";
+        String body = alarmGroup.getHostMember().getNickname() + " 님의" + alarmGroup.getTitle() + "의 알람그룹이 수정되었습니다.";
         for (AlarmGroupMember alarmGroupMember : alarmGroupMembers) {
             Member member = alarmGroupMember.getMember();
             if (!member.getId().equals(loginMember.getId())) {
