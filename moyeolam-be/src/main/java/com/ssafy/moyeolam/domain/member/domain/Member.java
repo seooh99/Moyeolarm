@@ -2,7 +2,9 @@ package com.ssafy.moyeolam.domain.member.domain;
 
 import com.ssafy.moyeolam.domain.BaseTimeEntity;
 import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroup;
+import com.ssafy.moyeolam.domain.alarmgroup.domain.AlarmGroupMember;
 import com.ssafy.moyeolam.domain.friend.domain.Friend;
+import com.ssafy.moyeolam.domain.friend.domain.FriendRequest;
 import com.ssafy.moyeolam.domain.meta.converter.OauthTypeConverter;
 import com.ssafy.moyeolam.domain.meta.domain.MetaData;
 import lombok.AllArgsConstructor;
@@ -44,10 +46,13 @@ public class Member extends BaseTimeEntity {
     private Boolean notificationToggle = Boolean.TRUE;
 
     @Builder.Default
-    @OneToMany(mappedBy = "member")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")
     private List<Friend> friends = new ArrayList<>();
 
-    @OneToOne(mappedBy = "member")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "myFriend")
+    private List<Friend> friendsOfMine;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "member")
     private ProfileImage profileImage;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "hostMember")
@@ -56,6 +61,15 @@ public class Member extends BaseTimeEntity {
     @Builder.Default
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")
     private Set<FcmToken> fcmTokens = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fromMember")
+    private List<FriendRequest> sentFriendRequests;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "toMember")
+    private List<FriendRequest> receivedFriendRequests;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")
+    private List<AlarmGroupMember> alarmGroupMembers;
 
     public void updateRefreshToken(String updateRefreshToken) {
         if (this.memberToken == null) {
