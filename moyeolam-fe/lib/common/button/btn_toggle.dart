@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moyeolam/common/const/colors.dart';
 
 class BtnToggle extends StatefulWidget {
 
@@ -24,7 +25,7 @@ class _BtnToggleState extends State<BtnToggle> {
   Widget build(BuildContext context) {
     return Switch(
       value: light,
-      activeColor: Colors.deepPurple,
+      activeColor: MAIN_COLOR,
       onChanged: (bool value) {
         widget.onChanged(value);
         setState(() {

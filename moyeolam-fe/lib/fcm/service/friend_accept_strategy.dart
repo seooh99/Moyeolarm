@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:youngjun/main.dart';
+import 'package:moyeolam/main.dart';
 import '../../../common/const/address_config.dart';
-import 'package:youngjun/fcm/data_source/fcm_api_data_source.dart';
+import 'package:moyeolam/fcm/data_source/fcm_api_data_source.dart';
 import '../../common/secure_storage/secure_storage.dart';
 import '../../user/model/user_model.dart';
 import '../model/alert_service_model.dart';

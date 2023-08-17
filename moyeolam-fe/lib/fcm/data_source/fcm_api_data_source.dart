@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 
 import '../../common/const/address_config.dart';
-import 'package:youngjun/fcm/model/alert_service_model.dart';
+import 'package:moyeolam/fcm/model/alert_service_model.dart';
 
 import '../model/alert_group_service_model.dart'; // ApiArletModel 클래스를 정의한 파일을 import
 

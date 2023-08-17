@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:youngjun/common/const/address_config.dart';
-import 'package:youngjun/main.dart';
+import 'package:moyeolam/common/const/address_config.dart';
+import 'package:moyeolam/main.dart';
 
 import '../../common/secure_storage/secure_storage.dart';
 import '../../user/model/user_model.dart';

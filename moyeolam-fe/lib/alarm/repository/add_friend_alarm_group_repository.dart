@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:youngjun/alarm/data_source/add_friend_alarm_group_data_source.dart';
-import 'package:youngjun/alarm/model/add_friend_alarm_group_model.dart';
-import 'package:youngjun/common/const/address_config.dart';
-import 'package:youngjun/common/secure_storage/secure_storage.dart';
-import 'package:youngjun/main.dart';
-import 'package:youngjun/user/model/user_model.dart';
+import 'package:moyeolam/alarm/data_source/add_friend_alarm_group_data_source.dart';
+import 'package:moyeolam/alarm/model/add_friend_alarm_group_model.dart';
+import 'package:moyeolam/common/const/address_config.dart';
+import 'package:moyeolam/common/secure_storage/secure_storage.dart';
+import 'package:moyeolam/main.dart';
+import 'package:moyeolam/user/model/user_model.dart';
 
 class AddFriendAlarmGroupRepository {
   final UserInformation _userInformation = UserInformation(storage);

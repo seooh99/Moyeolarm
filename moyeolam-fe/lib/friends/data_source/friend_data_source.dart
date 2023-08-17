@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import 'package:youngjun/friends/model/friend_delete_model.dart';
-import 'package:youngjun/friends/model/friends_add_model.dart';
-import 'package:youngjun/friends/model/friends_list_model.dart';
-import 'package:youngjun/friends/model/friends_search_model.dart';
+import 'package:moyeolam/friends/model/friend_delete_model.dart';
+import 'package:moyeolam/friends/model/friends_add_model.dart';
+import 'package:moyeolam/friends/model/friends_list_model.dart';
+import 'package:moyeolam/friends/model/friends_search_model.dart';
 
 
 part 'friend_data_source.g.dart';

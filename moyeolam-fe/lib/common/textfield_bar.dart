@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:youngjun/common/const/colors.dart';
+import 'package:moyeolam/common/const/colors.dart';
 
 class TextFieldbox extends StatefulWidget {
   final Function(String) setContents;
@@ -52,8 +52,8 @@ class _TextFieldboxState extends State<TextFieldbox> {
       textAlign: TextAlign.center,
       onSubmitted: widget.onSubmit,
       keyboardType: TextInputType.text,
-      onEditingComplete: (){
-        widget.setContents(widget.controller.text);
+      onChanged: (String value){
+        widget.setContents(value);
       },
       // obscureText: true,
       cursorColor: MAIN_COLOR,

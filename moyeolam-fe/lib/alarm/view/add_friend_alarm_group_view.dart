@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:youngjun/alarm/viewmodel/add_friend_alarm_group_view_model.dart';
-import 'package:youngjun/common/button/btn_back.dart';
-import 'package:youngjun/common/button/btn_save_update.dart';
-import 'package:youngjun/common/const/colors.dart';
-import 'package:youngjun/common/layout/title_bar.dart';
-import 'package:youngjun/common/secure_storage/secure_storage.dart';
-import 'package:youngjun/common/textfield_bar.dart';
-// import 'package:youngjun/friends/provider/friends_list_provider.dart';
-import 'package:youngjun/friends/model/friends_list_model.dart';
-import 'package:youngjun/friends/view_model/friend_search_view_model.dart';
-import 'package:youngjun/user/model/user_search_model.dart';
+import 'package:moyeolam/alarm/viewmodel/add_friend_alarm_group_view_model.dart';
+import 'package:moyeolam/common/button/btn_back.dart';
+import 'package:moyeolam/common/button/btn_save_update.dart';
+import 'package:moyeolam/common/const/colors.dart';
+import 'package:moyeolam/common/layout/title_bar.dart';
+import 'package:moyeolam/common/secure_storage/secure_storage.dart';
+import 'package:moyeolam/common/textfield_bar.dart';
+// import 'package:moyeolam/friends/provider/friends_list_provider.dart';
+import 'package:moyeolam/friends/model/friends_list_model.dart';
+import 'package:moyeolam/friends/view_model/friend_search_view_model.dart';
+import 'package:moyeolam/user/model/user_search_model.dart';
 
 class AddFriendAlarmGroupView extends ConsumerStatefulWidget{
   final List<AddMemberModel?> invitedMember;
@@ -118,6 +118,15 @@ class _AddFriendAlarmGroupViewState extends ConsumerState {
                         ref.invalidate(friendSearchProvider);
                         textFocus.unfocus();
                       },
+                      suffixIconColor: FONT_COLOR,
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.search_outlined),
+                        onPressed: (){
+                          searchFriend.setKeyword(_searchFriend.text);
+                          ref.invalidate(friendSearchProvider);
+                          textFocus.unfocus();
+                        },
+                      ),
                     ),
                   ),
                   SingleChildScrollView(
