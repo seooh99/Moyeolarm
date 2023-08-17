@@ -31,7 +31,8 @@ class AlarmAddScreen extends ConsumerStatefulWidget {
 
 class _AlarmAddScreenState extends ConsumerState<AlarmAddScreen> {
   late final AddAlarmGroupViewModel _addAlarmGroupViewModel;
-
+  final TextEditingController _setTitle = TextEditingController();
+  final FocusNode textFocus = FocusNode();
   // final AlarmListDetailViewModel _alarmListDetailViewModel = AlarmListDetailViewModel();
 
   @override
@@ -44,13 +45,19 @@ class _AlarmAddScreenState extends ConsumerState<AlarmAddScreen> {
     }
     super.initState();
   }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _setTitle.dispose();
+    textFocus.dispose();
+    super.dispose();
+  }
 
 
   @override
   Widget build(BuildContext context) {
     var _alarmDetail = ref.watch(alarmDetailProvider);
     AlarmListNotifier alarmListNotifier = ref.watch(alarmSettingProvider.notifier);
-
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
       appBar: TitleBar(
@@ -58,6 +65,9 @@ class _AlarmAddScreenState extends ConsumerState<AlarmAddScreen> {
         title: widget.detailAlarmGroup == null ? '알람 생성' : "알람 수정",
         actions: [
           TextButton(
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all(EdgeInsets.only(right: 8)),
+            ),
             onPressed: () async {
               int? preHour = widget.detailAlarmGroup?.hour;
               int? preMinute = widget.detailAlarmGroup?.minute;
@@ -115,7 +125,6 @@ class _AlarmAddScreenState extends ConsumerState<AlarmAddScreen> {
               } else {
                 var newGroupId = await _addAlarmGroupViewModel.addAlarmGroup();
                 // var response = await _alarmListDetailViewModel.getAlarmListDetail(newGroupId);
-                await _alarmDetail.setAlarmGroupId(newGroupId);
 
                 // 알람 새로 생성 시 알람 예약
                 int hour =
@@ -134,13 +143,14 @@ class _AlarmAddScreenState extends ConsumerState<AlarmAddScreen> {
                 AlarmScheduler.scheduleRepeatable(alarm);
 
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => AlarmDetailScreen()));
+                    builder: (context) => AlarmDetailScreen(alarmGroupId: newGroupId,)));
               }
             },
             child: const Text(
               '저장',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 18,
+                color: MAIN_COLOR,
               ),
             ),
           )
@@ -149,64 +159,68 @@ class _AlarmAddScreenState extends ConsumerState<AlarmAddScreen> {
           Navigator.of(context).pop();
         }),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 24,
-            ),
-            Center(
-              child: Container(
-                width: 320,
-                child: TextFieldbox(
-                  setContents: (String) {
-                    _addAlarmGroupViewModel.setTitle(String);
-                  },
-                  colors: Colors.black,
-                  defualtText: widget.detailAlarmGroup?.title ?? "제목",
+      body: GestureDetector(
+        onTap: (){
+          textFocus.unfocus();
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 24,
+              ),
+              Center(
+                child: Container(
+                  width: 320,
+                  child: TextFieldbox(
+                    textFocus: textFocus,
+                    controller: _setTitle,
+                    onSubmit: (String value){
+                      _addAlarmGroupViewModel.setTitle(value);
+                      textFocus.unfocus();
+                    },
+                    setContents: _addAlarmGroupViewModel.setTitle,
+                    colors: Colors.black,
+                    defualtText: widget.detailAlarmGroup?.title ?? "제목",
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Divider(
-              indent: 20,
-              endIndent: 20,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Clock(
-              timeSet: widget.detailAlarmGroup != null
-                  ? DateTime(
-                      DateTime.now().year,
-                      DateTime.now().month,
-                      DateTime.now().day,
-                      widget.detailAlarmGroup!.hour,
-                      widget.detailAlarmGroup!.minute,
-                    )
-                  : DateTime.now(),
-              onTimeChanged: _addAlarmGroupViewModel.setTime,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            AlarmMiddleSelect(
-              dayOfWeek: widget.detailAlarmGroup?.dayOfWeek,
-              alarmSound: widget.detailAlarmGroup?.alarmSound,
-              alarmMission: widget.detailAlarmGroup?.alarmMission,
-              addAlarmGroupViewModel: _addAlarmGroupViewModel,
-            ),
-          ],
+              SizedBox(
+                height: 20,
+              ),
+              Divider(
+                indent: 20,
+                endIndent: 20,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Clock(
+                timeSet: widget.detailAlarmGroup != null
+                    ? DateTime(
+                        DateTime.now().year,
+                        DateTime.now().month,
+                        DateTime.now().day,
+                        widget.detailAlarmGroup!.hour,
+                        widget.detailAlarmGroup!.minute,
+                      )
+                    : DateTime.now(),
+                onTimeChanged: _addAlarmGroupViewModel.setTime,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              AlarmMiddleSelect(
+                dayOfWeek: widget.detailAlarmGroup?.dayOfWeek,
+                alarmSound: widget.detailAlarmGroup?.alarmSound,
+                alarmMission: widget.detailAlarmGroup?.alarmMission,
+                addAlarmGroupViewModel: _addAlarmGroupViewModel,
+              ),
+            ],
+          ),
         ),
       ),
     );
-  }
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
   }
 }
 
