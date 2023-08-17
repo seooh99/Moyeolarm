@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moyeolam/common/const/address_config.dart';
 import 'package:moyeolam/common/const/colors.dart';
 
 import '../../common/secure_storage/secure_storage.dart';
@@ -79,7 +80,7 @@ class APIDialog extends StatelessWidget {
             onPressed: () {
               // FcmApiService 인스턴스 생성 (이 부분은 실제 구현에 따라 다를 수 있습니다.)
               final dio = Dio();
-              final apiService = FcmApiService(dio);
+              final apiService = FcmApiService(dio, baseUrl: BASE_URL);
               bool isAccepted = false;  // or false based on your condition
 
               if (alertTypeList == '친구 요청') {
@@ -113,7 +114,7 @@ class APIDialog extends StatelessWidget {
           TextButton(
             onPressed: () {
               final dio = Dio();
-              final apiService = FcmApiService(dio);
+              final apiService = FcmApiService(dio, baseUrl: BASE_URL);
               bool isAccepted = true;  // or false based on your condition
 
               if (alertTypeList == '친구 요청') {

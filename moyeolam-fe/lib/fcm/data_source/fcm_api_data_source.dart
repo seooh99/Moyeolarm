@@ -1,5 +1,6 @@
 // fcm_api_service.dart
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:retrofit/http.dart';
 
 import '../../common/const/address_config.dart';
@@ -9,7 +10,8 @@ import '../model/alert_group_service_model.dart'; // ApiArletModel 클래스를 
 
 part 'fcm_api_data_source.g.dart'; // api_service.g.dart 파일을 포함
 
-@RestApi(baseUrl: BASE_URL)
+
+@RestApi()
 abstract class FcmApiService {
   factory FcmApiService(Dio dio, {String baseUrl}) = _FcmApiService;
 

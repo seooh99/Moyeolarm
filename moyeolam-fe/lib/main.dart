@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -19,7 +20,9 @@ class GlobalVariable {
 final FlutterSecureStorage storage = FlutterSecureStorage();
 
 void main() async {
-  KakaoSdk.init(nativeAppKey: "a5b7ef2bcf2160ee4094ffe391dac777");
+  await dotenv.load(fileName: 'assets/config/.env');
+  String nativeKey = dotenv.get("KAKAO_NATIVE_KEY");
+  KakaoSdk.init(nativeAppKey: nativeKey);
 
 
   WidgetsFlutterBinding.ensureInitialized();

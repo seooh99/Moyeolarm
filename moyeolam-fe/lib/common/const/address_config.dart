@@ -1,2 +1,3 @@
-const BASE_URL = "http://i9a502.p.ssafy.io:8080";
-const RECOGNITION_URL = "http://i9a502.p.ssafy.io:8081";
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+String BASE_URL = dotenv.get('BASE_URL');
+String RECOGNITION_URL = dotenv.get('RECOGNITION_URL');
