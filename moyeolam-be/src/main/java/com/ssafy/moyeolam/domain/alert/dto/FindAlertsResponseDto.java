@@ -79,7 +79,7 @@ public class FindAlertsResponseDto {
                         .fromNickname(friendRequest.getFromMember().getNickname())
                         .alertType(AlertType.FRIEND_REQUEST.getName())
                         .createAt(friendRequest.getCreatedAt())
-                        .modifiedAt(friendRequest.getCreatedAt())
+                        .modifiedAt(friendRequest.getModifiedAt())
                         .build());
             }
         }
@@ -99,7 +99,7 @@ public class FindAlertsResponseDto {
                         .alertType(AlertType.ALARM_GROUP_REQUEST.getName())
                         .time(alarmGroupRequest.getAlarmGroup().getTime())
                         .createAt(alarmGroupRequest.getCreatedAt())
-                        .modifiedAt(alarmGroupRequest.getCreatedAt())
+                        .modifiedAt(alarmGroupRequest.getModifiedAt())
                         .build());
             }
         }
