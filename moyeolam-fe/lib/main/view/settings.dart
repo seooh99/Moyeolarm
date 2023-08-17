@@ -9,7 +9,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import '../../common/confirm.dart';
 
 
+import '../../common/secure_storage/secure_storage.dart';
 import '../../fcm/view/alert_list_view.dart';
+import '../../user/model/user_model.dart';
 import '../../user/view/auth.dart';
 import '../../user/viewmodel/auth_view_model.dart';
 import '../service/setting_service.dart';
@@ -199,11 +201,18 @@ class _SettingsContentState extends State<_SettingsContent> {
   }
 
   final dio = Dio();
+  final UserInformation _userInformation = UserInformation(storage);
 
 
   Future<void> fetchSettingStatus() async {
     try {
-      final settingfetch = await settingService.getSettings();
+      UserModel? userInfo = await _userInformation.getUserInfo();
+      if (userInfo == null) {
+        print("User info not found.");
+        return;
+      }
+      String token = "Bearer ${userInfo.accessToken}";
+      final settingfetch = await settingService.getSettings(token);
 
       if (settingfetch != null && settingfetch.data != null) {
         final notificationStatus = settingfetch.data?.isNotificationToggle;
@@ -223,7 +232,14 @@ class _SettingsContentState extends State<_SettingsContent> {
 
   Future<void> updateSettingStatus(bool status) async {
     try {
-      final settingupdate = await settingService.patchSettings(status);
+      UserModel? userInfo = await _userInformation.getUserInfo();
+      if (userInfo == null) {
+        print("User info not found.");
+        return;
+      }
+      String token = "Bearer ${userInfo.accessToken}";
+
+      final settingupdate = await settingService.patchSettings(token, status);
       print('Setting Update Response: $settingupdate');
 
       if (settingupdate != null && settingupdate.data != null) {
@@ -283,8 +299,9 @@ class _SettingsContentState extends State<_SettingsContent> {
                   // 예
                   await AuthViewModel().logOut();
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder:(context) => AuthView(),
-                  ));
+                    builder: (context) => AuthView(),
+                  )
+                  );
                 },
                     () {
                   // 아니오
@@ -308,7 +325,7 @@ class _SettingsContentState extends State<_SettingsContent> {
                 '예',
                 '아니오',
                     () async {
-                  await AuthViewModel().logOut();
+                  await AuthViewModel().signOut();
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => AuthView(),
                   ));
