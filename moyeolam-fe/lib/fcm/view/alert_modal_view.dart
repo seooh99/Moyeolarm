@@ -7,6 +7,8 @@ import '../../common/secure_storage/secure_storage.dart';
 import '../api/alert_modal_api.dart';
 import '../data_source/fcm_api_data_source.dart';
 import '../service/alert_main_sevice.dart';
+import '../service/friend_accept_strategy.dart';
+import '../service/group_accept_strategy.dart';
 
 
 class APIDialog extends StatelessWidget {
@@ -74,22 +76,20 @@ class APIDialog extends StatelessWidget {
           )
         else
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               // FcmApiService 인스턴스 생성 (이 부분은 실제 구현에 따라 다를 수 있습니다.)
               final dio = Dio();
               final apiService = FcmApiService(dio);
-              final apiHandler = ArletModalApi(apiService);
+              bool isAccepted = false;  // or false based on your condition
 
               if (alertTypeList == '친구 요청') {
-                apiHandler.handleApiRequest('친구 요청',
-                    friendRequestId: friendRequestId,
-                    isAccepted: false,
-                    fromMemberId: fromMemberId);
+                final strategy = FriendAcceptStrategy(apiService);
+                await strategy.execute(
+                    isAccepted, friendRequestId!);
               } else if (fromMemberId != null) {
-                apiHandler.handleApiRequest('알람그룹 요청',
-                    alarmGroupId: alarmGroupId,
-                    isAccepted: false,
-                    fromMemberId: fromMemberId);
+                final strategy = GroupAcceptStrategy(apiService);
+                await strategy.execute(
+                    isAccepted, alarmGroupId!, fromMemberId);
               }
               Navigator.of(context).pop(); // Dialog 닫기
               onDialogHandled?.call(); // Refresh the list in ArletListView
@@ -111,21 +111,19 @@ class APIDialog extends StatelessWidget {
           Container()
         else
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               final dio = Dio();
               final apiService = FcmApiService(dio);
-              final apiHandler = ArletModalApi(apiService);
+              bool isAccepted = true;  // or false based on your condition
 
               if (alertTypeList == '친구 요청') {
-                apiHandler.handleApiRequest('친구 요청',
-                    friendRequestId: friendRequestId,
-                    isAccepted: true,
-                    fromMemberId: fromMemberId);
+                final strategy = FriendAcceptStrategy(apiService);
+                await strategy.execute(
+                    isAccepted, friendRequestId!);
               } else if (fromMemberId != null) {
-                apiHandler.handleApiRequest('알람그룹 요청',
-                    alarmGroupId: alarmGroupId,
-                    isAccepted: true,
-                    fromMemberId: fromMemberId);
+                final strategy = GroupAcceptStrategy(apiService);
+                await strategy.execute(
+                    isAccepted, alarmGroupId!, fromMemberId);
               }
               Navigator.of(context).pop(); // Dialog 닫기
               onDialogHandled?.call(); // Refresh the list in ArletListView
