@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 import 'package:youngjun/alarm/model/alarm_list_model.dart';
+import 'package:youngjun/alarm/model/delete_friend_alarm_group_model.dart';
 
 import '../model/add_alarm_group_model.dart';
 import '../model/alarm_detail_model.dart';
@@ -34,5 +35,11 @@ abstract class AlarmListDataSource {
       @Header('Authorization') String token,
       @Path("alarmGroupId") int alarmGroupId,
     );
-
+  // 친구 강퇴
+  @POST("/alarmgroups/{alarmGroupId}/ban")
+  Future<AlarmGroupDeleteFriendResponseModel> kickFriend(
+      @Header('Authorization') String token,
+      @Path("alarmGroupId") int alarmGroupId,
+      @Body() AlarmGroupDeleteFriendRequestModel memberId,
+    );
 }

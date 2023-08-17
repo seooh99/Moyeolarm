@@ -13,11 +13,11 @@ class UserInformation {
     var stringUserInfo = await storage.read(key: 'userInfo');
     if(stringUserInfo !=null){
       var result = jsonDecode(stringUserInfo);
-      print("accessToken  ${result["accessToken"]} secure storage");
+      // print("accessToken  ${result["accessToken"]} secure storage");
       
       return UserModel.fromJson(result);
     }else{
-      print("Check: userInfo is $stringUserInfo");
+      // print("Check: userInfo is $stringUserInfo");
     }
   }
 
@@ -25,12 +25,12 @@ class UserInformation {
     var stringUserInfo = jsonEncode(newUserInfo);
     await storage.write(key: 'userInfo', value: stringUserInfo);
     var result = await storage.read(key: 'userInfo');
-    print("updated userInfo is $result");
+    // print("updated userInfo is $result");
   }
 
   deletUserInfo() async {
     await storage.delete(key: 'userInfo');
-    print("Delete!");
+    // print("Delete!");
     return "Delete UserInforamtion";
   }
 }

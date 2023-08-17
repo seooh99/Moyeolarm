@@ -19,7 +19,7 @@ class NicknameViewModel {
     try {
       UserModel? userInfo = await _userInformation.getUserInfo();
       // print("$userInfo 토큰 닉넴뷰모델");
-      print("$nName nickname");
+      // print("$nName nickname");
       if (userInfo != null) {
         var response = await _nicknameRepository
             .updateNickname(
