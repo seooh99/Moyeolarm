@@ -257,34 +257,51 @@ class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
                                     onLongPress: () {
                                       showDialog(
                                         context: context,
-                                        builder: (context) => ConfirmDialog(
-                                            title: "${data.members[index].nickname}님을 추방하시겠습니까?",
+                                        builder: (context) {
+                                          if(index != 0) {
+                                          return ConfirmDialog(
+                                            title:
+                                                "${data.members[index].nickname}님을 추방하시겠습니까?",
                                             content: "추방하면 다시 초대할 수 있습니다.",
                                             okTitle: "추방",
                                             okOnPressed: () {
-                                              _alarmListDetailViewModel.kickFriend(
-                                                  data.alarmGroupId,
-                                                  data.members[index].memberId,
+                                              _alarmListDetailViewModel
+                                                  .kickFriend(
+                                                data.alarmGroupId,
+                                                data.members[index].memberId,
                                               );
                                               Navigator.of(context).pop();
                                               // ref.invalidate(provider);
                                             },
                                             cancelTitle: "취소",
-                                            cancelOnPressed: (){
+                                            cancelOnPressed: () {
                                               Navigator.of(context).pop();
                                             },
-                                        )
+                                          );
+                                        }else{
+                                            return ConfirmDialog(
+                                                okOnPressed: (){
+                                                  Navigator.pop(context);
+                                                },
+                                                title: "경고",
+                                                content: "방장은 강퇴할 수 없습니다.",
+                                                okTitle: "확인",
+                                                cancelOnPressed: (){
+                                                  Navigator.pop(context);
+                                                },
+                                                cancelTitle: ""
+                                            );
+                                          }
+                                      }
                                       );
                                     },
                                     child: AlarmGuestList(
                                       color: data.members[index].toggle? MAIN_COLOR:CKECK_GRAY_COLOR,
                                       nickname: data.members[index].nickname,
-                                      profileImage: Image.network(
-                                          "${data.members[index].profileUrl}") ??
-                                          Image.asset("assets/images/moyeolam"),
+                                      profileImageUrl: data.members[index].profileImageUrl,
                                     ),
                                   ),
-                                if(data.members.length < 6)
+                                if(data.members.length < 6 && data.isHost)
                                   GestureDetector(
                                     onTap: () {
                                       List<AddMemberModel?> members = [];

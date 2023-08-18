@@ -184,12 +184,18 @@ Widget SearchList(List<FriendModel?> friends) {
                 color: FONT_COLOR,
                 fontWeight: FontWeight.w200,
               )),
-
-          leading: const CircleAvatar(
-            // backgroundColor: colorList[index % 3],
-            backgroundColor: SUB_COLOR,
-            child: Icon(Icons.person,size: 30, ),
+          leading: SizedBox(
+            height: 100,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(100.0),
+              child: friend.profileImageUrl != null ?Image.network("${friend.profileImageUrl}", fit: BoxFit.fill,):Icon(Icons.person,size:30,color: SUB_COLOR,),
+            ),
           ),
+          // leading: const CircleAvatar(
+          //   // backgroundColor: colorList[index % 3],
+          //   // backgroundColor: SUB_COLOR,
+          //   // child: Icon(Icons.person,size: 30, ),
+          // ),
             trailing: IconButton(
             onPressed: () async{
               showDialog(
