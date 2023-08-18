@@ -55,7 +55,7 @@ class AuthViewModel {
         // await storage.write(key: "userInfo", value: jsonEncode(response));
         _userInformation.setUserInfo(response);
         // print(await storage.readAll());
-        if (response.nickname != '') {
+        if (response.nickname != null) {
           // print(response.nickname);
           // print(await storage.read(key: "userInfo"));
           return "main";
