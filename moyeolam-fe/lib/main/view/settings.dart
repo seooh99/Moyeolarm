@@ -283,7 +283,7 @@ class _SettingsContentState extends State<_SettingsContent> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               buildText('버전 정보', context),
-              buildText('v1.04', context),
+              buildText('v1.05', context),
             ],
           ),
           buildDivider(),
@@ -298,7 +298,7 @@ class _SettingsContentState extends State<_SettingsContent> {
                 '아니오',
                     () async {
                   // 예
-                  await AuthViewModel().signOut();
+                  await AuthViewModel().logOut();
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => AuthView(),
                   )

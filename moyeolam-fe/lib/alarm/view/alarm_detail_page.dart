@@ -298,7 +298,7 @@ class _AlarmDetailScreenState extends ConsumerState<AlarmDetailScreen> {
                                     child: AlarmGuestList(
                                       color: data.members[index].toggle? MAIN_COLOR:CKECK_GRAY_COLOR,
                                       nickname: data.members[index].nickname,
-                                      profileImage: data.members[index].profileUrl,
+                                      profileImageUrl: data.members[index].profileImageUrl,
                                     ),
                                   ),
                                 if(data.members.length < 6 && data.isHost)

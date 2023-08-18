@@ -197,11 +197,11 @@ class _AddFriendAlarmGroupViewState extends ConsumerState {
                                   ),
                                 ),
                                 leading:  SizedBox(
-                                  height: 60,
-                                  width: 60,
+                                  height: 30,
+                                  width: 30,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(100.0),
-                                    child: Image.network("${friend.profileImageUrl}"),
+                                    child: (friend.profileImageUrl != null)?Image.network("${friend.profileImageUrl}"):Icon(Icons.person,size:30,),
                                   ),
                                 ),
                                 trailing: IconButton(

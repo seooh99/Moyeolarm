@@ -41,8 +41,12 @@ class ProfileCard extends StatelessWidget {
                   UserModel? userInfo = snapshot.data;
                   var profileImageUrl = userInfo!.profileImageUrl;
                   print("$profileImageUrl 123");
-                  return CircleAvatar(
-                    backgroundColor: Colors.deepOrangeAccent,
+                  return SizedBox(
+                    height: 80,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100.0),
+                      child: (profileImageUrl != null)?Image.network("$profileImageUrl", fit: BoxFit.fill,):Icon(Icons.person,size:30,color: FONT_COLOR,),
+                    ),
                   );
                 } else {
                   UserModel? userInfo = snapshot.data;
@@ -52,7 +56,7 @@ class ProfileCard extends StatelessWidget {
                     height: 80,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100.0),
-                      child: (profileImageUrl != null)?Image.network("$profileImageUrl", fit: BoxFit.fill,):Image.asset("assets/images/Limseohee.jpg",fit: BoxFit.fill,),
+                      child: (profileImageUrl != null)?Image.network("$profileImageUrl", fit: BoxFit.fill,):Icon(Icons.person,size:30,color: FONT_COLOR,),
                     ),
                   );
                 }

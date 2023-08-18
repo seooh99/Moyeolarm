@@ -188,7 +188,7 @@ Widget SearchList(List<FriendModel?> friends) {
             height: 100,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(100.0),
-              child: Image.network("${friend.profileImageUrl}", fit: BoxFit.fill,)??Icon(Icons.person,size:30,),
+              child: friend.profileImageUrl != null ?Image.network("${friend.profileImageUrl}", fit: BoxFit.fill,):Icon(Icons.person,size:30,color: SUB_COLOR,),
             ),
           ),
           // leading: const CircleAvatar(

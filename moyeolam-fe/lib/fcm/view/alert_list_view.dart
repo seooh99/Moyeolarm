@@ -87,14 +87,17 @@ class ArletListView extends ConsumerWidget {
         },
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
-            child: Center(
+            child: SizedBox(
+              height: 600,
+              child: Center(
                 child: Text('알림없음',
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight:FontWeight.bold,
                         color: FONT_COLOR
                     )
-                )
+                ),
+              ),
             )
         ),
       );

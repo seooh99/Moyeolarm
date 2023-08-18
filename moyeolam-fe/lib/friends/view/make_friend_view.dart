@@ -95,7 +95,7 @@ class _MakeFriendViewState extends ConsumerState<MakeFriendView> {
                                 height: 100,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(100.0),
-                                  child: Image.network("${data.profileImageUrl}")??Icon(Icons.person,size:30,),
+                                  child: (data.profileImageUrl != null)?Image.network("${data.profileImageUrl}"):Icon(Icons.person,size:30,color: SUB_COLOR,),
                                 ),
                               ),
                               Text("${data.nickname}",

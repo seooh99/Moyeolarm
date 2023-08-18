@@ -111,14 +111,14 @@ class AlarmGroup {
 class AlarmMember {
   final int memberId;
   final String nickname;
-  final String? profileUrl;
+  final String? profileImageUrl;
   final bool isHost;
   final bool toggle;
 
   AlarmMember({
     required this.memberId,
     required this.nickname,
-    required this.profileUrl,
+    required this.profileImageUrl,
     required this.isHost,
     required this.toggle,
   });
