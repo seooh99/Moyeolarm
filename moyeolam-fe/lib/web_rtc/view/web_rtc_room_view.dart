@@ -4,6 +4,11 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:moyeolam/background_alarm/model/alarm.dart';
+import 'package:moyeolam/background_alarm/provider/alarm_state.dart';
+import 'package:moyeolam/background_alarm/service/alarm_scheduler.dart';
 import 'package:moyeolam/main/view/main_page.dart';
 import 'package:openvidu_client/openvidu_client.dart';
 import 'package:moyeolam/alarm/model/alarm_detail_model.dart';
@@ -19,24 +24,29 @@ import 'package:moyeolam/web_rtc/repository/face_recognition_repository.dart';
 import '../../common/const/openvidu_confiig.dart';
 import '../component/media_stream_view.dart';
 
-class WebRtcRoomView extends StatefulWidget {
+class WebRtcRoomView extends ConsumerStatefulWidget {
   final Connection room;
   final String userName;
   final int alarmGroupId;
+  final Alarm alarm;
 
   const WebRtcRoomView(
       {super.key,
       required this.room,
       required this.userName,
-      required this.alarmGroupId});
+      required this.alarmGroupId,
+      required this.alarm});
 
   @override
-  State<WebRtcRoomView> createState() => _WebRtcRoomViewState();
+  ConsumerState<WebRtcRoomView> createState() => _WebRtcRoomViewState();
 }
 
-class _WebRtcRoomViewState extends State<WebRtcRoomView> {
+class _WebRtcRoomViewState extends ConsumerState<WebRtcRoomView> with WidgetsBindingObserver {
   /// map of SID to RemoteParticipant
   Map<String, RemoteParticipant> remoteParticipants = {};
+
+  /// map of nickname to MemberState
+  Map<String, MemberState> remoteMemberState = {};
 
   /// map of nickname to AlarmGroupMember
   Map<String, AlarmGroupMember> alarmGroupMembers = {};
@@ -54,15 +64,48 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     initOpenVidu();
     initAlarmDetail();
     _listenSessionEvents();
     _start();
   }
 
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   switch (state) {
+  //     case AppLifecycleState.paused:
+  //       _dismissAlarm();
+  //       break;
+  //     default:
+  //   }
+  // }
+
+  void _dismissAlarm() async {
+    // final alarmState = context.read<AlarmState>();
+    final _ = ref.watch(alarmStateProvider);
+    final alarmState = ref.watch(alarmStateProvider.notifier);
+
+    final callbackAlarmId = alarmState.callbackAlarmId;
+
+    if(callbackAlarmId == null){
+      return;
+    }
+    // 알람 콜백 ID는 `AlarmScheduler`에 의해 일(0), 월(1), 화(2), ... , 토요일(6) 만큼 더해져 있다.
+    // 따라서 이를 7로 나눈 몫이 해당 요일을 나타낸다.
+    final firedAlarmWeekday = callbackAlarmId % 7;
+    final nextAlarmTime =
+    widget.alarm.timeOfDay.toComingDateTimeAt(firedAlarmWeekday);
+
+    await AlarmScheduler.reschedule(callbackAlarmId, nextAlarmTime);
+
+    alarmState.dismiss();
+  }
+
   @override
   void dispose() {
     _timer.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -80,15 +123,21 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
             localState = MemberState.recognized;
           });
 
-          int invalidMemberCnt = alarmGroupMembers.values
-              .where((member) => member.memberState != MemberState.recognized)
-              .length;
+          // int invalidMemberCnt = alarmGroupMembers.values
+          //     .where((member) => member.memberState != MemberState.recognized)
+          //     .length;
+          //
+          // if (invalidMemberCnt == 0) {
+          //   print("invalidMemberCnt: $invalidMemberCnt");
+          //   setState(() {
+          //     isAllRecognized = true;
+          //   });
+          // }
 
-          if (invalidMemberCnt == 0) {
-            print("invalidMemberCnt: $invalidMemberCnt");
-            setState(() {
-              isAllRecognized = true;
-            });
+          int recognizedMemberCnt = remoteMemberState.values.where((state) => state == MemberState.recognized).length;
+
+          if (recognizedMemberCnt == alarmGroupMembers.length) {
+            isAllRecognized = true;
           }
         }
       } else {
@@ -122,6 +171,7 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
       alarmGroupMembers[member.nickname] = AlarmGroupMember(
           memberId: member.memberId, nickname: member.nickname);
     });
+
     setState(() {});
   }
 
@@ -138,13 +188,23 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
     _openvidu.on(OpenViduEvent.addStream, (params) {
       remoteParticipants = {..._openvidu.participants};
 
-      remoteParticipants.forEach((SID, remote) {
+      // remoteParticipants.forEach((SID, remote) {
+      //   String nickname = remote.metadata?['clientData'];
+      //
+      //   if (alarmGroupMembers[nickname]?.memberState == MemberState.offline) {
+      //     alarmGroupMembers[nickname]?.memberState = MemberState.online;
+      //     alarmGroupMembers[nickname]?.SID = SID;
+      //   }
+      // });
+
+      remoteMemberState = _openvidu.participants.values.fold(<String, MemberState>{}, (previousValue, remote) {
         String nickname = remote.metadata?['clientData'];
 
-        if (alarmGroupMembers[nickname]?.memberState == MemberState.offline) {
-          alarmGroupMembers[nickname]?.memberState = MemberState.online;
-          alarmGroupMembers[nickname]?.SID = SID;
-        }
+        remoteMemberState.containsKey(nickname)
+        ? previousValue[nickname] = remoteMemberState[nickname] ?? MemberState.online
+        : previousValue[nickname] = MemberState.online;
+
+        return previousValue;
       });
 
       setState(() {});
@@ -153,7 +213,19 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
     _openvidu.on(OpenViduEvent.removeStream, (params) {
       remoteParticipants = {..._openvidu.participants};
 
-      print("participants removed");
+      // Set<String> onlineNicknames =
+      //     remoteParticipants.values.fold({}, (res, remote) {
+      //   String nickname = remote.metadata?['clientData'];
+      //   res.add(nickname);
+      //   return res;
+      // });
+      //
+      // for (String nickname in alarmGroupMembers.keys) {
+      //   if (!onlineNicknames.contains(nickname)) {
+      //     alarmGroupMembers[nickname]?.memberState = MemberState.offline;
+      //     alarmGroupMembers[nickname]?.SID = null;
+      //   }
+      // }
 
       Set<String> onlineNicknames =
           remoteParticipants.values.fold({}, (res, remote) {
@@ -162,12 +234,15 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
         return res;
       });
 
-      for (String nickname in alarmGroupMembers.keys) {
-        if (!onlineNicknames.contains(nickname)) {
-          alarmGroupMembers[nickname]?.memberState = MemberState.offline;
-          alarmGroupMembers[nickname]?.SID = null;
+      Map<String, MemberState> newRemoteMemberState = {};
+
+      remoteMemberState.forEach((nickname, memberState) {
+        if (onlineNicknames.contains(nickname)) {
+          newRemoteMemberState[nickname] = memberState;
         }
-      }
+      });
+
+      remoteMemberState = newRemoteMemberState;
 
       setState(() {});
     });
@@ -188,27 +263,46 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
     });
 
     _openvidu.on(OpenViduEvent.reciveMessage, (params) {
+      // String? from = params["from"];
+      // String? type = params["type"];
+      // String? data = params["data"];
+      // String nickname = remoteParticipants[from]?.metadata?['clientData'];
+      //
+      // if (data == 'true') {
+      //   alarmGroupMembers[nickname]?.memberState = MemberState.recognized;
+      // } else if (data == 'false') {
+      //   alarmGroupMembers[nickname]?.memberState = MemberState.online;
+      // }
+      // setState(() {});
+      //
+      // int invalidMemberCnt = alarmGroupMembers.values
+      //     .where((member) => member.memberState != MemberState.recognized)
+      //     .length;
+      //
+      // print('invalidMemberCnt: $invalidMemberCnt');
+      //
+      // if (localState == MemberState.recognized && invalidMemberCnt == 0) {
+      //   isAllRecognized = true;
+      // }
+
       String? from = params["from"];
       String? type = params["type"];
       String? data = params["data"];
-      String nickname = remoteParticipants[from]?.metadata?['clientData'];
+      String? nickname = remoteParticipants[from]?.metadata?['clientData'];
 
       if (data == 'true') {
-        alarmGroupMembers[nickname]?.memberState = MemberState.recognized;
+        remoteMemberState[nickname!] = MemberState.recognized;
       } else if (data == 'false') {
-        alarmGroupMembers[nickname]?.memberState = MemberState.online;
+        remoteMemberState[nickname!] = MemberState.online;
       }
-      setState(() {});
 
-      int invalidMemberCnt = alarmGroupMembers.values
-          .where((member) => member.memberState != MemberState.recognized)
-          .length;
+      int recognizedMemberCnt = remoteMemberState.values.where((state) => state == MemberState.recognized).length;
 
-      print('invalidMemberCnt: $invalidMemberCnt');
-
-      if (localState == MemberState.recognized && invalidMemberCnt == 0) {
+      if (localState == MemberState.recognized && recognizedMemberCnt == alarmGroupMembers.length) {
         isAllRecognized = true;
       }
+
+      setState(() {});
     });
 
     _openvidu.on(OpenViduEvent.userUnpublished, (params) {
@@ -247,7 +341,10 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
   void _onDisconnect() async {
     final nav = Navigator.of(context);
     await _openvidu.disconnect();
-    nav.push(MaterialPageRoute(builder: (_) => const MainPage()));
+    _timer.cancel();
+    _dismissAlarm();
+    SystemNavigator.pop();
+    // nav.push(MaterialPageRoute(builder: (_) => const MainPage()));
   }
 
   Future<void> _captureImage() async {
@@ -304,32 +401,34 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
                                       ),
                                     ),
                                   ),
-                                  ...alarmGroupMembers.values
-                                      .map((member) => Container(
-                                          margin: EdgeInsets.all(10),
-                                          child: SizedBox(
-                                              width: 155,
-                                              height: 155,
-                                              child: MediaStreamView(
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                                participant: remoteParticipants[
-                                                    member.SID],
-                                                userName: member.nickname,
-                                                memberState: member.memberState,
-                                              )))),
-                                  // ...remoteParticipants.values
-                                  //     .map((remote) => Container(
-                                  //     margin: EdgeInsets.all(10),
-                                  //     child: SizedBox(
-                                  //       width: 170,
-                                  //       height: 170,
-                                  //       child: MediaStreamView(
-                                  //         borderRadius:
-                                  //         BorderRadius.circular(15),
-                                  //         participant: remote,
-                                  //       ),
-                                  //     ))),
+                                  // ...alarmGroupMembers.values
+                                  //     .map((member) => Container(
+                                  //         margin: EdgeInsets.all(10),
+                                  //         child: SizedBox(
+                                  //             width: 155,
+                                  //             height: 155,
+                                  //             child: MediaStreamView(
+                                  //               borderRadius:
+                                  //                   BorderRadius.circular(15),
+                                  //               participant: remoteParticipants[
+                                  //                   member.SID],
+                                  //               userName: member.nickname,
+                                  //               memberState: member.memberState,
+                                  //             )))),
+                                  ...remoteParticipants.values
+                                      .map((remote) => Container(
+                                      margin: EdgeInsets.all(10),
+                                      child: SizedBox(
+                                        width: 155,
+                                        height: 155,
+                                        child: MediaStreamView(
+                                          borderRadius:
+                                          BorderRadius.circular(15),
+                                          participant: remote,
+                                          userName: remote.metadata?['clientData'],
+                                          memberState: remoteMemberState[remote.metadata?['clientData']],
+                                        ),
+                                      ))),
                                 ],
                               ),
                             ),
@@ -352,72 +451,13 @@ class _WebRtcRoomViewState extends State<WebRtcRoomView> {
                                     ? BtnCalling(
                                         icons: const Icon(Icons.call_end),
                                         backGroundColor: CALLOFF_COLOR,
-                                        onPressed: () async {
-                                          _onDisconnect();
-                                          // await _captureImage();
-                                          // bool faceRecognitionResult =
-                                          //     await _faceRecognition();
-                                          //
-                                          // if (faceRecognitionResult) {
-                                          //   _openvidu.sendMessage(
-                                          //       OvMessage.fromJson(<String, dynamic>{
-                                          //     "data": "true",
-                                          //     "type": "recognized"
-                                          //   }));
-                                          //   setState(() {
-                                          //     localState = MemberState.recognized;
-                                          //   });
-                                          //
-                                          //   int invalidMemberCnt = alarmGroupMembers
-                                          //       .values
-                                          //       .where((member) =>
-                                          //           member.memberState !=
-                                          //           MemberState.recognized)
-                                          //       .length;
-                                          //
-                                          //   print(
-                                          //       'invalidMemberCnt: $invalidMemberCnt');
-                                          //
-                                          //   if (invalidMemberCnt == 0) {
-                                          //     _onDisconnect();
-                                          //   }
-                                          // } else {
-                                          //   _openvidu.sendMessage(
-                                          //       OvMessage.fromJson(<String, dynamic>{
-                                          //     "data": "false",
-                                          //     "type": "recognized"
-                                          //   }));
-                                          //   setState(() {
-                                          //     localState = MemberState.online;
-                                          //   });
-                                          // }
-                                        },
+                                        onPressed: _onDisconnect,
                                       )
                                     : BtnCalling(
                                         icons: const Icon(Icons.call_end),
                                         backGroundColor: CKECK_GRAY_COLOR,
                                         onPressed: () {},
                                       ),
-                                // Row(children: [
-                                //   BtnMedia(
-                                //     icons: Icon(Icons.mic, color: FONT_COLOR),
-                                //     // icons: Icon(Icons.mic_off),
-                                //     onPressed: () {},
-                                //   ),
-                                //   BtnCalling(
-                                //     icons: Icon(Icons.call_end),
-                                //     backGroundColor: CALLOFF_COLOR,
-                                //     onPressed: () {},
-                                //   ),
-                                //   BtnMedia(
-                                //     icons: const Icon(
-                                //       Icons.videocam,
-                                //       color: FONT_COLOR,
-                                //     ),
-                                //     // icons: Icon(Icons.videocam_off),
-                                //     onPressed: () {},
-                                //   ),
-                                // ]),
                               ],
                             )
                           ],
