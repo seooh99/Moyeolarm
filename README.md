@@ -1,56 +1,51 @@
-# 웹/모바일(웹 기술) 스켈레톤 프로젝트
+# ⏰ 모여람 (Moyeo-larm)
+-> 로고추가
 
-<!-- 필수 항목 -->
 
-## 카테고리
+<br><br>
+# 🔎 서비스 소개 [Introduction]
+#### `모여람`은 공유알람 어플리케이션 입니다.
+#### 사용자간 협력을 통한 알람공유와 알람해제로 새롭고 효과적인 소셜 알람 서비스입니다. 
 
-| Application | Domain | Language | Framework |
-| ---- | ---- | ---- | ---- |
-| :white_check_mark: Desktop Web | :black_square_button: AI | :white_check_mark: JavaScript | :white_check_mark: Vue.js |
-| :white_check_mark: Mobile Web | :black_square_button: Big Data | :black_square_button: TypeScript | :black_square_button: React |
-| :white_check_mark: Responsive Web | :black_square_button: Blockchain | :black_square_button: C/C++ | :black_square_button: Angular |
-| :black_square_button: Android App | :black_square_button: IoT | :black_square_button: C# | :black_square_button: Node.js |
-| :black_square_button: iOS App | :black_square_button: AR/VR/Metaverse | :white_check_mark: Python | :white_check_mark: Flask/Django |
-| :black_square_button: Desktop App | :black_square_button: Game | :white_check_mark: Java | :white_check_mark: Spring/Springboot |
-| | | :black_square_button: Kotlin | |
+<br><br>
+# 😃 멤버 Members
 
-<!-- 필수 항목 -->
+|Frontend|Frontend|Frontend|Frontend|Frontend|Frontend|
+|:---------:|:-------:|:---------:|:------:|:-----:|:------:|
+|![](https://media.istockphoto.com/id/1345388323/ko/%EB%B2%A1%ED%84%B0/%EC%9D%B8%EA%B0%84-%EC%8B%A4%EB%A3%A8%EC%97%A3-%EA%B2%A9%EB%A6%AC-%EB%B2%A1%ED%84%B0-%EC%95%84%EC%9D%B4%EC%BD%98.jpg?s=612x612&w=0&k=20&c=oCJvgDgwBzUeLFZ02SGe4hk3jhZTW2rNO13stCSNqts=)|![](https://media.istockphoto.com/id/1345388323/ko/%EB%B2%A1%ED%84%B0/%EC%9D%B8%EA%B0%84-%EC%8B%A4%EB%A3%A8%EC%97%A3-%EA%B2%A9%EB%A6%AC-%EB%B2%A1%ED%84%B0-%EC%95%84%EC%9D%B4%EC%BD%98.jpg?s=612x612&w=0&k=20&c=oCJvgDgwBzUeLFZ02SGe4hk3jhZTW2rNO13stCSNqts=)|![](https://media.istockphoto.com/id/1345388323/ko/%EB%B2%A1%ED%84%B0/%EC%9D%B8%EA%B0%84-%EC%8B%A4%EB%A3%A8%EC%97%A3-%EA%B2%A9%EB%A6%AC-%EB%B2%A1%ED%84%B0-%EC%95%84%EC%9D%B4%EC%BD%98.jpg?s=612x612&w=0&k=20&c=oCJvgDgwBzUeLFZ02SGe4hk3jhZTW2rNO13stCSNqts=)|![](https://media.istockphoto.com/id/1345388323/ko/%EB%B2%A1%ED%84%B0/%EC%9D%B8%EA%B0%84-%EC%8B%A4%EB%A3%A8%EC%97%A3-%EA%B2%A9%EB%A6%AC-%EB%B2%A1%ED%84%B0-%EC%95%84%EC%9D%B4%EC%BD%98.jpg?s=612x612&w=0&k=20&c=oCJvgDgwBzUeLFZ02SGe4hk3jhZTW2rNO13stCSNqts=)|![](https://media.istockphoto.com/id/1345388323/ko/%EB%B2%A1%ED%84%B0/%EC%9D%B8%EA%B0%84-%EC%8B%A4%EB%A3%A8%EC%97%A3-%EA%B2%A9%EB%A6%AC-%EB%B2%A1%ED%84%B0-%EC%95%84%EC%9D%B4%EC%BD%98.jpg?s=612x612&w=0&k=20&c=oCJvgDgwBzUeLFZ02SGe4hk3jhZTW2rNO13stCSNqts=)|![](https://media.istockphoto.com/id/1345388323/ko/%EB%B2%A1%ED%84%B0/%EC%9D%B8%EA%B0%84-%EC%8B%A4%EB%A3%A8%EC%97%A3-%EA%B2%A9%EB%A6%AC-%EB%B2%A1%ED%84%B0-%EC%95%84%EC%9D%B4%EC%BD%98.jpg?s=612x612&w=0&k=20&c=oCJvgDgwBzUeLFZ02SGe4hk3jhZTW2rNO13stCSNqts=)|
+|[강성구](링크)|[임서희](링크)|[최휘빈](링크)|[이용준](링크)|[탁성건](링크)|[허재](링크)|
 
-## 프로젝트 소개
+<br><br>
 
-* 프로젝트명: 그룹 비디오 컨퍼런스 서비스
-* 서비스 특징: 웹/모바일(웹 기술) 프로젝트를 위한 스켈레톤 프로젝트
-* 주요 기능
-  - 회원 관리
-  - 화상 미팅룸
-  - 그룹 채팅
-* 주요 기술
-  - WebRTC
-  - WebSocket
-  - JWT Authentication
-  - REST API
-* 참조 리소스
-  * Vuetify: 디자인 전반 적용
-  * Vue Argon Design System: 디자인 전반 적용
-  * Vue Black Dashboard Pro(유료): 캘린더 컴포넌트 사용
-  * AR Core: 구글에서 제공하는 AR 지원 라이브러리. 이미지 인식 및 오버레이 영상에 활용
-  * Color Thief: 이미지 색상 추출 라이브러리. 커버 사진 색상 추출 및 배경 변경에 활용
-  * Animation.css: CSS 애니메이션 지원 라이브러리. 메인 페이지 진입 애니메이션에 활용
-* 배포 환경
-  - URL: // 웹 서비스, 랜딩 페이지, 프로젝트 소개 등의 배포 URL 기입
-  - 테스트 계정: // 로그인이 필요한 경우, 사용 가능한 테스트 계정(ID/PW) 기입
 
-<!-- 자유 양식 -->
+# 🔧 기술스택 Tech Stack
+![image-1.png](./image-1.png)
 
-## 팀 소개
-* 김ㅇㅇ: 팀장, 프론트엔드 개발
-* 이ㅇㅇ: 부팀장, 기획 및 와이어프레임 작성, 프론트엔드 개발
-* 박ㅇㅇ: 백엔드 개발 및 QA 담당
-* 홍ㅇㅇ: 백엔드 개발, Swagger API 문서 관리
-* 전ㅇㅇ: 코드 리뷰 및 인프라 담당, CI/CD, HTTPS, Docker 구성
 
-<!-- 자유 양식 -->
+<br><br>
 
-## 프로젝트 상세 설명
+# 📌 핵심 기능 Core Features
+### [API명세서](https://www.notion.so/API-0623a137b9754447ad10bac192d0091e?p=03b2862d655d4bc3966c76619f6d1612&pm=s)
+ 
+ 
+### ⭐ 카카오 소셜 로그인으로 보다 간편한 회원가입, 로그인
+### ⭐ Web RTC 화상 기술과 얼굴인식 AI 기술
+기존의 알람 기능을 보완하기 위해  Web RTC 화상 기술과 얼굴인식 AI 기술로 완성한 얼굴 인식 공유알람을 통해 기존과 다른 
 
-// 개발 환경, 기술 스택, 시스템 구성도, ERD, 기능 상세 설명 등
+알람 서비스 구현 
+### ⭐ 카카오 소셜 로그인으로 보다 간편한 회원가입, 로그인
+
+ <br><br>
+# 📏 프로젝트 아키텍처 Project Architecture
+
+## Infrastructure
+![image.png](./image.png)
+## CI/CD
+
+
+<br><br>
+# 🎯 우리가 일하는 방식 [The way we work together]
+
+
+
+
