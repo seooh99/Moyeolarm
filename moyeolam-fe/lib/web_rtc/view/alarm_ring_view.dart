@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:moyeolam/background_alarm/model/alarm.dart';
 import 'package:moyeolam/common/button/btn_call.dart';
 import 'package:moyeolam/common/const/colors.dart';
 import 'package:moyeolam/web_rtc/view/real_time_view.dart';
@@ -18,8 +19,10 @@ import '../model/connection.dart';
 
 class AlarmRingView extends StatefulWidget {
   final int alarmGroupId;
+  final Alarm alarm;
 
-  const AlarmRingView({super.key, required this.alarmGroupId});
+  const AlarmRingView(
+      {super.key, required this.alarmGroupId, required this.alarm});
 
   @override
   State<AlarmRingView> createState() => _AlarmRingViewState();
@@ -98,6 +101,7 @@ class _AlarmRingViewState extends State<AlarmRingView> {
                     room: connection,
                     userName: _textUserNameController.text,
                     alarmGroupId: widget.alarmGroupId,
+                    alarm: widget.alarm,
                   )),
         );
       }
@@ -126,7 +130,8 @@ class _AlarmRingViewState extends State<AlarmRingView> {
 
   _getUserInfo() async {
     UserModel? userInfo = await _userInformation.getUserInfo();
-    _textUserNameController.text = userInfo?.nickname ?? 'Participant${Random().nextInt(1000)}';
+    _textUserNameController.text =
+        userInfo?.nickname ?? 'Participant${Random().nextInt(1000)}';
   }
 
   @override
