@@ -58,12 +58,7 @@ class ArletListView extends ConsumerWidget {
           loading: () => Center(child: CircularProgressIndicator()),
           error: (err, stack) => Center(child: Text("데이터 로딩 실패: $err")),
           data: (apiAlertModel) {
-            return RefreshIndicator(
-              onRefresh: ()async{
-                ref.invalidate(alertServiceProvider);
-              },
-                child: _buildAlertList(apiAlertModel, ref)
-            );
+            return _buildAlertList(apiAlertModel, ref);
           },
         ),
       ),
@@ -75,23 +70,36 @@ class ArletListView extends ConsumerWidget {
   Widget _buildAlertList(ApiArletModel apiAlertModel, WidgetRef ref) {
     if (apiAlertModel.data?.alerts != null && apiAlertModel.data!.alerts!.isNotEmpty) {
       final List<ApiArletItem?> alertItems = apiAlertModel.data!.alerts!;
-      return ListView.builder(
-        physics: AlwaysScrollableScrollPhysics(),
-        itemCount: alertItems.length,
-        itemBuilder: (context, index) => _buildAlertItem(context, alertItems[index], ref),
+      return RefreshIndicator(
+        onRefresh: ()async{
+          ref.invalidate(alertServiceProvider);
+        },
+        child: ListView.builder(
+          physics: AlwaysScrollableScrollPhysics(),
+          itemCount: alertItems.length,
+          itemBuilder: (context, index) => _buildAlertItem(context, alertItems[index], ref),
+        ),
       );
     } else {
-      return const SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
-          child: Center(
-              child: Text('알림없음',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight:FontWeight.bold,
-                      color: FONT_COLOR
-                  )
-              )
-          )
+      return RefreshIndicator(
+        onRefresh: ()async{
+          ref.invalidate(alertServiceProvider);
+        },
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+            child: SizedBox(
+              height: 600,
+              child: Center(
+                child: Text('알림없음',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight:FontWeight.bold,
+                        color: FONT_COLOR
+                    )
+                ),
+              ),
+            )
+        ),
       );
     }
   }
