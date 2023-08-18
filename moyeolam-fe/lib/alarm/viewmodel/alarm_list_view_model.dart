@@ -22,6 +22,7 @@ class AlarmListViewModel{
 
   deleteAlarmGroup(int alarmGroupId) async{
     var response = await _alarmListRepository.deleteAlarmGroup(alarmGroupId);
+    print("12333${response.message}");
     if (response.code == '200'){
       return response.data;
     }

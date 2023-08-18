@@ -6,10 +6,10 @@ class AlarmGuestList extends StatefulWidget {
   const AlarmGuestList({
     required this.color,
     required this.nickname,
-    required this.profileImage,
+    this.profileImageUrl,
     super.key});
 
-  final Image profileImage;
+  final String? profileImageUrl;
   final String nickname;
   final Color color;
   // final bool
@@ -37,8 +37,13 @@ class _AlarmGuestListState extends State<AlarmGuestList> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
 
-                  CircleAvatar(
-                    backgroundColor: Colors.deepOrange,
+                  SizedBox(
+                    height: 40,
+                    width: 40,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100.0),
+                      child: (widget.profileImageUrl != null)?Image.network("${widget.profileImageUrl}"):Icon(Icons.person,size:30,),
+                    ),
                   ),
                   SizedBox(
                     height: 12,
