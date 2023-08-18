@@ -64,8 +64,7 @@ class _AlarmObserverState extends ConsumerState<AlarmObserver>
         print(alarm);
         if (alarm != null) {
           // testPage = TestPage();
-          print("alarmGroupId: ${alarm.alarmGroupId}");
-          alarmRingView = AlarmRingView(alarmGroupId: alarm.alarmGroupId);
+          alarmRingView = AlarmRingView(alarmGroupId: alarm.alarmGroupId, alarm: alarm);
           // alarmScreen = AlarmScreen(alarm: alarm);
         }
       }
