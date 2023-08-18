@@ -46,7 +46,7 @@ class _Moyuram extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // storage.deleteAll();
+    storage.deleteAll();
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       localizationsDelegates: [

@@ -283,7 +283,7 @@ class _SettingsContentState extends State<_SettingsContent> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               buildText('버전 정보', context),
-              buildText('v1.01', context),
+              buildText('v1.04', context),
             ],
           ),
           buildDivider(),

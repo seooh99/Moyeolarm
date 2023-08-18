@@ -91,9 +91,12 @@ class _MakeFriendViewState extends ConsumerState<MakeFriendView> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              CircleAvatar(
-                                radius: 20,
-                                backgroundColor: Colors.amber,
+                              SizedBox(
+                                height: 100,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100.0),
+                                  child: Image.network("${data.profileImageUrl}")??Icon(Icons.person,size:30,),
+                                ),
                               ),
                               Text("${data.nickname}",
                               style: TextStyle(

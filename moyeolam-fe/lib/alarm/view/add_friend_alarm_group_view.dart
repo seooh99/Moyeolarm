@@ -196,8 +196,13 @@ class _AddFriendAlarmGroupViewState extends ConsumerState {
                                     fontWeight: FontWeight.w200,
                                   ),
                                 ),
-                                leading: const CircleAvatar(
-                                  backgroundColor: Colors.cyan,
+                                leading:  SizedBox(
+                                  height: 60,
+                                  width: 60,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(100.0),
+                                    child: Image.network("${friend.profileImageUrl}"),
+                                  ),
                                 ),
                                 trailing: IconButton(
                                   onPressed: () async{

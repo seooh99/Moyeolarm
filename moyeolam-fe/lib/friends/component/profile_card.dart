@@ -40,16 +40,20 @@ class ProfileCard extends StatelessWidget {
                 } else if (snapshot.hasError) {
                   UserModel? userInfo = snapshot.data;
                   var profileImageUrl = userInfo!.profileImageUrl;
+                  print("$profileImageUrl 123");
                   return CircleAvatar(
                     backgroundColor: Colors.deepOrangeAccent,
                   );
                 } else {
-                  return CircleAvatar(
-                    radius: 40,
-                    backgroundColor: SUB_COLOR,
-                    // backgroundColor: FONT_COLOR,
-                    // child: Image.asset("assets/images/defaultImage.png"),
-                    child: Icon(Icons.person,size: 60, ),
+                  UserModel? userInfo = snapshot.data;
+                  var profileImageUrl = userInfo!.profileImageUrl;
+                  print("$profileImageUrl 123");
+                  return SizedBox(
+                    height: 80,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100.0),
+                      child: (profileImageUrl != null)?Image.network("$profileImageUrl", fit: BoxFit.fill,):Image.asset("assets/images/Limseohee.jpg",fit: BoxFit.fill,),
+                    ),
                   );
                 }
               },
@@ -78,7 +82,7 @@ class ProfileCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: FONT_COLOR,
-                              fontSize: 16,
+                              fontSize: 24,
                             ),
                           );
                         } else {
@@ -87,7 +91,7 @@ class ProfileCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: FONT_COLOR,
-                              fontSize: 16,
+                              fontSize: 24,
                             ),
                           );
                         }

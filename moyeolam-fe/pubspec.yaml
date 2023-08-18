@@ -105,6 +105,10 @@ flutter:
     - assets/audio/
     - assets/images/defaultImage.png
     - assets/config/.env
+    - assets/images/Limseohee.jpg
+    - assets/images/seongku.png
+    - assets/images/huibin.png
+
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
