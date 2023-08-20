@@ -12,14 +12,21 @@
 
 |Frontend|Frontend|Frontend|Frontend|Frontend|Frontend|
 |:---------:|:-------:|:---------:|:------:|:-----:|:------:|
-|![](https://media.istockphoto.com/id/1345388323/ko/%EB%B2%A1%ED%84%B0/%EC%9D%B8%EA%B0%84-%EC%8B%A4%EB%A3%A8%EC%97%A3-%EA%B2%A9%EB%A6%AC-%EB%B2%A1%ED%84%B0-%EC%95%84%EC%9D%B4%EC%BD%98.jpg?s=612x612&w=0&k=20&c=oCJvgDgwBzUeLFZ02SGe4hk3jhZTW2rNO13stCSNqts=)|![](https://media.istockphoto.com/id/1345388323/ko/%EB%B2%A1%ED%84%B0/%EC%9D%B8%EA%B0%84-%EC%8B%A4%EB%A3%A8%EC%97%A3-%EA%B2%A9%EB%A6%AC-%EB%B2%A1%ED%84%B0-%EC%95%84%EC%9D%B4%EC%BD%98.jpg?s=612x612&w=0&k=20&c=oCJvgDgwBzUeLFZ02SGe4hk3jhZTW2rNO13stCSNqts=)|![](https://media.istockphoto.com/id/1345388323/ko/%EB%B2%A1%ED%84%B0/%EC%9D%B8%EA%B0%84-%EC%8B%A4%EB%A3%A8%EC%97%A3-%EA%B2%A9%EB%A6%AC-%EB%B2%A1%ED%84%B0-%EC%95%84%EC%9D%B4%EC%BD%98.jpg?s=612x612&w=0&k=20&c=oCJvgDgwBzUeLFZ02SGe4hk3jhZTW2rNO13stCSNqts=)|![](https://media.istockphoto.com/id/1345388323/ko/%EB%B2%A1%ED%84%B0/%EC%9D%B8%EA%B0%84-%EC%8B%A4%EB%A3%A8%EC%97%A3-%EA%B2%A9%EB%A6%AC-%EB%B2%A1%ED%84%B0-%EC%95%84%EC%9D%B4%EC%BD%98.jpg?s=612x612&w=0&k=20&c=oCJvgDgwBzUeLFZ02SGe4hk3jhZTW2rNO13stCSNqts=)|![](https://media.istockphoto.com/id/1345388323/ko/%EB%B2%A1%ED%84%B0/%EC%9D%B8%EA%B0%84-%EC%8B%A4%EB%A3%A8%EC%97%A3-%EA%B2%A9%EB%A6%AC-%EB%B2%A1%ED%84%B0-%EC%95%84%EC%9D%B4%EC%BD%98.jpg?s=612x612&w=0&k=20&c=oCJvgDgwBzUeLFZ02SGe4hk3jhZTW2rNO13stCSNqts=)|![](https://media.istockphoto.com/id/1345388323/ko/%EB%B2%A1%ED%84%B0/%EC%9D%B8%EA%B0%84-%EC%8B%A4%EB%A3%A8%EC%97%A3-%EA%B2%A9%EB%A6%AC-%EB%B2%A1%ED%84%B0-%EC%95%84%EC%9D%B4%EC%BD%98.jpg?s=612x612&w=0&k=20&c=oCJvgDgwBzUeLFZ02SGe4hk3jhZTW2rNO13stCSNqts=)|
+|![image-4.png](./docs/images/강성구.png)|![image-2.png](./docs/images/임서희.png)|![image-1.png](./docs/images/최휘빈.png)|![image.png](./docs/images/이용준.png)|![image-3.png](./docs/images/탁성건.png)|![image-5.png](./docs/images/허재.png)|
 |[강성구](링크)|[임서희](링크)|[최휘빈](링크)|[이용준](링크)|[탁성건](링크)|[허재](링크)|
 
 <br><br>
 
 
 # 🔧 기술스택 Tech Stack
-![image-1.png](./image-1.png)
+## Frontend
+![image.png](./docs/images/frontend.png)
+
+## Backend
+![image-1.png](./docs/images/backend.png)
+
+## Infra
+![image-3.png](./docs/images/infra.png)
 
 
 <br><br>
@@ -39,8 +46,7 @@
 # 📏 프로젝트 아키텍처 Project Architecture
 
 ## Infrastructure
-![image.png](./image.png)
-## CI/CD
+![image.png](./docs/images/infrastructure.png)
 
 
 <br><br>
