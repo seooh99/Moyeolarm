@@ -1,6 +1,6 @@
 # ⏰ 모여람 (Moyeo-larm)
 -> 로고추가
-![image-4.png](./docs/images/moyelam/alarm_on.gif)
+![image-4.png](./docs/images/moyelam/friend_fcm.gif)
 
 
 <br><br>
