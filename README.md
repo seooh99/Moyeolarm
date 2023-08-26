@@ -53,7 +53,7 @@ Google Play 서비스를 사용하는 Android 기기를 사용해 앱 전용 푸
 
 
 <br><br>
-# 👫👨‍💻👩‍💻우리가 일하는 방식 [The way we work together]
+# 👫 우리가 일하는 방식 [The way we work together]
 ### 1. 의견을 제시할때는 거침없게! 하지만 예의있게
 ### 2. 의견에는 항상 근거와 함께 말하기
 ### 3. 물어보는 것에 대해 두려워하지 말기
