@@ -1,7 +1,17 @@
 # ⏰ 모여람 (Moyeo-larm)
--> 로고추가
-
-
+![image-5.gif](./docs/images/moyelam/kakao_login.gif)
+![image-5.gif](./docs/images/moyelam/nickname.gif)
+![image-5.gif](./docs/images/moyelam/friend_add.gif)
+![image-5.gif](./docs/images/moyelam/friend_search.gif)
+![image-5.gif](./docs/images/moyelam/friend_fcm.gif)
+![image-5.gif](./docs/images/moyelam/alert_ok.gif)
+![image-5.gif](./docs/images/moyelam/group_alert.gif)
+![image-5.gif](./docs/images/moyelam/group_fcm.gif)
+![image-5.gif](./docs/images/moyelam/group_ok.gif)
+![image-5.gif](./docs/images/moyelam/toggle_on.gif)
+![image-5.gif](./docs/images/moyelam/arlam_on.gif)
+![image-5.gif](./docs/images/moyelam/arlam_on2.gif)
+![image-5.gif](./docs/images/moyelam/face_recognized.gif)
 <br><br>
 # 🔎 서비스 소개 [Introduction]
 #### `모여람`은 공유알람 어플리케이션 입니다.
