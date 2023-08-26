@@ -54,7 +54,6 @@ Google Play 서비스를 사용하는 Android 기기를 사용해 앱 전용 푸
 
 <br><br>
 # 🎯 우리가 일하는 방식 [The way we work together]
-
-
+![image.png](./docs/images/the_way_we_work_together.png)
 
 
