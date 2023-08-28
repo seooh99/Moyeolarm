@@ -38,7 +38,7 @@
 <br>
 
 ## Infra
-![image-3.png](./docs/images/Infra.png)
+![image.png](./docs/images/Infra.png)
 <br>
 
 
