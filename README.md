@@ -30,13 +30,16 @@
 
 # 🔧 기술스택 Tech Stack
 ## Frontend
-![image.png](./docs/images/frontend.png)
+![image.png](./docs/images/Frontend.png)
+<br>
 
 ## Backend
-![image-1.png](./docs/images/backend.png)
+![image-1.png](./docs/images/Backend.png)
+<br>
 
 ## Infra
-![image-3.png](./docs/images/infra.png)
+![image-3.png](./docs/images/Infra.png)
+<br>
 
 
 <br><br>
@@ -63,13 +66,9 @@ Google Play 서비스를 사용하는 Android 기기를 사용해 앱 전용 푸
 
 
 <br><br>
-# 👫 우리가 일하는 방식 [The way we work together]
-### 1. 의견을 제시할때는 거침없게! 하지만 예의있게
-### 2. 의견에는 항상 근거와 함께 말하기
-### 3. 물어보는 것에 대해 두려워하지 말기
-### 4. 아침, 저녁으로 진행상황 공유하기
-### 5. 공적인 회의는 존댓말 사용하기
-### 6. 회의는 적극적으로 참여하기
-### 7. 도움을 요청할때는 자료와 충분한 설명을 통해 질문하기
-### 8. 결정은 다 같이, 책임도 다 같이
+# 👫 우리가 일하는 방식 The way we work together
+### 1. 적극적으로 소통하기
+### 2. 의견을 말할 때는 근거와 함께
+### 3. 출근 후, 퇴근 전 진행상황 공유하기
+### 4. 결정은 다 같이, 책임도 다 같이
 
