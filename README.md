@@ -30,15 +30,16 @@
 
 # 🔧 기술스택 Tech Stack
 ## Frontend
-![image.png](./docs/images/Frontend.png)
+![Frontend.png](./docs/images/Frontend.png)
 <br>
 
 ## Backend
-![image-1.png](./docs/images/Backend.png)
+![Backend.png](./docs/images/Backend.png)
 <br>
 
 ## Infra
-![image.png](./docs/images/Infra.png)
+![Infra.png](./docs/images/Infra.png)
+
 <br>
 
 
