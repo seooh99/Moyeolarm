@@ -20,7 +20,7 @@
 <br><br>
 # 😃 멤버 Members
 
-|Frontend|Frontend|Frontend|Frontend|Frontend|Frontend|
+|Frontend|Frontend|Frontend|Backend|Backend|Backend|
 |:---------:|:-------:|:---------:|:------:|:-----:|:------:|
 |![image-4.png](./docs/images/강성구.png)|![image-2.png](./docs/images/임서희.png)|![image-1.png](./docs/images/최휘빈.png)|![image.png](./docs/images/이용준.png)|![image-3.png](./docs/images/탁성건.png)|![image-5.png](./docs/images/허재.png)|
 |[강성구](링크)|[임서희](링크)|[최휘빈](링크)|[이용준](링크)|[탁성건](링크)|[허재](링크)|
