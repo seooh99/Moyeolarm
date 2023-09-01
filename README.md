@@ -1,5 +1,5 @@
 # ⏰ 모여람 Moyeo-larm
-![image.png](./image.png)
+![image.png](./docs/images/mainimage.png)
 
 <br>
 
@@ -19,10 +19,10 @@
 - 회원 검색 후 친구 요청을 보내줍니다.
 - 친구 요청 수락시 푸쉬알림 및 알림을 통해 확인할 수 있습니다.
 
-![gif1.gif](./gif1.gif) 
-![gif2.gif](./gif2.gif)
-![gif4.gif](./gif4.gif)
-![gif6.gif](./gif6.gif)
+![gif1.gif](./docs/gifs/gif1.gif) 
+![gif2.gif](./docs/gifs/gif2.gif)
+![gif4.gif](./docs/gifs/gif4.gif)
+![gif6.gif](./docs/gifs/gif6.gif)
 
 <br><br>
 
@@ -30,10 +30,10 @@
 - 알람을 만들고, 친구를 초대해서 알람을 공유합니다.
 - 알람 그룹 요청을 수락하면 푸쉬알람 및 알림을 통해 확인할 수 있습니다.
 
-![알람생성.gif](./알람생성.gif)
-![gif8.gif](./gif8.gif)
-![gif10.gif](./gif10.gif)
-![gif11.gif](./gif11.gif)
+![알람생성.gif](./docs/gifs/알람생성.gif)
+![gif8.gif](./docs/gifs/gif8.gif)
+![gif10.gif](./docs/gifs/gif10.gif)
+![gif11.gif](./docs/gifs/gif11.gif)
 
 <br><br>
 
@@ -42,10 +42,10 @@
 - 참여인원이 모두 얼굴인식에 성공하면 recognized표시가 되고 알람 해제 버튼이 활성화 됩니다.
 - 활성화된 버튼을 눌러서 알람을 해제하면 성공!
 
-![gif13.gif](./gif13.gif)
-![gif14.gif](./gif14.gif)
-![gif15.gif](./gif15.gif)
-![gif16.gif](./gif16.gif)
+![gif13.gif](./docs/gifs/gif13.gif)
+![gif14.gif](./docs/gifs/gif14.gif)
+![gif15.gif](./docs/gifs/gif15.gif)
+![gif16.gif](./docs/gifs/gif16.gif)
 
 
 <br><br><br>
@@ -83,7 +83,7 @@ Google Play 서비스를 사용하는 Android 기기를 사용해 앱 전용 푸
 <br>
 
 ### [API명세서](https://www.notion.so/API-0623a137b9754447ad10bac192d0091e?p=03b2862d655d4bc3966c76619f6d1612&pm=s)
- ![image-1.png](./image-1.png)
+ ![image-1.png](./docs/images/api.png)
  
  <br><br>
 # 📏 프로젝트 아키텍처 Project Architecture
